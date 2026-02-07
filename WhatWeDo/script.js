@@ -103,8 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
         init() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 0.5; // Slowed down
-            this.vy = (Math.random() - 0.5) * 0.5; // Slowed down
+            // Base velocity for gentle drifting
+            this.baseVx = (Math.random() - 0.5) * 0.5;
+            this.baseVy = (Math.random() - 0.5) * 0.5;
+            // Interaction velocity (push from mouse)
+            this.ivx = 0;
+            this.ivy = 0;
             this.size = Math.random() * 2.5 + 0.5;
             this.baseSize = this.size;
             this.excitement = 0;
@@ -118,11 +122,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const distMouse = Math.sqrt(dx * dx + dy * dy);
 
             if (distMouse < CONFIG.mouseRadius) {
-                this.vx -= (dx / distMouse) * 0.02; // Gentler push
-                this.vy -= (dy / distMouse) * 0.02; // Gentler push
+                // Add to interaction velocity, not base velocity
+                this.ivx -= (dx / distMouse) * 0.02;
+                this.ivy -= (dy / distMouse) * 0.02;
                 this.excitement = Math.min(this.excitement + 0.02, 1);
             } else {
-                this.excitement = Math.max(this.excitement - 0.01, 0); // Slower decay
+                this.excitement = Math.max(this.excitement - 0.01, 0);
             }
 
             // Subtle card attraction
@@ -133,15 +138,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 const distCard = Math.sqrt(cdx * cdx + cdy * cdy);
 
                 if (distCard < 400) {
-                    // Very gentle pull toward card area
-                    this.vx += (cdx / distCard) * 0.015;
-                    this.vy += (cdy / distCard) * 0.015;
-                    this.excitement = Math.min(this.excitement + 0.03, 0.9);
+                    this.ivx += (cdx / distCard) * 0.005;
+                    this.ivy += (cdy / distCard) * 0.005;
+                    this.excitement = Math.min(this.excitement + 0.01, 0.9);
                 }
             }
 
-            this.x += this.vx * (1 + this.excitement * 0.3);
-            this.y += this.vy * (1 + this.excitement * 0.3);
+            // Apply friction to interaction velocity
+            this.ivx *= 0.95;
+            this.ivy *= 0.95;
+
+            // Update position with combined velocities
+            this.x += (this.baseVx + this.ivx) * (1 + this.excitement * 0.3);
+            this.y += (this.baseVy + this.ivy) * (1 + this.excitement * 0.3);
 
             // Bounds
             if (this.x < 0) this.x = width; if (this.x > width) this.x = 0;
