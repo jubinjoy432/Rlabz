@@ -13,13 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = this;
         const cardRect = card.getBoundingClientRect();
 
-        const x = e.clientX - cardRect.left - cardRect.width / 2;
-        const y = e.clientY - cardRect.top - cardRect.height / 2;
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
 
-        const rotateX = y / -20;
-        const rotateY = x / 20;
+        const rotateX = (y - cardRect.height / 2) / -20;
+        const rotateY = (x - cardRect.width / 2) / 20;
 
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+
+        // Set CSS variables for spotlight effect
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
     }
 
     function handleMouseLeave(e) {
@@ -41,12 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouse = { x: -1000, y: -1000 };
 
     const CONFIG = {
-        particleCount: 300,
-        colorBase: 'rgba(120, 120, 200, ',
-        colorHighlight: 'rgba(138, 43, 226, ',
-        colorAccent: 'rgba(157, 0, 255, ',
-        connectionDist: 120,
-        mouseRadius: 250,
+        particleCount: 400, // Increased count
+        colorBase: 'rgba(100, 149, 237, ', // Cornflower Blue base
+        colorHighlight: 'rgba(138, 43, 226, ', // Blue Violet
+        colorAccent: 'rgba(0, 255, 255, ', // Cyan accent
+        connectionDist: 140,
+        mouseRadius: 300,
     };
 
     function resize() {
@@ -99,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
         init() {
             this.x = Math.random() * width;
             this.y = Math.random() * height;
-            this.vx = (Math.random() - 0.5) * 1.5;
-            this.vy = (Math.random() - 0.5) * 1.5;
+            this.vx = (Math.random() - 0.5) * 0.5; // Slowed down
+            this.vy = (Math.random() - 0.5) * 0.5; // Slowed down
             this.size = Math.random() * 2.5 + 0.5;
             this.baseSize = this.size;
             this.excitement = 0;
@@ -114,11 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const distMouse = Math.sqrt(dx * dx + dy * dy);
 
             if (distMouse < CONFIG.mouseRadius) {
-                this.vx -= (dx / distMouse) * 0.05;
-                this.vy -= (dy / distMouse) * 0.05;
-                this.excitement = Math.min(this.excitement + 0.05, 1);
+                this.vx -= (dx / distMouse) * 0.02; // Gentler push
+                this.vy -= (dy / distMouse) * 0.02; // Gentler push
+                this.excitement = Math.min(this.excitement + 0.02, 1);
             } else {
-                this.excitement = Math.max(this.excitement - 0.02, 0);
+                this.excitement = Math.max(this.excitement - 0.01, 0); // Slower decay
             }
 
             // Subtle card attraction
@@ -257,7 +261,20 @@ document.addEventListener('DOMContentLoaded', () => {
             p.update();
             p.draw();
 
-            // Connections
+            // Connect to mouse
+            const dxMouse = p.x - mouse.x;
+            const dyMouse = p.y - mouse.y;
+            const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+            if (distMouse < CONFIG.connectionDist * 1.5) {
+                ctx.beginPath();
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = CONFIG.colorAccent + (1 - distMouse / (CONFIG.connectionDist * 1.5)) * 0.5 + ')';
+                ctx.lineWidth = 0.8;
+                ctx.stroke();
+            }
+
+            // Connections between particles
             if (p.excitement < 0.5) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const p2 = particles[j];
