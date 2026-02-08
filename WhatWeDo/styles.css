@@ -255,3 +255,414 @@ h2 {
         font-size: 2.5rem;
     }
 }
+
+
+/* Hero Section Variables */
+        :root {
+            --hero-violet-primary: 138, 43, 226;
+            --hero-violet-glow: 0, 255, 255;
+            --hero-bg-dark: #0a0a0a;
+            --hero-glass-bg: rgba(255, 255, 255, 0.05);
+            --hero-glass-border: rgba(255, 255, 255, 0.1);
+            --hero-font-main: 'Outfit', sans-serif;
+            --hero-text-color: #ffffff;
+        }
+
+        /* Hero Section Layout */
+        .hero-violet-section {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 50%, rgba(var(--hero-violet-primary), 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(var(--hero-violet-glow), 0.1) 0%, transparent 40%),
+                var(--hero-bg-dark);
+            overflow: hidden;
+            font-family: var(--hero-font-main);
+            color: var(--hero-text-color);
+            padding: 2rem;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        .hero-violet-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1200px;
+            width: 100%;
+            z-index: 10;
+        }
+
+        /* Left Side Content */
+        .hero-violet-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            z-index: 20;
+        }
+
+        .hero-violet-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(var(--hero-violet-glow), 1);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero-violet-title {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(var(--hero-violet-primary), 1) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-violet-desc {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+        }
+
+        /* CTA Button */
+        .hero-violet-cta {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: rgba(var(--hero-violet-primary), 0.2);
+            border: 1px solid rgba(var(--hero-violet-primary), 0.5);
+            border-radius: 50px;
+            text-decoration: none;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            width: fit-content;
+            cursor: pointer;
+        }
+
+        .hero-violet-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .hero-violet-cta:hover {
+            background: rgba(var(--hero-violet-primary), 0.4);
+            box-shadow: 0 0 20px rgba(var(--hero-violet-primary), 0.6);
+            transform: translateY(-2px);
+        }
+
+        .hero-violet-cta:hover::before {
+            left: 100%;
+        }
+
+        .hero-violet-cta i {
+            margin-left: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-violet-cta:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Right Side Visual - Card Slider Container */
+        .hero-violet-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+            height: 500px;
+            /* Explicit height for absolute positioning context */
+        }
+
+        /* Blob Splitting Background Effect */
+        .hero-blob-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* The Gooey Effect: Blur then Contrast */
+            filter: contrast(30);
+            background: transparent;
+            /* Changed from black to work on layout */
+            z-index: 0;
+            /* Note: contrast filter works best on opaque backgrounds. 
+               Since we have a gradient bg, we might see artifacts. 
+               Alternative: limit the container size rigidly. */
+        }
+
+        #hero-liquid-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            /* Key to metaball effect: Blur then Contrast */
+            filter: blur(40px) contrast(30);
+            opacity: 1;
+            /* Maximized visibility */
+            pointer-events: none;
+        }
+
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(var(--hero-violet-primary), 1);
+            /* Changed from glow (cyan) to primary (purple) */
+            filter: blur(20px);
+            opacity: 0.8;
+            will-change: transform;
+        }
+
+        /* Specific Blobs */
+        .blob-1 {
+            width: 120px;
+            height: 120px;
+            animation: blob-float-1 8s infinite ease-in-out;
+        }
+
+        .blob-2 {
+            width: 100px;
+            height: 100px;
+            animation: blob-float-2 7s infinite ease-in-out;
+            background: rgba(var(--hero-violet-primary), 0.8);
+        }
+
+        .blob-3 {
+            width: 80px;
+            height: 80px;
+            animation: blob-float-3 6s infinite ease-in-out;
+            background: rgba(var(--hero-violet-primary), 0.6);
+            /* Changed from white to purple */
+        }
+
+        @keyframes blob-float-1 {
+
+            0%,
+            100% {
+                transform: translate(-50px, -50px) scale(1);
+            }
+
+            33% {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-20px, 80px) scale(0.9);
+            }
+        }
+
+        @keyframes blob-float-2 {
+
+            0%,
+            100% {
+                transform: translate(60px, -30px) scale(1);
+            }
+
+            33% {
+                transform: translate(-40px, 60px) scale(0.9);
+            }
+
+            66% {
+                transform: translate(30px, -60px) scale(1.1);
+            }
+        }
+
+        @keyframes blob-float-3 {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(0, 20px) scale(1.2);
+            }
+        }
+
+        /* 3-Card Slider Styles */
+        .hero-cards-wrapper {
+            position: relative;
+            width: 350px;
+            height: 450px;
+            z-index: 5;
+            transform-style: preserve-3d;
+        }
+
+        .hero-violet-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--hero-glass-bg);
+            border: 1px solid var(--hero-glass-border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+
+            /* Animation States */
+            opacity: 0;
+            transform: translateX(100px) scale(0.9) rotateY(-10deg);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+
+        .hero-violet-card.active {
+            opacity: 1;
+            transform: translateX(0) scale(1) rotateY(0);
+            pointer-events: auto;
+            z-index: 2;
+        }
+
+        .hero-violet-card.prev {
+            opacity: 0;
+            transform: translateX(-100px) scale(0.9) rotateY(10deg);
+            z-index: 1;
+        }
+
+        .hero-violet-card.next {
+            z-index: 1;
+        }
+
+        .hero-card-icon {
+            font-size: 4rem;
+            color: rgba(var(--hero-violet-glow), 1);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(var(--hero-violet-glow), 0.6);
+        }
+
+        .hero-card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .hero-card-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Floating Orbs */
+        .hero-violet-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: rgba(var(--hero-violet-primary), 0.4);
+            top: -50px;
+            right: -50px;
+            animation: hero-orb-move 10s infinite alternate;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: rgba(var(--hero-violet-glow), 0.3);
+            bottom: -30px;
+            left: -30px;
+            animation: hero-orb-move 8s infinite alternate-reverse;
+        }
+
+        /* Animations */
+        @keyframes hero-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes hero-orb-move {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 992px) {
+            .hero-violet-section {
+                align-items: flex-start;
+                padding-top: 4rem;
+                height: auto;
+                min-height: auto;
+                padding-bottom: 4rem;
+            }
+
+            .hero-violet-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-violet-content {
+                align-items: center;
+            }
+
+            .hero-violet-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-violet-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-violet-visual {
+                height: 400px;
+            }
+
+            .hero-cards-wrapper {
+                width: 300px;
+                height: 380px;
+            }
+        }
