@@ -12,7 +12,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    
+
 </head>
 
 <body>
@@ -45,25 +45,40 @@
                     <div class="hero-blob blob-3"></div>
                 </div>
 
-                <!-- 3-Card Slider -->
+                <!-- 3-Card Floating Display -->
                 <div class="hero-cards-wrapper">
-                    <!-- Card 1 -->
-                    <div class="hero-violet-card active" data-index="0">
-                        <i class="fa-solid fa-cube hero-card-icon"></i>
-                        <h3 class="hero-card-title">Future Ready Solutions</h3>
-                        <p class="hero-card-text">RLabZ delivers secure, scalable, and powerful digital solutions designed to support businesses of every size at an affordable cost.</p>
+                    <!-- Card 1: HTML (Back/Top-Left) -->
+                    <div class="hero-violet-card card-html">
+                        <i class="fa-brands fa-html5 hero-card-icon"></i>
+                        <h3 class="hero-card-title">HTML</h3>
+                        <div class="code-snippet">
+                            <span>&lt;div class="card"&gt;</span><br>
+                            <span>&nbsp;&nbsp;&lt;h1&gt;Hello&lt;/h1&gt;</span><br>
+                            <span>&lt;/div&gt;</span>
+                        </div>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="hero-violet-card" data-index="1">
-                        <i class="fa-solid fa-layer-group hero-card-icon"></i>
-                        <h3 class="hero-card-title">Web Solutions</h3>
-                        <p class="hero-card-text">Transform your business digitally and expand beyond boundaries with innovative and scalable web technologies.</p>
+
+                    <!-- Card 2: SCSS (Middle/Center-Right) -->
+                    <div class="hero-violet-card card-scss">
+                        <i class="fa-brands fa-sass hero-card-icon"></i>
+                        <h3 class="hero-card-title">SCSS</h3>
+                        <div class="code-snippet">
+                            <span>.card {</span><br>
+                            <span>&nbsp;&nbsp;display: flex;</span><br>
+                            <span>&nbsp;&nbsp;gap: 1rem;</span><br>
+                            <span>}</span>
+                        </div>
                     </div>
-                    <!-- Card 3 -->
-                    <div class="hero-violet-card" data-index="2">
-                        <i class="fa-solid fa-wand-magic-sparkles hero-card-icon"></i>
-                        <h3 class="hero-card-title">Mobile Solutions</h3>
-                        <p class="hero-card-text">Touch the digital world like never before with customizable enterprise mobile applications built using powerful and modern technologies.</p>
+
+                    <!-- Card 3: JS (Front/Bottom-Center) -->
+                    <div class="hero-violet-card card-js">
+                        <i class="fa-brands fa-js hero-card-icon"></i>
+                        <h3 class="hero-card-title">JS</h3>
+                        <div class="code-snippet">
+                            <span>const card =</span><br>
+                            <span>document.querySelector</span><br>
+                            <span>('.card');</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -164,38 +179,12 @@
                 observer.observe(heroSection);
             }
 
-            // Card Slider Logic
-            let currentIndex = 0;
-            const cycleCards = () => {
-                const currentCard = cards[currentIndex];
-                const nextIndex = (currentIndex + 1) % cards.length;
-                const nextCard = cards[nextIndex];
-
-                // Slide Out Current
-                currentCard.classList.remove('active');
-                currentCard.classList.add('prev');
-
-                // Prepare Next (remove prev class if it was there)
-                nextCard.classList.remove('prev');
-
-                // Wait for CSS transition then reset
-                setTimeout(() => {
-                    currentCard.classList.remove('prev');
-                }, 800); // Match CSS transition duration
-
-                // Slide In Next
-                nextCard.classList.add('active');
-
-                currentIndex = nextIndex;
-            };
-
-            // Start Cycle Loop
-            if (cards.length > 1) {
-                setInterval(cycleCards, 4000); // Change every 4 seconds
-            }
-
-            // 3D Tilt Effect on Container
+            // Parallax 3D Tilt Effect on Container & Individual Cards
             const cardWrapper = document.querySelector('.hero-cards-wrapper');
+            const cardHTML = document.querySelector('.card-html');
+            const cardSCSS = document.querySelector('.card-scss');
+            const cardJS = document.querySelector('.card-js');
+
             if (cardWrapper && heroVisual) {
                 heroVisual.addEventListener('mousemove', (e) => {
                     const rect = cardWrapper.getBoundingClientRect();
@@ -205,14 +194,28 @@
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
 
-                    const rotateX = ((y - centerY) / centerY) * -10;
-                    const rotateY = ((x - centerX) / centerX) * 10;
+                    // Container Tilt
+                    const rotateX = ((y - centerY) / centerY) * -5; // Subtle tilt
+                    const rotateY = ((x - centerX) / centerX) * 5;
 
                     cardWrapper.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+                    // Individual Parallax (Front moves more, back moves less)
+                    // JS (Front)
+                    if (cardJS) cardJS.style.transform = `translate(${((x - centerX) * 0.05)}px, ${((y - centerY) * 0.05)}px)`;
+
+                    // SCSS (Middle)
+                    if (cardSCSS) cardSCSS.style.transform = `translate(${((x - centerX) * 0.03)}px, ${((y - centerY) * 0.03)}px)`;
+
+                    // HTML (Back)
+                    if (cardHTML) cardHTML.style.transform = `translate(${((x - centerX) * 0.01)}px, ${((y - centerY) * 0.01)}px)`;
                 });
 
                 heroVisual.addEventListener('mouseleave', () => {
                     cardWrapper.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+                    if (cardJS) cardJS.style.transform = 'translate(0, 0)';
+                    if (cardSCSS) cardSCSS.style.transform = 'translate(0, 0)';
+                    if (cardHTML) cardHTML.style.transform = 'translate(0, 0)';
                 });
             }
 
