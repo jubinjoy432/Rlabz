@@ -156,6 +156,467 @@
         </div>
     </section>
 
+    <!-- Have You Seen Our Works Section -->
+    <section id="our-works">
+        <div class="container">
+            <header class="section-header">
+                <h2 class="glitch" data-text="Have You Seen Our Works?">Have You Seen Our Works?</h2>
+                <p class="subtitle">Explore our portfolio of cutting-edge projects and digital innovations.</p>
+                <div class="divider"></div>
+            </header>
+
+            <div class="carousel-wrapper">
+                <button class="nav-btn prev"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <!-- Project Cards will be dynamically inserted here or hardcoded below -->
+                        <!-- Card 1 -->
+                        <div class="project-card" data-id="1">
+                            <img src="images/arkon-img.png" alt="Arkon Medical Systems" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Arkon Medical Systems</h3>
+                                <p class="project-desc">Reliable Service with Wide Product Range</p>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="project-card" data-id="2">
+                            <img src="images/splendore-2019.png" alt="Splendore" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Splendore</h3>
+                                <p class="project-desc">Rajagiri College of Social Sciences</p>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="project-card" data-id="3">
+                            <img src="images/euphoria-2019.png" alt="Euphoria 2k17" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Euphoria 2k17</h3>
+                                <p class="project-desc">RCSS MCA Department</p>
+                            </div>
+                        </div>
+                        <!-- Card 4 -->
+                        <div class="project-card" data-id="4">
+                            <img src="images/fesbud-image.png" alt="Fest Buddy" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Fest Buddy</h3>
+                                <p class="project-desc">Impress Project</p>
+                            </div>
+                        </div>
+                        <!-- Card 5 -->
+                        <div class="project-card" data-id="5">
+                            <img src="images/campuscon-image.png" alt="Campus Connect" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Campus Connect</h3>
+                                <p class="project-desc">Rajagiri College of Social Sciences</p>
+                            </div>
+                        </div>
+                        <!-- Card 6 -->
+                        <div class="project-card" data-id="6">
+                            <img src="images/cocobi-image.png" alt="Cocobies" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">Cocobies</h3>
+                                <p class="project-desc">RCSS MCA Dept.</p>
+                            </div>
+                        </div>
+                        <!-- Card 7 -->
+                        <div class="project-card" data-id="7">
+                            <img src="images/rex-image.png" alt="ReX" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">ReX</h3>
+                                <p class="project-desc">Rajagiri College of Social Sciences</p>
+                            </div>
+                        </div>
+                        <!-- Card 8 -->
+                        <div class="project-card" data-id="8">
+                            <img src="images/ctrm-image.png" alt="CTRM System" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">CTRM System</h3>
+                                <p class="project-desc">Rajagiri College of Social Sciences</p>
+                            </div>
+                        </div>
+                        <!-- Card 9 -->
+                        <div class="project-card" data-id="9">
+                            <img src="images/outreach-image.png" alt="RAJAGIRI OutREACH" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">RAJAGIRI OutREACH</h3>
+                                <p class="project-desc">Rajagiri College of Social Sciences</p>
+                            </div>
+                        </div>
+                        <!-- Card 10 -->
+                        <div class="project-card" data-id="10">
+                            <img src="images/luke-image.png" alt="The Luke" class="project-image">
+                            <div class="project-info">
+                                <h3 class="project-title">The Luke</h3>
+                                <p class="project-desc">The Luke Event Management</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Project Modal -->
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-grid">
+                <div class="modal-image-wrapper">
+                    <img src="" alt="Project Image" id="modal-image">
+                </div>
+                <div class="modal-details">
+                    <h2 id="modal-title">Project Title</h2>
+                    <p id="modal-description">Full project description goes here.</p>
+                    <div class="modal-meta">
+                        <div class="meta-item">
+                            <strong>Client:</strong> <span id="modal-client">Client Name</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Date:</strong> <span id="modal-date">Date</span>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Skills:</strong>
+                            <div class="modal-tech-stack" id="modal-tech-stack">
+                                <!-- Tech badges injected via JS -->
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <strong>Link:</strong> <a href="#" id="modal-website-link" target="_blank">Visit Website</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <section class="about-us-section" id="aboutUsSection">
+
+        <!-- Floating Decorative Elements (Scoped) -->
+        <div class="about-floating-orbs">
+            <div class="about-orb about-orb-1"></div>
+            <div class="about-orb about-orb-2"></div>
+            <div class="about-orb about-orb-3"></div>
+        </div>
+
+        <!-- Aurora Background (Scoped) -->
+        <div class="about-aurora-bg">
+            <div class="about-aurora-blob about-blob-1"></div>
+            <div class="about-aurora-blob about-blob-2"></div>
+            <div class="about-aurora-blob about-blob-3"></div>
+        </div>
+
+        <div class="about-container">
+
+            <!-- Hero Section -->
+            <div class="about-hero-header about-blur-in">
+                <h1 class="about-hero-title">Who We Are</h1>
+                <p class="about-hero-subtitle">"Winners are not people who never fail but people who never quit"</p>
+            </div>
+
+            <!-- Animated Stats -->
+            <div class="about-stats-grid about-scale-in about-delay-1">
+                <div class="about-stat-card">
+                    <div class="about-stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                        </svg>
+                    </div>
+                    <div class="about-stat-value" data-target="50">0</div>
+                    <div class="about-stat-label">Projects</div>
+                </div>
+                <div class="about-stat-card">
+                    <div class="about-stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div class="about-stat-value" data-target="200">0</div>
+                    <div class="about-stat-label">Students</div>
+                </div>
+                <div class="about-stat-card">
+                    <div class="about-stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <div class="about-stat-value" data-target="15">0</div>
+                    <div class="about-stat-label">Technologies</div>
+                </div>
+                <div class="about-stat-card">
+                    <div class="about-stat-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div class="about-stat-value" data-target="10">0</div>
+                    <div class="about-stat-label">Years</div>
+                </div>
+            </div>
+
+            <!-- Main Content Cards -->
+            <div class="about-content-section">
+
+                <!-- Initiative Card -->
+                <div class="about-feature-card about-slide-left about-delay-2">
+                    <div class="about-card-illustration">
+                        <svg viewBox="0 0 200 200" fill="none">
+                            <circle cx="100" cy="100" r="80" stroke="url(#grad1)" stroke-width="2" opacity="0.3" />
+                            <circle cx="100" cy="100" r="60" stroke="url(#grad1)" stroke-width="2" opacity="0.5" />
+                            <circle cx="100" cy="100" r="40" fill="url(#grad1)" opacity="0.2" />
+                            <path d="M100 60 L100 100 L130 100" stroke="url(#grad1)" stroke-width="3"
+                                stroke-linecap="round" />
+                            <circle cx="100" cy="60" r="5" fill="#8b5cf6" />
+                            <circle cx="130" cy="100" r="5" fill="#8b5cf6" />
+                            <defs>
+                                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="about-card-content">
+                        <div class="about-card-badge">Initiative</div>
+                        <h3 class="about-card-title">Fostering Innovation</h3>
+                        <p class="about-card-text">
+                            RLabz is an initiative under <strong>Rajagiri Centre for Incubation</strong> by the school
+                            of Computer Science.
+                            We maintain strong partnerships with Technopark TBI and Kerala State Industry Development
+                            Corporation (KSIDC),
+                            supporting both IT and non-IT startups in their journey towards excellence.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Vision Card -->
+                <div class="about-feature-card about-slide-right about-delay-3">
+                    <div class="about-card-illustration">
+                        <svg viewBox="0 0 200 200" fill="none">
+                            <path d="M100 40 L160 100 L100 160 L40 100 Z" stroke="url(#grad2)" stroke-width="2"
+                                opacity="0.4" />
+                            <path d="M100 60 L140 100 L100 140 L60 100 Z" stroke="url(#grad2)" stroke-width="2"
+                                opacity="0.6" />
+                            <circle cx="100" cy="100" r="15" fill="url(#grad2)" />
+                            <circle cx="100" cy="40" r="4" fill="#a78bfa" />
+                            <circle cx="160" cy="100" r="4" fill="#a78bfa" />
+                            <circle cx="100" cy="160" r="4" fill="#a78bfa" />
+                            <circle cx="40" cy="100" r="4" fill="#a78bfa" />
+                            <defs>
+                                <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="about-card-content">
+                        <div class="about-card-badge">Vision</div>
+                        <h3 class="about-card-title">Relentless Excellence</h3>
+                        <p class="about-card-text">
+                            Established through the foresight of the CMI, Rajagiri College of Social Sciences embodies
+                            an indefatigable spirit. The School of Computer Science upholds the axiomatic principle of
+                            <span class="about-accent-text">'Relentlessly towards Excellence'</span> in every endeavor.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- RIC Featured Section -->
+            <div class="about-ric-featured about-scale-in about-delay-4">
+                <div class="about-ric-content">
+                    <div class="about-ric-header">
+                        <div class="about-ric-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="about-ric-badge">Incubation Centre</div>
+                            <h2 class="about-ric-title">Rajagiri Incubation Centre</h2>
+                        </div>
+                    </div>
+                    <p class="about-ric-text">
+                        The Rajagiri Incubation Centre (RIC) provides RSET alumni and students with world-class
+                        facilities
+                        to design, develop, and deploy innovative ideas and concepts. Supported by a dedicated team of
+                        experienced faculty members who provide constant encouragement for new and developmental
+                        initiatives.
+                    </p>
+                    <div class="about-ric-features">
+                        <div class="about-ric-feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>State-of-the-art Infrastructure</span>
+                        </div>
+                        <div class="about-ric-feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Expert Faculty Mentorship</span>
+                        </div>
+                        <div class="about-ric-feature-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="20 6 9 17 4 12" />
+                            </svg>
+                            <span>Industry Partnerships</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-ric-visual">
+                    <svg viewBox="0 0 300 300" fill="none">
+                        <!-- Network nodes -->
+                        <circle cx="150" cy="150" r="8" fill="#8b5cf6" />
+                        <circle cx="80" cy="80" r="6" fill="#a78bfa" />
+                        <circle cx="220" cy="80" r="6" fill="#a78bfa" />
+                        <circle cx="80" cy="220" r="6" fill="#a78bfa" />
+                        <circle cx="220" cy="220" r="6" fill="#a78bfa" />
+                        <!-- Connection lines -->
+                        <line x1="150" y1="150" x2="80" y2="80" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="220" y2="80" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="80" y2="220" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="220" y2="220" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
+                        <!-- Outer ring -->
+                        <circle cx="150" cy="150" r="100" stroke="#8b5cf6" stroke-width="2" opacity="0.2"
+                            stroke-dasharray="5,5">
+                            <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150"
+                                dur="30s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Clients Section -->
+    <section class="clients-section" id="clientsSection">
+        <!-- Background -->
+        <div class="background">
+            <div class="gradient-mesh"></div>
+            <div class="gradient-orb gradient-orb-1"></div>
+            <div class="gradient-orb gradient-orb-2"></div>
+
+            <!-- Particles -->
+            <div id="particlesContainer"></div>
+
+            <div class="grid-pattern"></div>
+            <div class="vignette"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="clients-header" id="clientsHeader">
+                <h2>Our Clients</h2>
+                <p class="subtitle">Trusted by industry leaders worldwide</p>
+            </div>
+
+            <!-- Carousel -->
+            <div class="clients-carousel-wrapper" id="clientsCarouselWrapper">
+                <!-- Navigation Buttons -->
+                <button class="nav-button nav-button-left" id="scrollLeft" aria-label="Scroll left">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <div class="nav-button-glow"></div>
+                </button>
+
+                <button class="nav-button nav-button-right" id="scrollRight" aria-label="Scroll right">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                    <div class="nav-button-glow"></div>
+                </button>
+
+                <!-- Scroll Container -->
+                <div class="scroll-container" id="scrollContainer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us Section -->
+    <section id="contactSection" class="contact-section">
+        <div class="contact-container">
+            <h2 class="contact-title">Get In Touch</h2>
+            <p class="contact-subtitle">Have a project in mind or want to learn more? We'd love to hear from you.</p>
+
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
+                </div>
+                <div class="form-group">
+                    <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="mainFooter" class="main-footer">
+        <div class="footer-content">
+            <div class="footer-address">
+                <p>MCA block(Incubation center), Ground floor, Rajagiri College of Social Sciences</p>
+                <p>(Autonomous), Rajagiri P.O, Kalamassery, Kochi, Kerala 683104.</p>
+            </div>
+
+            <div class="footer-contact-info">
+                <a href="mailto:info@rlabz.in" class="footer-link">info@rlabz.in</a>
+                <p class="footer-phone">+91 984 628 1188</p>
+                <p class="footer-phone">+91 907 458 3614</p>
+            </div>
+
+            <div class="footer-social">
+                <h3>We Are Social</h3>
+                <div class="social-icons">
+                    <a href="#" class="social-icon" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" class="social-icon" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-divider"></div>
+            <p>&copy; 2026 All Rights reserved by <span class="brand-highlight">RLabZ</span></p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" aria-label="Back to Top">
+        <i class="fa-solid fa-chevron-up"></i>
+    </button>
+
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

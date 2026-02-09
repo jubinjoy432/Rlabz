@@ -335,3 +335,797 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { resize(); animate(); }, 100);
     setTimeout(() => { resize(); }, 500);
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // NEW: "Have You Seen Our Works" - 3D Cylindrical Carousel
+    // =========================================
+
+    const track = document.querySelector('.carousel-track');
+    const container = document.querySelector('.carousel-container');
+    const prevBtn = document.querySelector('.nav-btn.prev');
+    const nextBtn = document.querySelector('.nav-btn.next');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    const totalCards = projectCards.length;
+    const theta = 360 / totalCards; // Angle between cards
+    const radius = 450; // Cylinder radius - adjusted for smaller cards
+    let currentRotation = 0;
+    let autoScrollInterval;
+
+    // Position cards in 3D cylinder
+    function initCylinder() {
+        projectCards.forEach((card, index) => {
+            const angle = theta * index;
+            card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+        });
+        updateActiveCard();
+    }
+
+    function updateCarousel() {
+        track.style.transform = `rotateY(${currentRotation}deg)`;
+        updateActiveCard();
+    }
+
+    function updateActiveCard() {
+        const activeIndex = Math.round((-currentRotation / theta) % totalCards);
+        projectCards.forEach((card, index) => {
+            card.classList.toggle('active', index === (activeIndex < 0 ? activeIndex + totalCards : activeIndex));
+        });
+    }
+
+    if (prevBtn && nextBtn && container && track && projectCards.length > 0) {
+        initCylinder();
+
+        nextBtn.addEventListener('click', () => {
+            currentRotation -= theta; // Rotate to next
+            updateCarousel();
+            resetAutoScroll();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentRotation += theta; // Rotate to previous
+            updateCarousel();
+            resetAutoScroll();
+        });
+
+        // Auto Scroll
+        function startAutoScroll() {
+            autoScrollInterval = setInterval(() => {
+                currentRotation -= theta;
+                updateCarousel();
+            }, 2000);
+        }
+
+        function stopAutoScroll() {
+            clearInterval(autoScrollInterval);
+        }
+
+        function resetAutoScroll() {
+            stopAutoScroll();
+            startAutoScroll();
+        }
+
+        // Pause on hover
+        container.addEventListener('mouseenter', stopAutoScroll);
+        container.addEventListener('mouseleave', startAutoScroll);
+
+        // Start initially
+        updateCarousel(); // Set initial position
+        startAutoScroll();
+    }
+
+    // 2. Project Data (Mock Data matching IDs)
+    const projects = {
+        1: {
+            title: "Arkon Medical Systems",
+            desc: "Assured Service And Support And Reaching Out With Wide Product Range. Comprehensive medical equipment and systems for modern healthcare facilities.",
+            tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
+            img: "images/arkon-img.png",
+            client: "Arkon Medical Systems",
+            date: "December 2017",
+            link: "http://www.arkonmedicalsystems.in"
+        },
+        2: {
+            title: "Splendore",
+            desc: "Website for Rajagiri College of Social Sciences cultural festival.",
+            tech: ["HTML5", "CSS3", "JavaScript"],
+            img: "images/splendore-2019.png",
+            client: "Rajagiri College of Social Sciences",
+            date: "August 2019",
+            link: "http://www.splendorercss.in"
+        },
+        3: {
+            title: "Euphoria 2k17",
+            desc: "Cultural festival website for RCSS MCA Department.",
+            tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
+            img: "images/euphoria-2019.png",
+            client: "RCSS MCA Dept.",
+            date: "May 2017",
+            link: "http://euphoria.rlabz.in"
+        },
+        4: {
+            title: "Fest Buddy",
+            desc: "Android application for managing college festivals and events.",
+            tech: ["Android"],
+            img: "images/fesbud-image.png",
+            client: "Impress Project",
+            date: "March 2020",
+            link: "#"
+        },
+        5: {
+            title: "Campus Connect",
+            desc: "A comprehensive web platform connecting students, faculty, and administration for seamless campus communication and collaboration.",
+            tech: ["Python", "Django", "HTML5", "CSS3", "JavaScript"],
+            img: "images/campuscon-image.png",
+            client: "Rajagiri College of Social Sciences",
+            date: "November 2017",
+            link: "http://xxsreexx.pythonanywhere.com"
+        },
+        6: {
+            title: "Cocobies",
+            desc: "An innovative Android application developed for the RCSS MCA Department.",
+            tech: ["Android"],
+            img: "images/cocobi-image.png",
+            client: "RCSS MCA Dept.",
+            date: "July 2013",
+            link: "#"
+        },
+        7: {
+            title: "ReX",
+            desc: "A comprehensive web platform developed for Rajagiri College of Social Sciences.",
+            tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
+            img: "images/rex-image.png",
+            client: "Rajagiri College of Social Sciences",
+            date: "N/A",
+            link: "#"
+        },
+        8: {
+            title: "CTRM System",
+            desc: "Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences.",
+            tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
+            img: "images/ctrm-image.png",
+            client: "Rajagiri College of Social Sciences",
+            date: "March 2017",
+            link: "#"
+        },
+        9: {
+            title: "RAJAGIRI OutREACH",
+            desc: "Community outreach and social engagement platform for Rajagiri College of Social Sciences.",
+            tech: ["PHP", "HTML", "CSS", "JavaScript"],
+            img: "images/outreach-image.png",
+            client: "Rajagiri College of Social Sciences",
+            date: "June 2019",
+            link: "#"
+        },
+        10: {
+            title: "The Luke",
+            desc: "Professional event management website for The Luke Event Management company.",
+            tech: ["HTML5", "CSS3", "JavaScript"],
+            img: "images/luke-image.png",
+            client: "The Luke Event Management",
+            date: "August 2017",
+            link: "http://www.theluke.in"
+        }
+    };
+
+    // 3. Modal Logic
+    const modal = document.getElementById('project-modal');
+    const closeModalBtn = document.querySelector('.close-modal');
+
+    // Modal Elements
+    const modalImg = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-description');
+    const modalStack = document.getElementById('modal-tech-stack');
+
+    function openModal(id) {
+        const data = projects[id];
+        if (!data) return;
+
+        // Use detail image if available, otherwise use thumbnail
+        const imageSrc = data.detailImg || data.img;
+        console.log('Opening modal for:', data.title);
+        console.log('Image source:', imageSrc);
+        modalImg.src = imageSrc;
+        modalTitle.innerText = data.title;
+        modalDesc.innerText = data.desc;
+
+        // Populate client and date if available
+        const modalClient = document.getElementById('modal-client');
+        const modalDate = document.getElementById('modal-date');
+        const modalWebsiteLink = document.getElementById('modal-website-link');
+
+        if (modalClient) modalClient.innerText = data.client || data.title;
+        if (modalDate) modalDate.innerText = data.date || 'N/A';
+        if (modalWebsiteLink) {
+            modalWebsiteLink.href = data.link || '#';
+            modalWebsiteLink.innerText = data.link || 'N/A';
+        }
+
+        // Clear and add badges
+        modalStack.innerHTML = '';
+        data.tech.forEach(tech => {
+            const span = document.createElement('span');
+            span.className = 'tech-badge';
+            span.innerText = tech;
+            modalStack.appendChild(span);
+        });
+
+        // Show modal with animation
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+
+        // Trigger animation after browser has rendered initial state
+        setTimeout(() => {
+            modal.classList.add('show');
+        }, 10);
+    }
+
+
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+
+        // Hide modal after transition completes
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 500); // Match the CSS transition duration
+    }
+
+
+    projectCards.forEach(card => {
+        // Spotlight Effect - Only update CSS variables, don't modify transform
+        card.addEventListener('mousemove', (e) => {
+            const cardRect = card.getBoundingClientRect();
+            const x = e.clientX - cardRect.left;
+            const y = e.clientY - cardRect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+
+        // Click to Open
+        card.addEventListener('click', () => {
+            const id = card.getAttribute('data-id');
+            openModal(id);
+        });
+    });
+
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+    // Close on backdrop click
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // Clients Section Logic
+    // =========================================
+
+    // Client Data
+    const clients = [
+        {
+            id: 1,
+            name: "Sarah Mitchell",
+            position: "Chief Technology Officer",
+            company: "TechVision Inc.",
+            description: "Transformed our entire infrastructure with their innovative solutions.",
+            image: "https://images.unsplash.com/photo-1758518729459-235dcaadc611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        {
+            id: 2,
+            name: "Marcus Chen",
+            position: "VP of Engineering",
+            company: "CloudScale Systems",
+            description: "Exceptional service delivery and outstanding technical expertise.",
+            image: "https://images.unsplash.com/photo-1581065178047-8ee15951ede6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        {
+            id: 3,
+            name: "Elena Rodriguez",
+            position: "Head of Innovation",
+            company: "Digital Dynamics",
+            description: "A partnership that consistently exceeds expectations.",
+            image: "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        {
+            id: 4,
+            name: "James Anderson",
+            position: "CEO & Founder",
+            company: "Quantum Ventures",
+            description: "The strategic partner every growing company needs.",
+            image: "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        {
+            id: 5,
+            name: "Priya Sharma",
+            position: "Director of Product",
+            company: "InnovateLabs",
+            description: "Incredible attention to detail and commitment to excellence.",
+            image: "https://images.unsplash.com/photo-1737574821698-862e77f044c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        },
+        {
+            id: 6,
+            name: "David Park",
+            position: "Chief Product Officer",
+            company: "NextGen Solutions",
+            description: "Their platform has become integral to our operations.",
+            image: "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+        }
+    ];
+
+    // State
+    let isAutoScrolling = true;
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
+    let autoScrollInterval = null;
+    let inactivityTimer = null;
+
+    // DOM Elements - Using Class Selectors where renamed
+    const section = document.getElementById('clientsSection');
+    const header = document.querySelector('.clients-header');
+    const carouselWrapper = document.querySelector('.clients-carousel-wrapper');
+    const scrollContainer = document.getElementById('scrollContainer');
+    const scrollLeftBtn = document.getElementById('scrollLeft');
+    const scrollRightBtn = document.getElementById('scrollRight');
+    const particlesContainer = document.getElementById('particlesContainer');
+    const scrollProgress = document.getElementById('scrollProgress');
+
+    if (!section || !scrollContainer) return; // Guard clause
+
+    // Generate particles
+    function generateParticles() {
+        if (!particlesContainer) return;
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const tx = (Math.random() - 0.5) * 200;
+            const ty = (Math.random() - 0.5) * 200;
+            particle.style.left = `${left}%`;
+            particle.style.top = `${top}%`;
+            particle.style.setProperty('--tx', tx);
+            particle.style.setProperty('--ty', ty);
+            particle.style.animationDelay = `${Math.random() * 5}s`;
+            particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // Generate client cards
+    function generateCards() {
+        // Duplicate clients 3 times for infinite scroll
+        const infiniteClients = [...clients, ...clients, ...clients];
+
+        infiniteClients.forEach((client, index) => {
+            const cardWrapper = document.createElement('div');
+            cardWrapper.className = 'client-card-wrapper';
+
+            cardWrapper.innerHTML = `
+                <div class="client-card">
+                    <div class="card-shine"></div>
+                    <div class="card-glow"></div>
+                    <div class="card-image">
+                        <img src="${client.image}" alt="${client.name}" loading="lazy">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="card-info">
+                        <div class="name-linkedin">
+                            <h3>${client.name}</h3>
+                            <a href="#" class="linkedin-link" aria-label="View LinkedIn Profile" onclick="event.stopPropagation()">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                    <rect x="2" y="9" width="4" height="12"></rect>
+                                    <circle cx="4" cy="4" r="2"></circle>
+                                </svg>
+                            </a>
+                        </div>
+                        <p class="position">${client.position}</p>
+                        <p class="company">${client.company}</p>
+                        
+                        <div class="feedback">
+                            <p class="feedback-text">${client.description}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Staggered animation
+            cardWrapper.style.animationDelay = `${(index % clients.length) * 0.1}s`;
+
+            scrollContainer.appendChild(cardWrapper);
+        });
+    }
+
+    // Intersection Observer for fade-in
+    function setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    section.classList.add('visible');
+                    if (header) header.classList.add('visible');
+                    if (carouselWrapper) carouselWrapper.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(section);
+    }
+
+    // Auto-scroll functionality
+    function startAutoScroll() {
+        if (!isAutoScrolling) return;
+
+        autoScrollInterval = setInterval(() => {
+            if (!isAutoScrolling) return;
+
+            const maxScroll = scrollContainer.scrollWidth / 3; // Since we have 3x duplication
+
+            if (scrollContainer.scrollLeft >= maxScroll) {
+                scrollContainer.scrollLeft = 0;
+            } else {
+                scrollContainer.scrollLeft += 1;
+            }
+        }, 30);
+    }
+
+    function stopAutoScroll() {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+    }
+
+    function pauseAutoScroll() {
+        isAutoScrolling = false;
+        stopAutoScroll();
+
+        if (inactivityTimer) {
+            clearTimeout(inactivityTimer);
+        }
+
+        inactivityTimer = setTimeout(() => {
+            isAutoScrolling = true;
+            startAutoScroll();
+        }, 5000);
+    }
+
+    // Manual scroll
+    function handleManualScroll(direction) {
+        const scrollAmount = 400;
+        const newScrollLeft = direction === 'left'
+            ? scrollContainer.scrollLeft - scrollAmount
+            : scrollContainer.scrollLeft + scrollAmount;
+
+        scrollContainer.scrollTo({
+            left: newScrollLeft,
+            behavior: 'smooth'
+        });
+
+        pauseAutoScroll();
+    }
+
+    // Update navigation button states
+    function updateNavButtons() {
+        const isAtStart = scrollContainer.scrollLeft <= 10;
+        const isAtEnd = scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth - 10;
+
+        if (scrollLeftBtn) scrollLeftBtn.classList.toggle('disabled', isAtStart);
+        if (scrollRightBtn) scrollRightBtn.classList.toggle('disabled', isAtEnd);
+    }
+
+    // Update scroll progress
+    function updateScrollProgress() {
+        if (!scrollProgress) return;
+        const scrollableWidth = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        const scrollProgressPercent = (scrollContainer.scrollLeft / scrollableWidth) * 100;
+        scrollProgress.style.width = `${Math.min(100, Math.max(0, scrollProgressPercent))}%`;
+    }
+
+    // Keyboard navigation
+    function handleKeyDown(e) {
+        if (e.key === 'ArrowLeft') {
+            // Only capture if section is in view? Removed to avoid interfering with other carousels
+            // handleManualScroll('left'); 
+        } else if (e.key === 'ArrowRight') {
+            // handleManualScroll('right');
+        }
+    }
+
+    // Drag functionality
+    function handleMouseDown(e) {
+        isDragging = true;
+        scrollContainer.classList.add('grabbing');
+        startX = e.pageX - scrollContainer.offsetLeft;
+        scrollLeft = scrollContainer.scrollLeft;
+        pauseAutoScroll();
+    }
+
+    function handleMouseMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - scrollContainer.offsetLeft;
+        const walk = (x - startX) * 2;
+        scrollContainer.scrollLeft = scrollLeft - walk;
+    }
+
+    function handleMouseUp() {
+        isDragging = false;
+        scrollContainer.classList.remove('grabbing');
+    }
+
+    function handleMouseLeave() {
+        isDragging = false;
+        scrollContainer.classList.remove('grabbing');
+    }
+
+    // Click to pause
+    function handleClick() {
+        pauseAutoScroll();
+    }
+
+    // Event listeners
+    if (scrollLeftBtn) scrollLeftBtn.addEventListener('click', () => handleManualScroll('left'));
+    if (scrollRightBtn) scrollRightBtn.addEventListener('click', () => handleManualScroll('right'));
+
+    scrollContainer.addEventListener('mousedown', handleMouseDown);
+    scrollContainer.addEventListener('mousemove', handleMouseMove);
+    scrollContainer.addEventListener('mouseup', handleMouseUp);
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
+    scrollContainer.addEventListener('click', handleClick);
+    scrollContainer.addEventListener('scroll', () => {
+        updateNavButtons();
+        updateScrollProgress();
+    });
+    // window.addEventListener('keydown', handleKeyDown); // Commented out to avoid global conflict
+
+    // Touch support for mobile
+    let touchStartX = 0;
+    scrollContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        pauseAutoScroll();
+    });
+
+    scrollContainer.addEventListener('touchmove', (e) => {
+        if (Math.abs(e.touches[0].clientX - touchStartX) > 10) {
+            pauseAutoScroll();
+        }
+    });
+
+    // Initialize
+    generateParticles();
+    generateCards();
+    setupIntersectionObserver();
+    startAutoScroll();
+    updateNavButtons();
+
+    // Initial scroll progress update
+    setTimeout(() => {
+        updateScrollProgress();
+    }, 100);
+
+    // Cleanup on page unload (optional, handled by browser mostly)
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // About Us Section Logic
+    // =========================================
+
+    // --- 1. Animated Stats Counter ---
+    const statValues = document.querySelectorAll('.about-stat-value');
+
+    const animateCounter = (element) => {
+        const target = parseInt(element.dataset.target);
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                element.textContent = Math.floor(current);
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = target;
+            }
+        };
+
+        updateCounter();
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statValues.forEach(stat => statsObserver.observe(stat));
+
+    // --- 2. Mouse Tracking for Feature Cards ---
+    const featureCards = document.querySelectorAll('.about-feature-card');
+
+    featureCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // --- 3. Scroll-Triggered Animations ---
+    const scrollElements = document.querySelectorAll('.about-reveal, .about-scale-in, .about-blur-in, .about-slide-left, .about-slide-right');
+
+    const elementInView = (el, percentageScroll = 100) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return (
+            elementTop <=
+            ((window.innerHeight || document.documentElement.clientHeight) * (percentageScroll / 100))
+        );
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add('active');
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach((el) => {
+            if (elementInView(el, 85)) {
+                displayScrollElement(el);
+            }
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        handleScrollAnimation();
+    });
+
+    // Trigger on load for elements already in view
+    handleScrollAnimation();
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // About Us Section Logic
+    // =========================================
+
+    // --- 1. Animated Stats Counter ---
+    const statValues = document.querySelectorAll('.about-stat-value');
+
+    const animateCounter = (element) => {
+        const target = parseInt(element.dataset.target);
+        const duration = 2000;
+        const increment = target / (duration / 16);
+        let current = 0;
+
+        const updateCounter = () => {
+            current += increment;
+            if (current < target) {
+                element.textContent = Math.floor(current);
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = target;
+            }
+        };
+
+        updateCounter();
+    };
+
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    statValues.forEach(stat => statsObserver.observe(stat));
+
+    // --- 2. Mouse Tracking for Feature Cards ---
+    const featureCards = document.querySelectorAll('.about-feature-card');
+
+    featureCards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // --- 3. Scroll-Triggered Animations ---
+    const scrollElements = document.querySelectorAll('.about-reveal, .about-scale-in, .about-blur-in, .about-slide-left, .about-slide-right');
+
+    const elementInView = (el, percentageScroll = 100) => {
+        const elementTop = el.getBoundingClientRect().top;
+        return (
+            elementTop <=
+            ((window.innerHeight || document.documentElement.clientHeight) * (percentageScroll / 100))
+        );
+    };
+
+    const displayScrollElement = (element) => {
+        element.classList.add('active');
+    };
+
+    const handleScrollAnimation = () => {
+        scrollElements.forEach((el) => {
+            if (elementInView(el, 85)) {
+                displayScrollElement(el);
+            }
+        });
+    };
+
+    window.addEventListener('scroll', () => {
+        handleScrollAnimation();
+    });
+
+    // Trigger on load for elements already in view
+    handleScrollAnimation();
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // Contact Form Handling
+    // =========================================
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitBtn = contactForm.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                alert('Thank you! Your message has been sent successfully.');
+                contactForm.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+
+    // =========================================
+    // Back to Top Button Logic
+    // =========================================
+    const backToTopBtn = document.getElementById('backToTop');
+
+    if (backToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+});
+
