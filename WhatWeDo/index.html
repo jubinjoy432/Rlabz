@@ -17,7 +17,9 @@
 
 </head>
 
-<body>
+<body data-morphic-active="false">
+    <!-- Shared Morphic Highlight Element -->
+    <div id="shared-morphic-highlight" class="shared-morphic-highlight"></div>
 
     <!-- Premium Floating Navbar -->
     <nav class="premium-nav">
@@ -180,7 +182,8 @@
 
         <div class="container">
             <header class="section-header">
-                <h2 class="section-title">Comprehensive <span class="highlight-text">Solutions</span><br>for Your
+                <h2 class="section-title">Comprehensive <span class="highlight-text"
+                        id="highlight-solutions">Solutions</span><br>for Your
                     Business</h2>
                 <div class="divider"></div>
             </header>
@@ -258,7 +261,8 @@
     <section id="our-works" class="rounded-section light-blue-bg">
         <div class="container">
             <header class="section-header">
-                <h2 class="section-title">Have You Seen <br><span class="highlight-text">Our Works?</span></h2>
+                <h2 class="section-title">Have You Seen <br><span class="highlight-text" id="highlight-works">Our
+                        Works?</span></h2>
                 <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
@@ -269,82 +273,426 @@
                         <!-- Project Cards will be dynamically inserted here or hardcoded below -->
                         <!-- Card 1 -->
                         <div class="project-card" data-id="1">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/arkon-img.png" alt="Arkon Medical Systems" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Arkon Medical Systems</h3>
                                 <p class="project-desc">Reliable Service with Wide Product Range</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle">
+                                            <img src="https://i.pravatar.cc/150?img=1" alt="Team Member 1">
+                                        </div>
+                                        <p class="profile-name">John Doe</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle">
+                                            <img src="https://i.pravatar.cc/150?img=2" alt="Team Member 2">
+                                        </div>
+                                        <p class="profile-name">Jane Smith</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle">
+                                            <img src="https://i.pravatar.cc/150?img=3" alt="Team Member 3">
+                                        </div>
+                                        <p class="profile-name">Mike Johnson</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle">
+                                            <img src="https://i.pravatar.cc/150?img=4" alt="Team Member 4">
+                                        </div>
+                                        <p class="profile-name">Sarah Williams</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 2 -->
                         <div class="project-card" data-id="2">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/splendore-2019.png" alt="Splendore" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Splendore</h3>
                                 <p class="project-desc">Rajagiri College of Social Sciences</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=5"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Alex Chen</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=6"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Maria Garcia</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=7"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">David Lee</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=8"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Emily Brown</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 3 -->
                         <div class="project-card" data-id="3">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/euphoria-2019.png" alt="Euphoria 2k17" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Euphoria 2k17</h3>
                                 <p class="project-desc">RCSS MCA Department</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=9"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Chris Taylor</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=10"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Lisa Anderson</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=11"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Ryan Martinez</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=12"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Sophie Wilson</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 4 -->
                         <div class="project-card" data-id="4">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/fesbud-image.png" alt="Fest Buddy" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Fest Buddy</h3>
                                 <p class="project-desc">Impress Project</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=13"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Kevin Park</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=14"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Anna Kim</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=15"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Tom Harris</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=16"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Rachel Green</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 5 -->
                         <div class="project-card" data-id="5">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/campuscon-image.png" alt="Campus Connect" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Campus Connect</h3>
                                 <p class="project-desc">Rajagiri College of Social Sciences</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=17"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Ben Carter</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=18"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Nina Patel</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=19"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Sam Cooper</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=20"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Olivia Reed</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 6 -->
                         <div class="project-card" data-id="6">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/cocobi-image.png" alt="Cocobies" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">Cocobies</h3>
                                 <p class="project-desc">RCSS MCA Dept.</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=21"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Mark Stevens</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=22"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Julia Roberts</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=23"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Paul Walker</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=24"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Kate Evans</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 7 -->
                         <div class="project-card" data-id="7">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/rex-image.png" alt="ReX" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">ReX</h3>
                                 <p class="project-desc">Rajagiri College of Social Sciences</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=25"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Luke Scott</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=26"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Emma Stone</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=27"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Jack Turner</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=28"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Maya Collins</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 8 -->
                         <div class="project-card" data-id="8">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/ctrm-image.png" alt="CTRM System" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">CTRM System</h3>
                                 <p class="project-desc">Rajagiri College of Social Sciences</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=29"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Nick Parker</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=30"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Grace Miller</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=31"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Adam White</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=32"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Zoe King</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 9 -->
                         <div class="project-card" data-id="9">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/outreach-image.png" alt="RAJAGIRI OutREACH" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">RAJAGIRI OutREACH</h3>
                                 <p class="project-desc">Rajagiri College of Social Sciences</p>
                             </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=33"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">James Bond</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=34"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Lily Adams</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=35"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Max Bell</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=36"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Chloe Davis</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
+                            </div>
                         </div>
                         <!-- Card 10 -->
                         <div class="project-card" data-id="10">
+                            <!-- Info Icon (Top Right) -->
+                            <div class="info-icon">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+
+                            <!-- Regular Card Content -->
                             <img src="images/luke-image.png" alt="The Luke" class="project-image">
                             <div class="project-info">
                                 <h3 class="project-title">The Luke</h3>
                                 <p class="project-desc">The Luke Event Management</p>
+                            </div>
+
+                            <!-- Reveal Overlay -->
+                            <div class="reveal-overlay">
+                                <div class="developed-by-title">Developed By</div>
+                                <div class="team-profiles">
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=37"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Oscar Brooks</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=38"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Mia Foster</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=39"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Leo Hunt</p>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-circle"><img src="https://i.pravatar.cc/150?img=40"
+                                                alt="Team Member"></div>
+                                        <p class="profile-name">Bella Wright</p>
+                                    </div>
+                                </div>
+                                <a href="#" class="know-more-btn">Know more <i class="fa-solid fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>

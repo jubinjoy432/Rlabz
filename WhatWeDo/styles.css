@@ -1245,7 +1245,7 @@ h2 {
 
 
 #our-works .container {
-    max-width: 1200px;
+    max-width: 1600px;
     width: 100%;
     margin: 0 auto;
     /* Center the container */
@@ -1257,27 +1257,29 @@ h2 {
     display: flex;
     align-items: center;
     gap: 2rem;
-    margin-top: 3rem;
+    margin-top: 1rem;
     width: 100%;
     justify-content: center;
+    overflow: hidden;
+    /* Hide cards sliding off edges */
 }
 
 .carousel-container {
     flex: 1;
-    height: 450px;
+    height: 600px;
     position: relative;
     perspective: 1200px;
-    /* 3D perspective */
+    /* 3D perspective for Coverflow */
     overflow: visible;
+    transform-style: preserve-3d;
 }
 
-/* 3D Cylinder Track */
+/* Track - container for cards (no rotation) */
 .carousel-track {
     width: 100%;
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;
-    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Navigation Buttons */
@@ -1314,25 +1316,24 @@ h2 {
     margin-left: 0.5rem;
 }
 
-/* 3D Project Card - positioned on cylinder */
+/* 3D Project Card - Coverflow Styles */
 .project-card {
     position: absolute;
-    width: 250px;
-    height: 320px;
+    width: 375px;
+    height: 500px;
     left: 50%;
     top: 50%;
-    margin-left: -125px;
-    /* Half of width */
-    margin-top: -160px;
-    /* Half of height */
-    /* Half of height */
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Transforms applied by JavaScript */
+    background: transparent;
+    border: none;
     border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    box-shadow: none;
+    /* Smooth Coverflow transitions */
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.6s ease,
+        box-shadow 0.3s ease;
     backface-visibility: hidden;
 
     /* Spotlight vars */
@@ -1340,10 +1341,13 @@ h2 {
     --mouse-y: 50%;
 }
 
-/* Hover effect - lift the card */
-.project-card:hover {
+/* Hover effect - lift the card (only non-active cards) */
+.project-card:hover:not(.active) .flip-card-inner {
     transform: scale(1.15) translateY(-20px);
-    box-shadow: 0 20px 60px rgba(var(--primary-blue-rgb), 0.6);
+}
+
+.project-card:hover:not(.active) .flip-card-front {
+    box-shadow: 0 20px 40px rgba(11, 83, 148, 0.3);
     border-color: var(--accent-cyan);
 }
 
@@ -1356,7 +1360,7 @@ h2 {
     right: 0;
     bottom: 0;
     background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y),
-            rgba(255, 255, 255, 0.08),
+            rgba(11, 83, 148, 0.1),
             transparent 40%);
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -1370,15 +1374,15 @@ h2 {
 
 /* Front-facing cards are more prominent */
 .project-card.active {
-    filter: brightness(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
+    filter: brightness(1.02);
+    box-shadow: 0 8px 30px rgba(11, 83, 148, 0.25);
+    border-color: rgba(11, 83, 148, 0.3);
 }
 
-/* Active card hover - ensure hover effect overrides active state */
-.project-card.active:hover {
-    transform: scale(1.15) translateY(-20px);
-    box-shadow: 0 20px 60px rgba(var(--primary-blue-rgb), 0.6);
+/* Active card hover - keep in place, no scale/transform (only flip) */
+.project-card.active:hover .flip-card-front,
+.project-card.active:hover .flip-card-back {
+    box-shadow: 0 20px 50px rgba(11, 83, 148, 0.35);
     border-color: var(--accent-cyan);
 }
 
@@ -1390,42 +1394,172 @@ h2 {
     background-size: cover;
     background-position: center;
     position: relative;
+    -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }
 
 .project-image::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(to top, rgba(5, 5, 5, 1), transparent);
+    display: none;
 }
 
 .project-info {
     padding: 1.5rem;
     position: relative;
     z-index: 2;
-    background: linear-gradient(to bottom, rgba(2, 6, 11, 0.8), rgba(2, 6, 11, 1));
+    background: #ffffff;
+    /* Solid white to match card background */
     min-height: 40%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
+    text-align: center;
+    padding-bottom: 1rem;
 }
 
 .project-info h3 {
     font-family: var(--font-heading);
-    font-size: 1.2rem;
-    color: #fff;
+    font-size: 1.8rem;
+    color: #0f172a;
     margin-bottom: 0.5rem;
 }
 
 .project-info p {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    color: #64748b;
     line-height: 1.4;
     overflow: visible;
 }
+
+/* =========================================
+   Flip Card 3D Effect - Only Active Cards
+   ========================================= */
+
+/* Flip Card Container */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out;
+    background: transparent;
+}
+
+/* Only flip when hovering over active (center) card - DISABLED by request */
+/* .project-card.active:hover .flip-card-inner {
+    transform: rotateY(180deg); 
+} */
+
+/* Front and Back Sides */
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* Front side - default view */
+.flip-card-front {
+    transform: rotateY(0deg) translateZ(1px);
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 4px 20px rgba(11, 83, 148, 0.15);
+}
+
+/* Back side - flipped view */
+.flip-card-back {
+    transform: rotateY(180deg) translateZ(1px);
+    background: #ffffff;
+    border: none;
+    box-shadow: 0 4px 20px rgba(11, 83, 148, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+/* Developed By heading */
+.developed-by-title {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Team profiles grid */
+.team-profiles {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
+    max-width: 200px;
+}
+
+/* Individual profile item */
+.profile-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Profile circle */
+.profile-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #0b5394;
+    box-shadow: 0 4px 15px rgba(11, 83, 148, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(11, 83, 148, 0.5);
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Click hint on back of card */
+.flip-card-back::after {
+    content: "Click for more details";
+    position: absolute;
+    bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--primary-blue);
+    font-weight: 500;
+    opacity: 0.8;
+    background: rgba(11, 83, 148, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+}
+
+/* Profile name */
+.profile-name {
+    font-size: 0.7rem;
+    color: #334155;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
 
 /* =========================================
    Modal Styling
@@ -1455,15 +1589,15 @@ h2 {
 }
 
 .modal-content {
-    background: #02060b;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #ffffff;
+    border: none;
     width: 90%;
     max-width: 1400px;
     /* Increased from 1000px for larger images */
     max-height: 90vh;
     border-radius: 20px;
     position: relative;
-    box-shadow: 0 0 50px rgba(var(--primary-blue-rgb), 0.15);
+    box-shadow: 0 4px 20px rgba(11, 83, 148, 0.15);
     transform: scale(0.3) translateY(100px);
     opacity: 0;
     transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1479,7 +1613,7 @@ h2 {
     position: absolute;
     top: 15px;
     right: 25px;
-    color: #aaa;
+    color: #64748b;
     font-size: 35px;
     font-weight: bold;
     cursor: pointer;
@@ -1489,7 +1623,7 @@ h2 {
 }
 
 .close-modal:hover {
-    color: #fff;
+    color: var(--primary-blue);
 }
 
 .modal-grid {
@@ -1506,7 +1640,7 @@ h2 {
     max-height: 85vh;
     overflow: hidden;
     /* No scrolling */
-    background: #02060b;
+    background: #ffffff;
     display: flex;
     align-items: flex-start;
     justify-content: center;
@@ -1520,6 +1654,9 @@ h2 {
     /* Show full image without cropping */
     max-width: 100%;
     display: block;
+    /* Smooth edge blend using mask */
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
 }
 
 /* Optional: hover effect on image inside modal */
@@ -1532,37 +1669,190 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: radial-gradient(circle at top right, rgba(11, 83, 148, 0.2), #02060b);
+    background: #ffffff;
 }
 
 .modal-details h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    color: #fff;
+    color: #0f172a;
     background: none;
     -webkit-text-fill-color: initial;
-    /* Resetting gradient text from global H2 if needed, 
-       or keep it for consistency. Let's keep white for readability against dark. */
 }
 
 .modal-details p {
-    color: rgba(255, 255, 255, 0.75);
+    color: #64748b;
     line-height: 1.7;
     margin-bottom: 2rem;
     font-size: 1.05rem;
 }
 
+/* =========================================
+   Circular Reveal Interaction - INFO ICON
+   ========================================= */
+
+/* Corner Structure for Info Icon */
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: rgba(15, 23, 42, 0.08);
+    /* Neutral transparent structure */
+    box-shadow: -2px 2px 10px rgba(0, 0, 0, 0.03);
+    /* Lighter shadow */
+    pointer-events: none;
+    z-index: 10;
+    border-radius: 0 16px 0 100%;
+    /* Corner bulge shape */
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.project-card.active::before {
+    opacity: 1;
+}
+
+/* Info Icon - Only visible on active card */
+.project-card .info-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 20;
+    /* Above everything */
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    /* Remove white background */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    pointer-events: none;
+    /* Disable interaction on non-active cards */
+}
+
+.project-card.active .info-icon {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+.info-icon i {
+    color: #0b5394;
+    /* Primary blue for contrast against white corner */
+    background: none;
+    /* Ensure no residual background */
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.project-card.active .info-icon:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(11, 83, 148, 0.25);
+}
+
+/* Reveal Overlay */
+.reveal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.98);
+    /* Slight transparency for layering feel */
+    z-index: 15;
+    /* Above image/text but below info-icon */
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    /* Match card border radius */
+
+    /* Circular Reveal Logic */
+    /* Start circle at top right, where icon is */
+    clip-path: circle(0% at calc(100% - 38px) 38px);
+    transition: clip-path 0.7s cubic-bezier(0.645, 0.045, 0.355, 1);
+    /* Smooth eased transition */
+    pointer-events: none;
+    /* Allow clicks to pass through when hidden */
+}
+
+/* Trigger Reveal: When active card's icon is hovered OR overlay itself is hovered */
+.project-card.active .info-icon:hover~.reveal-overlay,
+.project-card.active .reveal-overlay:hover {
+    clip-path: circle(150% at calc(100% - 38px) 38px);
+    pointer-events: auto;
+}
+
+/* Ensure existing profile styles work well in overlay */
+.reveal-overlay .developed-by-title {
+    margin-top: 1rem;
+}
+
+.reveal-overlay .team-profiles {
+    margin-bottom: 1.5rem;
+}
+
+/* Know More Button */
+.know-more-btn {
+    margin-top: auto;
+    margin-bottom: 1rem;
+    padding: 0.6rem 1.8rem;
+    background: linear-gradient(135deg, #0b5394 0%, #00d2ff 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 4px 15px rgba(11, 83, 148, 0.3);
+}
+
+.know-more-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(11, 83, 148, 0.4);
+    color: white;
+}
+
+.know-more-btn i {
+    font-size: 0.9rem;
+    transition: transform 0.2s;
+}
+
+.know-more-btn:hover i {
+    transform: translateX(4px);
+}
+
+/* Click hint on back of card - UPDATE for Reveal */
+/* We don't need the previous ::after content on flip-card-back */
+
+/* =========================================
+   Modal Styling
+   ========================================= */
 .modal-meta {
     margin-bottom: 2rem;
 }
 
+
 .meta-item {
     margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: #475569;
 }
 
 .meta-item strong {
-    color: var(--accent-cyan);
+    color: #0f172a;
     display: inline-block;
     min-width: 80px;
 }
@@ -1673,14 +1963,14 @@ h2 {
     }
 
     .carousel-container {
-        height: 380px;
+        height: 550px;
     }
 
     .project-card {
-        width: 220px;
-        height: 300px;
-        margin-left: -110px;
-        margin-top: -150px;
+        width: 320px;
+        height: 440px;
+        margin-left: -160px;
+        margin-top: -220px;
     }
 
     .nav-btn {
@@ -1763,14 +2053,14 @@ h2 {
     }
 
     .carousel-container {
-        height: 350px;
+        height: 480px;
     }
 
     .project-card {
-        width: 200px;
-        height: 280px;
-        margin-left: -100px;
-        margin-top: -140px;
+        width: 280px;
+        height: 400px;
+        margin-left: -140px;
+        margin-top: -200px;
     }
 
     .project-card:hover {
@@ -3389,7 +3679,7 @@ h2 {
 /* Feature Grid Layout (Mutmiz Style) */
 .features-section {
     padding: 6rem 2rem;
-    background: #f8faff;
+    background: linear-gradient(180deg, #f8faff 0%, #f0f9ff 100%);
     position: relative;
     /* Removed z-index: 10 to allow background elements */
 }
@@ -3418,6 +3708,32 @@ h2 {
     background: rgba(11, 83, 148, 0.1);
     z-index: -1;
     border-radius: 4px;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide static highlights for shared elements to prevent doubling */
+[data-morphic-active="true"] #highlight-solutions::after,
+[data-morphic-active="true"] #highlight-works::after {
+    opacity: 0;
+}
+
+/* Shared Morphic Element */
+.shared-morphic-highlight {
+    position: fixed;
+    height: 8px;
+    background: rgba(11, 83, 148, 0.15);
+    z-index: 5;
+    /* Below text, above section backgrounds */
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+    transform-origin: left bottom;
+    will-change: transform, width, opacity;
+}
+
+.shared-morphic-highlight.active {
+    opacity: 1;
 }
 
 .feature-grid {
@@ -3514,8 +3830,14 @@ h2 {
 }
 
 /* Specific Cleanup for Our Works in Light Mode */
+#our-works {
+    margin-top: 0;
+    padding-top: 4rem;
+    /* Adjust padding if needed */
+}
+
 #our-works .section-header {
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
 }
 
 #our-works .subtitle {
