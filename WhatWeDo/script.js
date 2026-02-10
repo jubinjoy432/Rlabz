@@ -137,10 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let mouse = { x: -1000, y: -1000 };
 
     const CONFIG = {
-        particleCount: 400, // Increased count
-        colorBase: 'rgba(11, 83, 148, ', // Primary Blue base
-        colorHighlight: 'rgba(0, 210, 255, ', // Cyan Highlight
-        colorAccent: 'rgba(224, 242, 254, ', // Light Blue accent
+        particleCount: 150, // Reduced for cleaner look
+        colorBase: 'rgba(148, 163, 184, ', // Slate 400 (Light subtle dots)
+        colorHighlight: 'rgba(59, 130, 246, ', // Blue 500 (Soft blue glow)
+        colorAccent: 'rgba(203, 213, 225, ', // Slate 300 (Very light lines)
         connectionDist: 140,
         mouseRadius: 300,
     };
@@ -1574,6 +1574,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+<<<<<<< HEAD
 
 /* =========================================
    NEW CLIENTS FEEDBACK SECTION LOGIC
@@ -1820,4 +1821,141 @@ document.addEventListener('DOMContentLoaded', () => {
     client_form_populate_cards();
     client_form_create_particles();
     client_form_add_logos_blob();
+=======
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // "Who We Are" Diagonal Mesh Animation (Ambient Wave)
+    // =========================================
+    const canvas = document.getElementById('who-we-are-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const section = document.getElementById('aboutUsSection');
+
+    let width, height;
+    let gridPoints = [];
+
+    const CONFIG = {
+        gridSize: 60,
+        lineColor: 'rgba(148, 163, 184, 0.15)',
+        vertexColor: 'rgba(148, 163, 184, 0.3)',
+        waveSpeed: 0.002,
+        waveAmplitude: 6    // Subtle vertical rise
+    };
+
+    function resize() {
+        width = canvas.width = section.offsetWidth;
+        height = canvas.height = section.offsetHeight;
+        initMesh();
+    }
+
+    class Point {
+        constructor(x, y, col, row) {
+            this.baseX = x;
+            this.baseY = y;
+            this.x = x;
+            this.y = y;
+            // Alternating Phase: (col + row) % 2 creates a checkerboard pattern
+            // Points (0,0), (1,1), (2,0) etc. move together
+            // Points (0,1), (1,0), (2,1) etc. move in opposition
+            this.offset = (col + row) % 2 === 0 ? 0 : Math.PI;
+        }
+
+        update(time) {
+            // "Rise and Fall" Illusion
+            // Only modify Y axis to keep the grid structure rigid (no X distortion)
+            // The sine wave creates a smooth up/down motion
+            // The offset makes neighbors move in opposite directions
+            const oscillation = Math.sin(time * CONFIG.waveSpeed + this.offset);
+
+            this.y = this.baseY + oscillation * CONFIG.waveAmplitude;
+            this.x = this.baseX; // Keep X fixed to maintain shape
+        }
+    }
+
+    function initMesh() {
+        gridPoints = [];
+        const cols = Math.ceil(width / CONFIG.gridSize) + 2;
+        const rows = Math.ceil(height / CONFIG.gridSize) + 2;
+
+        for (let i = -1; i < cols; i++) {
+            gridPoints[i] = [];
+            for (let j = -1; j < rows; j++) {
+                // Pass indices (i, j) to constructor for phase calculation
+                gridPoints[i][j] = new Point(i * CONFIG.gridSize, j * CONFIG.gridSize, i, j);
+            }
+        }
+    }
+
+    function animate(time) {
+        ctx.clearRect(0, 0, width, height);
+
+        const cols = gridPoints.length;
+
+        for (let i = 0; i < cols; i++) {
+            if (!gridPoints[i]) continue;
+            const rows = gridPoints[i].length;
+            for (let j = 0; j < rows; j++) {
+                gridPoints[i][j].update(time);
+            }
+        }
+
+        ctx.strokeStyle = CONFIG.lineColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+
+        for (let i = 0; i < cols - 1; i++) {
+            if (!gridPoints[i]) continue;
+            const rows = gridPoints[i].length;
+            for (let j = 0; j < rows - 1; j++) {
+                const p1 = gridPoints[i][j];
+                const p2 = gridPoints[i + 1][j];
+                const p3 = gridPoints[i][j + 1];
+                const p4 = gridPoints[i + 1][j + 1];
+
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p3.x, p3.y);
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p4.x, p4.y);
+            }
+        }
+        ctx.stroke();
+
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resize);
+    setTimeout(() => { resize(); requestAnimationFrame(animate); }, 100);
+});
+
+// =========================================
+// "Comprehensive Solutions" Reveal on Scroll
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    // Target the section header
+    const solutionsHeader = document.querySelector('#what-we-do .section-header');
+    if (solutionsHeader) {
+        solutionsHeader.classList.add('reveal-on-scroll');
+        revealObserver.observe(solutionsHeader);
+    }
+
+    // Target each feature card with staggered delay
+    const featureCards = document.querySelectorAll('#what-we-do .feature-card');
+    featureCards.forEach((card, index) => {
+        card.classList.add('reveal-on-scroll');
+        card.style.transitionDelay = `${(index + 1) * 120}ms`;
+        revealObserver.observe(card);
+    });
+>>>>>>> origin/jubin
 });
