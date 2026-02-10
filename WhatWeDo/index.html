@@ -17,138 +17,192 @@
 
 <body>
 
-    <!-- Hero Section (Violet Theme + Blob BG + Card Slider) -->
-    <section class="hero-violet-section" id="hero-violet">
-        <div class="hero-violet-container">
-            <!-- Left Side Content -->
-            <div class="hero-violet-content">
-                <div class="hero-violet-label">Next Gen Innovation</div>
-                <h1 class="hero-violet-title">Building the Future <br> with Advanced Solutions</h1>
-                <p class="hero-violet-desc">
-                    Explore a world where technology meets creativity. We craft immersive digital experiences that
-                    redefine interaction and design.
-                </p>
-                <a href="#what-we-do" class="hero-violet-cta">
-                    Discover More <i class="fa-solid fa-arrow-right"></i>
-                </a>
+    <!-- Premium Floating Navbar -->
+    <nav class="premium-nav">
+        <div class="nav-content">
+            <a href="#" class="nav-logo">R<span class="brand-highlight">Labz</span></a>
+            <div class="nav-links">
+                <a href="#hero-blue" class="nav-link active">Home</a>
+                <a href="#what-we-do" class="nav-link">Services</a>
+                <a href="#our-works" class="nav-link">Work</a>
+                <a href="#clientsSection" class="nav-link">Clients</a>
             </div>
-
-            <!-- Right Side Visual -->
-            <div class="hero-violet-visual">
-                <!-- Liquid Canvas Background -->
-                <canvas id="hero-liquid-canvas"></canvas>
-
-                <!-- Blob Background -->
-                <div class="hero-blob-container">
-                    <div class="hero-blob blob-1"></div>
-                    <div class="hero-blob blob-2"></div>
-                    <div class="hero-blob blob-3"></div>
-                </div>
-
-                <!-- 3-Card Floating Display -->
-                <div class="hero-cards-wrapper">
-                    <!-- Card 1: HTML (Back/Top-Left) -->
-                    <div class="hero-violet-card card-html">
-                        <i class="fa-brands fa-html5 hero-card-icon"></i>
-                        <h3 class="hero-card-title">HTML</h3>
-                        <div class="code-snippet">
-                            <span>&lt;div class="card"&gt;</span><br>
-                            <span>&nbsp;&nbsp;&lt;h1&gt;Hello&lt;/h1&gt;</span><br>
-                            <span>&lt;/div&gt;</span>
-                        </div>
-                    </div>
-
-                    <!-- Card 2: SCSS (Middle/Center-Right) -->
-                    <div class="hero-violet-card card-scss">
-                        <i class="fa-brands fa-sass hero-card-icon"></i>
-                        <h3 class="hero-card-title">SCSS</h3>
-                        <div class="code-snippet">
-                            <span>.card {</span><br>
-                            <span>&nbsp;&nbsp;display: flex;</span><br>
-                            <span>&nbsp;&nbsp;gap: 1rem;</span><br>
-                            <span>}</span>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: JS (Front/Bottom-Center) -->
-                    <div class="hero-violet-card card-js">
-                        <i class="fa-brands fa-js hero-card-icon"></i>
-                        <h3 class="hero-card-title">JS</h3>
-                        <div class="code-snippet">
-                            <span>const card =</span><br>
-                            <span>document.querySelector</span><br>
-                            <span>('.card');</span>
-                        </div>
-                    </div>
-                </div>
+            <a href="#contactSection" class="nav-btn">Get Started</a>
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
             </div>
         </div>
+    </nav>
+
+
+    <!-- Hero Section (Blue Theme + Blob BG + Card Slider) -->
+    <section class="hero-blue-section" id="hero-blue">
+        <!-- Main Blue Background Elements -->
+        <div class="hero-bg-overlay"></div>
+
+        <!-- White Rounded Container -->
+        <div class="hero-white-container">
+            <div class="hero-blue-container">
+                <!-- Left Side Content -->
+                <div class="hero-blue-content">
+                    <div class="hero-blue-label">Next Gen Innovation</div>
+                    <h1 class="hero-blue-title">Building the Future <br> with Advanced Solutions</h1>
+                    <p class="hero-blue-desc">
+                        Explore a world where technology meets creativity. We craft immersive digital experiences that
+                        redefine interaction and design.
+                    </p>
+                    <a href="#what-we-do" class="hero-blue-cta">
+                        Discover More <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- Right Side Visual -->
+                <div class="hero-blue-visual">
+                    <!-- Liquid Canvas Background -->
+                    <canvas id="hero-liquid-canvas"></canvas>
+
+                    <!-- Blob Background -->
+                    <div class="hero-blob-container">
+                        <div class="hero-blob blob-1"></div>
+                        <div class="hero-blob blob-2"></div>
+                        <div class="hero-blob blob-3"></div>
+                    </div>
+
+                    <!-- Phone Mockup Container -->
+                    <div class="phone-frame">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <!-- App UI Mockup Header -->
+                            <div class="app-header">
+                                <div class="app-avatar"></div>
+                                <div class="app-user-info">
+                                    <span class="app-greeting">Hello,</span>
+                                    <span class="app-username">RLabz Team 👋</span>
+                                </div>
+                            </div>
+
+                            <!-- App UI Content Mockup -->
+                            <div class="app-stats-card">
+                                <i class="fa-solid fa-code"></i>
+                                <div class="app-stat-text">
+                                    <span class="stat-label">Projects</span>
+                                    <span class="stat-value">50+</span>
+                                </div>
+                            </div>
+
+                            <div class="app-stats-card">
+                                <i class="fa-solid fa-users"></i>
+                                <div class="app-stat-text">
+                                    <span class="stat-label">Clients</span>
+                                    <span class="stat-value">200+</span>
+                                </div>
+                            </div>
+
+                            <!-- Floating Action Button -->
+                            <div class="app-fab">+</div>
+                        </div>
+                    </div>
+
+                    <!-- Floating Cards (Positioned around phone) -->
+                    <div class="hero-cards-wrapper">
+                        <!-- Card 1: HTML (Left) -->
+                        <div class="hero-blue-card card-html">
+                            <i class="fa-brands fa-html5 hero-card-icon"></i>
+                            <h3 class="hero-card-title">HTML</h3>
+                            <p class="hero-card-desc">Structural Foundation</p>
+                        </div>
+
+                        <!-- Card 2: SCSS (Right) -->
+                        <div class="hero-blue-card card-scss">
+                            <i class="fa-brands fa-sass hero-card-icon"></i>
+                            <h3 class="hero-card-title">SCSS</h3>
+                            <p class="hero-card-desc">Modern Styling</p>
+                        </div>
+
+                        <!-- Card 3: JS (Bottom) -->
+                        <div class="hero-blue-card card-js">
+                            <i class="fa-brands fa-js hero-card-icon"></i>
+                            <h3 class="hero-card-title">JavaScript</h3>
+                            <p class="hero-card-desc">Interactive Logic</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 
-    <section id="what-we-do">
+    <section id="what-we-do" class="features-section">
         <!-- Ambient Canvas Background -->
         <canvas id="ambient-canvas"></canvas>
 
         <div class="container">
             <header class="section-header">
-                <h2 class="glitch" data-text="What We Do">What We Do</h2>
-                <p class="subtitle">Crafting digital excellence using cutting-edge technologies.</p>
+                <h2 class="section-title">Comprehensive <span class="highlight-text">Solutions</span><br>for Your
+                    Business</h2>
                 <div class="divider"></div>
             </header>
 
-            <div class="cards-container">
+            <div class="feature-grid">
                 <!-- Card 1: Mobile Solutions -->
-                <div class="card" data-tilt>
-                    <div class="card-content">
-                        <div class="icon-wrapper">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
-                        </div>
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </div>
+                    <div class="feature-content">
                         <h3>Mobile Solutions</h3>
-                        <p>Seamless offline and online mobile experiences designed for performance and user engagement.
-                        </p>
-                        <div class="tech-stack">
-                            <span class="tech-badge"><i class="fa-brands fa-android"></i> Android</span>
-                            <span class="tech-badge"><i class="fa-brands fa-apple"></i> iOS</span>
-                            <span class="tech-badge"><i class="fa-brands fa-flutter"></i> Flutter</span>
+                        <p>Seamless offline and online mobile experiences designed for performance.</p>
+                        <div class="feature-tags">
+                            <span>Android</span>
+                            <span>iOS</span>
+                            <span>Flutter</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 2: Web Solutions -->
-                <div class="card" data-tilt>
-                    <div class="card-content">
-                        <div class="icon-wrapper">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <div class="feature-content">
                         <h3>Web Solutions</h3>
-                        <p>Web application development powered by PHP, .NET, Python, J2EE, Angular JS. Responsive Web
-                            Designing powered by HTML5, CSS3, jQuery.</p>
-                        <div class="tech-stack">
-                            <span class="tech-badge"><i class="fa-brands fa-php"></i> PHP</span>
-                            <span class="tech-badge"><i class="fa-brands fa-microsoft"></i> .NET</span>
-                            <span class="tech-badge"><i class="fa-brands fa-python"></i> Python</span>
-                            <span class="tech-badge"><i class="fa-brands fa-java"></i> J2EE</span>
-                            <span class="tech-badge"><i class="fa-brands fa-angular"></i> Angular</span>
-                            <span class="tech-badge"><i class="fa-brands fa-html5"></i> HTML5</span>
-                            <span class="tech-badge"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
-                            <span class="tech-badge"><i class="fa-brands fa-js"></i> jQuery</span>
+                        <p>Robust web applications and responsive designs using modern frameworks.</p>
+                        <div class="feature-tags">
+                            <span>PHP</span>
+                            <span>.NET</span>
+                            <span>Python</span>
+                            <span>Angular</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card 3: Services -->
-                <div class="card" data-tilt>
-                    <div class="card-content">
-                        <div class="icon-wrapper">
-                            <i class="fa-solid fa-rocket"></i>
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-rocket"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Digital Services</h3>
+                        <p>Hosting, Domain registration, SEO, and Social Media promotions.</p>
+                        <div class="feature-tags">
+                            <span>Hosting</span>
+                            <span>SEO</span>
+                            <span>Marketing</span>
                         </div>
-                        <h3>Services</h3>
-                        <p>Hosting, Domain registration, Search Engine Optimization, Social Media promotions.</p>
-                        <div class="tech-stack">
-                            <span class="tech-badge"><i class="fa-solid fa-server"></i> Hosting</span>
-                            <span class="tech-badge"><i class="fa-solid fa-globe"></i> Domain</span>
-                            <span class="tech-badge"><i class="fa-solid fa-magnifying-glass-chart"></i> SEO</span>
-                            <span class="tech-badge"><i class="fa-solid fa-hashtag"></i> Social Media</span>
+                    </div>
+                </div>
+
+                <!-- Card 4: Placeholder for Grid Balance (Optional or Real Content) -->
+                <div class="feature-card" data-tilt>
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-cloud"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Cloud Integration</h3>
+                        <p>Scalable cloud infrastructure and deployment solutions.</p>
+                        <div class="feature-tags">
+                            <span>AWS</span>
+                            <span>Azure</span>
+                            <span>GCP</span>
                         </div>
                     </div>
                 </div>
@@ -157,12 +211,11 @@
     </section>
 
     <!-- Have You Seen Our Works Section -->
-    <section id="our-works">
+    <section id="our-works" class="rounded-section light-blue-bg">
         <div class="container">
             <header class="section-header">
-                <h2 class="glitch" data-text="Have You Seen Our Works?">Have You Seen Our Works?</h2>
-                <p class="subtitle">Explore our portfolio of cutting-edge projects and digital innovations.</p>
-                <div class="divider"></div>
+                <h2 class="section-title">Have You Seen <br><span class="highlight-text">Our Works?</span></h2>
+                <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
             <div class="carousel-wrapper">
@@ -377,12 +430,12 @@
                             <circle cx="100" cy="100" r="40" fill="url(#grad1)" opacity="0.2" />
                             <path d="M100 60 L100 100 L130 100" stroke="url(#grad1)" stroke-width="3"
                                 stroke-linecap="round" />
-                            <circle cx="100" cy="60" r="5" fill="#8b5cf6" />
-                            <circle cx="130" cy="100" r="5" fill="#8b5cf6" />
+                            <circle cx="100" cy="60" r="5" fill="#0b5394" />
+                            <circle cx="130" cy="100" r="5" fill="#0b5394" />
                             <defs>
                                 <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:1" />
+                                    <stop offset="0%" style="stop-color:#0b5394;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00d2ff;stop-opacity:1" />
                                 </linearGradient>
                             </defs>
                         </svg>
@@ -409,14 +462,14 @@
                             <path d="M100 60 L140 100 L100 140 L60 100 Z" stroke="url(#grad2)" stroke-width="2"
                                 opacity="0.6" />
                             <circle cx="100" cy="100" r="15" fill="url(#grad2)" />
-                            <circle cx="100" cy="40" r="4" fill="#a78bfa" />
-                            <circle cx="160" cy="100" r="4" fill="#a78bfa" />
-                            <circle cx="100" cy="160" r="4" fill="#a78bfa" />
-                            <circle cx="40" cy="100" r="4" fill="#a78bfa" />
+                            <circle cx="100" cy="40" r="4" fill="#00d2ff" />
+                            <circle cx="160" cy="100" r="4" fill="#00d2ff" />
+                            <circle cx="100" cy="160" r="4" fill="#00d2ff" />
+                            <circle cx="40" cy="100" r="4" fill="#00d2ff" />
                             <defs>
                                 <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                                    <stop offset="0%" style="stop-color:#00d2ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#0b5394;stop-opacity:1" />
                                 </linearGradient>
                             </defs>
                         </svg>
@@ -484,18 +537,18 @@
                 <div class="about-ric-visual">
                     <svg viewBox="0 0 300 300" fill="none">
                         <!-- Network nodes -->
-                        <circle cx="150" cy="150" r="8" fill="#8b5cf6" />
-                        <circle cx="80" cy="80" r="6" fill="#a78bfa" />
-                        <circle cx="220" cy="80" r="6" fill="#a78bfa" />
-                        <circle cx="80" cy="220" r="6" fill="#a78bfa" />
-                        <circle cx="220" cy="220" r="6" fill="#a78bfa" />
+                        <circle cx="150" cy="150" r="8" fill="#0b5394" />
+                        <circle cx="80" cy="80" r="6" fill="#00d2ff" />
+                        <circle cx="220" cy="80" r="6" fill="#00d2ff" />
+                        <circle cx="80" cy="220" r="6" fill="#00d2ff" />
+                        <circle cx="220" cy="220" r="6" fill="#00d2ff" />
                         <!-- Connection lines -->
-                        <line x1="150" y1="150" x2="80" y2="80" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
-                        <line x1="150" y1="150" x2="220" y2="80" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
-                        <line x1="150" y1="150" x2="80" y2="220" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
-                        <line x1="150" y1="150" x2="220" y2="220" stroke="#8b5cf6" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="80" y2="80" stroke="#0b5394" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="220" y2="80" stroke="#0b5394" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="80" y2="220" stroke="#0b5394" stroke-width="2" opacity="0.3" />
+                        <line x1="150" y1="150" x2="220" y2="220" stroke="#0b5394" stroke-width="2" opacity="0.3" />
                         <!-- Outer ring -->
-                        <circle cx="150" cy="150" r="100" stroke="#8b5cf6" stroke-width="2" opacity="0.2"
+                        <circle cx="150" cy="150" r="100" stroke="#0b5394" stroke-width="2" opacity="0.2"
                             stroke-dasharray="5,5">
                             <animateTransform attributeName="transform" type="rotate" from="0 150 150" to="360 150 150"
                                 dur="30s" repeatCount="indefinite" />
@@ -556,26 +609,108 @@
     </section>
 
     <!-- Contact Us Section -->
-    <section id="contactSection" class="contact-section">
-        <div class="contact-container">
-            <h2 class="contact-title">Get In Touch</h2>
-            <p class="contact-subtitle">Have a project in mind or want to learn more? We'd love to hear from you.</p>
+    <section id="contactSection" class="rounded-section contact-section white-bg">
+        <div class="contact-header-center">
+            <h2 class="section-title">Contact Us</h2>
+        </div>
 
-            <form class="contact-form" id="contactForm">
-                <div class="form-group">
-                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+        <div class="contact-wrapper">
+            <!-- Left Column: Form -->
+            <div class="contact-form-column">
+                <div class="form-header">
+                    <h3>Send us a message</h3>
+                    <p>Do you have a question? A complaint? Or need any help to choose the right product? Feel free to
+                        contact us.</p>
                 </div>
-                <div class="form-group">
-                    <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+                <form class="contact-form-grid" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Contact Details</label>
+                            <div class="phone-input-group">
+                                <span class="country-code">+91</span>
+                                <input type="tel" id="phone" name="phone" placeholder="Enter your contact number">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Enter your message" rows="4"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">Send a Message</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Info Card -->
+            <div class="contact-info-column">
+                <div class="contact-info-card">
+                    <h3>Hi! We are always here to help you.</h3>
+
+                    <div class="info-list">
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Hotline:</span>
+                                <span class="info-value">+91 123 456 7890</span>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Email:</span>
+                                <span class="info-value">support@rlabz.com</span>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div class="info-content">
+                                <span class="info-label">Location:</span>
+                                <span class="info-value">Rajagiri Valley, Kochi</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="social-connect-box">
+                        <p>Connect with us</p>
+                        <div class="social-icons-row">
+                            <a href="#" class="social-link"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="social-link"><i class="fa-brands fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="tel" id="phone" name="phone" placeholder="Your Phone Number">
-                </div>
-                <div class="form-group">
-                    <textarea id="message" name="message" rows="5" placeholder="Your Message" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
+            </div>
         </div>
     </section>
 
@@ -620,10 +755,10 @@
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const heroSection = document.querySelector('.hero-violet-section');
-            const heroContent = document.querySelector('.hero-violet-content');
-            const heroVisual = document.querySelector('.hero-violet-visual');
-            const cards = document.querySelectorAll('.hero-violet-card');
+            const heroSection = document.querySelector('.hero-blue-section');
+            const heroContent = document.querySelector('.hero-blue-content');
+            const heroVisual = document.querySelector('.hero-blue-visual');
+            const cards = document.querySelectorAll('.hero-blue-card');
 
             // Fade In Animation using Intersection Observer
             const observer = new IntersectionObserver((entries) => {
@@ -710,8 +845,8 @@
                         this.vy = (Math.random() - 0.5) * 3;
                         this.baseRadius = this.radius;
                         this.angle = Math.random() * Math.PI * 2;
-                        // Pure Violet with high opacity for visibility
-                        this.color = `rgba(138, 43, 226, 1)`;
+                        // Pure Blue with high opacity for visibility
+                        this.color = `rgba(11, 83, 148, 1)`;
                     }
 
                     update() {
@@ -733,7 +868,7 @@
                         const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
                         gradient.addColorStop(0, this.color);
                         gradient.addColorStop(0.5, this.color); // Hard center
-                        gradient.addColorStop(1, 'rgba(138, 43, 226, 0)'); // Fade out
+                        gradient.addColorStop(1, 'rgba(11, 83, 148, 0)'); // Fade out
 
                         ctx.fillStyle = gradient;
                         ctx.arc(this.x, this.y, this.radius * 2, 0, Math.PI * 2);

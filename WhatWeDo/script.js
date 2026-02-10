@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const CONFIG = {
         particleCount: 400, // Increased count
-        colorBase: 'rgba(100, 149, 237, ', // Cornflower Blue base
-        colorHighlight: 'rgba(138, 43, 226, ', // Blue Violet
-        colorAccent: 'rgba(0, 255, 255, ', // Cyan accent
+        colorBase: 'rgba(11, 83, 148, ', // Primary Blue base
+        colorHighlight: 'rgba(0, 210, 255, ', // Cyan Highlight
+        colorAccent: 'rgba(224, 242, 254, ', // Light Blue accent
         connectionDist: 140,
         mouseRadius: 300,
     };
@@ -1127,5 +1127,129 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+    // --- Scroll Animations for Bottom Cards (Our Works) ---
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
+
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card, index) => {
+        card.style.transitionDelay = `${index * 100}ms`; // Staggered delay
+        observer.observe(card);
+    });
+
+
+
+
+
+    // --- Typewriter Effect & Card Animations ---
+    const heroTitle = document.querySelector('.hero-blue-title');
+    const heroCards = document.querySelectorAll('.hero-blue-card');
+
+    if (heroTitle) {
+        const text = heroTitle.innerHTML.replace(/<br\s*\/?>/gi, '\n'); // Preserve line breaks
+        heroTitle.innerHTML = '';
+        heroTitle.style.opacity = 1; // Ensure visible before typing
+
+        let i = 0;
+        const typeWriter = () => {
+            if (i < text.length) {
+                const char = text.charAt(i);
+                if (char === '\n') {
+                    heroTitle.innerHTML += '<br>';
+                } else {
+                    heroTitle.innerHTML += char;
+                }
+                i++;
+                setTimeout(typeWriter, 50); // Typing speed
+            } else {
+                heroTitle.classList.remove('typing'); // Stop cursor blinking if needed
+            }
+        };
+
+        // Start typing after a short delay
+        setTimeout(() => {
+            heroTitle.classList.add('typing');
+            typeWriter();
+        }, 500);
+    }
+
+    // Trigger Card Animations
+    if (heroCards.length > 0) {
+        setTimeout(() => {
+            heroCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('animate-in');
+                }, index * 200); // Stagger delay
+            });
+        }, 1000); // Wait for title to start
+    }
+
+    // --- Hero Horizontal Parallax Effect ---
+    const heroSection = document.querySelector('.hero-blue-section');
+    const heroVisual = document.querySelector('.hero-blue-visual');
+    const parallaxCards = document.querySelectorAll('.hero-blue-card');
+
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function updateParallax() {
+        if (!heroSection) return;
+
+        const scrollY = window.scrollY;
+        const sectionHeight = heroSection.offsetHeight;
+
+        // Only animate if within relevant scroll range (hero + a bit more)
+        if (scrollY < sectionHeight * 1.5) {
+            // Calculate movement based on scroll
+            // Phone container moves right
+            const visualMove = scrollY * 0.15;
+
+            if (heroVisual) {
+                // Keep the tilt if it exists, add translateX
+                // Note: The phone frame inside handles tilt on hover, visuals container just moves
+                heroVisual.style.transform = `translateX(${visualMove}px)`;
+            }
+
+            // Cards move at different speeds (Layered Depth)
+            parallaxCards.forEach((card, index) => {
+                const speed = 0.05 + (index * 0.08); // 0.05, 0.13, 0.21
+                const cardMove = scrollY * speed;
+
+                // We need to maintain the initial float animation transform if possible, 
+                // but usually direct transform overrides animation. 
+                // To mix them, we wrapper or use specific properties. 
+                // However, the requested effect implies the container moves.
+                // Since cards have their own CSS animation (float-left, etc.), 
+                // applying transform here directly might break the CSS keyframe animation.
+                // Better approach: Apply parallax to the WRAPPER of cards if possible, 
+                // OR use margin-left/right (less performant) OR use CSS variables.
+
+                // Let's use CSS variables to add to the transform
+                card.style.setProperty('--parallax-x', `${cardMove}px`);
+            });
+        }
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+        lastScrollY = window.scrollY;
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    });
+
 });
 
