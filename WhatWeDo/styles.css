@@ -3795,30 +3795,8 @@ h2 {
     transition: opacity 0.3s ease;
 }
 
-/* Hide static highlights for shared elements to prevent doubling */
-[data-morphic-active="true"] #highlight-solutions::after,
-[data-morphic-active="true"] #highlight-works::after {
-    opacity: 0;
-}
 
-/* Shared Morphic Element */
-.shared-morphic-highlight {
-    position: fixed;
-    height: 8px;
-    background: rgba(11, 83, 148, 0.15);
-    z-index: 5;
-    /* Below text, above section backgrounds */
-    border-radius: 4px;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease-out;
-    transform-origin: left bottom;
-    will-change: transform, width, opacity;
-}
 
-.shared-morphic-highlight.active {
-    opacity: 1;
-}
 
 .divider {
     width: 60px;
@@ -4265,8 +4243,10 @@ footer {
         transform: scale(0.9) rotate(0deg);
         /* Remove tilt on mobile */
     }
-<<<<<<< HEAD
-}/* =========================================
+
+}
+
+/* =========================================
    NEW CLIENTS FEEDBACK SECTION STYLES
    ========================================= */
 
@@ -5168,7 +5148,7 @@ footer {
 .mobile-screen .code-body {
     font-size: 9px;
     padding: 8px;
-=======
+
 }
 
 /* =========================================
@@ -5184,5 +5164,4 @@ footer {
 .reveal-on-scroll.revealed {
     opacity: 1;
     transform: translateY(0);
->>>>>>> origin/jubin
 }

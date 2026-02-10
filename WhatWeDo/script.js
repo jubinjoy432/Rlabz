@@ -1433,74 +1433,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // --- SHARED MORPHIC HIGHLIGHT TRANSITION ---
-        const sharedHighlight = document.getElementById('shared-morphic-highlight');
-        const sourceEl = document.getElementById('highlight-solutions');
-        const targetEl = document.getElementById('highlight-works');
-
-        if (sharedHighlight && sourceEl && targetEl) {
-            function updateMorphicHighlight() {
-                const sourceRect = sourceEl.getBoundingClientRect();
-                const targetRect = targetEl.getBoundingClientRect();
-                const body = document.body;
-
-                // Transition Zone: Start when source is middle of screen, end when target is middle
-                const viewHeight = window.innerHeight;
-                const sourceCenter = sourceRect.top + sourceRect.height / 2;
-                const targetCenter = targetRect.top + targetRect.height / 2;
-
-                // Calculate progress (0 to 1) between the two headers
-                // We want the element to be at Source when source is in view, and at Target when target is in view.
-                // A simple way: use the viewport center as the "activation" point.
-
-                // If both are off-screen in the same direction, hide it
-                if (targetRect.bottom < 0 || sourceRect.top > viewHeight) {
-                    sharedHighlight.classList.remove('active');
-                    body.setAttribute('data-morphic-active', 'false');
-                    return;
-                }
-
-                sharedHighlight.classList.add('active');
-                body.setAttribute('data-morphic-active', 'true');
-
-                // Interpolate based on the progress of scroll between source and target
-                // Total distance to travel in scroll pixels
-                const travelDist = targetCenter - sourceCenter;
-                const totalScrollDist = (targetRect.top + window.scrollY) - (sourceRect.top + window.scrollY);
-
-                // Define active range: from source being at 30% of height to target being at 30%
-                const startPoint = viewHeight * 0.4; // source at 40% height
-                const endPoint = viewHeight * 0.4;   // target at 40% height
-
-                // Progress is 0 when source is at startPoint, 1 when target is at endPoint
-                const pStart = sourceCenter;
-                const pEnd = targetCenter;
-
-                let progress = (startPoint - sourceCenter) / (targetCenter - sourceCenter);
-                progress = Math.max(0, Math.min(1, progress));
-
-                // Easing for a "premium" feel
-                const ease = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-                const easedProgress = ease(progress);
-
-                // Interpolate values
-                const currentWidth = sourceRect.width + (targetRect.width - sourceRect.width) * easedProgress;
-                const currentLeft = sourceRect.left + (targetRect.left - sourceRect.left) * easedProgress;
-                const currentTop = sourceRect.top + (targetRect.top - sourceRect.top) * easedProgress;
-
-                // Apply transforms
-                // We use fixed positioning, so we just update top/left
-                sharedHighlight.style.width = `${currentWidth}px`;
-                sharedHighlight.style.left = `${currentLeft}px`;
-                sharedHighlight.style.top = `${currentTop + sourceRect.height - 8}px`; // Align to bottom of text
-            }
-
-            window.addEventListener('scroll', updateMorphicHighlight);
-            window.addEventListener('resize', updateMorphicHighlight);
-            // Initial call
-            updateMorphicHighlight();
-        }
-
         ticking = false;
     }
 
@@ -1511,6 +1443,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ticking = true;
         }
     });
+
 
     // --- Reactive 3D Device Hover Effect ---
     const elementToHover = document.querySelector('.hero-blue-visual');
@@ -1574,7 +1507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-<<<<<<< HEAD
+
 
 /* =========================================
    NEW CLIENTS FEEDBACK SECTION LOGIC
@@ -1821,7 +1754,8 @@ document.addEventListener('DOMContentLoaded', () => {
     client_form_populate_cards();
     client_form_create_particles();
     client_form_add_logos_blob();
-=======
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
     // "Who We Are" Diagonal Mesh Animation (Ambient Wave)
@@ -1957,5 +1891,5 @@ document.addEventListener('DOMContentLoaded', () => {
         card.style.transitionDelay = `${(index + 1) * 120}ms`;
         revealObserver.observe(card);
     });
->>>>>>> origin/jubin
+
 });
