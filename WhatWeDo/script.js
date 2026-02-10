@@ -336,271 +336,356 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { resize(); }, 500);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    // =========================================
-    // NEW: "Have You Seen Our Works" - 3D Cylindrical Carousel
-    // =========================================
+// === 3D Coverflow Carousel ===
+const carouselSection = document.getElementById('our-works');
+const carouselContainer = document.querySelector('.carousel-container');
+const carouselTrack = document.querySelector('.carousel-track');
+const projectCards = document.querySelectorAll('.project-card');
+const prevBtn = document.querySelector('.nav-btn.prev');
+const nextBtn = document.querySelector('.nav-btn.next');
 
-    const track = document.querySelector('.carousel-track');
-    const container = document.querySelector('.carousel-container');
-    const prevBtn = document.querySelector('.nav-btn.prev');
-    const nextBtn = document.querySelector('.nav-btn.next');
-    const projectCards = document.querySelectorAll('.project-card');
-
+if (carouselContainer && carouselTrack && projectCards.length > 0) {
+    let currentIndex = 0;
     const totalCards = projectCards.length;
-    const theta = 360 / totalCards; // Angle between cards
-    const radius = 450; // Cylinder radius - adjusted for smaller cards
-    let currentRotation = 0;
-    let autoScrollInterval;
 
-    // Position cards in 3D cylinder
-    function initCylinder() {
-        projectCards.forEach((card, index) => {
-            const angle = theta * index;
-            card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-        });
-        updateActiveCard();
-    }
+    // Coverflow configuration
+    const spacing = 450;      // Horizontal spacing between cards
+    const sideAngle = 60;     // Rotation angle for side cards (degrees)
+    const sideDepth = -350;   // Z-depth for side cards (negative = away)
+    const sideScale = 0.9;    // Scale factor for side cards
+    const sideOpacity = 0.7;  // Opacity for side cards
+
+    let previousIndex = 0;
 
     function updateCarousel() {
-        track.style.transform = `rotateY(${currentRotation}deg)`;
-        updateActiveCard();
-    }
-
-    function updateActiveCard() {
-        const activeIndex = Math.round((-currentRotation / theta) % totalCards);
         projectCards.forEach((card, index) => {
-            card.classList.toggle('active', index === (activeIndex < 0 ? activeIndex + totalCards : activeIndex));
+            // Calculate distance from center (with wrapping)
+            let diff = index - currentIndex;
+
+            // Calculate previous distance for transition logic
+            let prevDiff = index - previousIndex;
+
+            // Normalize to shortest path around carousel
+            if (diff > totalCards / 2) diff -= totalCards;
+            if (diff < -totalCards / 2) diff += totalCards;
+
+            if (prevDiff > totalCards / 2) prevDiff -= totalCards;
+            if (prevDiff < -totalCards / 2) prevDiff += totalCards;
+
+            // Active card is the one at center (diff === 0)
+            const isActive = diff === 0;
+
+            // Check if card is moving between hidden positions (wrap-around)
+            // If both new and old positions are "far" (> 1 or < -1), disable transition
+            // This prevents cards from animating across the visible area when wrapping
+            const isHiddenMove = Math.abs(diff) > 1 && Math.abs(prevDiff) > 1;
+
+            if (isHiddenMove) {
+                card.style.transition = 'none';
+            } else {
+                // Slower, smoother transition (0.8s)
+                card.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease, box-shadow 0.3s ease';
+            }
+
+            // Calculate transforms based on distance from center
+            const translateX = diff * spacing;
+            const translateZ = isActive ? 0 : sideDepth;
+            const rotateY = isActive ? 0 : (diff > 0 ? -sideAngle : sideAngle);
+            const scale = isActive ? 1.0 : sideScale;
+            // Opacity: Visible only at 0 and adjacent ±1 positions (or adjust logic as needed)
+            const opacity = isActive ? 1 : (Math.abs(diff) > 1 ? 0 : sideOpacity);
+
+            // Apply transforms
+            // Force reflow if transition was disabled to ensure it snaps instantly
+            if (isHiddenMove) void card.offsetWidth;
+
+            card.style.transform = `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+            card.style.opacity = opacity;
+            card.style.zIndex = totalCards - Math.abs(diff);
+            card.style.pointerEvents = isActive ? 'auto' : 'none';
+
+            // Toggle active class
+            if (isActive) {
+                card.classList.add('active');
+            } else {
+                card.classList.remove('active');
+            }
         });
     }
 
-    if (prevBtn && nextBtn && container && track && projectCards.length > 0) {
-        initCylinder();
+    function nextCard() {
+        previousIndex = currentIndex;
+        currentIndex = (currentIndex + 1) % totalCards;
+        updateCarousel();
+    }
 
+    function prevCard() {
+        previousIndex = currentIndex;
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        updateCarousel();
+    }
+
+    // Auto-rotation (Slower interval: 5000ms)
+    let autoRotateInterval = setInterval(nextCard, 5000);
+
+    function resetAutoRotate() {
+        clearInterval(autoRotateInterval);
+        autoRotateInterval = setInterval(nextCard, 5000);
+    }
+
+    // Pause on hover
+    carouselContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoRotateInterval);
+    });
+
+    carouselContainer.addEventListener('mouseleave', () => {
+        resetAutoRotate();
+    });
+
+    // Navigation buttons
+    if (nextBtn) {
         nextBtn.addEventListener('click', () => {
-            currentRotation -= theta; // Rotate to next
-            updateCarousel();
-            resetAutoScroll();
+            nextCard();
+            resetAutoRotate();
         });
+    }
 
+    if (prevBtn) {
         prevBtn.addEventListener('click', () => {
-            currentRotation += theta; // Rotate to previous
-            updateCarousel();
-            resetAutoScroll();
+            prevCard();
+            resetAutoRotate();
         });
-
-        // Auto Scroll
-        function startAutoScroll() {
-            autoScrollInterval = setInterval(() => {
-                currentRotation -= theta;
-                updateCarousel();
-            }, 2000);
-        }
-
-        function stopAutoScroll() {
-            clearInterval(autoScrollInterval);
-        }
-
-        function resetAutoScroll() {
-            stopAutoScroll();
-            startAutoScroll();
-        }
-
-        // Pause on hover
-        container.addEventListener('mouseenter', stopAutoScroll);
-        container.addEventListener('mouseleave', startAutoScroll);
-
-        // Start initially
-        updateCarousel(); // Set initial position
-        startAutoScroll();
     }
 
-    // 2. Project Data (Mock Data matching IDs)
-    const projects = {
-        1: {
-            title: "Arkon Medical Systems",
-            desc: "Assured Service And Support And Reaching Out With Wide Product Range. Comprehensive medical equipment and systems for modern healthcare facilities.",
-            tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
-            img: "images/arkon-img.png",
-            client: "Arkon Medical Systems",
-            date: "December 2017",
-            link: "http://www.arkonmedicalsystems.in"
-        },
-        2: {
-            title: "Splendore",
-            desc: "Website for Rajagiri College of Social Sciences cultural festival.",
-            tech: ["HTML5", "CSS3", "JavaScript"],
-            img: "images/splendore-2019.png",
-            client: "Rajagiri College of Social Sciences",
-            date: "August 2019",
-            link: "http://www.splendorercss.in"
-        },
-        3: {
-            title: "Euphoria 2k17",
-            desc: "Cultural festival website for RCSS MCA Department.",
-            tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
-            img: "images/euphoria-2019.png",
-            client: "RCSS MCA Dept.",
-            date: "May 2017",
-            link: "http://euphoria.rlabz.in"
-        },
-        4: {
-            title: "Fest Buddy",
-            desc: "Android application for managing college festivals and events.",
-            tech: ["Android"],
-            img: "images/fesbud-image.png",
-            client: "Impress Project",
-            date: "March 2020",
-            link: "#"
-        },
-        5: {
-            title: "Campus Connect",
-            desc: "A comprehensive web platform connecting students, faculty, and administration for seamless campus communication and collaboration.",
-            tech: ["Python", "Django", "HTML5", "CSS3", "JavaScript"],
-            img: "images/campuscon-image.png",
-            client: "Rajagiri College of Social Sciences",
-            date: "November 2017",
-            link: "http://xxsreexx.pythonanywhere.com"
-        },
-        6: {
-            title: "Cocobies",
-            desc: "An innovative Android application developed for the RCSS MCA Department.",
-            tech: ["Android"],
-            img: "images/cocobi-image.png",
-            client: "RCSS MCA Dept.",
-            date: "July 2013",
-            link: "#"
-        },
-        7: {
-            title: "ReX",
-            desc: "A comprehensive web platform developed for Rajagiri College of Social Sciences.",
-            tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
-            img: "images/rex-image.png",
-            client: "Rajagiri College of Social Sciences",
-            date: "N/A",
-            link: "#"
-        },
-        8: {
-            title: "CTRM System",
-            desc: "Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences.",
-            tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
-            img: "images/ctrm-image.png",
-            client: "Rajagiri College of Social Sciences",
-            date: "March 2017",
-            link: "#"
-        },
-        9: {
-            title: "RAJAGIRI OutREACH",
-            desc: "Community outreach and social engagement platform for Rajagiri College of Social Sciences.",
-            tech: ["PHP", "HTML", "CSS", "JavaScript"],
-            img: "images/outreach-image.png",
-            client: "Rajagiri College of Social Sciences",
-            date: "June 2019",
-            link: "#"
-        },
-        10: {
-            title: "The Luke",
-            desc: "Professional event management website for The Luke Event Management company.",
-            tech: ["HTML5", "CSS3", "JavaScript"],
-            img: "images/luke-image.png",
-            client: "The Luke Event Management",
-            date: "August 2017",
-            link: "http://www.theluke.in"
+    // Touch/swipe support
+    let touchStartX = 0;
+    carouselContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        clearInterval(autoRotateInterval);
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextCard();
+            } else {
+                prevCard();
+            }
         }
-    };
+        resetAutoRotate();
+    }, { passive: true });
 
-    // 3. Modal Logic
-    const modal = document.getElementById('project-modal');
-    const closeModalBtn = document.querySelector('.close-modal');
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (carouselSection) {
+            const rect = carouselSection.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
 
-    // Modal Elements
-    const modalImg = document.getElementById('modal-image');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-description');
-    const modalStack = document.getElementById('modal-tech-stack');
-
-    function openModal(id) {
-        const data = projects[id];
-        if (!data) return;
-
-        // Use detail image if available, otherwise use thumbnail
-        const imageSrc = data.detailImg || data.img;
-        console.log('Opening modal for:', data.title);
-        console.log('Image source:', imageSrc);
-        modalImg.src = imageSrc;
-        modalTitle.innerText = data.title;
-        modalDesc.innerText = data.desc;
-
-        // Populate client and date if available
-        const modalClient = document.getElementById('modal-client');
-        const modalDate = document.getElementById('modal-date');
-        const modalWebsiteLink = document.getElementById('modal-website-link');
-
-        if (modalClient) modalClient.innerText = data.client || data.title;
-        if (modalDate) modalDate.innerText = data.date || 'N/A';
-        if (modalWebsiteLink) {
-            modalWebsiteLink.href = data.link || '#';
-            modalWebsiteLink.innerText = data.link || 'N/A';
-        }
-
-        // Clear and add badges
-        modalStack.innerHTML = '';
-        data.tech.forEach(tech => {
-            const span = document.createElement('span');
-            span.className = 'tech-badge';
-            span.innerText = tech;
-            modalStack.appendChild(span);
-        });
-
-        // Show modal with animation
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-        // Trigger animation after browser has rendered initial state
-        setTimeout(() => {
-            modal.classList.add('show');
-        }, 10);
-    }
-
-
-    function closeModal() {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-
-        // Hide modal after transition completes
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 500); // Match the CSS transition duration
-    }
-
-
-    projectCards.forEach(card => {
-        // Spotlight Effect - Only update CSS variables, don't modify transform
-        card.addEventListener('mousemove', (e) => {
-            const cardRect = card.getBoundingClientRect();
-            const x = e.clientX - cardRect.left;
-            const y = e.clientY - cardRect.top;
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-        });
-
-        // Click to Open
-        card.addEventListener('click', () => {
-            const id = card.getAttribute('data-id');
-            openModal(id);
-        });
-    });
-
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-
-    // Close on backdrop click
-    window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
+            if (isVisible) {
+                if (e.key === 'ArrowRight') {
+                    nextCard();
+                    resetAutoRotate();
+                } else if (e.key === 'ArrowLeft') {
+                    prevCard();
+                    resetAutoRotate();
+                }
+            }
         }
     });
 
+    // Initialize
+    updateCarousel();
+}
+
+// 2. Project Data (Mock Data matching IDs)
+const projects = {
+    1: {
+        title: "Arkon Medical Systems",
+        desc: "Assured Service And Support And Reaching Out With Wide Product Range. Comprehensive medical equipment and systems for modern healthcare facilities.",
+        tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
+        img: "images/arkon-img.png",
+        client: "Arkon Medical Systems",
+        date: "December 2017",
+        link: "http://www.arkonmedicalsystems.in"
+    },
+    2: {
+        title: "Splendore",
+        desc: "Website for Rajagiri College of Social Sciences cultural festival.",
+        tech: ["HTML5", "CSS3", "JavaScript"],
+        img: "images/splendore-2019.png",
+        client: "Rajagiri College of Social Sciences",
+        date: "August 2019",
+        link: "http://www.splendorercss.in"
+    },
+    3: {
+        title: "Euphoria 2k17",
+        desc: "Cultural festival website for RCSS MCA Department.",
+        tech: ["HTML5", "CSS3", "JavaScript", "PHP"],
+        img: "images/euphoria-2019.png",
+        client: "RCSS MCA Dept.",
+        date: "May 2017",
+        link: "http://euphoria.rlabz.in"
+    },
+    4: {
+        title: "Fest Buddy",
+        desc: "Android application for managing college festivals and events.",
+        tech: ["Android"],
+        img: "images/fesbud-image.png",
+        client: "Impress Project",
+        date: "March 2020",
+        link: "#"
+    },
+    5: {
+        title: "Campus Connect",
+        desc: "A comprehensive web platform connecting students, faculty, and administration for seamless campus communication and collaboration.",
+        tech: ["Python", "Django", "HTML5", "CSS3", "JavaScript"],
+        img: "images/campuscon-image.png",
+        client: "Rajagiri College of Social Sciences",
+        date: "November 2017",
+        link: "http://xxsreexx.pythonanywhere.com"
+    },
+    6: {
+        title: "Cocobies",
+        desc: "An innovative Android application developed for the RCSS MCA Department.",
+        tech: ["Android"],
+        img: "images/cocobi-image.png",
+        client: "RCSS MCA Dept.",
+        date: "July 2013",
+        link: "#"
+    },
+    7: {
+        title: "ReX",
+        desc: "A comprehensive web platform developed for Rajagiri College of Social Sciences.",
+        tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
+        img: "images/rex-image.png",
+        client: "Rajagiri College of Social Sciences",
+        date: "N/A",
+        link: "#"
+    },
+    8: {
+        title: "CTRM System",
+        desc: "Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences.",
+        tech: ["PHP", "HTML5", "CSS3", "JavaScript"],
+        img: "images/ctrm-image.png",
+        client: "Rajagiri College of Social Sciences",
+        date: "March 2017",
+        link: "#"
+    },
+    9: {
+        title: "RAJAGIRI OutREACH",
+        desc: "Community outreach and social engagement platform for Rajagiri College of Social Sciences.",
+        tech: ["PHP", "HTML", "CSS", "JavaScript"],
+        img: "images/outreach-image.png",
+        client: "Rajagiri College of Social Sciences",
+        date: "June 2019",
+        link: "#"
+    },
+    10: {
+        title: "The Luke",
+        desc: "Professional event management website for The Luke Event Management company.",
+        tech: ["HTML5", "CSS3", "JavaScript"],
+        img: "images/luke-image.png",
+        client: "The Luke Event Management",
+        date: "August 2017",
+        link: "http://www.theluke.in"
+    }
+};
+
+// 3. Modal Logic
+const modal = document.getElementById('project-modal');
+const closeModalBtn = document.querySelector('.close-modal');
+
+// Modal Elements
+const modalImg = document.getElementById('modal-image');
+const modalTitle = document.getElementById('modal-title');
+const modalDesc = document.getElementById('modal-description');
+const modalStack = document.getElementById('modal-tech-stack');
+
+function openModal(id) {
+    const data = projects[id];
+    if (!data) return;
+
+    // Use detail image if available, otherwise use thumbnail
+    const imageSrc = data.detailImg || data.img;
+    console.log('Opening modal for:', data.title);
+    console.log('Image source:', imageSrc);
+    modalImg.src = imageSrc;
+    modalTitle.innerText = data.title;
+    modalDesc.innerText = data.desc;
+
+    // Populate client and date if available
+    const modalClient = document.getElementById('modal-client');
+    const modalDate = document.getElementById('modal-date');
+    const modalWebsiteLink = document.getElementById('modal-website-link');
+
+    if (modalClient) modalClient.innerText = data.client || data.title;
+    if (modalDate) modalDate.innerText = data.date || 'N/A';
+    if (modalWebsiteLink) {
+        modalWebsiteLink.href = data.link || '#';
+        modalWebsiteLink.innerText = data.link || 'N/A';
+    }
+
+    // Clear and add badges
+    modalStack.innerHTML = '';
+    data.tech.forEach(tech => {
+        const span = document.createElement('span');
+        span.className = 'tech-badge';
+        span.innerText = tech;
+        modalStack.appendChild(span);
+    });
+
+    // Show modal with animation
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+
+    // Trigger animation after browser has rendered initial state
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
+}
+
+
+function closeModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+
+    // Hide modal after transition completes
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 500); // Match the CSS transition duration
+}
+
+
+projectCards.forEach(card => {
+    // Spotlight Effect - Only update CSS variables, don't modify transform
+    card.addEventListener('mousemove', (e) => {
+        const cardRect = card.getBoundingClientRect();
+        const x = e.clientX - cardRect.left;
+        const y = e.clientY - cardRect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+    });
+
+    // Click to Open
+    card.addEventListener('click', () => {
+        const id = card.getAttribute('data-id');
+        openModal(id);
+    });
 });
+
+if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+// Close on backdrop click
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        closeModal();
+    }
+});
+
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
@@ -1238,6 +1323,74 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Let's use CSS variables to add to the transform
                 card.style.setProperty('--parallax-x', `${cardMove}px`);
             });
+        }
+
+        // --- SHARED MORPHIC HIGHLIGHT TRANSITION ---
+        const sharedHighlight = document.getElementById('shared-morphic-highlight');
+        const sourceEl = document.getElementById('highlight-solutions');
+        const targetEl = document.getElementById('highlight-works');
+
+        if (sharedHighlight && sourceEl && targetEl) {
+            function updateMorphicHighlight() {
+                const sourceRect = sourceEl.getBoundingClientRect();
+                const targetRect = targetEl.getBoundingClientRect();
+                const body = document.body;
+
+                // Transition Zone: Start when source is middle of screen, end when target is middle
+                const viewHeight = window.innerHeight;
+                const sourceCenter = sourceRect.top + sourceRect.height / 2;
+                const targetCenter = targetRect.top + targetRect.height / 2;
+
+                // Calculate progress (0 to 1) between the two headers
+                // We want the element to be at Source when source is in view, and at Target when target is in view.
+                // A simple way: use the viewport center as the "activation" point.
+
+                // If both are off-screen in the same direction, hide it
+                if (targetRect.bottom < 0 || sourceRect.top > viewHeight) {
+                    sharedHighlight.classList.remove('active');
+                    body.setAttribute('data-morphic-active', 'false');
+                    return;
+                }
+
+                sharedHighlight.classList.add('active');
+                body.setAttribute('data-morphic-active', 'true');
+
+                // Interpolate based on the progress of scroll between source and target
+                // Total distance to travel in scroll pixels
+                const travelDist = targetCenter - sourceCenter;
+                const totalScrollDist = (targetRect.top + window.scrollY) - (sourceRect.top + window.scrollY);
+
+                // Define active range: from source being at 30% of height to target being at 30%
+                const startPoint = viewHeight * 0.4; // source at 40% height
+                const endPoint = viewHeight * 0.4;   // target at 40% height
+
+                // Progress is 0 when source is at startPoint, 1 when target is at endPoint
+                const pStart = sourceCenter;
+                const pEnd = targetCenter;
+
+                let progress = (startPoint - sourceCenter) / (targetCenter - sourceCenter);
+                progress = Math.max(0, Math.min(1, progress));
+
+                // Easing for a "premium" feel
+                const ease = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+                const easedProgress = ease(progress);
+
+                // Interpolate values
+                const currentWidth = sourceRect.width + (targetRect.width - sourceRect.width) * easedProgress;
+                const currentLeft = sourceRect.left + (targetRect.left - sourceRect.left) * easedProgress;
+                const currentTop = sourceRect.top + (targetRect.top - sourceRect.top) * easedProgress;
+
+                // Apply transforms
+                // We use fixed positioning, so we just update top/left
+                sharedHighlight.style.width = `${currentWidth}px`;
+                sharedHighlight.style.left = `${currentLeft}px`;
+                sharedHighlight.style.top = `${currentTop + sourceRect.height - 8}px`; // Align to bottom of text
+            }
+
+            window.addEventListener('scroll', updateMorphicHighlight);
+            window.addEventListener('resize', updateMorphicHighlight);
+            // Initial call
+            updateMorphicHighlight();
         }
 
         ticking = false;
