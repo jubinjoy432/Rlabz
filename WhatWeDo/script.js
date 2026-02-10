@@ -1,5 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Entrance Animations ---
+    const devices = document.querySelectorAll('.device');
+    // Small delay to ensure styles are ready
+    setTimeout(() => {
+        devices.forEach(device => {
+            device.classList.add('animate-in');
+        });
+    }, 100);
+
+    // --- Hero Slider Logic ---
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.slider-dot');
+    const visual = document.querySelector('.hero-blue-visual');
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+        // Update Text Slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        if (slides[index]) slides[index].classList.add('active');
+
+        // Update Dots
+        dots.forEach(dot => dot.classList.remove('active'));
+        if (dots[index]) dots[index].classList.add('active');
+
+        // Update Visual State (Alignment of Devices)
+        if (visual) {
+            if (index === 1) {
+                visual.classList.add('state-aligned');
+            } else {
+                visual.classList.remove('state-aligned');
+            }
+        }
+        currentSlide = index;
+    }
+
+    // Dot Click Events
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            goToSlide(index);
+        });
+    });
+
     // --- 3D Card Tilt Effect ---
+    // (Existing card tilt logic...)
+
+    // --- Product Showcase Parallax ---
+    const showcaseContainer = document.querySelector('.showcase-container');
+    const showcaseStage = document.querySelector('.showcase-stage');
+
+    if (showcaseContainer && showcaseStage) {
+        showcaseContainer.addEventListener('mousemove', (e) => {
+            const rect = showcaseContainer.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Rotate stage based on mouse position
+            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg tilt
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            showcaseStage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            // Parallax for individual elements
+            document.querySelectorAll('.device, .floating-badge').forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed')) || 2;
+                const moveX = ((x - centerX) / centerX) * speed * -1;
+                const moveY = ((y - centerY) / centerY) * speed * -1;
+
+                // Keep existing transforms (like translateZ) and add parallax
+                // We use CSS custom properties to avoid overwriting the transform property directly 
+                // if it's complex, but here a simple approach is to modify the transform matrix 
+                // or just use translate3d if the base transform is handled via CSS classes.
+                // However, our CSS uses translate(-50%, -50%) etc. 
+                // So best to apply parallax to a wrapper OR use CSS variables.
+
+                // Let's use CSS variables for cleaner integration if supported, 
+                // but since we didn't set that up in CSS, we'll use a simpler approach:
+                // We'll update a custom property --parallax-x and --parallax-y
+                el.style.setProperty('--parallax-x', `${moveX}px`);
+                el.style.setProperty('--parallax-y', `${moveY}px`);
+            });
+        });
+
+        showcaseContainer.addEventListener('mouseleave', () => {
+            showcaseStage.style.transform = 'rotateX(0) rotateY(0)';
+            document.querySelectorAll('.device, .floating-badge').forEach(el => {
+                el.style.setProperty('--parallax-x', '0px');
+                el.style.setProperty('--parallax-y', '0px');
+            });
+        });
+    }
     const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
@@ -1157,30 +1249,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroCards = document.querySelectorAll('.hero-blue-card');
 
     if (heroTitle) {
-        const text = heroTitle.innerHTML.replace(/<br\s*\/?>/gi, '\n'); // Preserve line breaks
+        // 1. Capture Original HTML completely to restore later for perfect layout
+        const originalHTML = heroTitle.innerHTML;
+
+        // 2. Prepare for animation (Span-based reveal)
+        const originalNodes = Array.from(heroTitle.childNodes);
         heroTitle.innerHTML = '';
-        heroTitle.style.opacity = 1; // Ensure visible before typing
+        heroTitle.style.opacity = '1';
 
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                const char = text.charAt(i);
-                if (char === '\n') {
-                    heroTitle.innerHTML += '<br>';
-                } else {
-                    heroTitle.innerHTML += char;
-                }
-                i++;
-                setTimeout(typeWriter, 50); // Typing speed
+        // Rebuild content with transparency for animation
+        originalNodes.forEach(node => {
+            if (node.nodeType === 3) { // Text Node
+                const chars = node.textContent.split('');
+                chars.forEach(char => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.opacity = '0';
+                    span.style.transition = 'opacity 0.05s ease';
+                    heroTitle.appendChild(span);
+                });
             } else {
-                heroTitle.classList.remove('typing'); // Stop cursor blinking if needed
+                heroTitle.appendChild(node.cloneNode(true)); // Preserve elements like <br>
             }
-        };
+        });
 
-        // Start typing after a short delay
+        // 3. Trigger reveal animation
+        const spans = heroTitle.querySelectorAll('span');
         setTimeout(() => {
             heroTitle.classList.add('typing');
-            typeWriter();
+            spans.forEach((span, index) => {
+                setTimeout(() => {
+                    span.style.opacity = '1';
+                }, index * 30); // 30ms per char
+            });
+
+            // 4. RESTORE ORIGINAL HTML after animation
+            // This ensures perfect layout (ligatures, kerning, wrapping) matches CSS
+            setTimeout(() => {
+                heroTitle.classList.remove('typing');
+                heroTitle.innerHTML = originalHTML; // Restore exact original content
+            }, (spans.length * 30) + 100); // Slight buffer
         }, 500);
     }
 
@@ -1250,6 +1358,66 @@ document.addEventListener('DOMContentLoaded', () => {
             ticking = true;
         }
     });
+
+    // --- Reactive 3D Device Hover Effect ---
+    const elementToHover = document.querySelector('.hero-blue-visual');
+    const stageToRotate = document.querySelector('.showcase-stage');
+
+    if (elementToHover && stageToRotate) {
+        elementToHover.addEventListener('mousemove', (e) => {
+            const rect = elementToHover.getBoundingClientRect();
+            const x = e.clientX - rect.left; // Mouse X relative to container
+            const y = e.clientY - rect.top; // Mouse Y relative to container
+
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Calculate rotation (max +/- 20 degrees) - More Energetic
+            const rotateY = ((x - centerX) / centerX) * 20;
+            const rotateX = -((y - centerY) / centerY) * 20;
+
+            stageToRotate.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+
+            // Parallax for individual devices
+            const devices = document.querySelectorAll('.device');
+            devices.forEach(device => {
+                const speed = parseFloat(device.getAttribute('data-speed')) || 2;
+                // Significant increase in movement range for "energetic" feel
+                const moveX = ((x - centerX) / centerX) * speed * 12;
+                const moveY = ((y - centerY) / centerY) * speed * 12;
+
+                device.style.setProperty('--parallax-x', `${moveX}px`);
+                device.style.setProperty('--parallax-y', `${moveY}px`);
+            });
+        });
+
+        elementToHover.addEventListener('mouseleave', () => {
+            // Reset rotation
+            stageToRotate.style.transition = 'transform 0.5s ease-out';
+            stageToRotate.style.transform = 'rotateX(0deg) rotateY(0deg)';
+
+            // Reset Parallax
+            const devices = document.querySelectorAll('.device');
+            devices.forEach(device => {
+                device.style.transition = 'transform 0.5s ease-out'; // Smooth return
+                device.style.setProperty('--parallax-x', '0px');
+                device.style.setProperty('--parallax-y', '0px');
+
+                // Restore original transition after a delay to allow re-entry without lag
+                setTimeout(() => {
+                    device.style.transition = 'transform 0.1s ease-out';
+                }, 500);
+            });
+
+            setTimeout(() => {
+                stageToRotate.style.transition = 'transform 0.1s ease-out'; // Restore quick response
+            }, 500);
+        });
+
+        elementToHover.addEventListener('mouseenter', () => {
+            stageToRotate.style.transition = 'transform 0.1s ease-out';
+        });
+    }
 
 });
 

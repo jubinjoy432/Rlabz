@@ -27,7 +27,7 @@
                 <a href="#our-works" class="nav-link">Work</a>
                 <a href="#clientsSection" class="nav-link">Clients</a>
             </div>
-            <a href="#contactSection" class="nav-btn">Get Started</a>
+
             <div class="mobile-menu-toggle">
                 <i class="fas fa-bars"></i>
             </div>
@@ -44,86 +44,128 @@
         <div class="hero-white-container">
             <div class="hero-blue-container">
                 <!-- Left Side Content -->
-                <div class="hero-blue-content">
-                    <div class="hero-blue-label">Next Gen Innovation</div>
-                    <h1 class="hero-blue-title">Building the Future <br> with Advanced Solutions</h1>
-                    <p class="hero-blue-desc">
-                        Explore a world where technology meets creativity. We craft immersive digital experiences that
-                        redefine interaction and design.
-                    </p>
-                    <a href="#what-we-do" class="hero-blue-cta">
-                        Discover More <i class="fa-solid fa-arrow-right"></i>
-                    </a>
+                <!-- Left Side Content (Slider) -->
+                <div class="hero-text-slider">
+                    <div class="slider-track">
+                        <!-- Slide 1 -->
+                        <div class="hero-blue-content slide active">
+                            <div class="hero-blue-label">Next Gen Innovation</div>
+                            <h1 class="hero-blue-title">Building the Future <br> with Advanced Solutions</h1>
+                            <p class="hero-blue-desc">
+                                Explore a world where technology meets creativity. We craft immersive digital
+                                experiences that
+                                redefine interaction and design.
+                            </p>
+                            <a href="#what-we-do" class="hero-blue-cta">
+                                Discover More <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div class="hero-blue-content slide">
+                            <div class="hero-blue-label">Seamless Integration</div>
+                            <h1 class="hero-blue-title">Unified Ecosystems <br> for Modern Business</h1>
+                            <p class="hero-blue-desc">
+                                Connect every aspect of your operations with our integrated platforms.
+                                Experience the power of synchronized technology.
+                            </p>
+                            <a href="#contactSection" class="hero-blue-cta">
+                                Get Started <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Slider Controls Removed -->
                 </div>
 
                 <!-- Right Side Visual -->
                 <div class="hero-blue-visual">
-                    <!-- Liquid Canvas Background -->
-                    <canvas id="hero-liquid-canvas"></canvas>
+                    <!-- Product Showcase Container -->
+                    <div class="showcase-container">
+                        <div class="showcase-glows"></div>
 
-                    <!-- Blob Background -->
-                    <div class="hero-blob-container">
-                        <div class="hero-blob blob-1"></div>
-                        <div class="hero-blob blob-2"></div>
-                        <div class="hero-blob blob-3"></div>
-                    </div>
-
-                    <!-- Phone Mockup Container -->
-                    <div class="phone-frame">
-                        <div class="phone-notch"></div>
-                        <div class="phone-screen">
-                            <!-- App UI Mockup Header -->
-                            <div class="app-header">
-                                <div class="app-avatar"></div>
-                                <div class="app-user-info">
-                                    <span class="app-greeting">Hello,</span>
-                                    <span class="app-username">RLabz Team 👋</span>
+                        <div class="showcase-stage">
+                            <!-- Desktop Device (Back Layer) -->
+                            <div class="device device-desktop" data-speed="2">
+                                <div class="device-frame">
+                                    <div class="screen-content desktop-screen code-screen">
+                                        <div class="code-header">
+                                            <div class="code-dots"><span class="red"></span><span
+                                                    class="yellow"></span><span class="green"></span></div>
+                                            <div class="code-title">main.js</div>
+                                        </div>
+                                        <div class="code-body">
+                                            <pre><code><span class="pastel-purple">const</span> <span class="pastel-blue">initHero</span> <span class="pastel-white">=</span> <span class="pastel-yellow">()</span> <span class="pastel-purple">=></span> {
+  <span class="pastel-purple">const</span> <span class="pastel-orange">canvas</span> <span class="pastel-white">=</span> <span class="pastel-cyan">document</span>.<span class="pastel-blue">getElementById</span>(<span class="pastel-green">'hero'</span>);
+  <span class="pastel-purple">const</span> <span class="pastel-orange">ctx</span> <span class="pastel-white">=</span> <span class="pastel-orange">canvas</span>.<span class="pastel-blue">getContext</span>(<span class="pastel-green">'2d'</span>);
+  
+  <span class="pastel-comment">// Initialize particles</span>
+  <span class="pastel-purple">class</span> <span class="pastel-yellow">Particle</span> {
+    <span class="pastel-blue">constructor</span>(<span class="pastel-orange">x</span>, <span class="pastel-orange">y</span>) {
+      <span class="pastel-cyan">this</span>.<span class="pastel-orange">x</span> <span class="pastel-white">=</span> <span class="pastel-orange">x</span>;
+      <span class="pastel-cyan">this</span>.<span class="pastel-orange">y</span> <span class="pastel-white">=</span> <span class="pastel-orange">y</span>;
+      <span class="pastel-cyan">this</span>.<span class="pastel-orange">color</span> <span class="pastel-white">=</span> <span class="pastel-pink">'#a5b4fc'</span>;
+    }
+  }
+}</code></pre>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="device-label">Desktop Dashboard</div>
                             </div>
 
-                            <!-- App UI Content Mockup -->
-                            <div class="app-stats-card">
-                                <i class="fa-solid fa-code"></i>
-                                <div class="app-stat-text">
-                                    <span class="stat-label">Projects</span>
-                                    <span class="stat-value">50+</span>
+                            <!-- Tablet Device (Middle Layer) -->
+                            <div class="device device-tablet" data-speed="4">
+                                <div class="device-frame">
+                                    <div class="screen-content tablet-screen code-screen">
+                                        <div class="code-header">
+                                            <div class="code-dots"><span class="red"></span><span
+                                                    class="yellow"></span><span class="green"></span></div>
+                                            <div class="code-title">style.css</div>
+                                        </div>
+                                        <div class="code-body">
+                                            <pre><code><span class="pastel-purple">.hero-section</span> {
+  <span class="pastel-blue">display</span>: <span class="pastel-orange">flex</span>;
+  <span class="pastel-blue">align-items</span>: <span class="pastel-orange">center</span>;
+  <span class="pastel-blue">background</span>: <span class="pastel-pink">#0f172a</span>;
+}
+
+<span class="pastel-purple">.card</span> {
+  <span class="pastel-blue">border-radius</span>: <span class="pastel-green">12px</span>;
+  <span class="pastel-blue">box-shadow</span>: <span class="pastel-white">0 4px 6px</span> <span class="pastel-yellow">rgba(0,0,0,0.1)</span>;
+  <span class="pastel-blue">backdrop-filter</span>: <span class="pastel-orange">blur(10px)</span>;
+}</code></pre>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="device-label">Analytics View</div>
                             </div>
 
-                            <div class="app-stats-card">
-                                <i class="fa-solid fa-users"></i>
-                                <div class="app-stat-text">
-                                    <span class="stat-label">Clients</span>
-                                    <span class="stat-value">200+</span>
+                            <!-- Mobile Device (Front Layer) -->
+                            <div class="device device-mobile" data-speed="6">
+                                <div class="device-frame">
+                                    <div class="device-notch"></div>
+                                    <div class="screen-content mobile-screen code-screen">
+                                        <div class="code-header">
+                                            <div class="code-time">9:41</div>
+                                        </div>
+                                        <div class="code-body">
+                                            <pre><code><span class="pastel-comment">&lt;!-- Mobile App --></span>
+<span class="pastel-purple">&lt;div</span> <span class="pastel-blue">class</span>=<span class="pastel-green">"app"</span><span class="pastel-purple">></span>
+  <span class="pastel-purple">&lt;nav></span>
+    <span class="pastel-purple">&lt;h1></span><span class="pastel-white">Dashboard</span><span class="pastel-purple">&lt;/h1></span>
+  <span class="pastel-purple">&lt;/nav></span>
+  <span class="pastel-purple">&lt;main></span>
+    <span class="pastel-purple">&lt;card></span>
+      <span class="pastel-blue">User Stats</span>
+    <span class="pastel-purple">&lt;/card></span>
+  <span class="pastel-purple">&lt;/main></span>
+<span class="pastel-purple">&lt;/div></span></code></pre>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="device-label">Mobile App</div>
                             </div>
 
-                            <!-- Floating Action Button -->
-                            <div class="app-fab">+</div>
-                        </div>
-                    </div>
 
-                    <!-- Floating Cards (Positioned around phone) -->
-                    <div class="hero-cards-wrapper">
-                        <!-- Card 1: HTML (Left) -->
-                        <div class="hero-blue-card card-html">
-                            <i class="fa-brands fa-html5 hero-card-icon"></i>
-                            <h3 class="hero-card-title">HTML</h3>
-                            <p class="hero-card-desc">Structural Foundation</p>
-                        </div>
-
-                        <!-- Card 2: SCSS (Right) -->
-                        <div class="hero-blue-card card-scss">
-                            <i class="fa-brands fa-sass hero-card-icon"></i>
-                            <h3 class="hero-card-title">SCSS</h3>
-                            <p class="hero-card-desc">Modern Styling</p>
-                        </div>
-
-                        <!-- Card 3: JS (Bottom) -->
-                        <div class="hero-blue-card card-js">
-                            <i class="fa-brands fa-js hero-card-icon"></i>
-                            <h3 class="hero-card-title">JavaScript</h3>
-                            <p class="hero-card-desc">Interactive Logic</p>
                         </div>
                     </div>
                 </div>
