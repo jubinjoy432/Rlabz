@@ -1253,3 +1253,250 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+
+/* =========================================
+   NEW CLIENTS FEEDBACK SECTION LOGIC
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    // Only run if the new container exists
+    if (!document.getElementById('client_form_cards_container')) return;
+
+    // Client Logos Data
+    const client_form_logos_data = [
+        "TechCorp",
+        "InnovateLab",
+        "GlobalSoft",
+        "DataFlow Inc",
+        "CloudNine",
+        "FutureWorks",
+        "DigitalEdge",
+        "SmartSolutions",
+        "NextGen Tech",
+        "ProActive",
+        "SkyBridge",
+        "WebMasters"
+    ];
+
+    // Testimonials Data
+    const client_form_testimonials_data = [
+        {
+            name: "Sarah Mitchell",
+            role: "CEO, TechCorp",
+            feedback: "Working with this team transformed our digital presence. Their attention to detail and innovative approach exceeded all expectations. We saw a 300% increase in user engagement!",
+            image: "https://i.pravatar.cc/150?img=1",
+            linkedin: "https://www.linkedin.com/in/sarah-mitchell"
+        },
+        {
+            name: "David Chen",
+            role: "CTO, InnovateLab",
+            feedback: "Exceptional service and outstanding results. The team's expertise in modern web technologies helped us launch our product ahead of schedule. Highly recommended!",
+            image: "https://i.pravatar.cc/150?img=13",
+            linkedin: "https://www.linkedin.com/in/david-chen"
+        },
+        {
+            name: "Emily Rodriguez",
+            role: "Marketing Director, GlobalSoft",
+            feedback: "The creative solutions and professional execution made our project a huge success. Their ability to understand our vision and bring it to life was remarkable.",
+            image: "https://i.pravatar.cc/150?img=5",
+            linkedin: "https://www.linkedin.com/in/emily-rodriguez"
+        },
+        {
+            name: "Michael Thompson",
+            role: "Founder, DataFlow Inc",
+            feedback: "From concept to deployment, the entire process was seamless. The team's dedication and technical prowess delivered results beyond our imagination. Outstanding work!",
+            image: "https://i.pravatar.cc/150?img=12",
+            linkedin: "https://www.linkedin.com/in/michael-thompson"
+        },
+        {
+            name: "Jessica Park",
+            role: "Product Manager, CloudNine",
+            feedback: "Their innovative approach and cutting-edge solutions helped us stand out in a competitive market. The ROI has been phenomenal. Truly a game-changer!",
+            image: "https://i.pravatar.cc/150?img=9",
+            linkedin: "https://www.linkedin.com/in/jessica-park"
+        },
+        {
+            name: "Robert Anderson",
+            role: "VP Engineering, FutureWorks",
+            feedback: "Professional, efficient, and incredibly talented. They turned our complex requirements into an elegant solution that our users absolutely love.",
+            image: "https://i.pravatar.cc/150?img=33",
+            linkedin: "https://www.linkedin.com/in/robert-anderson"
+        }
+    ];
+
+    // Populate Company Logos with Marquee
+    function client_form_populate_logos() {
+        const client_form_marquee_track = document.getElementById('client_form_marquee_track');
+        if (!client_form_marquee_track) return;
+
+        // Create double set for seamless loop
+        const client_form_doubled_logos = [...client_form_logos_data, ...client_form_logos_data];
+
+        client_form_doubled_logos.forEach(client_form_logo_name => {
+            const client_form_logo_item = document.createElement('div');
+            client_form_logo_item.className = 'client_form_logo_item';
+            client_form_logo_item.innerHTML = `<div class="client_form_logo_text">${client_form_logo_name}</div>`;
+            client_form_marquee_track.appendChild(client_form_logo_item);
+        });
+    }
+
+    // Populate Testimonial Cards
+    function client_form_populate_cards() {
+        const client_form_cards_container = document.getElementById('client_form_cards_container');
+        if (!client_form_cards_container) return;
+
+        // Use single set for normal scrolling
+        client_form_testimonials_data.forEach((client_form_testimonial, client_form_index) => {
+            const client_form_card = document.createElement('div');
+            client_form_card.className = 'client_form_card';
+            client_form_card.dataset.index = client_form_index;
+            client_form_card.id = `client_form_card_${client_form_index}`;
+
+            const client_form_linkedin_icon = `
+                <svg class="client_form_linkedin_icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+            `;
+
+            client_form_card.innerHTML = `
+                <div class="client_form_card_header">
+                    <img src="${client_form_testimonial.image}" alt="${client_form_testimonial.name}" class="client_form_profile_pic">
+                    <div class="client_form_profile_info">
+                        <div class="client_form_name">${client_form_testimonial.name}</div>
+                        <div class="client_form_role">${client_form_testimonial.role}</div>
+                    </div>
+                    ${client_form_testimonial.linkedin ? `<a href="${client_form_testimonial.linkedin}" target="_blank" rel="noopener noreferrer" class="client_form_linkedin_link" aria-label="Visit ${client_form_testimonial.name}'s LinkedIn profile">${client_form_linkedin_icon}</a>` : ''}
+                </div>
+                <div class="client_form_feedback">${client_form_testimonial.feedback}</div>
+            `;
+
+            client_form_cards_container.appendChild(client_form_card);
+        });
+    }
+
+    // Normal scrolling functionality
+    let client_form_current_card_index = 0;
+    let client_form_is_scrolling = false;
+
+    const client_form_cards_wrapper = document.querySelector('.client_form_cards_wrapper');
+    const client_form_cards_container = document.getElementById('client_form_cards_container');
+    const client_form_prev_btn = document.getElementById('client_form_prev_btn');
+    const client_form_next_btn = document.getElementById('client_form_next_btn');
+
+    // Manual navigation with smooth scroll
+    function client_form_navigate(client_form_direction) {
+        if (client_form_is_scrolling) return;
+
+        const client_form_cards = document.querySelectorAll('.client_form_card');
+        if (client_form_cards.length === 0) return;
+
+        client_form_is_scrolling = true;
+
+        if (client_form_direction === 'next') {
+            client_form_current_card_index++;
+        } else {
+            client_form_current_card_index--;
+        }
+
+        // Handle wrapping
+        const client_form_total_cards = client_form_testimonials_data.length;
+        if (client_form_current_card_index >= client_form_total_cards) {
+            client_form_current_card_index = 0;
+        } else if (client_form_current_card_index < 0) {
+            client_form_current_card_index = client_form_total_cards - 1;
+        }
+
+        // Scroll to the target card
+        const client_form_target_card = document.getElementById(`client_form_card_${client_form_current_card_index}`);
+        if (client_form_target_card && client_form_cards_wrapper) {
+            const client_form_wrapper_rect = client_form_cards_wrapper.getBoundingClientRect();
+            const client_form_card_rect = client_form_target_card.getBoundingClientRect();
+            const client_form_scroll_top = client_form_cards_wrapper.scrollTop;
+            const client_form_target_position = client_form_scroll_top + client_form_card_rect.top - client_form_wrapper_rect.top - 20;
+
+            client_form_cards_wrapper.scrollTo({
+                top: client_form_target_position,
+                behavior: 'smooth'
+            });
+        }
+
+        setTimeout(() => {
+            client_form_is_scrolling = false;
+        }, 800);
+    }
+
+    // Event Listeners
+    if (client_form_prev_btn) client_form_prev_btn.addEventListener('click', () => client_form_navigate('prev'));
+    if (client_form_next_btn) client_form_next_btn.addEventListener('click', () => client_form_navigate('next'));
+
+    // Track scroll position to update current card index
+    if (client_form_cards_wrapper) {
+        client_form_cards_wrapper.addEventListener('scroll', () => {
+            const client_form_cards = document.querySelectorAll('.client_form_card');
+            if (client_form_cards.length === 0) return;
+
+            const client_form_wrapper_rect = client_form_cards_wrapper.getBoundingClientRect();
+            // const client_form_wrapper_top = client_form_wrapper_rect.top;
+            const client_form_wrapper_center = client_form_wrapper_rect.top + (client_form_wrapper_rect.height / 2);
+
+            let client_form_closest_index = 0;
+            let client_form_closest_distance = Infinity;
+
+            client_form_cards.forEach((client_form_card, client_form_index) => {
+                const client_form_card_rect = client_form_card.getBoundingClientRect();
+                const client_form_card_center = client_form_card_rect.top + (client_form_card_rect.height / 2);
+                const client_form_distance = Math.abs(client_form_card_center - client_form_wrapper_center);
+
+                if (client_form_distance < client_form_closest_distance) {
+                    client_form_closest_distance = client_form_distance;
+                    client_form_closest_index = client_form_index;
+                }
+            });
+
+            client_form_current_card_index = client_form_closest_index;
+        });
+    }
+
+    // Create animated background particles
+    function client_form_create_particles() {
+        const client_form_particles_container = document.getElementById('client_form_bg_particles');
+        if (!client_form_particles_container) return;
+        const client_form_particle_count = 15;
+
+        for (let i = 0; i < client_form_particle_count; i++) {
+            const client_form_particle = document.createElement('div');
+            client_form_particle.className = 'client_form_particle';
+
+            // Random size between 100px and 300px
+            const client_form_size = Math.random() * 200 + 100;
+            client_form_particle.style.width = client_form_size + 'px';
+            client_form_particle.style.height = client_form_size + 'px';
+
+            // Random position
+            client_form_particle.style.left = Math.random() * 100 + '%';
+            client_form_particle.style.top = Math.random() * 100 + '%';
+
+            // Random animation delay
+            client_form_particle.style.animationDelay = Math.random() * 20 + 's';
+            client_form_particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+
+            client_form_particles_container.appendChild(client_form_particle);
+        }
+    }
+
+
+    // Add extra blob to logos section
+    function client_form_add_logos_blob() {
+        const client_form_logos_section = document.querySelector('.client_form_logos_section');
+        if (client_form_logos_section) {
+            const client_form_extra_blob = document.createElement('div');
+            client_form_extra_blob.className = 'client_form_logos_blob_extra';
+            client_form_logos_section.appendChild(client_form_extra_blob);
+        }
+    }
+
+    // Initialize
+    client_form_populate_logos();
+    client_form_populate_cards();
+    client_form_create_particles();
+    client_form_add_logos_blob();
+});

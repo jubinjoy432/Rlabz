@@ -10,6 +10,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&display=swap"
         rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 
@@ -561,52 +563,57 @@
     </section>
 
     <!-- Clients Section -->
-    <section class="clients-section" id="clientsSection">
-        <!-- Background -->
-        <div class="background">
-            <div class="gradient-mesh"></div>
-            <div class="gradient-orb gradient-orb-1"></div>
-            <div class="gradient-orb gradient-orb-2"></div>
+    <!-- New Clients Feedback Section -->
+    <div id="clientsSection" class="client-feedback-wrapper">
+        <!-- Animated Background Particles -->
+        <div class="client_form_bg_particles" id="client_form_bg_particles"></div>
 
-            <!-- Particles -->
-            <div id="particlesContainer"></div>
+        <!-- Client Feedback Section -->
+        <section class="client_form_section">
+            <div class="client_form_container">
+                <!-- Left Side -->
+                <div class="client_form_left">
+                    <h1 class="client_form_heading">What Our Clients Say</h1>
+                    <p class="client_form_description">
+                        Don't just take our word for it. Hear directly from our valued clients about their experiences
+                        working with us. Their success stories drive our passion for excellence.
+                    </p>
+                    <div class="client_form_nav_buttons">
+                        <button class="client_form_nav_btn client_form_prev_btn" id="client_form_prev_btn"
+                            aria-label="Previous testimonial">
+                            <span>&larr;</span>
+                        </button>
+                        <button class="client_form_nav_btn client_form_next_btn" id="client_form_next_btn"
+                            aria-label="Next testimonial">
+                            <span>&rarr;</span>
+                        </button>
+                    </div>
+                </div>
 
-            <div class="grid-pattern"></div>
-            <div class="vignette"></div>
-        </div>
-
-        <!-- Content -->
-        <div class="content-wrapper">
-            <!-- Header -->
-            <div class="clients-header" id="clientsHeader">
-                <h2>Our Clients</h2>
-                <p class="subtitle">Trusted by industry leaders worldwide</p>
+                <!-- Right Side - Cards -->
+                <div class="client_form_right">
+                    <div class="client_form_cards_wrapper">
+                        <div class="client_form_cards_container" id="client_form_cards_container">
+                            <!-- Cards will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <!-- Carousel -->
-            <div class="clients-carousel-wrapper" id="clientsCarouselWrapper">
-                <!-- Navigation Buttons -->
-                <button class="nav-button nav-button-left" id="scrollLeft" aria-label="Scroll left">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    <div class="nav-button-glow"></div>
-                </button>
-
-                <button class="nav-button nav-button-right" id="scrollRight" aria-label="Scroll right">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                    <div class="nav-button-glow"></div>
-                </button>
-
-                <!-- Scroll Container -->
-                <div class="scroll-container" id="scrollContainer"></div>
+        <!-- Our Clients Logo Section -->
+        <section class="client_form_logos_section">
+            <div class="client_form_logos_container">
+                <h2 class="client_form_logos_heading">Our Clients</h2>
+                <p class="client_form_logos_subtitle">Trusted by leading companies worldwide</p>
+                <div class="client_form_marquee_wrapper">
+                    <div class="client_form_marquee_track" id="client_form_marquee_track">
+                        <!-- Logo items will be populated by JavaScript -->
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- Contact Us Section -->
     <section id="contactSection" class="rounded-section contact-section white-bg">
