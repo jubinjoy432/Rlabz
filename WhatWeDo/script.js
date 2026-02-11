@@ -1892,6 +1892,25 @@ document.addEventListener('DOMContentLoaded', () => {
         revealObserver.observe(card);
     });
 
+    // =========================================
+    // "Have You Seen Our Works" Reveal on Scroll
+    // =========================================
+
+    // Target the section header
+    const worksHeader = document.querySelector('#our-works .section-header');
+    if (worksHeader) {
+        worksHeader.classList.add('reveal-on-scroll');
+        revealObserver.observe(worksHeader);
+    }
+
+    // Target the cube grid with delay
+    const worksGrid = document.querySelector('.cube-structure-grid');
+    if (worksGrid) {
+        worksGrid.classList.add('reveal-on-scroll');
+        worksGrid.style.transitionDelay = '200ms';
+        revealObserver.observe(worksGrid);
+    }
+
 });
 
 // =========================================
