@@ -5164,7 +5164,9 @@ footer {
 .reveal-on-scroll.revealed {
     opacity: 1;
     transform: translateY(0);
-}/* =========================================
+}
+
+/* =========================================
    CUBE SLIDER STYLES
    ========================================= */
 
@@ -5272,6 +5274,8 @@ footer {
     background-size: cover;
     border: 1px solid rgba(255, 255, 255, 0.3);
     user-select: none;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 .cube-swiper .swiper-slide img {
@@ -5415,12 +5419,12 @@ footer {
     .reveal-title {
         font-size: 1.2rem;
     }
-    
+
     .reveal-avatar {
         width: 60px;
         height: 60px;
     }
-    
+
     .reveal-name {
         font-size: 0.8rem;
     }
