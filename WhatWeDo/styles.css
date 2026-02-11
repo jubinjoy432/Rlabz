@@ -5164,4 +5164,157 @@ footer {
 .reveal-on-scroll.revealed {
     opacity: 1;
     transform: translateY(0);
+}/* =========================================
+   CUBE SLIDER STYLES
+   ========================================= */
+
+/* Grid Layout: Details Left, Cube Right */
+.cube-structure-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 40px;
+}
+
+/* LEFT PANEL: Details */
+.cube-details-panel {
+    max-width: 600px;
+    text-align: left;
+    padding-left: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cube-details-panel h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #1e3a8a;
+}
+
+.cube-details-panel p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+/* Tech Stack */
+.cube-meta-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cube-tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.cube-tech-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Links */
+.cube-links {
+    display: flex;
+    gap: 15px;
+}
+
+.cube-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cube-link-btn.github {
+    background: #24292e;
+    color: white;
+}
+
+.cube-link-btn.github:hover {
+    background: #1a1e22;
+}
+
+.cube-link-btn.live {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.cube-link-btn.live:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+/* RIGHT PANEL: Swiper Cube */
+.cube-swiper {
+    position: relative;
+    width: 400px;
+    height: 490px;
+}
+
+.cube-swiper .swiper-slide {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    user-select: none;
+}
+
+.cube-swiper .swiper-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1050px) {
+    .cube-swiper {
+        width: 350px;
+        height: 450px;
+    }
+}
+
+@media (max-width: 930px) {
+    .cube-structure-grid {
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto;
+        gap: 40px;
+        text-align: center;
+    }
+
+    .cube-details-panel {
+        text-align: center;
+        padding: 0 20px;
+        margin: 0 auto;
+    }
+
+    .cube-links {
+        justify-content: center;
+    }
+
+    .cube-tech-stack {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 470px) {
+    .cube-swiper {
+        width: 300px;
+        height: 400px;
+    }
 }

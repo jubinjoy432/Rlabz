@@ -1893,3 +1893,105 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
+// =========================================
+// CUBE SLIDER LOGIC
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const cubeWrapper = document.querySelector('.cube-swiper .swiper-wrapper');
+    const cubeTitle = document.getElementById('cube-title');
+    const cubeDesc = document.getElementById('cube-desc');
+    const cubeTech = document.getElementById('cube-tech');
+    const cubeGithub = document.getElementById('cube-github');
+    const cubeLive = document.getElementById('cube-live');
+
+    if (cubeWrapper && typeof Swiper !== 'undefined') {
+        // 1. Inject Slides from 'projects' data
+        const projectIds = Object.keys(projects);
+
+        projectIds.forEach(id => {
+            const p = projects[id];
+
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.setAttribute('data-id', id);
+
+            slide.innerHTML = `<img src="${p.img}" alt="${p.title}" />`;
+
+            cubeWrapper.appendChild(slide);
+        });
+
+        // 2. Initialize Swiper
+        const cubeSwiper = new Swiper(".cube-swiper", {
+            effect: "cube",
+            grabCursor: true,
+            loop: true,
+            speed: 1000,
+            cubeEffect: {
+                shadow: false,
+                slideShadows: true,
+                shadowOffset: 10,
+                shadowScale: 0.94,
+            },
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            on: {
+                slideChange: function () {
+                    updateDetails(this.realIndex);
+                }
+            }
+        });
+
+        // 3. Update Details Panel
+        function updateDetails(realIndex) {
+            const pKey = projectIds[realIndex];
+            const p = projects[pKey];
+
+            if (p) {
+                const detailsPanel = document.querySelector('.cube-details-panel');
+                if (detailsPanel) {
+                    detailsPanel.style.opacity = '0';
+                    detailsPanel.style.transform = 'translateY(10px)';
+                }
+
+                setTimeout(() => {
+                    cubeTitle.innerText = p.title;
+                    cubeDesc.innerText = p.desc;
+
+                    if (cubeTech) {
+                        cubeTech.innerHTML = '';
+                        if (p.tech && p.tech.length > 0) {
+                            p.tech.forEach(t => {
+                                const badge = document.createElement('span');
+                                badge.className = 'cube-tech-badge';
+                                badge.innerText = t;
+                                cubeTech.appendChild(badge);
+                            });
+                        }
+                    }
+
+                    if (cubeGithub) {
+                        cubeGithub.href = p.github || '#';
+                        cubeGithub.style.opacity = (p.github === '#' || !p.github) ? '0.5' : '1';
+                        cubeGithub.style.pointerEvents = (p.github === '#' || !p.github) ? 'none' : 'auto';
+                    }
+                    if (cubeLive) {
+                        cubeLive.href = p.link || '#';
+                        cubeLive.style.opacity = (p.link === '#' || !p.link) ? '0.5' : '1';
+                        cubeLive.style.pointerEvents = (p.link === '#' || !p.link) ? 'none' : 'auto';
+                    }
+
+                    if (detailsPanel) {
+                        detailsPanel.style.opacity = '1';
+                        detailsPanel.style.transform = 'translateY(0)';
+                    }
+                }, 200);
+            }
+        }
+
+        // 4. Initialize with first project
+        updateDetails(0);
+    }
+});
