@@ -5242,14 +5242,7 @@ footer {
     transition: all 0.3s ease;
 }
 
-.cube-link-btn.github {
-    background: #24292e;
-    color: white;
-}
 
-.cube-link-btn.github:hover {
-    background: #1a1e22;
-}
 
 .cube-link-btn.live {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);

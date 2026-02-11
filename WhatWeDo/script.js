@@ -1902,7 +1902,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cubeTitle = document.getElementById('cube-title');
     const cubeDesc = document.getElementById('cube-desc');
     const cubeTech = document.getElementById('cube-tech');
-    const cubeGithub = document.getElementById('cube-github');
+
     const cubeLive = document.getElementById('cube-live');
 
     if (cubeWrapper && typeof Swiper !== 'undefined') {
@@ -1972,11 +1972,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    if (cubeGithub) {
-                        cubeGithub.href = p.github || '#';
-                        cubeGithub.style.opacity = (p.github === '#' || !p.github) ? '0.5' : '1';
-                        cubeGithub.style.pointerEvents = (p.github === '#' || !p.github) ? 'none' : 'auto';
-                    }
+
                     if (cubeLive) {
                         cubeLive.href = p.link || '#';
                         cubeLive.style.opacity = (p.link === '#' || !p.link) ? '0.5' : '1';
