@@ -1993,5 +1993,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 4. Initialize with first project
         updateDetails(0);
+
+        // 5. Pause autoplay on hover
+        const cubeContainer = document.querySelector('.cube-swiper');
+        if (cubeContainer && cubeSwiper.autoplay) {
+            cubeContainer.addEventListener('mouseenter', () => {
+                cubeSwiper.autoplay.stop();
+            });
+            cubeContainer.addEventListener('mouseleave', () => {
+                cubeSwiper.autoplay.start();
+            });
+        }
     }
 });

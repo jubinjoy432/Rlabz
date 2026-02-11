@@ -5318,3 +5318,110 @@ footer {
         height: 400px;
     }
 }
+
+/* ==========================================
+   CIRCULAR REVEAL OVERLAY
+   ========================================== */
+
+/* Ensure cube-swiper has position context */
+.cube-swiper {
+    position: relative !important;
+}
+
+/* Overlay container - hidden by default */
+.cube-hover-reveal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    pointer-events: none;
+    clip-path: circle(0% at 100% 0%);
+    transition: clip-path 0.7s ease-in-out;
+    box-shadow: inset 0 0 30px rgba(102, 126, 234, 0.1);
+}
+
+/* Expand circle on hover */
+.cube-swiper:hover .cube-hover-reveal {
+    clip-path: circle(150% at 100% 0%);
+}
+
+/* Content container */
+.reveal-content {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Title styling */
+.reveal-title {
+    color: #1e3a8a;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Team grid */
+.reveal-team {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+/* Individual member */
+.reveal-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Avatar circle */
+.reveal-avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #667eea;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.reveal-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Member name */
+.reveal-name {
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0;
+    text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .reveal-title {
+        font-size: 1.2rem;
+    }
+    
+    .reveal-avatar {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .reveal-name {
+        font-size: 0.8rem;
+    }
+}
