@@ -779,316 +779,192 @@ window.addEventListener('click', (e) => {
 
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
-    // Clients Section Logic
+    // STICKY SCROLL STACKING TESTIMONIALS
     // =========================================
 
-    // Client Data
-    const clients = [
+    // Testimonial Data
+    const testimonials = [
         {
             id: 1,
             name: "Sarah Mitchell",
             position: "Chief Technology Officer",
             company: "TechVision Inc.",
-            description: "Transformed our entire infrastructure with their innovative solutions.",
-            image: "https://images.unsplash.com/photo-1758518729459-235dcaadc611?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+            text: "Transformed our entire infrastructure with their innovative solutions. The team's dedication and expertise exceeded all our expectations.",
+            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop"
         },
         {
             id: 2,
             name: "Marcus Chen",
             position: "VP of Engineering",
             company: "CloudScale Systems",
-            description: "Exceptional service delivery and outstanding technical expertise.",
-            image: "https://images.unsplash.com/photo-1581065178047-8ee15951ede6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+            text: "Exceptional service delivery and outstanding technical expertise. They brought our vision to life with precision and creativity.",
+            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop"
         },
         {
             id: 3,
             name: "Elena Rodriguez",
             position: "Head of Innovation",
             company: "Digital Dynamics",
-            description: "A partnership that consistently exceeds expectations.",
-            image: "https://images.unsplash.com/photo-1758518727888-ffa196002e59?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+            text: "A partnership that consistently exceeds expectations. Their innovative approach transformed our digital presence completely.",
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
         },
         {
             id: 4,
             name: "James Anderson",
             position: "CEO & Founder",
             company: "Quantum Ventures",
-            description: "The strategic partner every growing company needs.",
-            image: "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+            text: "The strategic partner every growing company needs. Their solutions scaled perfectly with our business growth.",
+            image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
         },
         {
             id: 5,
             name: "Priya Sharma",
             position: "Director of Product",
             company: "InnovateLabs",
-            description: "Incredible attention to detail and commitment to excellence.",
-            image: "https://images.unsplash.com/photo-1737574821698-862e77f044c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
-        },
-        {
-            id: 6,
-            name: "David Park",
-            position: "Chief Product Officer",
-            company: "NextGen Solutions",
-            description: "Their platform has become integral to our operations.",
-            image: "https://images.unsplash.com/photo-1758691737605-69a0e78bd193?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+            text: "Incredible attention to detail and commitment to excellence. Every deliverable was polished and exceeded our standards.",
+            image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop"
         }
     ];
 
-    // State
-    let isAutoScrolling = true;
-    let isDragging = false;
-    let startX = 0;
-    let scrollLeft = 0;
-    let autoScrollInterval = null;
-    let inactivityTimer = null;
-
-    // DOM Elements - Using Class Selectors where renamed
     const section = document.getElementById('clientsSection');
-    const header = document.querySelector('.clients-header');
-    const carouselWrapper = document.querySelector('.clients-carousel-wrapper');
-    const scrollContainer = document.getElementById('scrollContainer');
-    const scrollLeftBtn = document.getElementById('scrollLeft');
-    const scrollRightBtn = document.getElementById('scrollRight');
-    const particlesContainer = document.getElementById('particlesContainer');
-    const scrollProgress = document.getElementById('scrollProgress');
+    const cardsContainer = document.getElementById('client_form_cards_container');
 
-    if (!section || !scrollContainer) return; // Guard clause
+    if (!section || !cardsContainer) return;
 
-    // Generate particles
-    function generateParticles() {
-        if (!particlesContainer) return;
-        for (let i = 0; i < 20; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            const left = Math.random() * 100;
-            const top = Math.random() * 100;
-            const tx = (Math.random() - 0.5) * 200;
-            const ty = (Math.random() - 0.5) * 200;
-            particle.style.left = `${left}%`;
-            particle.style.top = `${top}%`;
-            particle.style.setProperty('--tx', tx);
-            particle.style.setProperty('--ty', ty);
-            particle.style.animationDelay = `${Math.random() * 5}s`;
-            particle.style.animationDuration = `${15 + Math.random() * 10}s`;
-            particlesContainer.appendChild(particle);
-        }
-    }
+    // Generate testimonial cards
+    function generateTestimonialCards() {
+        cardsContainer.innerHTML = ''; // Clear existing content
 
-    // Generate client cards
-    function generateCards() {
-        // Duplicate clients 3 times for infinite scroll
-        const infiniteClients = [...clients, ...clients, ...clients];
+        testimonials.forEach((testimonial, index) => {
+            const card = document.createElement('div');
+            card.className = 'testimonial-card';
+            card.setAttribute('data-index', index);
+            card.style.zIndex = index + 1; // Higher z-index for later cards
 
-        infiniteClients.forEach((client, index) => {
-            const cardWrapper = document.createElement('div');
-            cardWrapper.className = 'client-card-wrapper';
-
-            cardWrapper.innerHTML = `
-                <div class="client-card">
-                    <div class="card-shine"></div>
-                    <div class="card-glow"></div>
-                    <div class="card-image">
-                        <img src="${client.image}" alt="${client.name}" loading="lazy">
-                        <div class="image-overlay"></div>
+            card.innerHTML = `
+                <div class="testimonial-card-content">
+                    <div class="testimonial-text">
+                        "${testimonial.text}"
                     </div>
-                    <div class="card-info">
-                        <div class="name-linkedin">
-                            <h3>${client.name}</h3>
-                            <a href="#" class="linkedin-link" aria-label="View LinkedIn Profile" onclick="event.stopPropagation()">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                    <rect x="2" y="9" width="4" height="12"></rect>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg>
-                            </a>
-                        </div>
-                        <p class="position">${client.position}</p>
-                        <p class="company">${client.company}</p>
-                        
-                        <div class="feedback">
-                            <p class="feedback-text">${client.description}</p>
+                    <div class="testimonial-author">
+                        <img src="${testimonial.image}" alt="${testimonial.name}" class="testimonial-avatar">
+                        <div class="testimonial-info">
+                            <h4>${testimonial.name}</h4>
+                            <p>${testimonial.position} at ${testimonial.company}</p>
                         </div>
                     </div>
                 </div>
             `;
 
-            // Staggered animation
-            cardWrapper.style.animationDelay = `${(index % clients.length) * 0.1}s`;
-
-            scrollContainer.appendChild(cardWrapper);
+            cardsContainer.appendChild(card);
         });
     }
 
-    // Intersection Observer for fade-in
-    function setupIntersectionObserver() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    section.classList.add('visible');
-                    if (header) header.classList.add('visible');
-                    if (carouselWrapper) carouselWrapper.classList.add('visible');
+    // Scroll-based animation controller
+    function setupStickyScrollAnimation() {
+        const cards = document.querySelectorAll('.testimonial-card');
+        const totalCards = cards.length;
+
+        if (totalCards === 0) return;
+
+        // Calculate scroll progress through the 300vh section
+        function updateCardAnimations() {
+            const rect = section.getBoundingClientRect();
+            const sectionHeight = section.offsetHeight;
+            const viewportHeight = window.innerHeight;
+
+            // Progress from 0 (top of section at viewport top) to 1 (bottom of section at viewport bottom)
+            const scrollStart = -rect.top;
+            const scrollRange = sectionHeight - viewportHeight;
+            const progress = Math.max(0, Math.min(1, scrollStart / scrollRange));
+
+            // Animate each card based on progress
+            cards.forEach((card, index) => {
+                const cardProgress = totalCards > 1 ? index / (totalCards - 1) : 0;
+                const startProgress = cardProgress * 0.7; // Cards start appearing progressively
+                const endProgress = Math.min(1, startProgress + 0.3); // Each card has 30% of scroll range
+
+                // Calculate individual card progress (0 to 1)
+                const individualProgress = Math.max(0, Math.min(1,
+                    (progress - startProgress) / (endProgress - startProgress)
+                ));
+
+                if (individualProgress <= 0) {
+                    // Card hasn't started yet - keep it below
+                    card.style.transform = 'translateY(100%)';
+                    card.style.opacity = '0';
+                    card.style.clipPath = 'inset(100% 0% 0% 0%)';
+                } else if (individualProgress >= 1) {
+                    // Card fully visible and anchored at top
+                    card.style.transform = 'translateY(0%)';
+                    card.style.opacity = '1';
+                    card.style.clipPath = 'inset(0% 0% 0% 0%)';
+                } else {
+                    // Card is animating - slide up
+                    const translateY = 100 * (1 - individualProgress);
+                    const clipInset = 100 * (1 - individualProgress);
+
+                    card.style.transform = `translateY(${translateY}%)`;
+                    card.style.opacity = `${individualProgress}`;
+                    card.style.clipPath = `inset(${clipInset}% 0% 0% 0%)`;
                 }
             });
-        }, { threshold: 0.1 });
+        }
 
-        observer.observe(section);
-    }
-
-    // Auto-scroll functionality
-    function startAutoScroll() {
-        if (!isAutoScrolling) return;
-
-        autoScrollInterval = setInterval(() => {
-            if (!isAutoScrolling) return;
-
-            const maxScroll = scrollContainer.scrollWidth / 3; // Since we have 3x duplication
-
-            if (scrollContainer.scrollLeft >= maxScroll) {
-                scrollContainer.scrollLeft = 0;
-            } else {
-                scrollContainer.scrollLeft += 1;
+        // Listen to scroll events
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateCardAnimations();
+                    ticking = false;
+                });
+                ticking = true;
             }
-        }, 30);
-    }
-
-    function stopAutoScroll() {
-        if (autoScrollInterval) {
-            clearInterval(autoScrollInterval);
-            autoScrollInterval = null;
-        }
-    }
-
-    function pauseAutoScroll() {
-        isAutoScrolling = false;
-        stopAutoScroll();
-
-        if (inactivityTimer) {
-            clearTimeout(inactivityTimer);
-        }
-
-        inactivityTimer = setTimeout(() => {
-            isAutoScrolling = true;
-            startAutoScroll();
-        }, 5000);
-    }
-
-    // Manual scroll
-    function handleManualScroll(direction) {
-        const scrollAmount = 400;
-        const newScrollLeft = direction === 'left'
-            ? scrollContainer.scrollLeft - scrollAmount
-            : scrollContainer.scrollLeft + scrollAmount;
-
-        scrollContainer.scrollTo({
-            left: newScrollLeft,
-            behavior: 'smooth'
         });
 
-        pauseAutoScroll();
+        // Initial update
+        updateCardAnimations();
     }
 
-    // Update navigation button states
-    function updateNavButtons() {
-        const isAtStart = scrollContainer.scrollLeft <= 10;
-        const isAtEnd = scrollContainer.scrollLeft >= scrollContainer.scrollWidth - scrollContainer.clientWidth - 10;
-
-        if (scrollLeftBtn) scrollLeftBtn.classList.toggle('disabled', isAtStart);
-        if (scrollRightBtn) scrollRightBtn.classList.toggle('disabled', isAtEnd);
-    }
-
-    // Update scroll progress
-    function updateScrollProgress() {
-        if (!scrollProgress) return;
-        const scrollableWidth = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-        const scrollProgressPercent = (scrollContainer.scrollLeft / scrollableWidth) * 100;
-        scrollProgress.style.width = `${Math.min(100, Math.max(0, scrollProgressPercent))}%`;
-    }
-
-    // Keyboard navigation
-    function handleKeyDown(e) {
-        if (e.key === 'ArrowLeft') {
-            // Only capture if section is in view? Removed to avoid interfering with other carousels
-            // handleManualScroll('left'); 
-        } else if (e.key === 'ArrowRight') {
-            // handleManualScroll('right');
-        }
-    }
-
-    // Drag functionality
-    function handleMouseDown(e) {
-        isDragging = true;
-        scrollContainer.classList.add('grabbing');
-        startX = e.pageX - scrollContainer.offsetLeft;
-        scrollLeft = scrollContainer.scrollLeft;
-        pauseAutoScroll();
-    }
-
-    function handleMouseMove(e) {
-        if (!isDragging) return;
-        e.preventDefault();
-        const x = e.pageX - scrollContainer.offsetLeft;
-        const walk = (x - startX) * 2;
-        scrollContainer.scrollLeft = scrollLeft - walk;
-    }
-
-    function handleMouseUp() {
-        isDragging = false;
-        scrollContainer.classList.remove('grabbing');
-    }
-
-    function handleMouseLeave() {
-        isDragging = false;
-        scrollContainer.classList.remove('grabbing');
-    }
-
-    // Click to pause
-    function handleClick() {
-        pauseAutoScroll();
-    }
-
-    // Event listeners
-    if (scrollLeftBtn) scrollLeftBtn.addEventListener('click', () => handleManualScroll('left'));
-    if (scrollRightBtn) scrollRightBtn.addEventListener('click', () => handleManualScroll('right'));
-
-    scrollContainer.addEventListener('mousedown', handleMouseDown);
-    scrollContainer.addEventListener('mousemove', handleMouseMove);
-    scrollContainer.addEventListener('mouseup', handleMouseUp);
-    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
-    scrollContainer.addEventListener('click', handleClick);
-    scrollContainer.addEventListener('scroll', () => {
-        updateNavButtons();
-        updateScrollProgress();
-    });
-    // window.addEventListener('keydown', handleKeyDown); // Commented out to avoid global conflict
-
-    // Touch support for mobile
-    let touchStartX = 0;
-    scrollContainer.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        pauseAutoScroll();
-    });
-
-    scrollContainer.addEventListener('touchmove', (e) => {
-        if (Math.abs(e.touches[0].clientX - touchStartX) > 10) {
-            pauseAutoScroll();
-        }
-    });
 
     // Initialize
-    generateParticles();
-    generateCards();
-    setupIntersectionObserver();
-    startAutoScroll();
-    updateNavButtons();
+    generateTestimonialCards();
+    setupStickyScrollAnimation();
 
-    // Initial scroll progress update
-    setTimeout(() => {
-        updateScrollProgress();
-    }, 100);
+    // =========================================
+    // LOGO MARQUEE SECTION
+    // =========================================
 
-    // Cleanup on page unload (optional, handled by browser mostly)
+    // Client logos data
+    const clientLogos = [
+        { name: "TechVision Inc.", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=TechVision" },
+        { name: "CloudScale Systems", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=CloudScale" },
+        { name: "Digital Dynamics", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=Digital+Dynamics" },
+        { name: "Quantum Ventures", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=Quantum" },
+        { name: "InnovateLabs", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=InnovateLabs" },
+        { name: "NextGen Solutions", logo: "https://via.placeholder.com/150x60/0b5394/ffffff?text=NextGen" }
+    ];
+
+    const marqueeTrack = document.getElementById('client_form_marquee_track');
+
+    if (marqueeTrack) {
+        // Duplicate logos 3 times for infinite scroll effect
+        const duplicatedLogos = [...clientLogos, ...clientLogos, ...clientLogos];
+
+        duplicatedLogos.forEach(client => {
+            const logoItem = document.createElement('div');
+            logoItem.className = 'client_form_marquee_item';
+            logoItem.innerHTML = `
+                <img src="${client.logo}" alt="${client.name}" />
+            `;
+            marqueeTrack.appendChild(logoItem);
+        });
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1509,205 +1385,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
 /* =========================================
-   NEW CLIENTS FEEDBACK SECTION LOGIC
+   NEW CLIENTS FEEDBACK SECTION LOGIC (Restored for Logos & Particles)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
     // Only run if the new container exists
     if (!document.getElementById('client_form_cards_container')) return;
 
-    // Client Logos Data
+    // Client Logos Data with Icons
     const client_form_logos_data = [
-        "TechCorp",
-        "InnovateLab",
-        "GlobalSoft",
-        "DataFlow Inc",
-        "CloudNine",
-        "FutureWorks",
-        "DigitalEdge",
-        "SmartSolutions",
-        "NextGen Tech",
-        "ProActive",
-        "SkyBridge",
-        "WebMasters"
+        { name: "TechCorp", icon: "fas fa-microchip" },
+        { name: "InnovateLab", icon: "fas fa-flask" },
+        { name: "GlobalSoft", icon: "fas fa-globe" },
+        { name: "DataFlow", icon: "fas fa-database" },
+        { name: "CloudNine", icon: "fas fa-cloud" },
+        { name: "FutureWorks", icon: "fas fa-rocket" },
+        { name: "DigitalEdge", icon: "fas fa-laptop-code" },
+        { name: "SmartSolutions", icon: "far fa-lightbulb" },
+        { name: "NextGen", icon: "fas fa-robot" },
+        { name: "ProActive", icon: "fas fa-bolt" },
+        { name: "SkyBridge", icon: "fab fa-mixcloud" },
+        { name: "WebMasters", icon: "fas fa-code" }
     ];
 
-    // Testimonials Data
-    const client_form_testimonials_data = [
-        {
-            name: "Sarah Mitchell",
-            role: "CEO, TechCorp",
-            feedback: "Working with this team transformed our digital presence. Their attention to detail and innovative approach exceeded all expectations. We saw a 300% increase in user engagement!",
-            image: "https://i.pravatar.cc/150?img=1",
-            linkedin: "https://www.linkedin.com/in/sarah-mitchell"
-        },
-        {
-            name: "David Chen",
-            role: "CTO, InnovateLab",
-            feedback: "Exceptional service and outstanding results. The team's expertise in modern web technologies helped us launch our product ahead of schedule. Highly recommended!",
-            image: "https://i.pravatar.cc/150?img=13",
-            linkedin: "https://www.linkedin.com/in/david-chen"
-        },
-        {
-            name: "Emily Rodriguez",
-            role: "Marketing Director, GlobalSoft",
-            feedback: "The creative solutions and professional execution made our project a huge success. Their ability to understand our vision and bring it to life was remarkable.",
-            image: "https://i.pravatar.cc/150?img=5",
-            linkedin: "https://www.linkedin.com/in/emily-rodriguez"
-        },
-        {
-            name: "Michael Thompson",
-            role: "Founder, DataFlow Inc",
-            feedback: "From concept to deployment, the entire process was seamless. The team's dedication and technical prowess delivered results beyond our imagination. Outstanding work!",
-            image: "https://i.pravatar.cc/150?img=12",
-            linkedin: "https://www.linkedin.com/in/michael-thompson"
-        },
-        {
-            name: "Jessica Park",
-            role: "Product Manager, CloudNine",
-            feedback: "Their innovative approach and cutting-edge solutions helped us stand out in a competitive market. The ROI has been phenomenal. Truly a game-changer!",
-            image: "https://i.pravatar.cc/150?img=9",
-            linkedin: "https://www.linkedin.com/in/jessica-park"
-        },
-        {
-            name: "Robert Anderson",
-            role: "VP Engineering, FutureWorks",
-            feedback: "Professional, efficient, and incredibly talented. They turned our complex requirements into an elegant solution that our users absolutely love.",
-            image: "https://i.pravatar.cc/150?img=33",
-            linkedin: "https://www.linkedin.com/in/robert-anderson"
-        }
-    ];
+    // Define empty array to prevent crashes in event listeners
+    const client_form_testimonials_data = [];
 
     // Populate Company Logos with Marquee
     function client_form_populate_logos() {
         const client_form_marquee_track = document.getElementById('client_form_marquee_track');
         if (!client_form_marquee_track) return;
 
+        // Clear existing content just in case
+        client_form_marquee_track.innerHTML = '';
+
         // Create double set for seamless loop
         const client_form_doubled_logos = [...client_form_logos_data, ...client_form_logos_data];
 
-        client_form_doubled_logos.forEach(client_form_logo_name => {
+        client_form_doubled_logos.forEach(brand => {
             const client_form_logo_item = document.createElement('div');
             client_form_logo_item.className = 'client_form_logo_item';
-            client_form_logo_item.innerHTML = `<div class="client_form_logo_text">${client_form_logo_name}</div>`;
+            client_form_logo_item.innerHTML = `
+                <div class="client_form_logo_icon"><i class="${brand.icon}"></i></div>
+                <div class="client_form_logo_text">${brand.name}</div>
+            `;
             client_form_marquee_track.appendChild(client_form_logo_item);
-        });
-    }
-
-    // Populate Testimonial Cards
-    function client_form_populate_cards() {
-        const client_form_cards_container = document.getElementById('client_form_cards_container');
-        if (!client_form_cards_container) return;
-
-        // Use single set for normal scrolling
-        client_form_testimonials_data.forEach((client_form_testimonial, client_form_index) => {
-            const client_form_card = document.createElement('div');
-            client_form_card.className = 'client_form_card';
-            client_form_card.dataset.index = client_form_index;
-            client_form_card.id = `client_form_card_${client_form_index}`;
-
-            const client_form_linkedin_icon = `
-                <svg class="client_form_linkedin_icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-            `;
-
-            client_form_card.innerHTML = `
-                <div class="client_form_card_header">
-                    <img src="${client_form_testimonial.image}" alt="${client_form_testimonial.name}" class="client_form_profile_pic">
-                    <div class="client_form_profile_info">
-                        <div class="client_form_name">${client_form_testimonial.name}</div>
-                        <div class="client_form_role">${client_form_testimonial.role}</div>
-                    </div>
-                    ${client_form_testimonial.linkedin ? `<a href="${client_form_testimonial.linkedin}" target="_blank" rel="noopener noreferrer" class="client_form_linkedin_link" aria-label="Visit ${client_form_testimonial.name}'s LinkedIn profile">${client_form_linkedin_icon}</a>` : ''}
-                </div>
-                <div class="client_form_feedback">${client_form_testimonial.feedback}</div>
-            `;
-
-            client_form_cards_container.appendChild(client_form_card);
-        });
-    }
-
-    // Normal scrolling functionality
-    let client_form_current_card_index = 0;
-    let client_form_is_scrolling = false;
-
-    const client_form_cards_wrapper = document.querySelector('.client_form_cards_wrapper');
-    const client_form_cards_container = document.getElementById('client_form_cards_container');
-    const client_form_prev_btn = document.getElementById('client_form_prev_btn');
-    const client_form_next_btn = document.getElementById('client_form_next_btn');
-
-    // Manual navigation with smooth scroll
-    function client_form_navigate(client_form_direction) {
-        if (client_form_is_scrolling) return;
-
-        const client_form_cards = document.querySelectorAll('.client_form_card');
-        if (client_form_cards.length === 0) return;
-
-        client_form_is_scrolling = true;
-
-        if (client_form_direction === 'next') {
-            client_form_current_card_index++;
-        } else {
-            client_form_current_card_index--;
-        }
-
-        // Handle wrapping
-        const client_form_total_cards = client_form_testimonials_data.length;
-        if (client_form_current_card_index >= client_form_total_cards) {
-            client_form_current_card_index = 0;
-        } else if (client_form_current_card_index < 0) {
-            client_form_current_card_index = client_form_total_cards - 1;
-        }
-
-        // Scroll to the target card
-        const client_form_target_card = document.getElementById(`client_form_card_${client_form_current_card_index}`);
-        if (client_form_target_card && client_form_cards_wrapper) {
-            const client_form_wrapper_rect = client_form_cards_wrapper.getBoundingClientRect();
-            const client_form_card_rect = client_form_target_card.getBoundingClientRect();
-            const client_form_scroll_top = client_form_cards_wrapper.scrollTop;
-            const client_form_target_position = client_form_scroll_top + client_form_card_rect.top - client_form_wrapper_rect.top - 20;
-
-            client_form_cards_wrapper.scrollTo({
-                top: client_form_target_position,
-                behavior: 'smooth'
-            });
-        }
-
-        setTimeout(() => {
-            client_form_is_scrolling = false;
-        }, 800);
-    }
-
-    // Event Listeners
-    if (client_form_prev_btn) client_form_prev_btn.addEventListener('click', () => client_form_navigate('prev'));
-    if (client_form_next_btn) client_form_next_btn.addEventListener('click', () => client_form_navigate('next'));
-
-    // Track scroll position to update current card index
-    if (client_form_cards_wrapper) {
-        client_form_cards_wrapper.addEventListener('scroll', () => {
-            const client_form_cards = document.querySelectorAll('.client_form_card');
-            if (client_form_cards.length === 0) return;
-
-            const client_form_wrapper_rect = client_form_cards_wrapper.getBoundingClientRect();
-            // const client_form_wrapper_top = client_form_wrapper_rect.top;
-            const client_form_wrapper_center = client_form_wrapper_rect.top + (client_form_wrapper_rect.height / 2);
-
-            let client_form_closest_index = 0;
-            let client_form_closest_distance = Infinity;
-
-            client_form_cards.forEach((client_form_card, client_form_index) => {
-                const client_form_card_rect = client_form_card.getBoundingClientRect();
-                const client_form_card_center = client_form_card_rect.top + (client_form_card_rect.height / 2);
-                const client_form_distance = Math.abs(client_form_card_center - client_form_wrapper_center);
-
-                if (client_form_distance < client_form_closest_distance) {
-                    client_form_closest_distance = client_form_distance;
-                    client_form_closest_index = client_form_index;
-                }
-            });
-
-            client_form_current_card_index = client_form_closest_index;
         });
     }
 
@@ -1720,24 +1444,16 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < client_form_particle_count; i++) {
             const client_form_particle = document.createElement('div');
             client_form_particle.className = 'client_form_particle';
-
-            // Random size between 100px and 300px
             const client_form_size = Math.random() * 200 + 100;
             client_form_particle.style.width = client_form_size + 'px';
             client_form_particle.style.height = client_form_size + 'px';
-
-            // Random position
             client_form_particle.style.left = Math.random() * 100 + '%';
             client_form_particle.style.top = Math.random() * 100 + '%';
-
-            // Random animation delay
             client_form_particle.style.animationDelay = Math.random() * 20 + 's';
             client_form_particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-
             client_form_particles_container.appendChild(client_form_particle);
         }
     }
-
 
     // Add extra blob to logos section
     function client_form_add_logos_blob() {
@@ -1751,10 +1467,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize
     client_form_populate_logos();
-    client_form_populate_cards();
     client_form_create_particles();
     client_form_add_logos_blob();
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
