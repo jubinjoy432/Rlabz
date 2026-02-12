@@ -1992,12 +1992,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
 
-                    if (cubeLive) {
-                        cubeLive.href = p.link || '#';
-                        cubeLive.style.opacity = (p.link === '#' || !p.link) ? '0.5' : '1';
-                        cubeLive.style.pointerEvents = (p.link === '#' || !p.link) ? 'none' : 'auto';
-                    }
-
                     if (detailsPanel) {
                         detailsPanel.style.opacity = '1';
                         detailsPanel.style.transform = 'translateY(0)';
@@ -2020,4 +2014,150 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+});
+
+/* =========================================
+   STICKY SCROLL STACKING LOGIC
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const stackSection = document.querySelector('.clients-stack-section');
+    if (!stackSection) return;
+
+    // Use a broad selector to ensure we find cards
+    let cards = [];
+
+    // Function to find cards - call this on init and resize
+    function initCards() {
+        // We look for .client_form_card inside the stack section
+        // Note: The original JS logic creates them with class 'client_form_card'
+        // and appends them to 'client_form_cards_container'
+        const rawCards = document.querySelectorAll('.clients-stack-section .client_form_card');
+        cards = Array.from(rawCards);
+    }
+
+    // Rate Limiting / Animation Frame
+    let ticking = false;
+
+    function onScroll() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateStackCards);
+            ticking = true;
+        }
+    }
+
+    function updateStackCards() {
+        // Re-check cards if empty (in case populator was slow)
+        if (!cards.length) initCards();
+        if (!cards.length) {
+            ticking = false;
+            return;
+        }
+
+        const sectionRect = stackSection.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        // Calculate progress:
+        // sticky container locks when section top hits 0.
+        // Animation range is from top=0 to top = -(height - viewportHeight)
+        const scrollDistance = sectionRect.height - viewportHeight;
+
+        // Safety check to prevent division by zero
+        if (scrollDistance <= 0) {
+            ticking = false;
+            return;
+        }
+
+        // Clamp progress between 0 and 1
+        let progress = (sectionRect.top * -1) / scrollDistance;
+        if (progress < 0) progress = 0;
+        if (progress > 1) progress = 1;
+
+        // Mobile Guard
+        if (window.innerWidth <= 768) {
+            cards.forEach(card => {
+                card.style.transform = '';
+                card.style.opacity = '';
+                card.style.zIndex = '';
+            });
+            ticking = false;
+            return;
+        }
+
+        const totalCards = cards.length;
+
+        // Distribute progress across cards
+        cards.forEach((card, index) => {
+            // Apply z-index strictly
+            card.style.zIndex = index + 5;
+
+            // Card 0 (Base) logic
+            if (index === 0) {
+                // Scales down as soon as we start scrolling
+                const scale = 1 - (progress * 0.1);
+                const clampedScale = Math.max(0.9, scale);
+
+                // Base card stays centered (0px offset)
+                card.style.transform = `translate(-50%, -50%) translateY(0px) scale(${clampedScale})`;
+                card.style.opacity = 1;
+                return;
+            }
+
+            // Cards 1..N
+            const segmentSize = 1 / (totalCards - 1);
+            const startThreshold = (index - 1) * segmentSize;
+
+            // Local progress
+            let localProgress = (progress - startThreshold) / segmentSize;
+
+            let translateY = 0;
+            let scale = 1;
+            let opacity = 1;
+
+            // Defines how far down the card starts (in pixels).
+            // Container is 600px. Center is 300. Bottom is 600.
+            // We want to start from ~bottom.
+            // 400px down from center puts it well below the container.
+            const startOffset = 500;
+
+            if (localProgress < 0) {
+                // Waiting below
+                translateY = startOffset;
+                opacity = 0;
+            } else if (localProgress <= 1) {
+                // Rising with Easing
+                const t = localProgress;
+                const easeFactor = Math.pow(1 - t, 3); // Cubic out
+
+                translateY = startOffset * easeFactor;
+                opacity = Math.min(1, t * 4);
+            } else {
+                // Fully arrived
+                translateY = 0;
+                const excess = localProgress - 1;
+                scale = 1 - (excess * 0.05);
+                scale = Math.max(0.9, scale);
+                opacity = 1;
+            }
+
+            // Use pixel-based translateY combined with centering
+            card.style.transform = `translate(-50%, -50%) translateY(${translateY}px) scale(${scale})`;
+            card.style.opacity = opacity;
+        });
+
+        ticking = false;
+    }
+
+    // Attach Listeners
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+        initCards();
+        onScroll();
+    });
+
+    // Initial Trigger (wait for card population)
+    setTimeout(() => {
+        initCards();
+        onScroll();
+        updateStackCards();
+    }, 800);
 });

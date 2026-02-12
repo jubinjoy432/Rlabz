@@ -5422,3 +5422,153 @@ footer {
         font-size: 0.8rem;
     }
 }
+
+/* =========================================
+   STICKY SCROLL STACKING ENHANCEMENTS
+   ========================================= */
+
+.clients-stack-section {
+    position: relative;
+    width: 100%;
+    height: 400vh;
+    /* Create scroll space */
+    z-index: 10;
+}
+
+.clients-scroll-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.clients-sticky-container {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    /* Ensure content stays within viewport */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Ensure the inner section adapts to full height */
+.clients-sticky-container .client_form_section {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.clients-sticky-container .client_form_container {
+    height: 100%;
+    align-items: center;
+    /* Ensure vertical alignment */
+}
+
+/* Right side needs to be the stage for absolute cards */
+.clients-sticky-container .client_form_right {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.clients-sticky-container .client_form_cards_wrapper {
+
+    /* Disable internal scroll since we use main scroll */
+    overflow: visible;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.clients-sticky-container .client_form_cards_container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    /* Fixed height stage for cards */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Overriding Card Styles for Stacking Effect */
+.clients-stack-section .client_form_card {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+
+    width: 100% !important;
+    max-width: 500px !important;
+
+    /* Initial State */
+    opacity: 0;
+    /* transform is handled by JS, but this sets the baseline */
+    transform: translate(-50%, -50%) scale(0.9);
+
+    /* Override existing animations */
+    animation: none !important;
+    transition: box-shadow 0.3s ease !important;
+    /* removed transform transition to allow JS to drive it instantly */
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+
+    /* Ensure it sits above properly */
+    transform-origin: center center;
+}
+
+/* Ensure text/content visibility */
+.clients-stack-section .client_form_card_header,
+.clients-stack-section .client_form_feedback {
+    opacity: 1;
+}
+
+/* Mobile Fallback: Disable sticky stack */
+@media (max-width: 768px) {
+    .clients-stack-section {
+        height: auto;
+    }
+
+    .clients-sticky-container {
+        position: relative;
+        height: auto;
+        top: auto;
+        display: block;
+    }
+
+    .clients-sticky-container .client_form_section {
+        height: auto;
+        padding: 50px 0;
+    }
+
+    .clients-sticky-container .client_form_right {
+        height: auto;
+        display: block;
+    }
+
+    .clients-sticky-container .client_form_cards_container {
+        height: auto;
+        display: block;
+    }
+
+    .clients-stack-section .client_form_card {
+        position: relative !important;
+        transform: none !important;
+        margin: 20px auto !important;
+        opacity: 1 !important;
+        top: auto !important;
+        left: auto !important;
+        width: 90% !important;
+    }
+}
