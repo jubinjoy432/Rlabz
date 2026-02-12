@@ -67,26 +67,28 @@ body {
 /* Premium Floating Navbar */
 .premium-nav {
     position: fixed;
-    top: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 1100px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 100px;
-    /* Pill shape */
-    padding: 0.75rem 1.5rem;
-    z-index: 1000;
-    box-shadow: 0 15px 40px -5px rgba(0, 0, 0, 0.15),
-        0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* Full width */
+    max-width: none;
+    border-radius: 0;
+    /* Remove pill shape */
+    padding: 1rem 2rem;
+    /* Adjust padding */
+    z-index: 9999;
+    box-shadow: none;
+    /* No shadow initially */
     transition: all 0.3s ease;
+    /* Subtle border initially */
 }
 
 .premium-nav.scrolled {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 15px 40px -5px rgba(11, 83, 148, 0.15);
+    background: rgb(255, 255, 255);
+    box-shadow: 0 4px 20px -5px rgba(11, 83, 148, 0.15);
+    padding: 0.8rem 2rem;
+    /* Slightly compact on scroll */
+    border-bottom: 1px solid rgba(11, 83, 148, 0.1);
 }
 
 .nav-content {
@@ -95,18 +97,35 @@ body {
     justify-content: space-between;
 }
 
+/* Scrolled State Children Overrides */
+.premium-nav.scrolled .nav-logo {
+    color: #0f172a;
+}
+
+.premium-nav.scrolled .nav-link {
+    color: #475569;
+}
+
+.premium-nav.scrolled .nav-link:hover,
+.premium-nav.scrolled .nav-link.active {
+    color: var(--primary-blue);
+}
+
 .nav-logo {
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 800;
-    color: #0f172a;
+    color: #ffffff;
+    /* White initially */
     text-decoration: none;
     letter-spacing: -0.5px;
+    transition: color 0.3s ease;
 }
 
 .brand-highlight {
-    color: var(--primary-blue);
+    color: #FFB347;
 }
+
 
 .nav-links {
     display: flex;
@@ -116,7 +135,8 @@ body {
 
 .nav-link {
     text-decoration: none;
-    color: #475569;
+    color: rgba(255, 255, 255, 0.9);
+    /* White for blue bg */
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.2s ease;
@@ -179,8 +199,8 @@ body {
 /* Responsive Navbar */
 @media (max-width: 768px) {
     .premium-nav {
-        width: 92%;
-        top: 1rem;
+        /* Width is already 100% */
+        top: 0;
         padding: 0.8rem 1.2rem;
     }
 
@@ -205,11 +225,14 @@ body {
     position: relative;
     background-color: var(--primary-blue);
     min-height: 100vh;
+    height: auto;
+    /* allow growth */
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    /* Changed from center to respect padding-top */
     justify-content: center;
-    padding: 12rem 2rem 6rem;
-    /* Increased top/bottom padding to show more blue bg */
+    padding: 20rem 2rem 6rem;
+    /* Further increased top padding */
     overflow: hidden;
 }
 
@@ -229,6 +252,7 @@ body {
     /* Ensure centering */
     align-items: center;
     justify-content: center;
+    margin-top: 2rem;
 }
 
 /* Ensure inner container fits */
@@ -555,7 +579,8 @@ h2 {
 /* Product Showcase - Futuristic 3D Layout */
 .hero-blue-visual {
     position: relative;
-    width: 600px;
+    width: 100%;
+    max-width: 600px;
     height: 500px;
     display: flex;
     justify-content: center;
@@ -628,8 +653,8 @@ h2 {
     position: relative;
     width: 100%;
     max-width: 600px;
-    min-height: 550px;
-    /* Increased from fixed 400px to prevent clipping */
+    min-height: auto;
+    /* flexible height */
     /* Remove fixed height to allow expansion if needed, but min-height keeps layout stable */
     display: flex;
     flex-direction: column;
@@ -3662,7 +3687,8 @@ footer {
     .hero-blue-section {
         height: auto;
         min-height: 100vh;
-        padding: 4rem 1.5rem;
+        padding: 10rem 1rem 3rem;
+        align-items: flex-start;
     }
 
     .hero-white-container {
@@ -3691,15 +3717,43 @@ footer {
     }
 
     .hero-blue-visual {
-        height: 400px;
+        height: 350px;
+        /* Reduced height for mobile */
+        width: 100%;
+        max-width: 100%;
         order: -1;
-        /* Visual first on mobile? Or keep bottom? Let's keep default (bottom) but maybe adjust margin */
-        margin-top: 1rem;
+        margin-top: -2rem;
+        /* Pull up slightly */
+        transform: scale(0.6);
+        /* Scale down significantly */
+        margin-bottom: -4rem;
+        /* Reduce bottom space caused by scaling */
     }
 
     .phone-frame {
         transform: scale(0.9) rotate(0deg);
         /* Remove tilt on mobile */
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 576px) {
+    .hero-blue-section {
+        padding: 10rem 1rem 3rem;
+        /* Slightly less top padding on very small screens if possible, but enough to clear nav */
+    }
+
+    .hero-white-container {
+        padding: 1.5rem 1rem;
+        border-radius: 24px;
+    }
+
+    .hero-blue-title {
+        font-size: 2rem;
+    }
+
+    .premium-nav {
+        padding: 0.8rem 1rem;
     }
 }
 
