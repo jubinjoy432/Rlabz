@@ -260,8 +260,8 @@ h2 {
             #1e293b 60%,
             #1e293b 80%);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -5418,157 +5418,472 @@ footer {
         height: 60px;
     }
 
+
     .reveal-name {
         font-size: 0.8rem;
     }
 }
 
-/* =========================================
-   STICKY SCROLL STACKING ENHANCEMENTS
-   ========================================= */
+/* ===============================================
+   STICKY SCROLL STACKING TESTIMONIALS SECTION
+   =============================================== */
 
-.clients-stack-section {
+/* Main 300vh Sticky Track - The ONLY element providing vertical space */
+.testimonials-section {
+    position: relative;
+    height: 300vh;
+    margin: 0;
+    padding: 0;
+    display: block;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #f8faff 0%, #e0f2fe 100%);
+}
+
+/* Sticky Viewport Wrapper - Stays fixed while scrolling through 300vh */
+.testimonials-sticky-wrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Client Feedback Section - Centered Content */
+.client_form_section {
     position: relative;
     width: 100%;
-    height: 400vh;
-    /* Create scroll space */
+    max-width: 1400px;
+    padding: 0 2rem;
     z-index: 10;
 }
 
-.clients-scroll-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
 
-.clients-sticky-container {
-    position: sticky;
+.client_form_bg_particles {
+    position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
     overflow: hidden;
-    /* Ensure content stays within viewport */
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-/* Ensure the inner section adapts to full height */
-.clients-sticky-container .client_form_section {
-    height: 100%;
-    width: 100%;
-    display: flex;
+/* Container Layout */
+.client_form_container {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
     align-items: center;
-    padding: 0;
 }
 
-.clients-sticky-container .client_form_container {
-    height: 100%;
-    align-items: center;
-    /* Ensure vertical alignment */
-}
-
-/* Right side needs to be the stage for absolute cards */
-.clients-sticky-container .client_form_right {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Left Side - Text Content */
+.client_form_left {
     position: relative;
+    z-index: 20;
 }
 
-.clients-sticky-container .client_form_cards_wrapper {
+.client_form_heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #0b5394;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+}
 
-    /* Disable internal scroll since we use main scroll */
-    overflow: visible;
-    height: 100%;
+.client_form_description {
+    font-size: 1.1rem;
+    color: #475569;
+    line-height: 1.7;
+    max-width: 500px;
+}
+
+/* Right Side - Card Stacking Area */
+.client_form_right {
+    position: relative;
+    height: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
 }
 
-.clients-sticky-container .client_form_cards_container {
+.client_form_cards_wrapper {
     position: relative;
     width: 100%;
-    height: 600px;
-    /* Fixed height stage for cards */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
 }
 
-/* Overriding Card Styles for Stacking Effect */
-.clients-stack-section .client_form_card {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-
-    width: 100% !important;
-    max-width: 500px !important;
-
-    /* Initial State */
-    opacity: 0;
-    /* transform is handled by JS, but this sets the baseline */
-    transform: translate(-50%, -50%) scale(0.9);
-
-    /* Override existing animations */
-    animation: none !important;
-    transition: box-shadow 0.3s ease !important;
-    /* removed transform transition to allow JS to drive it instantly */
-
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+/* Individual Testimonial Cards - Stacked Absolutely */
+.testimonial-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 450px;
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-
-    /* Ensure it sits above properly */
-    transform-origin: center center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 20px 60px -10px rgba(11, 83, 148, 0.15);
+    border: 1px solid rgba(11, 83, 148, 0.1);
+    box-sizing: border-box;
+    transform-origin: top center;
+    transition: none;
+    /* Controlled by JS */
+    pointer-events: none;
+    /* Fix: Prevent click interactions that cause cards to disappear */
 }
 
-/* Ensure text/content visibility */
-.clients-stack-section .client_form_card_header,
-.clients-stack-section .client_form_feedback {
-    opacity: 1;
+/* Card Content Layout */
+.testimonial-card-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
 }
 
-/* Mobile Fallback: Disable sticky stack */
+.testimonial-text {
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: #1e293b;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.testimonial-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0b5394;
+}
+
+.testimonial-info h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0b5394;
+    margin: 0 0 0.25rem 0;
+}
+
+.testimonial-info p {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Background Particles */
+.client_form_bg_particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .client_form_container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .client_form_heading {
+        font-size: 2.8rem;
+    }
+
+    .client_form_right {
+        height: 400px;
+    }
+
+    .testimonial-card {
+        height: 380px;
+        padding: 2.5rem;
+    }
+}
+
 @media (max-width: 768px) {
-    .clients-stack-section {
-        height: auto;
+    .testimonials-section {
+        height: 200vh;
+        /* Shorter track on mobile */
     }
 
-    .clients-sticky-container {
-        position: relative;
-        height: auto;
-        top: auto;
-        display: block;
+    .client_form_heading {
+        font-size: 2.2rem;
     }
 
-    .clients-sticky-container .client_form_section {
-        height: auto;
-        padding: 50px 0;
+    .testimonial-card {
+        height: 320px;
+        padding: 2rem;
     }
 
-    .clients-sticky-container .client_form_right {
-        height: auto;
-        display: block;
+    .testimonial-text {
+        font-size: 1.1rem;
+    }
+}
+
+/* ===============================================
+   LOGO MARQUEE SECTION
+   =============================================== */
+
+.client_form_logos_section {
+    padding: 4rem 2rem;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.client_form_logos_container {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.client_form_logos_heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0b5394;
+    margin-bottom: 0.5rem;
+}
+
+.client_form_logos_subtitle {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin-bottom: 3rem;
+}
+
+.client_form_marquee_wrapper {
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 0;
+}
+
+.client_form_marquee_track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 30s linear infinite;
+    width: fit-content;
+}
+
+.client_form_marquee_item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    background: rgba(11, 83, 148, 0.05);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.client_form_marquee_item:hover {
+    background: rgba(11, 83, 148, 0.1);
+    transform: scale(1.05);
+}
+
+.client_form_marquee_item img {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.6);
+    transition: filter 0.3s ease;
+}
+
+.client_form_marquee_item:hover img {
+    filter: grayscale(0%) opacity(1);
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
     }
 
-    .clients-sticky-container .client_form_cards_container {
-        height: auto;
-        display: block;
+    100% {
+        transform: translateX(-33.333%);
+    }
+}
+
+/* Pause on hover */
+.client_form_marquee_wrapper:hover .client_form_marquee_track {
+    animation-play-state: paused;
+}
+
+/* =========================================
+   RESTORED LOGO SECTION CSS
+   ========================================= */
+
+/* Logo Section Container */
+.client_form_logos_section {
+    padding: 80px 20px;
+    background: linear-gradient(180deg, rgba(11, 83, 148, 0.05) 0%, transparent 100%);
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Logo Section Heading */
+.client_form_logos_heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #0b5394;
+    /* Solid blue color */
+    letter-spacing: -1px;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Logo Section Subtitle */
+.client_form_logos_subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: #475569;
+    margin-bottom: 60px;
+    font-weight: 300;
+    text-align: center;
+}
+
+/* Logo Container */
+.client_form_logos_container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+/* Glass Shine Logo Cards */
+.client_form_logo_item {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 15px rgba(11, 83, 148, 0.05);
+    /* Subtle blue shadow */
+    border-radius: 16px;
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    /* Flex to align icon and text */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    min-width: 160px;
+    position: relative;
+    overflow: hidden;
+    /* Important for shine effect */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover Lift */
+.client_form_logo_item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 25px rgba(11, 83, 148, 0.15);
+    border-color: #0b5394;
+}
+
+/* Shine Effect (Pseudo-element) */
+.client_form_logo_item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    /* Start off-screen left */
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: skewX(-25deg);
+    transition: none;
+    pointer-events: none;
+}
+
+/* Animate Shine on Hover (or auto if preferred, but hover is nice) */
+.client_form_logo_item:hover::before {
+    animation: glass_shine 0.75s;
+}
+
+@keyframes glass_shine {
+    0% {
+        left: -100%;
     }
 
-    .clients-stack-section .client_form_card {
-        position: relative !important;
-        transform: none !important;
-        margin: 20px auto !important;
-        opacity: 1 !important;
-        top: auto !important;
-        left: auto !important;
-        width: 90% !important;
+    100% {
+        left: 200%;
     }
+}
+
+/* Icon Styling */
+.client_form_logo_icon {
+    font-size: 2rem;
+    color: #0b5394;
+    transition: transform 0.3s ease;
+}
+
+.client_form_logo_item:hover .client_form_logo_icon {
+    transform: scale(1.1);
+}
+
+/* Text Styling */
+.client_form_logo_text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #334155;
+    white-space: nowrap;
+}
+
+/* Extra animated blob for logo section */
+.client_form_logos_blob_extra {
+    position: absolute;
+    top: 30%;
+    left: -5%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(11, 83, 148, 0.08) 0%, transparent 70%);
+    filter: blur(90px);
+    pointer-events: none;
+    animation: blob_move_logos_extra 18s ease-in-out infinite;
+    transform-origin: center;
+}
+
+@keyframes blob_move_logos_extra {
+
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(80px, -100px) scale(1.1);
+    }
+}
+
+/* ENSURE HEADINGS ARE VISIBLE */
+.client_form_heading {
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 50 !important;
+    position: relative !important;
 }
