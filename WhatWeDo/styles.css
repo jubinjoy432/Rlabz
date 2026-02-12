@@ -2847,6 +2847,19 @@ h2 {
     /* Light BG */
     overflow: hidden;
     font-family: 'Outfit', sans-serif;
+    isolation: isolate;
+}
+
+.about-us-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: radial-gradient(circle at center,
+            rgba(248, 250, 255, 0.92) 0%,
+            rgba(248, 250, 255, 0.55) 48%,
+            rgba(248, 250, 255, 0) 78%);
 }
 
 /* --- Floating Decorative Orbs --- */
@@ -2884,6 +2897,7 @@ h2 {
     height: 100%;
     z-index: 1;
     /* Behind content but above some backgrounds */
+    opacity: 0.9;
     pointer-events: none;
     /* Let clicks pass through */
 }

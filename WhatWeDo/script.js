@@ -1770,11 +1770,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let gridPoints = [];
 
     const CONFIG = {
-        gridSize: 60,
-        lineColor: 'rgba(148, 163, 184, 0.15)',
-        vertexColor: 'rgba(148, 163, 184, 0.3)',
-        waveSpeed: 0.002,
-        waveAmplitude: 6    // Subtle vertical rise
+        gridSize: 56,
+        lineColor: 'rgba(11, 83, 148, 0.22)',
+        vertexColor: 'rgba(11, 83, 148, 0.28)',
+        waveSpeed: 0.0016,
+        waveAmplitude: 10
     };
 
     function resize() {
@@ -1856,6 +1856,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         ctx.stroke();
+
+        // Draw sparse vertices to make the mesh more visible without crowding text.
+        ctx.fillStyle = CONFIG.vertexColor;
+        for (let i = 0; i < cols; i++) {
+            if (!gridPoints[i]) continue;
+            const rows = gridPoints[i].length;
+            for (let j = 0; j < rows; j++) {
+                if ((i + j) % 2 !== 0) continue;
+                const p = gridPoints[i][j];
+                ctx.fillRect(p.x - 0.8, p.y - 0.8, 1.6, 1.6);
+            }
+        }
 
         requestAnimationFrame(animate);
     }
