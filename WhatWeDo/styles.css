@@ -6035,12 +6035,12 @@ html.lenis body {
 
 .footer-bg-glow {
     position: absolute;
-    top: -50%;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at center, rgba(11, 83, 148, 0.15) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(circle at center, rgba(11, 83, 148, 0.2) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
@@ -6067,7 +6067,7 @@ html.lenis body {
     font-size: 1.8rem;
     color: #ffffff;
     margin-bottom: 0.5rem;
-    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -6101,16 +6101,18 @@ html.lenis body {
 
 .footer-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    margin-bottom: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    /* Solid, subtle line */
+    width: 100%;
+    margin-top: 2rem;
+    /* Added to balance spacing */
 }
 
 /* Footer Grid */
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    /* Adjusted for 2 columns */
-    /* Adjusted for 2 columns */
+    grid-template-columns: 1fr 1fr;
+    /* Equal columns to bring Contact closer */
     gap: 2rem;
     margin-bottom: 1rem;
 }
@@ -6123,7 +6125,16 @@ html.lenis body {
     color: #fff;
     text-decoration: none;
     display: inline-block;
+    display: inline-block;
     margin-bottom: 0.5rem;
+}
+
+.premium-footer .brand-highlight {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
 }
 
 .footer-desc {
