@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const showcaseStage = document.querySelector('.showcase-stage');
 
     if (showcaseContainer && showcaseStage) {
+        // Optimization: Cache elements to avoid querying DOM on every frame
+        const parallaxElements = document.querySelectorAll('.device, .floating-badge');
+
         showcaseContainer.addEventListener('mousemove', (e) => {
             const rect = showcaseContainer.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showcaseStage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
             // Parallax for individual elements
-            document.querySelectorAll('.device, .floating-badge').forEach(el => {
+            parallaxElements.forEach(el => {
                 const speed = parseFloat(el.getAttribute('data-speed')) || 2;
                 const moveX = ((x - centerX) / centerX) * speed * -1;
                 const moveY = ((y - centerY) / centerY) * speed * -1;
@@ -86,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         showcaseContainer.addEventListener('mouseleave', () => {
             showcaseStage.style.transform = 'rotateX(0) rotateY(0)';
-            document.querySelectorAll('.device, .floating-badge').forEach(el => {
+            parallaxElements.forEach(el => {
                 el.style.setProperty('--parallax-x', '0px');
                 el.style.setProperty('--parallax-y', '0px');
             });
@@ -123,289 +126,277 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- ENHANCED AMBIENT PARTICLES ---
-    const canvas = document.getElementById('ambient-canvas');
-    if (!canvas) return;
+    // === ENHANCED AMBIENT PARTICLES (REFACTORED) ===
+    function initParticleCanvas(canvasId, sectionId, cardSelector) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    const section = document.getElementById('what-we-do');
+        const ctx = canvas.getContext('2d');
+        const section = document.getElementById(sectionId);
+        if (!section) return;
 
-    let width, height;
-    let particles = [];
-    let sparkles = [];
-    let cardRects = [];
-    let activeCardIndex = -1;
-    let mouse = { x: -1000, y: -1000 };
+        let width, height;
+        let particles = [];
+        let sparkles = [];
+        let cardRects = [];
+        let activeCardIndex = -1;
+        let mouse = { x: -1000, y: -1000 };
 
-    const CONFIG = {
-        particleCount: 150, // Reduced for cleaner look
-        colorBase: 'rgba(148, 163, 184, ', // Slate 400 (Light subtle dots)
-        colorHighlight: 'rgba(59, 130, 246, ', // Blue 500 (Soft blue glow)
-        colorAccent: 'rgba(203, 213, 225, ', // Slate 300 (Very light lines)
-        connectionDist: 140,
-        mouseRadius: 300,
-    };
+        // Local cards for interaction
+        const localCards = section.querySelectorAll(cardSelector);
 
-    function resize() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = section.offsetHeight;
-        updateCardRects();
-        initParticles();
-    }
-
-    function updateCardRects() {
-        const canvasRect = canvas.getBoundingClientRect();
-
-        cardRects = Array.from(cards).map(card => {
-            const r = card.getBoundingClientRect();
-            return {
-                x: r.left - canvasRect.left,
-                y: r.top - canvasRect.top,
-                w: r.width,
-                h: r.height,
-                cx: (r.left - canvasRect.left) + r.width / 2,
-                cy: (r.top - canvasRect.top) + r.height / 2
-            };
+        // Add hover listeners for interaction
+        localCards.forEach((card, index) => {
+            card.addEventListener('mouseenter', () => { activeCardIndex = index; });
+            card.addEventListener('mouseleave', () => { activeCardIndex = -1; });
         });
-    }
 
-    function setActiveCard(card) {
-        if (!card) {
-            activeCardIndex = -1;
-        } else {
-            cards.forEach((c, i) => { if (c === card) activeCardIndex = i; });
-        }
-    }
+        const CONFIG = {
+            particleCount: 150, // Reduced for cleaner look
+            colorBase: 'rgba(148, 163, 184, ', // Slate 400 (Light subtle dots)
+            colorHighlight: 'rgba(59, 130, 246, ', // Blue 500 (Soft blue glow)
+            colorAccent: 'rgba(203, 213, 225, ', // Slate 300 (Very light lines)
+            connectionDist: 140,
+            mouseRadius: 300,
+        };
 
-    document.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        } else {
-            mouse.x = -1000;
-            mouse.y = -1000;
-        }
-    });
-
-    class Particle {
-        constructor() {
-            this.init();
-        }
-
-        init() {
-            this.x = Math.random() * width;
-            this.y = Math.random() * height;
-            // Base velocity for gentle drifting
-            this.baseVx = (Math.random() - 0.5) * 0.5;
-            this.baseVy = (Math.random() - 0.5) * 0.5;
-            // Interaction velocity (push from mouse)
-            this.ivx = 0;
-            this.ivy = 0;
-            this.size = Math.random() * 2.5 + 0.5;
-            this.baseSize = this.size;
-            this.excitement = 0;
-            this.opacity = 0.6 + Math.random() * 0.4;
-        }
-
-        update() {
-            // Mouse Interaction
-            const dx = mouse.x - this.x;
-            const dy = mouse.y - this.y;
-            const distMouse = Math.sqrt(dx * dx + dy * dy);
-
-            if (distMouse < CONFIG.mouseRadius) {
-                // Add to interaction velocity, not base velocity
-                this.ivx -= (dx / distMouse) * 0.02;
-                this.ivy -= (dy / distMouse) * 0.02;
-                this.excitement = Math.min(this.excitement + 0.02, 1);
-            } else {
-                this.excitement = Math.max(this.excitement - 0.01, 0);
-            }
-
-            // Subtle card attraction
-            if (activeCardIndex !== -1 && cardRects[activeCardIndex]) {
-                const rect = cardRects[activeCardIndex];
-                const cdx = rect.cx - this.x;
-                const cdy = rect.cy - this.y;
-                const distCard = Math.sqrt(cdx * cdx + cdy * cdy);
-
-                if (distCard < 400) {
-                    this.ivx += (cdx / distCard) * 0.005;
-                    this.ivy += (cdy / distCard) * 0.005;
-                    this.excitement = Math.min(this.excitement + 0.01, 0.9);
-                }
-            }
-
-            // Apply friction to interaction velocity
-            this.ivx *= 0.95;
-            this.ivy *= 0.95;
-
-            // Update position with combined velocities
-            this.x += (this.baseVx + this.ivx) * (1 + this.excitement * 0.3);
-            this.y += (this.baseVy + this.ivy) * (1 + this.excitement * 0.3);
-
-            // Bounds
-            if (this.x < 0) this.x = width; if (this.x > width) this.x = 0;
-            if (this.y < 0) this.y = height; if (this.y > height) this.y = 0;
-        }
-
-        draw() {
-            const displaySize = this.size * (1 + this.excitement * 0.5);
-
-            // Enhanced glow when excited
-            if (this.excitement > 0.4) {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, displaySize * 6, 0, Math.PI * 2);
-                const glowGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, displaySize * 6);
-                glowGradient.addColorStop(0, CONFIG.colorAccent + (this.excitement * 0.3) + ')');
-                glowGradient.addColorStop(1, CONFIG.colorAccent + '0)');
-                ctx.fillStyle = glowGradient;
-                ctx.fill();
-            }
-
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, displaySize, 0, Math.PI * 2);
-
-            if (this.excitement > 0.1) {
-                ctx.fillStyle = CONFIG.colorHighlight + (0.4 + this.excitement * 0.6) + ')';
-                if (this.excitement > 0.5) {
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = CONFIG.colorAccent + (this.excitement * 0.6) + ')';
-                }
-            } else {
-                ctx.fillStyle = CONFIG.colorBase + (this.opacity * 0.4) + ')';
-            }
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-    }
-
-    // Sparkle particle class
-    class Sparkle {
-        constructor(x, y) {
-            this.x = x;
-            this.y = y;
-            this.vx = (Math.random() - 0.5) * 2;
-            this.vy = -Math.random() * 2 - 1; // Float upward
-            this.life = 1;
-            this.size = Math.random() * 2 + 1;
-        }
-
-        update() {
-            this.x += this.vx;
-            this.y += this.vy;
-            this.life -= 0.015;
-            this.vy += 0.02; // Slight gravity
-        }
-
-        draw() {
-            if (this.life <= 0) return;
-
-            const alpha = this.life;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = CONFIG.colorHighlight + (alpha * 0.9) + ')';
-            ctx.shadowBlur = 6;
-            ctx.shadowColor = CONFIG.colorAccent + (alpha * 0.7) + ')';
-            ctx.fill();
-            ctx.shadowBlur = 0;
-        }
-
-        isDead() {
-            return this.life <= 0;
-        }
-    }
-
-    function initParticles() {
-        particles = [];
-        for (let i = 0; i < CONFIG.particleCount; i++) {
-            particles.push(new Particle());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-
-        if (activeCardIndex !== -1) {
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = section.offsetHeight;
             updateCardRects();
-
-            // Spawn sparkles around card edges
-            if (Math.random() < 0.3) { // 30% chance per frame
-                const rect = cardRects[activeCardIndex];
-                const pad = 8;
-
-                // Random edge position
-                const edge = Math.floor(Math.random() * 4);
-                let sx, sy;
-
-                if (edge === 0) { // Top
-                    sx = rect.cx - rect.w / 2 + Math.random() * rect.w;
-                    sy = rect.cy - rect.h / 2 - pad;
-                } else if (edge === 1) { // Right
-                    sx = rect.cx + rect.w / 2 + pad;
-                    sy = rect.cy - rect.h / 2 + Math.random() * rect.h;
-                } else if (edge === 2) { // Bottom
-                    sx = rect.cx - rect.w / 2 + Math.random() * rect.w;
-                    sy = rect.cy + rect.h / 2 + pad;
-                } else { // Left
-                    sx = rect.cx - rect.w / 2 - pad;
-                    sy = rect.cy - rect.h / 2 + Math.random() * rect.h;
-                }
-
-                sparkles.push(new Sparkle(sx, sy));
-            }
-
+            initParticles();
         }
 
+        function updateCardRects() {
+            const canvasRect = canvas.getBoundingClientRect();
+            cardRects = Array.from(localCards).map(card => {
+                const r = card.getBoundingClientRect();
+                return {
+                    x: r.left - canvasRect.left,
+                    y: r.top - canvasRect.top,
+                    w: r.width,
+                    h: r.height,
+                    cx: (r.left - canvasRect.left) + r.width / 2,
+                    cy: (r.top - canvasRect.top) + r.height / 2
+                };
+            });
+        }
 
-        particles.forEach((p, i) => {
-            p.update();
-            p.draw();
+        document.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            // simple check if mouse is over section vertically
+            if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            } else {
+                mouse.x = -1000;
+                mouse.y = -1000;
+            }
+        });
 
-            // Connect to mouse
-            const dxMouse = p.x - mouse.x;
-            const dyMouse = p.y - mouse.y;
-            const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-            if (distMouse < CONFIG.connectionDist * 1.5) {
-                ctx.beginPath();
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.strokeStyle = CONFIG.colorAccent + (1 - distMouse / (CONFIG.connectionDist * 1.5)) * 0.5 + ')';
-                ctx.lineWidth = 0.8;
-                ctx.stroke();
+        class Particle {
+            constructor() {
+                this.init();
             }
 
-            // Connections between particles
-            if (p.excitement < 0.5) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const p2 = particles[j];
-                    const dx = p.x - p2.x;
-                    const dy = p.y - p2.y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
+            init() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.baseVx = (Math.random() - 0.5) * 0.5;
+                this.baseVy = (Math.random() - 0.5) * 0.5;
+                this.ivx = 0;
+                this.ivy = 0;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.baseSize = this.size;
+                this.excitement = 0;
+                this.opacity = 0.6 + Math.random() * 0.4;
+            }
 
-                    if (dist < CONFIG.connectionDist) {
-                        ctx.beginPath();
-                        ctx.moveTo(p.x, p.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        const alpha = (1 - dist / CONFIG.connectionDist) * 0.2;
-                        ctx.strokeStyle = CONFIG.colorBase + alpha + ')';
-                        ctx.lineWidth = 0.5;
-                        ctx.stroke();
+            update() {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distMouse = Math.sqrt(dx * dx + dy * dy);
+
+                if (distMouse < CONFIG.mouseRadius) {
+                    this.ivx -= (dx / distMouse) * 0.02;
+                    this.ivy -= (dy / distMouse) * 0.02;
+                    this.excitement = Math.min(this.excitement + 0.02, 1);
+                } else {
+                    this.excitement = Math.max(this.excitement - 0.01, 0);
+                }
+
+                if (activeCardIndex !== -1 && cardRects[activeCardIndex]) {
+                    const rect = cardRects[activeCardIndex];
+                    const cdx = rect.cx - this.x;
+                    const cdy = rect.cy - this.y;
+                    const distCard = Math.sqrt(cdx * cdx + cdy * cdy);
+
+                    if (distCard < 400) {
+                        this.ivx += (cdx / distCard) * 0.005;
+                        this.ivy += (cdy / distCard) * 0.005;
+                        this.excitement = Math.min(this.excitement + 0.01, 0.9);
+                    }
+                }
+
+                this.ivx *= 0.95;
+                this.ivy *= 0.95;
+
+                this.x += (this.baseVx + this.ivx) * (1 + this.excitement * 0.3);
+                this.y += (this.baseVy + this.ivy) * (1 + this.excitement * 0.3);
+
+                if (this.x < 0) this.x = width; if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height; if (this.y > height) this.y = 0;
+            }
+
+            draw() {
+                const displaySize = this.size * (1 + this.excitement * 0.5);
+
+                if (this.excitement > 0.4) {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, displaySize * 6, 0, Math.PI * 2);
+                    const glowGradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, displaySize * 6);
+                    glowGradient.addColorStop(0, CONFIG.colorAccent + (this.excitement * 0.3) + ')');
+                    glowGradient.addColorStop(1, CONFIG.colorAccent + '0)');
+                    ctx.fillStyle = glowGradient;
+                    ctx.fill();
+                }
+
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, displaySize, 0, Math.PI * 2);
+
+                if (this.excitement > 0.1) {
+                    ctx.fillStyle = CONFIG.colorHighlight + (0.4 + this.excitement * 0.6) + ')';
+                    if (this.excitement > 0.5) {
+                        ctx.shadowBlur = 8;
+                        ctx.shadowColor = CONFIG.colorAccent + (this.excitement * 0.6) + ')';
+                    }
+                } else {
+                    ctx.fillStyle = CONFIG.colorBase + (this.opacity * 0.4) + ')';
+                }
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        class Sparkle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = -Math.random() * 2 - 1;
+                this.life = 1;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 0.015;
+                this.vy += 0.02;
+            }
+
+            draw() {
+                if (this.life <= 0) return;
+                const alpha = this.life;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = CONFIG.colorHighlight + (alpha * 0.9) + ')';
+                ctx.shadowBlur = 6;
+                ctx.shadowColor = CONFIG.colorAccent + (alpha * 0.7) + ')';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+
+            isDead() { return this.life <= 0; }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < CONFIG.particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            if (activeCardIndex !== -1) {
+                updateCardRects();
+                if (Math.random() < 0.3) {
+                    if (cardRects[activeCardIndex]) {
+                        const rect = cardRects[activeCardIndex];
+                        const pad = 8;
+                        const edge = Math.floor(Math.random() * 4);
+                        let sx, sy;
+                        if (edge === 0) { sx = rect.cx - rect.w / 2 + Math.random() * rect.w; sy = rect.cy - rect.h / 2 - pad; }
+                        else if (edge === 1) { sx = rect.cx + rect.w / 2 + pad; sy = rect.cy - rect.h / 2 + Math.random() * rect.h; }
+                        else if (edge === 2) { sx = rect.cx - rect.w / 2 + Math.random() * rect.w; sy = rect.cy + rect.h / 2 + pad; }
+                        else { sx = rect.cx - rect.w / 2 - pad; sy = rect.cy - rect.h / 2 + Math.random() * rect.h; }
+                        sparkles.push(new Sparkle(sx, sy));
                     }
                 }
             }
-        });
 
-        // Update and draw sparkles
-        sparkles = sparkles.filter(s => {
-            s.update();
-            s.draw();
-            return !s.isDead();
-        });
+            particles.forEach((p, i) => {
+                p.update();
+                p.draw();
 
-        requestAnimationFrame(animate);
+                const dxMouse = p.x - mouse.x;
+                const dyMouse = p.y - mouse.y;
+                const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
+                if (distMouse < CONFIG.connectionDist * 1.5) {
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.strokeStyle = CONFIG.colorAccent + (1 - distMouse / (CONFIG.connectionDist * 1.5)) * 0.5 + ')';
+                    ctx.lineWidth = 0.8;
+                    ctx.stroke();
+                }
+
+                if (p.excitement < 0.5) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < CONFIG.connectionDist) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            const alpha = (1 - dist / CONFIG.connectionDist) * 0.2;
+                            ctx.strokeStyle = CONFIG.colorBase + alpha + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            });
+
+            // Optimized loop to avoid GC thrashing (reusing memory)
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                const s = sparkles[i];
+                s.update();
+                s.draw();
+                if (s.isDead()) {
+                    sparkles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        setTimeout(() => { resize(); animate(); }, 100);
+        setTimeout(() => { resize(); }, 500);
     }
 
+    // Initialize Canvases
+    initParticleCanvas('ambient-canvas', 'what-we-do', '.feature-card');
+    initParticleCanvas('works-canvas', 'our-works', '.project-card');
+
+    // Re-implement the entrance animation observer if needed
+    // (Note: The original code used global 'cards' for this, which might have been empty or referring to something else.
+    // If we want entrance animations for feature-cards, we should do it explicitly)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -415,7 +406,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, { threshold: 0.1 });
 
-    cards.forEach((card, index) => {
+    // Observer for feature cards
+    document.querySelectorAll('.feature-card').forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -423,9 +415,8 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
-    window.addEventListener('resize', resize);
-    setTimeout(() => { resize(); animate(); }, 100);
-    setTimeout(() => { resize(); }, 500);
+
+
 });
 
 // === 3D Coverflow Carousel ===
@@ -492,6 +483,12 @@ if (carouselContainer && carouselTrack && projectCards.length > 0) {
             if (isHiddenMove) void card.offsetWidth;
 
             card.style.transform = `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
+
+            // Dynamic Shading: Darken side cards to frame the active one
+            // Active card is bright (1.0), side cards are dimmed (0.6)
+            const brightness = isActive ? 1.05 : 0.5;
+            card.style.filter = `brightness(${brightness})`;
+
             card.style.opacity = opacity;
             card.style.zIndex = totalCards - Math.abs(diff);
             card.style.pointerEvents = isActive ? 'auto' : 'none';
@@ -864,77 +861,118 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Scroll-based animation controller
-    function setupStickyScrollAnimation() {
+    // Scroll-based Sticky Stack Animation
+    function setupStickyStackAnimation() {
+        const section = document.getElementById('clientsSection');
         const cards = document.querySelectorAll('.testimonial-card');
         const totalCards = cards.length;
 
-        if (totalCards === 0) return;
+        if (!section || totalCards === 0) return;
 
-        // Calculate scroll progress through the 300vh section
-        function updateCardAnimations() {
+        // Reset cards initially
+        cards.forEach((card, index) => {
+            card.style.zIndex = index + 1;
+            if (index > 0) {
+                card.style.transform = 'translateY(110%)'; // Start off-screen
+                card.style.opacity = '1';
+            } else {
+                card.style.transform = 'translateY(0)';
+                card.style.opacity = '1';
+            }
+        });
+
+        function updateCards() {
+            // Check if mobile
+            if (window.innerWidth <= 768) {
+                cards.forEach(card => card.style.transform = 'none');
+                return;
+            }
+
             const rect = section.getBoundingClientRect();
             const sectionHeight = section.offsetHeight;
             const viewportHeight = window.innerHeight;
 
-            // Progress from 0 (top of section at viewport top) to 1 (bottom of section at viewport bottom)
-            const scrollStart = -rect.top;
+            // Calculate scroll progress (0 to 1) based on sticky section
+            // The section is 400vh, but logic applies to the scrollable part (300vh)
+            const scrollDist = -rect.top;
             const scrollRange = sectionHeight - viewportHeight;
-            const progress = Math.max(0, Math.min(1, scrollStart / scrollRange));
+            let progress = Math.max(0, Math.min(1, scrollDist / scrollRange));
 
-            // Animate each card based on progress
+            // Map progress to card index
+            // We want to animate card 2, 3, 4, etc. (Card 1 is static at base)
+            // Divide progress by number of cards to stack
+            const cardsToAnimate = totalCards - 1;
+            const progressPerCard = 1 / cardsToAnimate;
+
             cards.forEach((card, index) => {
-                const cardProgress = totalCards > 1 ? index / (totalCards - 1) : 0;
-                const startProgress = cardProgress * 0.7; // Cards start appearing progressively
-                const endProgress = Math.min(1, startProgress + 0.3); // Each card has 30% of scroll range
-
-                // Calculate individual card progress (0 to 1)
-                const individualProgress = Math.max(0, Math.min(1,
-                    (progress - startProgress) / (endProgress - startProgress)
-                ));
-
-                if (individualProgress <= 0) {
-                    // Card hasn't started yet - keep it below
-                    card.style.transform = 'translateY(100%)';
-                    card.style.opacity = '0';
-                    card.style.clipPath = 'inset(100% 0% 0% 0%)';
-                } else if (individualProgress >= 1) {
-                    // Card fully visible and anchored at top
-                    card.style.transform = 'translateY(0%)';
+                if (index === 0) {
+                    // Base card logic: it scales down as subsequent cards arrive
+                    // It scales down continuously as progress increases
+                    const scale = Math.max(0.9, 1 - (progress * 0.1));
+                    card.style.transform = `scale(${scale})`;
                     card.style.opacity = '1';
-                    card.style.clipPath = 'inset(0% 0% 0% 0%)';
                 } else {
-                    // Card is animating - slide up
-                    const translateY = 100 * (1 - individualProgress);
-                    const clipInset = 100 * (1 - individualProgress);
+                    // Logic for Card N (where N > 0)
+                    // It should slide up when progress reaches its segment
 
-                    card.style.transform = `translateY(${translateY}%)`;
-                    card.style.opacity = `${individualProgress}`;
-                    card.style.clipPath = `inset(${clipInset}% 0% 0% 0%)`;
+                    // Card 1 starts animating effectively at 0
+                    // Card 2 at progress 0.25 (if 4 cards), etc.
+
+                    const cardStartThreshold = (index - 1) * progressPerCard;
+
+                    // Calculate local progress for this specific card
+                    let localProgress = (progress - cardStartThreshold) / progressPerCard;
+                    localProgress = Math.max(0, Math.min(1, localProgress));
+
+                    // Transformation
+                    if (localProgress <= 0) {
+                        card.style.transform = 'translateY(110%)';
+                    } else if (localProgress >= 1) {
+                        // Card is fully stacked. 
+                        // It should also scale down slightly if MORE cards are coming after it
+                        // Calculate remaining progress AFTER this card was fully revealed
+                        const cardEndThreshold = index * progressPerCard;
+                        const remainingProgress = (progress - cardEndThreshold) / (1 - cardEndThreshold);
+                        const scale = (remainingProgress > 0) ? Math.max(0.9, 1 - (remainingProgress * 0.05)) : 1;
+
+                        card.style.transform = `translateY(0) scale(${scale})`;
+                    } else {
+                        // Card is sliding up
+                        // Ease out
+                        const ease = 1 - Math.pow(1 - localProgress, 3);
+                        const translateY = 100 * (1 - ease);
+                        card.style.transform = `translateY(${translateY}%)`;
+                    }
                 }
             });
         }
 
-        // Listen to scroll events
+        // Ticking mechanism for performance
         let ticking = false;
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
-                    updateCardAnimations();
+                    updateCards();
                     ticking = false;
                 });
                 ticking = true;
             }
         });
 
-        // Initial update
-        updateCardAnimations();
+        // Resize listener
+        window.addEventListener('resize', updateCards);
+
+        // Initial call
+        updateCards();
+
+        // Ensure robust init after all resources load
+        window.addEventListener('load', updateCards);
     }
 
 
     // Initialize
     generateTestimonialCards();
-    setupStickyScrollAnimation();
+    setupStickyStackAnimation();
 
     // =========================================
     // LOGO MARQUEE SECTION
@@ -1654,7 +1692,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cubeWrapper && typeof Swiper !== 'undefined') {
         // 1. Inject Slides from 'projects' data
-        const projectIds = Object.keys(projects);
+        // Filter for specific projects: Splendore(2), Euphoria(3), Cocobies(6), The Luke(10)
+        const visibleProjectIds = ['2', '3', '6', '10'];
+        const projectIds = Object.keys(projects).filter(id => visibleProjectIds.includes(id));
 
         projectIds.forEach(id => {
             const p = projects[id];
@@ -1748,4 +1788,24 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     }
+    // === Lenis Smooth Scroll Init ===
+    const lenis = new Lenis({
+        duration: 1.5,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 2,
+        wheelMultiplier: 1.2,
+    });
+
+    // Sync Lenis scroll with RequestAnimationFrame
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
 });

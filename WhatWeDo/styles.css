@@ -1514,7 +1514,11 @@ h2 {
     /* Spotlight vars */
     --mouse-x: 50%;
     --mouse-y: 50%;
+
+    /* 3D Reflection */
+    -webkit-box-reflect: below 10px linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.15));
 }
+
 
 /* Hover effect - lift the card (only non-active cards) */
 .project-card:hover:not(.active) .flip-card-inner {
@@ -1550,8 +1554,16 @@ h2 {
 /* Front-facing cards are more prominent */
 .project-card.active {
     filter: brightness(1.02);
-    box-shadow: 0 8px 30px rgba(11, 83, 148, 0.25);
+    box-shadow:
+        0 25px 60px rgba(11, 83, 148, 0.5),
+        /* Deeper bottom shadow */
+        0 0 20px rgba(11, 83, 148, 0.2),
+        /* Glow */
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    /* Crisp border */
     border-color: rgba(11, 83, 148, 0.3);
+    z-index: 100;
+    /* Ensure it's on top */
 }
 
 /* Active card hover - keep in place, no scale/transform (only flip) */
@@ -2979,6 +2991,7 @@ h2 {
     margin-bottom: 1rem;
     background: linear-gradient(to right, #1e293b, #0b5394);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     letter-spacing: -1px;
 }
@@ -5437,17 +5450,15 @@ footer {
         font-size: 0.8rem;
     }
 }
-<<<<<<< HEAD
-=======
 
 /* ===============================================
-   STICKY SCROLL STACKING TESTIMONIALS SECTION
+   CLIENTS FEEDBACK SECTION (STICKY STACK)
    =============================================== */
 
-/* Main 300vh Sticky Track - The ONLY element providing vertical space */
+/* Main 400vh Sticky Track - Provides vertical space for scrolling */
 .testimonials-section {
     position: relative;
-    height: 300vh;
+    height: 400vh;
     margin: 0;
     padding: 0;
     display: block;
@@ -5455,7 +5466,7 @@ footer {
     background: linear-gradient(180deg, #f8faff 0%, #e0f2fe 100%);
 }
 
-/* Sticky Viewport Wrapper - Stays fixed while scrolling through 300vh */
+/* Sticky Wrapper - Pins to viewport */
 .testimonials-sticky-wrapper {
     position: sticky;
     top: 0;
@@ -5463,19 +5474,24 @@ footer {
     width: 100%;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    /* Hide scrollbar explicitly */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
-/* Client Feedback Section - Centered Content */
+.testimonials-sticky-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* Client Feedback Section */
 .client_form_section {
     position: relative;
     width: 100%;
-    max-width: 1400px;
     padding: 0 2rem;
     z-index: 10;
 }
-
 
 .client_form_bg_particles {
     position: absolute;
@@ -5491,14 +5507,16 @@ footer {
 /* Container Layout */
 .client_form_container {
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
+    grid-template-columns: 1fr 1fr;
     gap: 4rem;
-    align-items: center;
+    align-items: start;
 }
 
 /* Left Side - Text Content */
 .client_form_left {
-    position: relative;
+    position: sticky;
+    top: 100px;
+    /* Sticky title for nice effect */
     z-index: 20;
 }
 
@@ -5518,10 +5536,12 @@ footer {
     max-width: 500px;
 }
 
-/* Right Side - Card Stacking Area */
+/* Right Side - Cards Container */
 .client_form_right {
     position: relative;
     height: 500px;
+    max-height: 55vh;
+    /* Ensure it doesn't overflow small screens */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -5533,14 +5553,39 @@ footer {
     height: 100%;
 }
 
+.client_form_cards_container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Hide scrollbars globally for these elements */
+.client_form_right,
+.client_form_cards_wrapper,
+.client_form_cards_container,
+.testimonial-card {
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE/Edge */
+}
+
+.client_form_right::-webkit-scrollbar,
+.client_form_cards_wrapper::-webkit-scrollbar,
+.client_form_cards_container::-webkit-scrollbar,
+.testimonial-card::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Opera */
+}
+
 /* Individual Testimonial Cards - Stacked Absolutely */
 .testimonial-card {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
     width: 100%;
-    height: 450px;
+    height: 100%;
+    /* Fill the container */
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -5550,10 +5595,33 @@ footer {
     border: 1px solid rgba(11, 83, 148, 0.1);
     box-sizing: border-box;
     transform-origin: top center;
-    transition: none;
-    /* Controlled by JS */
-    pointer-events: none;
-    /* Fix: Prevent click interactions that cause cards to disappear */
+
+    transform-origin: top center;
+
+    /* Allow scrolling if content is too long, but hide bar */
+    overflow-y: auto;
+
+    /* Animation Initial State */
+    will-change: transform, opacity;
+}
+
+/* Visible State */
+.testimonial-card.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Interactive State (Added after reveal) */
+.testimonial-card.interactive {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover Effect */
+.testimonial-card.interactive:hover {
+    transform: scale(1.03);
+    box-shadow: 0 20px 40px -5px rgba(11, 83, 148, 0.2);
+    border-color: rgba(11, 83, 148, 0.3);
+    z-index: 5;
 }
 
 /* Card Content Layout */
@@ -5600,18 +5668,6 @@ footer {
     margin: 0;
 }
 
-/* Background Particles */
-.client_form_bg_particles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-}
-
 /* Responsive Design */
 @media (max-width: 1024px) {
     .client_form_container {
@@ -5619,24 +5675,30 @@ footer {
         gap: 3rem;
     }
 
+    .client_form_left {
+        position: relative;
+        /* Unstick on mobile */
+        top: 0;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .client_form_description {
+        margin: 0 auto;
+    }
+
     .client_form_heading {
         font-size: 2.8rem;
     }
 
-    .client_form_right {
-        height: 400px;
-    }
-
     .testimonial-card {
-        height: 380px;
         padding: 2.5rem;
     }
 }
 
 @media (max-width: 768px) {
     .testimonials-section {
-        height: 200vh;
-        /* Shorter track on mobile */
+        padding: 4rem 0;
     }
 
     .client_form_heading {
@@ -5644,7 +5706,6 @@ footer {
     }
 
     .testimonial-card {
-        height: 320px;
         padding: 2rem;
     }
 
@@ -5652,6 +5713,8 @@ footer {
         font-size: 1.1rem;
     }
 }
+
+
 
 /* ===============================================
    LOGO MARQUEE SECTION
@@ -5683,10 +5746,18 @@ footer {
     margin-bottom: 3rem;
 }
 
+/* Marquee Section Wrapper - Full Width Breakout */
 .client_form_marquee_wrapper {
     position: relative;
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
     overflow: hidden;
     padding: 2rem 0;
+
+    /* Gradient Fade Mask at edges */
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 .client_form_marquee_track {
@@ -5870,6 +5941,30 @@ footer {
     white-space: nowrap;
 }
 
+/* ===============================================
+   LENIS SMOOTH SCROLL
+   =============================================== */
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+    overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+    pointer-events: none;
+}
+
 /* Extra animated blob for logo section */
 .client_form_logos_blob_extra {
     position: absolute;
@@ -5903,4 +5998,273 @@ footer {
     z-index: 50 !important;
     position: relative !important;
 }
->>>>>>> e7daf68b01cfc5b33b588cd9e8478a8f72b4f3f9
+
+/* Background Animation Canvas Styles */
+#ambient-canvas,
+#works-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+#what-we-do,
+#our-works {
+    position: relative;
+    z-index: 1;
+}
+
+/* Fix for blue line glitch on hero title */
+/* =========================================
+   PREMIUM FOOTER STYLES
+   ========================================= */
+.premium-footer {
+    background-color: #0f172a;
+    /* Dark Slate Blue */
+    color: #cbd5e1;
+    /* Light Slate Text */
+    /* Light Slate Text */
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0;
+}
+
+.footer-bg-glow {
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(11, 83, 148, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.premium-footer .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* CTA Section */
+.footer-cta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.cta-content h2 {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    max-width: 600px;
+    color: #94a3b8;
+}
+
+.footer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--primary-blue), #0ea5e9);
+    border-radius: 50px;
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.footer-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.5);
+    background: linear-gradient(135deg, #0ea5e9, var(--primary-blue));
+}
+
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    margin-bottom: 2rem;
+}
+
+/* Footer Grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    /* Adjusted for 2 columns */
+    /* Adjusted for 2 columns */
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo {
+    font-family: var(--font-heading);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.footer-desc {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    max-width: 400px;
+    font-size: 0.95rem;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    background: var(--primary-blue);
+    border-color: var(--primary-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(11, 83, 148, 0.4);
+}
+
+.footer-links-col h4,
+.footer-contact-col h4 {
+    color: #fff;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+}
+
+.footer-links-col ul,
+.footer-contact-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links-col li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links-col a,
+.footer-contact-col a {
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.footer-links-col a:hover {
+    color: #0ea5e9;
+    transform: translateX(5px);
+}
+
+.contact-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.contact-list i {
+    color: #0ea5e9;
+    margin-top: 4px;
+}
+
+/* Bottom Bar */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-legal a {
+    color: #64748b;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-legal a:hover {
+    color: #fff;
+}
+
+/* Responsive Footer */
+@media (max-width: 900px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .footer-cta {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-content p {
+        margin: 0 auto;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+/* Fix for blue line glitch on hero title */
+.hero-blue-title,
+.hero-blue-content {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+
+.hero-blue-title::after,
+.hero-blue-title::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+}
