@@ -111,6 +111,10 @@ body {
     color: var(--primary-blue);
 }
 
+.premium-nav.scrolled .nav-link::after {
+    background: var(--primary-blue);
+}
+
 .nav-logo {
     font-family: var(--font-heading);
     font-size: 1.5rem;
@@ -145,7 +149,7 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    color: var(--primary-blue);
+    color: #FFD700;
 }
 
 .nav-link::after {
@@ -155,7 +159,7 @@ body {
     left: 50%;
     width: 0;
     height: 2px;
-    background: var(--primary-blue);
+    background: #FFD700;
     transition: all 0.3s ease;
     transform: translateX(-50%);
     border-radius: 2px;
@@ -623,7 +627,7 @@ h2 {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     transform-style: preserve-3d;
-    transition: transform 0.5s ease;
+    transition: transform 1.5s ease;
 }
 
 .device-frame {
@@ -665,6 +669,9 @@ h2 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    transform: translate(var(--parallax-x, 0px), var(--parallax-y, 0px));
+    transition: transform 0.1s ease-out;
+    /* Smooth parallax */
 }
 
 .slider-track {
@@ -678,8 +685,8 @@ h2 {
     min-width: 100%;
     flex: 0 0 100%;
     opacity: 0;
-    transform: translateX(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(30px);
+    transition: opacity 2.0s ease, transform 2.0s ease;
     display: flex;
     /* Restore flex from original class */
     flex-direction: column;
@@ -688,7 +695,7 @@ h2 {
 
 .hero-blue-content.slide.active {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
 }
 
 .slider-controls {
@@ -724,7 +731,7 @@ h2 {
     }
 
     to {
-        transform: translate(calc(0% + var(--parallax-x, 0px)), calc(-10% + var(--parallax-y, 0px))) translateZ(80px) rotateY(10deg);
+        transform: translate(calc(0% + var(--parallax-x, 0px)), calc(-10% + var(--parallax-y, 0px) + var(--float-y, 0px))) translateZ(80px) rotateY(10deg);
         opacity: 1;
     }
 }
@@ -736,7 +743,7 @@ h2 {
     }
 
     to {
-        transform: translate(calc(-20% + var(--parallax-x, 0px)), calc(-50% + var(--parallax-y, 0px))) translateZ(0px) rotateY(-10deg);
+        transform: translate(calc(-20% + var(--parallax-x, 0px)), calc(-50% + var(--parallax-y, 0px) + var(--float-y, 0px))) translateZ(0px) rotateY(-10deg);
         opacity: 1;
     }
 }
@@ -748,21 +755,21 @@ h2 {
     }
 
     to {
-        transform: translate(calc(-50% + var(--parallax-x, 0px)), calc(-50% + var(--parallax-y, 0px))) translateZ(-100px);
+        transform: translate(calc(-50% + var(--parallax-x, 0px)), calc(-50% + var(--parallax-y, 0px) + var(--float-y, 0px))) translateZ(-100px);
         opacity: 1;
     }
 }
 
 .device-mobile.animate-in {
-    animation: enter-left 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: enter-left 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .device-tablet.animate-in {
-    animation: enter-right 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: enter-right 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 .device-desktop.animate-in {
-    animation: enter-top 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation: enter-top 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 /* Aligned State (Slide 2) */
@@ -3406,7 +3413,7 @@ h2 {
 }
 
 .clients-header h2 {
-    color: #0f172a;
+    color: #FFB347;
     background: none;
     -webkit-text-fill-color: initial;
     text-shadow: none;
@@ -3445,6 +3452,7 @@ h2 {
     grid-template-columns: 1.2fr 0.8fr;
     gap: 4rem;
     align-items: start;
+    will-change: transform;
 }
 
 /* Left Column: Form */

@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
         devices.forEach(device => {
             device.classList.add('animate-in');
         });
+        // Trigger text animation
+        if (slides[0]) slides[0].classList.add('active');
+        if (dots[0]) dots[0].classList.add('active');
     }, 100);
 
     // --- Hero Slider Logic ---
@@ -44,56 +47,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 3D Card Tilt Effect ---
     // (Existing card tilt logic...)
 
-    // --- Product Showcase Parallax ---
+    // --- Hero Entrance Animation ---
+    // (Removed as per user request to keep container static)
+
+    // --- Product Showcase Parallax (Global) ---
     const showcaseContainer = document.querySelector('.showcase-container');
     const showcaseStage = document.querySelector('.showcase-stage');
 
     if (showcaseContainer && showcaseStage) {
-        // Optimization: Cache elements to avoid querying DOM on every frame
-        const parallaxElements = document.querySelectorAll('.device, .floating-badge');
+        // Use document for global mouse tracking in hero
+        document.addEventListener('mousemove', (e) => {
+            // Only active if hero is in view (optional optimization, but simple is fine)
+            // Calculate relative to window center
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
 
-        showcaseContainer.addEventListener('mousemove', (e) => {
-            const rect = showcaseContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            const x = e.clientX;
+            const y = e.clientY;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            // Rotate stage based on mouse position
-            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg tilt
-            const rotateY = ((x - centerX) / centerX) * 5;
+            // Rotate stage based on mouse position relative to center
+            const rotateX = ((y - centerY) / centerY) * -3; // Max 3deg tilt
+            const rotateY = ((x - centerX) / centerX) * 3;
 
             showcaseStage.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
             // Parallax for individual elements
-            parallaxElements.forEach(el => {
-                const speed = parseFloat(el.getAttribute('data-speed')) || 2;
+            document.querySelectorAll('.device, .floating-badge, .hero-text-slider').forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed')) || (el.classList.contains('hero-text-slider') ? 1 : 2);
+                // Invert direction for better depth feel
                 const moveX = ((x - centerX) / centerX) * speed * -1;
                 const moveY = ((y - centerY) / centerY) * speed * -1;
 
-                // Keep existing transforms (like translateZ) and add parallax
-                // We use CSS custom properties to avoid overwriting the transform property directly 
-                // if it's complex, but here a simple approach is to modify the transform matrix 
-                // or just use translate3d if the base transform is handled via CSS classes.
-                // However, our CSS uses translate(-50%, -50%) etc. 
-                // So best to apply parallax to a wrapper OR use CSS variables.
-
-                // Let's use CSS variables for cleaner integration if supported, 
-                // but since we didn't set that up in CSS, we'll use a simpler approach:
-                // We'll update a custom property --parallax-x and --parallax-y
                 el.style.setProperty('--parallax-x', `${moveX}px`);
                 el.style.setProperty('--parallax-y', `${moveY}px`);
             });
         });
 
+        // Reset on leave (optional, maybe not needed if global)
+        /* 
         showcaseContainer.addEventListener('mouseleave', () => {
-            showcaseStage.style.transform = 'rotateX(0) rotateY(0)';
-            parallaxElements.forEach(el => {
-                el.style.setProperty('--parallax-x', '0px');
-                el.style.setProperty('--parallax-y', '0px');
-            });
+             // ... reset logic ... 
         });
+        */
     }
     const cards = document.querySelectorAll('.card');
 
@@ -415,8 +410,54 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
+    // --- Initial Resize ---
+    window.addEventListener('resize', resize);
+    setTimeout(() => { resize(); animate(); }, 100);
+    setTimeout(() => { resize(); }, 500);
 
+    // --- Continuous Floating Animation ---
+    function animateFloat() {
+        const time = Date.now() * 0.0015; // Speed factor
+        devices.forEach((device, index) => {
+            const amplitude = 15; // Float range in px
+            const phase = index * (Math.PI / 1.5); // Phase offset between devices
+            const y = Math.sin(time + phase) * amplitude;
+            device.style.setProperty('--float-y', `${y}px`);
+        });
+        requestAnimationFrame(animateFloat);
+    }
+    animateFloat();
+    // --- Contact Section Parallax (Smooth) ---
+    const contactSection = document.querySelector('.contact-section');
+    const contactWrapper = document.querySelector('.contact-wrapper');
 
+    if (contactSection && contactWrapper) {
+        let currentTranslateY = 0;
+        let targetTranslateY = 0;
+
+        window.addEventListener('scroll', () => {
+            const rect = contactSection.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+
+            // Only calculate target if section is somewhat visible or nearby
+            if (rect.top < windowHeight && rect.bottom > 0) {
+                const distanceFromCenter = (windowHeight / 2) - (rect.top + rect.height / 2);
+                // "Push up" effect: Move element up as we scroll down
+                targetTranslateY = distanceFromCenter * -0.15;
+            }
+        });
+
+        function animateContactParallax() {
+            // Linear Interpolation (LERP) for smoothness
+            // Move 10% of the way to the target each frame
+            currentTranslateY += (targetTranslateY - currentTranslateY) * 0.1;
+
+            contactWrapper.style.transform = `translateY(${currentTranslateY}px)`;
+
+            requestAnimationFrame(animateContactParallax);
+        }
+        animateContactParallax();
+    }
 });
 
 // === 3D Coverflow Carousel ===
