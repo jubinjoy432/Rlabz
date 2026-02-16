@@ -82,96 +82,7 @@
 
                 <!-- Right Side Visual -->
                 <div class="hero-blue-visual">
-                    <!-- Product Showcase Container -->
-                    <div class="showcase-container">
-                        <div class="showcase-glows"></div>
-
-                        <div class="showcase-stage">
-                            <!-- Desktop Device (Back Layer) -->
-                            <div class="device device-desktop" data-speed="2">
-                                <div class="device-frame">
-                                    <div class="screen-content desktop-screen code-screen">
-                                        <div class="code-header">
-                                            <div class="code-dots"><span class="red"></span><span
-                                                    class="yellow"></span><span class="green"></span></div>
-                                            <div class="code-title">main.js</div>
-                                        </div>
-                                        <div class="code-body">
-                                            <pre><code><span class="pastel-purple">const</span> <span class="pastel-blue">initHero</span> <span class="pastel-white">=</span> <span class="pastel-yellow">()</span> <span class="pastel-purple">=></span> {
-  <span class="pastel-purple">const</span> <span class="pastel-orange">canvas</span> <span class="pastel-white">=</span> <span class="pastel-cyan">document</span>.<span class="pastel-blue">getElementById</span>(<span class="pastel-green">'hero'</span>);
-  <span class="pastel-purple">const</span> <span class="pastel-orange">ctx</span> <span class="pastel-white">=</span> <span class="pastel-orange">canvas</span>.<span class="pastel-blue">getContext</span>(<span class="pastel-green">'2d'</span>);
-  
-  <span class="pastel-comment">// Initialize particles</span>
-  <span class="pastel-purple">class</span> <span class="pastel-yellow">Particle</span> {
-    <span class="pastel-blue">constructor</span>(<span class="pastel-orange">x</span>, <span class="pastel-orange">y</span>) {
-      <span class="pastel-cyan">this</span>.<span class="pastel-orange">x</span> <span class="pastel-white">=</span> <span class="pastel-orange">x</span>;
-      <span class="pastel-cyan">this</span>.<span class="pastel-orange">y</span> <span class="pastel-white">=</span> <span class="pastel-orange">y</span>;
-      <span class="pastel-cyan">this</span>.<span class="pastel-orange">color</span> <span class="pastel-white">=</span> <span class="pastel-pink">'#a5b4fc'</span>;
-    }
-  }
-}</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="device-label">Desktop Dashboard</div>
-                            </div>
-
-                            <!-- Tablet Device (Middle Layer) -->
-                            <div class="device device-tablet" data-speed="4">
-                                <div class="device-frame">
-                                    <div class="screen-content tablet-screen code-screen">
-                                        <div class="code-header">
-                                            <div class="code-dots"><span class="red"></span><span
-                                                    class="yellow"></span><span class="green"></span></div>
-                                            <div class="code-title">style.css</div>
-                                        </div>
-                                        <div class="code-body">
-                                            <pre><code><span class="pastel-purple">.hero-section</span> {
-  <span class="pastel-blue">display</span>: <span class="pastel-orange">flex</span>;
-  <span class="pastel-blue">align-items</span>: <span class="pastel-orange">center</span>;
-  <span class="pastel-blue">background</span>: <span class="pastel-pink">#0f172a</span>;
-}
-
-<span class="pastel-purple">.card</span> {
-  <span class="pastel-blue">border-radius</span>: <span class="pastel-green">12px</span>;
-  <span class="pastel-blue">box-shadow</span>: <span class="pastel-white">0 4px 6px</span> <span class="pastel-yellow">rgba(0,0,0,0.1)</span>;
-  <span class="pastel-blue">backdrop-filter</span>: <span class="pastel-orange">blur(10px)</span>;
-}</code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="device-label">Analytics View</div>
-                            </div>
-
-                            <!-- Mobile Device (Front Layer) -->
-                            <div class="device device-mobile" data-speed="6">
-                                <div class="device-frame">
-                                    <div class="device-notch"></div>
-                                    <div class="screen-content mobile-screen code-screen">
-                                        <div class="code-header">
-                                            <div class="code-time">9:41</div>
-                                        </div>
-                                        <div class="code-body">
-                                            <pre><code><span class="pastel-comment">&lt;!-- Mobile App --></span>
-<span class="pastel-purple">&lt;div</span> <span class="pastel-blue">class</span>=<span class="pastel-green">"app"</span><span class="pastel-purple">></span>
-  <span class="pastel-purple">&lt;nav></span>
-    <span class="pastel-purple">&lt;h1></span><span class="pastel-white">Dashboard</span><span class="pastel-purple">&lt;/h1></span>
-  <span class="pastel-purple">&lt;/nav></span>
-  <span class="pastel-purple">&lt;main></span>
-    <span class="pastel-purple">&lt;card></span>
-      <span class="pastel-blue">User Stats</span>
-    <span class="pastel-purple">&lt;/card></span>
-  <span class="pastel-purple">&lt;/main></span>
-<span class="pastel-purple">&lt;/div></span></code></pre>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="device-label">Mobile App</div>
-                            </div>
-
-
-                        </div>
-                    </div>
+                    <div id="robot-container"></div>
                 </div>
             </div>
     </section>
@@ -752,9 +663,10 @@
         <i class="fa-solid fa-chevron-up"></i>
     </button>
 
-    <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="robot.js"></script>
     <script src="script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -993,6 +905,8 @@
 
     <!-- Lenis Smooth Scroll -->
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+
 </body>
 
 </html>
