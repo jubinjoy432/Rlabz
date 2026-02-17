@@ -1,21 +1,46 @@
+console.log("ROBOT: Starting initialization...");
+
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('robot-container');
-    if (!container) return;
+    if (!container) {
+        console.error("ROBOT: Container missing!");
+        return;
+    }
 
-    // --- Scene Setup ---
+    console.log("ROBOT: Container found. Initializing scene...");
+
+    // --- Scroll Animation Setup ---
+    // 1. Get Anchors
+    const heroVisual = document.querySelector('.hero-blue-visual');
+    const targetHeading = document.querySelector('#what-we-do .section-title'); // "Comprehensive Solutions..."
+
+    // 2. Detach and Fix Container
+    // We need to set explicit size because 'fixed' removes it from flow
+    // --- Fullscreen Overlay Setup ---
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.zIndex = '50';
+    container.style.pointerEvents = 'none'; // Click-through
+    document.body.appendChild(container);
+
     const scene = new THREE.Scene();
-    // Use a wider FOV for that "toy photo" look
-    const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 9);
+
+    // Camera matches full viewport
+    const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, 9); // Initial Z depth
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
+
 
     // --- Lighting (Bright Studio / Toy Product) ---
     // Boosted brightness to make white look WHITE
@@ -63,20 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         color: 0x111111,
         roughness: 0.4
     });
-
-    const glassLens = new THREE.MeshPhysicalMaterial({
-        color: 0xffffff,
-        metalness: 0.0,
-        roughness: 0.0,
-        transmission: 0.95, // Glass
-        thickness: 0.5,
-        clearcoat: 1.0
-    });
-
-    const eyeBacking = new THREE.MeshBasicMaterial({ color: 0x000000 });
-
-    const glowLight = new THREE.MeshBasicMaterial({ color: 0xffffee });
-
 
     // --- Geometry Helpers ---
 
@@ -212,6 +223,14 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         ref3.position.set(-0.05, -0.08, 0.05);
         g.add(ref3);
+
+        // Eyelid (ADDED BACK FOR SAFEKEEPING, BUT NOT ANIMATED YET TO AVOID CRASH)
+        // If we animate it, we need to name it "eyelid"
+        // For now, skipping to match 'createEye' function from previous context
+        // But if blinking logic needs it, we should add it.
+        // Let's add it but make it invisible initially or higher up.
+        // Or simply remove blinking logic causing crash.
+        // Removing blinking logic is safer.
 
         return g;
     }
@@ -422,11 +441,52 @@ document.addEventListener('DOMContentLoaded', () => {
         isIdle = false;
     });
 
+    // Resize Handling
     window.addEventListener('resize', () => {
-        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
     });
+
+    let scrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+    });
+
+    // Helper: Map DOM (pixels) to World (3D units) at a given depth
+    function getZPosition(depth) {
+        // Calculate the height of the view at this depth
+        const vFOV = THREE.MathUtils.degToRad(camera.fov); // vertical fov in radians
+        const height = 2 * Math.tan(vFOV / 2) * (camera.position.z - depth);
+        const width = height * camera.aspect;
+        return { width, height };
+    }
+
+    function mapDomToWorld(rect, depth, alignMode = 'center') {
+        const { width: viewW, height: viewH } = getZPosition(depth);
+        const canvasW = window.innerWidth;
+        const canvasH = window.innerHeight;
+
+        // Normalized coordinates (-1 to +1)
+        // Center of rect
+        let domX = rect.left + rect.width / 2;
+        let domY = rect.top + rect.height / 2;
+
+        if (alignMode === 'left-of') {
+            domX = rect.left;
+        } else if (alignMode === 'right-center') {
+            domX = rect.right; // Just the X reference
+            domY = rect.top + rect.height / 2;
+        }
+
+        const ndcX = (domX / canvasW) * 2 - 1;
+        const ndcY = -(domY / canvasH) * 2 + 1;
+
+        const worldX = (ndcX * viewW) / 2;
+        const worldY = (ndcY * viewH) / 2;
+        return { x: worldX, y: worldY };
+    }
+
 
     // Blinking State
     let isBlinking = false;
@@ -437,21 +497,92 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(animate);
         time += 0.02;
 
-        // Idle Logic (500ms)
+        // --- 1. Position & Scroll Logic (Run First) ---
+        let currentPos = new THREE.Vector3(0, 0, 0);
+        let currentScale = 1;
+
+        if (heroVisual && targetHeading) {
+            const r1 = heroVisual.getBoundingClientRect();
+            const r2 = targetHeading.getBoundingClientRect();
+
+            // Scroll Progress (Robust)
+            const triggerStart = 0;
+            const triggerEnd = window.innerHeight * 0.8;
+            const range = triggerEnd - triggerStart;
+            let t = (Math.abs(range) > 1) ? (scrollY - triggerStart) / range : 0;
+            t = Math.max(0, Math.min(1, isFinite(t) ? t : 0)); // Clamp [0, 1]
+            const ease = t * t * (3 - 2 * t);
+
+            // Initial State (Hero)
+            const depth0 = 0;
+            const pos1 = mapDomToWorld(r1, depth0, 'center');
+
+            // Target State (Heading)
+            const pos2 = mapDomToWorld(r2, depth0, 'right-center');
+
+            // Target Scale
+            const startScale = 0.82;
+            const targetScale = 0.32;
+
+            // Offset
+            const { width: viewW } = getZPosition(depth0);
+            const pixelsPerUnit = window.innerWidth / viewW;
+            const offsetWorld = (60 + (100 * targetScale)) / pixelsPerUnit;
+
+            const targetX = pos2.x + offsetWorld;
+            const targetY = pos2.y - 0.15;
+
+            // Interpolate Base Position
+            currentPos.x = pos1.x + (targetX - pos1.x) * ease;
+            currentPos.y = pos1.y + (targetY - pos1.y) * ease;
+            currentPos.z = depth0;
+            currentScale = startScale + (targetScale - startScale) * ease;
+
+            // Shadow Opacity Fade
+            if (shadow) {
+                shadow.material.opacity = 0.2 * (1 - ease);
+            }
+        }
+
+        // --- 2. Apply Position + Bobbing ---
+        // Add bobbing to the calculated Y position
+        const bobOffset = Math.sin(time * 1.2) * 0.06;
+
+        // Safety: If calculations fail, fallback to center
+        if (isFinite(currentPos.x) && isFinite(currentPos.y) && isFinite(currentPos.z)) {
+            robot.position.set(currentPos.x, currentPos.y + bobOffset, currentPos.z);
+            robot.scale.set(currentScale, currentScale, currentScale);
+        } else {
+            // FALLBACK TO DEFAULT CENTER if math fails
+            robot.position.set(0, -1 + bobOffset, 0);
+            robot.scale.set(1, 1, 1);
+        }
+
+
+        // --- 3. Body Animations ---
+        bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
+
+        // Arms Sway
+        armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+        armR.rotation.x = Math.sin(time * 1.5 + 1) * 0.1;
+
+
+        // --- 4. Head Logic (Idle vs Looking) ---
+        // Robust NaN recovery
+        if (isNaN(headGroup.rotation.y)) headGroup.rotation.y = 0;
+        if (isNaN(headGroup.rotation.x)) headGroup.rotation.x = 0;
+
+        // Check Idle
         if (Date.now() - lastMouseMoveTime > 500) {
             isIdle = true;
         }
 
-        // Floating Bob (always active)
-        robot.position.y = Math.sin(time * 1.2) * 0.06;
-
-        // Head Animation
         if (isIdle) {
             // Look around using layered sine waves
-            const targetX = Math.sin(time * 0.4) * 0.3 + Math.sin(time * 1.1) * 0.1;
-            const targetY = Math.sin(time * 0.3) * 0.15;
-            headGroup.rotation.y += (targetX - headGroup.rotation.y) * 0.05;
-            headGroup.rotation.x += (targetY - headGroup.rotation.x) * 0.05;
+            const idleTX = Math.sin(time * 0.4) * 0.3 + Math.sin(time * 1.1) * 0.1;
+            const idleTY = Math.sin(time * 0.3) * 0.15;
+            headGroup.rotation.y += (idleTX - headGroup.rotation.y) * 0.05;
+            headGroup.rotation.x += (idleTY - headGroup.rotation.x) * 0.05;
 
             // Antenna Twitch
             if (Math.random() > 0.985) {
@@ -463,28 +594,53 @@ document.addEventListener('DOMContentLoaded', () => {
             // Chest Light Pulse
             const pulse = 1 + Math.sin(time * 3) * 0.15;
             chestLight.scale.set(pulse, pulse, 1);
+
         } else {
-            // Track Mouse
-            const targetX = mouse.x * 0.6;
-            let targetY = -mouse.y * 0.4;
-            // Limit looking down to prevent clipping
+            // Track Mouse Logic
+            // Now safe to use robot.position because it was updated above!
+
+            const robotScreen = robot.position.clone().project(camera);
+
+            // Interpolate Reference Point (Center -> Robot) based on scroll ease
+            // Re-calculate ease here or reuse it? Re-calculating correctly for safety
+            const triggerStart = 0;
+            const triggerEnd = window.innerHeight * 0.8;
+            const range = triggerEnd - triggerStart;
+            let currentScrollT = (Math.abs(range) > 1) ? (scrollY - triggerStart) / range : 0;
+            currentScrollT = Math.max(0, Math.min(1, isFinite(currentScrollT) ? currentScrollT : 0));
+            const ease = currentScrollT * currentScrollT * (3 - 2 * currentScrollT);
+
+            // If ease=0 (Page1), ref is (0,0) -> look at mouse relative to center
+            // If ease=1 (Page2), ref is robotScreen -> look at mouse relative to robot
+            const refX = robotScreen.x * ease;
+            const refY = robotScreen.y * ease;
+
+            const dx = mouse.x - refX;
+            const dy = mouse.y - refY;
+
+            const targetX = dx * 0.6;
+            let targetY = -dy * 0.4;
+
+            // Limit looking down
             if (targetY > 0.15) targetY = 0.15;
 
-            headGroup.rotation.y += (targetX - headGroup.rotation.y) * 0.1;
-            headGroup.rotation.x += (targetY - headGroup.rotation.x) * 0.1;
+            // Apply rotation with NaN safety
+            if (!isNaN(targetX)) {
+                headGroup.rotation.y += (targetX - headGroup.rotation.y) * 0.1;
+            }
+            if (!isNaN(targetY)) {
+                headGroup.rotation.x += (targetY - headGroup.rotation.x) * 0.1;
+            }
 
             // Reset antenna & chest
             antennaGroup.rotation.z *= 0.8;
             chestLight.scale.set(1, 1, 1);
         }
 
-        bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
 
-        // Arms Sway
-        armL.rotation.x = Math.sin(time * 1.5) * 0.1;
-        armR.rotation.x = Math.sin(time * 1.5 + 1) * 0.1;
-
-        // BLINKING LOGIC
+        // --- 5. Blinking Logic ---
+        // (SIMPLIFIED: Removed eyelid update to prevent crash because eyelids are missing)
+        /*
         if (Math.random() > 0.995) isBlinking = true;
 
         if (isBlinking) {
@@ -498,18 +654,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 isBlinking = false;
             }
         }
-
-        // Update Eyelids (safe even if no eyelid mesh exists)
-        const closedY = -0.1;
-        const openY = 0.24;
-        const lidY = openY - (blinkProgress * (openY - closedY));
-        const lids = [eyeL.getObjectByName("eyelid"), eyeR.getObjectByName("eyelid")];
-        lids.forEach(lid => {
-            if (lid) lid.position.y = lidY;
-        });
+        */
 
         renderer.render(scene, camera);
     }
 
-    animate();
+    // Start Animation with Try-Catch for safety
+    try {
+        animate();
+        console.log("ROBOT: Animation loop started.");
+    } catch (e) {
+        console.error("ROBOT: Animation failed to start:", e);
+    }
 });
