@@ -353,6 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 5. Hand (Cute Mitten)
         const hand = new THREE.Group();
+        hand.name = "hand"; // Named for easy access
         hand.position.y = -1.25;
         g.add(hand);
 
@@ -377,6 +378,207 @@ document.addEventListener('DOMContentLoaded', () => {
     const armR = createArm(1.0);
     armR.rotation.z = -0.1;
     bodyGroup.add(armR);
+
+    // --- PROPS SETUP (Right Hand) ---
+    const handR = armR.getObjectByName("hand");
+    const props = {};
+
+    if (handR) {
+        // 1. Mobile Phone (Simple Box Model for Guaranteed Visibility)
+        const mobileProp = new THREE.Group();
+
+        // Materials
+        const frameMat = new THREE.MeshStandardMaterial({
+            color: 0xcccccc, roughness: 0.4, metalness: 0.5
+        });
+        const screenMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+        // High Contrast Camera Materials
+        const camBumpMat = new THREE.MeshBasicMaterial({ color: 0x111111 });
+        const camRingMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+        // Dims
+        const pW = 0.45;
+        const pH = 0.85;
+        const pD = 0.05; // Slightly thicker to be safe
+
+        // Body (BoxGeometry - No bevels, no confusion)
+        const phoneBody = new THREE.Mesh(
+            new THREE.BoxGeometry(pW, pH, pD),
+            frameMat
+        );
+
+        // Screen (Plane on front)
+        const phoneScreen = new THREE.Mesh(
+            new THREE.PlaneGeometry(pW - 0.04, pH - 0.04),
+            screenMat
+        );
+        phoneScreen.position.z = pD / 2 + 0.002;
+
+        mobileProp.add(phoneBody, phoneScreen);
+
+        // Cameras (On Back)
+        const backZ = -pD / 2;
+
+        const camOffsetX = -0.12;
+        const camStartY = 0.25;
+        const camSpacing = 0.16;
+
+        for (let i = 0; i < 3; i++) {
+            const posY = camStartY - i * camSpacing;
+
+            // Large Camera Bump
+            const bump = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.07, 0.07, 0.05, 32), // Cylinder sticks out more visibly
+                camBumpMat
+            );
+            bump.rotation.x = Math.PI / 2;
+            bump.position.set(camOffsetX, posY, backZ - 0.025); // Push out by half height
+            mobileProp.add(bump);
+
+            // Ring
+            const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(0.07, 0.015, 8, 32),
+                camRingMat
+            );
+            ring.position.set(camOffsetX, posY, backZ - 0.05); // At the tip
+            mobileProp.add(ring);
+        }
+
+        // Flash
+        const flash = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.03, 0.03, 0.02, 16),
+            new THREE.MeshBasicMaterial({ color: 0xffff00 })
+        );
+        flash.rotation.x = Math.PI / 2;
+        flash.position.set(camOffsetX + 0.12, camStartY, backZ - 0.01);
+        mobileProp.add(flash);
+
+        // Orientation: Back faces user
+        mobileProp.rotation.x = -0.2;
+        mobileProp.rotation.y = Math.PI + 0.2; // Turn around
+        mobileProp.rotation.z = -0.1;
+        mobileProp.position.set(0.05, -0.45, 0.15);
+
+        mobileProp.visible = false;
+        handR.add(mobileProp);
+        props['Mobile Solutions'] = mobileProp;
+
+        // 2. Web Solutions (Mini Laptop)
+        // 2. Web Solutions (Mini Laptop)
+        const laptopProp = new THREE.Group();
+
+        // Laptop Material (Dark Grey Matte)
+        const laptopFrameMat = new THREE.MeshStandardMaterial({
+            color: 0x2b2b2b,
+            roughness: 0.4,
+            metalness: 0.5
+        });
+
+        // 1. BASE (Keyboard section)
+        // Using BoxGeometry for sharper, recognizable laptop shape
+        const baseGeo = new THREE.BoxGeometry(0.8, 0.04, 0.55);
+        const lBase = new THREE.Mesh(baseGeo, laptopFrameMat);
+
+        // Keyboard Texture/Mesh (Darker inset)
+        const kbGeo = new THREE.PlaneGeometry(0.7, 0.28);
+        const kbMat = new THREE.MeshBasicMaterial({ color: 0x111111 }); // Black keys
+        const keyboard = new THREE.Mesh(kbGeo, kbMat);
+        keyboard.rotation.x = -Math.PI / 2;
+        keyboard.position.set(0, 0.021, 0.05); // On top of base
+        lBase.add(keyboard);
+
+        // 2. LID (Screen section)
+        const lidGroup = new THREE.Group();
+        // Hinge position: Back edge of base
+        lidGroup.position.set(0, 0.02, -0.27);
+
+        // Screen Frame
+        const lidGeo = new THREE.BoxGeometry(0.8, 0.04, 0.55);
+        const lLid = new THREE.Mesh(lidGeo, laptopFrameMat);
+        // Offset lid so it rotates around bottom edge
+        lLid.position.set(0, 0, -0.275);
+        // Actually, easiest to just center the geometry in a logical way or offset mesh
+        // Let's keep it simple: Pivot is at (0,0,0) of lidGroup
+        // Lid mesh center should be up and back?
+        // Let's re-think: Lid is a box. Pivot is bottom edge.
+        lLid.geometry.translate(0, 0, -0.275); // Shift geometry so origin is at bottom edge? No.
+        // Re-do Lid: Origin of lidGroup is the Hinge.
+        // Lid mesh should extend UP from hinge.
+        // If we rotate lidGroup X, lid mesh should follow.
+        // Let's define lid mesh relative to hinge.
+        // Hinge is at Z = -0.27 of base.
+        // Lid mesh center should be at Z = -0.275 (half height) if it was flat?
+        // Let's just build it simple:
+        const screenFrame = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.55, 0.04), laptopFrameMat);
+        screenFrame.position.set(0, 0.275, 0); // Center relative to hinge (which is at bottom of screen)
+
+        // Screen Display (Bright Blue)
+        const screenGeo = new THREE.PlaneGeometry(0.72, 0.45);
+        const laptopScreenMat = new THREE.MeshBasicMaterial({ color: 0x3399ff });
+        const screen = new THREE.Mesh(screenGeo, laptopScreenMat);
+        screen.position.set(0, 0.275, 0.021); // Slightly in front of frame
+        lidGroup.add(screenFrame, screen);
+
+        // Open the laptop
+        lidGroup.rotation.x = -Math.PI / 12; // Tilted back slightly from vertical? 
+        // Wait, Base is flat (Y up). 
+        // ScreenFrame is vertical (Y up).
+        // If rotation is 0, it's a 90 degree angle (L shape).
+        // We want it slightly more open, so rotate back.
+        lidGroup.rotation.x = 0.3; // Tilt back 
+
+        laptopProp.add(lBase, lidGroup);
+
+        // Orientation in hand
+        // Arm hold pose: rotation.x = -1.2, rotation.z = -0.3
+        // Refined Alignment: 
+        // 1. Tilt base slightly towards viewer (RotX 1.6 - 1.2 = 0.4 rad tilt)
+        // 2. Adjust position to sit ON TOP of the mitten sphere
+        laptopProp.rotation.x = 1.6;
+        laptopProp.rotation.y = -0.1;
+        laptopProp.rotation.z = 0.3;
+
+        // Position: Sit on the sphere
+        laptopProp.position.set(0, -0.20, 0.3);
+
+        laptopProp.visible = false;
+        handR.add(laptopProp);
+        props['Web Solutions'] = laptopProp;
+
+        // 3. Rocket (Services)
+        const rocketProp = new THREE.Group();
+        const rBody = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.25, 16), glossyWhite);
+        const rNose = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.12, 16), new THREE.MeshBasicMaterial({ color: 0xff4444 }));
+        rNose.position.y = 0.18;
+        const rFin = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.08, 0.02), new THREE.MeshBasicMaterial({ color: 0xff4444 }));
+        rFin.position.y = -0.08;
+        rocketProp.add(rBody, rNose, rFin);
+        rocketProp.add(rBody, rNose, rFin);
+        // Arm is at -1.8 (Face level). 
+        // To point UP, we need to counter-rotate.
+        rocketProp.rotation.x = 1.5;
+        rocketProp.rotation.z = 0.5;
+        rocketProp.position.set(0, -0.4, 0.1);
+        rocketProp.scale.set(1.8, 1.8, 1.8); // Scale up for visibility
+        rocketProp.visible = false;
+        handR.add(rocketProp);
+        props['Digital Services'] = rocketProp;
+
+        // 4. Cloud (Integration)
+        const cloudProp = new THREE.Group();
+        const c1 = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 16), glossyWhite);
+        const c2 = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), glossyWhite);
+        c2.position.set(0.14, -0.02, 0);
+        const c3 = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), glossyWhite);
+        c3.position.set(-0.14, -0.02, 0);
+        cloudProp.add(c1, c2, c3);
+        cloudProp.position.set(0, -0.4, 0.1);
+        cloudProp.scale.set(1.8, 1.8, 1.8); // Scale up for visibility
+        cloudProp.visible = false;
+        handR.add(cloudProp);
+        props['Cloud Integration'] = cloudProp;
+    }
 
 
     // 4. LEGS
@@ -438,7 +640,37 @@ document.addEventListener('DOMContentLoaded', () => {
         mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         lastMouseMoveTime = Date.now();
+        if (!isHoldingObject) isIdle = false; // Only wake up if not holding object (or wake up anyway?)
+        // Better: wake up anyway, but head tracking might be overridden if holding? 
+        // For now, let's keep it simple.
         isIdle = false;
+    });
+
+    // --- INTERACTION LISTENERS ---
+    let isHoldingObject = false;
+    let targetArmRotX = 0; // Default sine wave base
+    let targetArmRotZ = -0.1; // Default idle
+
+    const cards = document.querySelectorAll('.feature-card');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            const title = card.querySelector('h3').textContent.trim();
+            if (props[title]) {
+                // Hide all first
+                Object.values(props).forEach(p => p.visible = false);
+                // Show specific
+                props[title].visible = true;
+                isHoldingObject = true;
+                isIdle = false; // Wake up robot
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            isHoldingObject = false;
+            // Hide all after a short delay or immediately? 
+            // Immediately for responsiveness
+            Object.values(props).forEach(p => p.visible = false);
+        });
     });
 
     // Resize Handling
@@ -563,8 +795,37 @@ document.addEventListener('DOMContentLoaded', () => {
         bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
 
         // Arms Sway
-        armL.rotation.x = Math.sin(time * 1.5) * 0.1;
-        armR.rotation.x = Math.sin(time * 1.5 + 1) * 0.1;
+        if (isHoldingObject) {
+            // Raised Arm State
+            const raiseSpeed = 0.1;
+
+            // Dynamic Pose based on active prop
+            // Default: High hold (Phone, Rocket, Cloud)
+            let holdRotX = -1.8;
+            let holdRotZ = -0.5;
+
+            // Laptop: Low hold (Presenting at chest level)
+            if (props['Web Solutions'] && props['Web Solutions'].visible) {
+                holdRotX = -1.2;
+                holdRotZ = -0.3;
+            }
+
+            armR.rotation.x += (holdRotX - armR.rotation.x) * raiseSpeed;
+            armR.rotation.z += (holdRotZ - armR.rotation.z) * raiseSpeed;
+
+            // Left arm still sways
+            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+        } else {
+            // Normal Idle Sway
+            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+            // Smooth return to idle for Right Arm
+            // We blend the sine wave with the current transition
+            const idleRotX = Math.sin(time * 1.5 + 1) * 0.1;
+            const idleRotZ = -0.1;
+
+            armR.rotation.x += (idleRotX - armR.rotation.x) * 0.1;
+            armR.rotation.z += (idleRotZ - armR.rotation.z) * 0.1;
+        }
 
 
         // --- 4. Head Logic (Idle vs Looking) ---
