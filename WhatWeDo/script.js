@@ -515,81 +515,7 @@ const projects = {
     }
 };
 
-// 3. Modal Logic
-const modal = document.getElementById('project-modal');
-const closeModalBtn = document.querySelector('.close-modal');
 
-// Modal Elements
-const modalImg = document.getElementById('modal-image');
-const modalTitle = document.getElementById('modal-title');
-const modalDesc = document.getElementById('modal-description');
-const modalStack = document.getElementById('modal-tech-stack');
-
-function openModal(id) {
-    const data = projects[id];
-    if (!data) return;
-
-    // Use detail image if available, otherwise use thumbnail
-    const imageSrc = data.detailImg || data.img;
-    console.log('Opening modal for:', data.title);
-    console.log('Image source:', imageSrc);
-    modalImg.src = imageSrc;
-    modalTitle.innerText = data.title;
-    modalDesc.innerText = data.desc;
-
-    // Populate client and date if available
-    const modalClient = document.getElementById('modal-client');
-    const modalDate = document.getElementById('modal-date');
-    const modalWebsiteLink = document.getElementById('modal-website-link');
-
-    if (modalClient) modalClient.innerText = data.client || data.title;
-    if (modalDate) modalDate.innerText = data.date || 'N/A';
-    if (modalWebsiteLink) {
-        modalWebsiteLink.href = data.link || '#';
-        modalWebsiteLink.innerText = data.link || 'N/A';
-    }
-
-    // Clear and add badges
-    modalStack.innerHTML = '';
-    data.tech.forEach(tech => {
-        const span = document.createElement('span');
-        span.className = 'tech-badge';
-        span.innerText = tech;
-        modalStack.appendChild(span);
-    });
-
-    // Show modal with animation
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-    // Trigger animation after browser has rendered initial state
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 10);
-}
-
-
-function closeModal() {
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
-
-    // Hide modal after transition completes
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 500); // Match the CSS transition duration
-}
-
-
-
-
-if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-
-// Close on backdrop click
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
 
 
 
@@ -1534,11 +1460,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =========================================
-   BENTO GRID LOGIC
+   BENTO GRID & DETAILS LOGIC
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
     const bentoGrid = document.getElementById('bento-grid');
-    if (!bentoGrid) return;
+    const detailsPanel = document.getElementById('project-details-panel');
+
+    if (!bentoGrid || !detailsPanel) return;
 
     // Helper to get icon based on title or keywords
     const getIcon = (title) => {
@@ -1553,15 +1481,71 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'fa-solid fa-code';
     };
 
-    // Select 5 specific projects to display in the Bento Grid
     const selectedProjectIds = [1, 2, 3, 5, 10];
+    // Default to first project
+    let activeProjectId = selectedProjectIds[0];
 
+    // Function to render details with transition
+    const renderDetails = (id) => {
+        const p = projects[id];
+        if (!p) return;
+
+        // Create HTML structure
+        const html = `
+            <div class="detail-content-wrapper fading">
+                <img src="${p.img}" alt="${p.title}" class="detail-image">
+                <h2 class="detail-title">${p.title}</h2>
+                
+                <div class="detail-meta-row">
+                    <span><i class="fa-solid fa-user"></i> ${p.client}</span>
+                    <span><i class="fa-solid fa-calendar"></i> ${p.date}</span>
+                </div>
+
+                <p class="detail-desc">${p.desc}</p>
+
+                <div class="tech-stack">
+                    ${p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('')}
+                </div>
+
+                <a href="${p.link}" target="_blank" class="detail-btn">
+                    <span>Live Demo</span> <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        `;
+
+        // Smooth transition logic
+        const currentContent = detailsPanel.querySelector('.detail-content-wrapper');
+
+        if (currentContent) {
+            // Fade out current
+            currentContent.classList.add('fading');
+            setTimeout(() => {
+                detailsPanel.innerHTML = html;
+                // Fade in new (forced reflow/timeout to ensure transition triggers)
+                requestAnimationFrame(() => {
+                    const newContent = detailsPanel.querySelector('.detail-content-wrapper');
+                    if (newContent) newContent.classList.remove('fading');
+                });
+            }, 300); // Match CSS transition duration
+        } else {
+            // First render (instant or fade in)
+            detailsPanel.innerHTML = html;
+            requestAnimationFrame(() => {
+                const newContent = detailsPanel.querySelector('.detail-content-wrapper');
+                if (newContent) newContent.classList.remove('fading');
+            });
+        }
+    };
+
+    // Render Grid Cards
     selectedProjectIds.forEach((id, index) => {
         const p = projects[id];
         if (!p) return;
 
         const card = document.createElement('div');
-        card.className = 'bento-card';
+        // Set active class if it's the default project
+        card.className = `bento-card ${parseInt(id) === parseInt(activeProjectId) ? 'active' : ''}`;
+        card.dataset.id = id;
 
         // Staggered entry animation
         card.style.opacity = '0';
@@ -1577,17 +1561,25 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>${p.desc}</p>
         `;
 
-        // Click to Open Existing Modal
-        card.addEventListener('click', () => {
-            if (typeof openModal === 'function') {
-                openModal(id);
-            } else {
-                console.warn('openModal function not found');
-            }
+        // Hover Interaction
+        card.addEventListener('mouseenter', () => {
+            const currentId = parseInt(id);
+            if (parseInt(activeProjectId) === currentId) return; // Ignore if already active
+
+            // Update active visual state
+            const allCards = bentoGrid.querySelectorAll('.bento-card');
+            allCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            activeProjectId = currentId;
+            renderDetails(currentId);
         });
 
         bentoGrid.appendChild(card);
     });
+
+    // Initial Render of Details
+    renderDetails(activeProjectId);
 
     // Add keyframes for entry animation
     if (!document.getElementById('bento-animations')) {
