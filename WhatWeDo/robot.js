@@ -351,21 +351,65 @@ document.addEventListener('DOMContentLoaded', () => {
         cuff.position.y = -1.13;
         g.add(cuff);
 
-        // 5. Hand (Cute Mitten)
+        // 5. Hand (Cartoon Mitt - Fixed Alignment & Position)
         const hand = new THREE.Group();
-        hand.name = "hand"; // Named for easy access
-        hand.position.y = -1.25;
+        hand.name = "hand";
+        hand.position.y = -1.3;
         g.add(hand);
 
-        // Main Mitten Shape (Flattened Sphere)
-        const mittenGeo = new THREE.SphereGeometry(0.22, 32, 32);
-        const mitten = new THREE.Mesh(mittenGeo, glossyWhite);
-        mitten.scale.set(1.0, 1.2, 0.6); // Tall and flat
-        hand.add(mitten);
+        // Palm (Huge flattened sphere - glove body)
+        const palmGeo = new THREE.SphereGeometry(0.15, 32, 32);
+        const palm = new THREE.Mesh(palmGeo, glossyWhite);
+        palm.scale.set(1.4, 0.9, 0.8);
+        hand.add(palm);
 
-        // Thumb (Small Sphere on side)
-        const thumb = new THREE.Mesh(new THREE.SphereGeometry(0.12, 32, 32), glossyWhite);
-        thumb.position.set(0, 0.1, 0.15);
+        // Fingers - LONGER, LOWER, and angled NATURALLY
+        const fR = 0.065;
+        const fLen = 0.16;
+
+        const fingerData = [
+            { angle: -0.25, x: -0.11 },
+            { angle: 0.0, x: 0.00 },
+            { angle: 0.25, x: 0.11 }
+        ];
+
+        for (let i = 0; i < 3; i++) {
+            const fd = fingerData[i];
+            const finger = new THREE.Mesh(
+                new THREE.CapsuleGeometry(fR, fLen, 16, 8),
+                glossyWhite
+            );
+            // Position: Start LOW (bottom of palm) so they aren't buried
+            // Palm Y-radius is ~0.135 (0.15 * 0.9). Start at -0.12.
+            finger.position.set(fd.x, -0.12, 0.05);
+
+            // Point DOWN and FORWARD
+            // Math.PI = Straight Down.
+            // Math.PI - 0.5 = Angled forward ~30 deg from vertical.
+            // This looks natural and shows length.
+            finger.rotation.x = Math.PI - 0.5;
+
+            finger.rotation.z = fd.angle;
+
+            hand.add(finger);
+        }
+
+        // Thumb (Thick nub on side)
+        const thumbSide = x > 0 ? -1 : 1;
+        const thumb = new THREE.Mesh(
+            new THREE.CapsuleGeometry(fR * 1.1, fLen * 0.9, 16, 8),
+            glossyWhite
+        );
+        // Stick out from side EDGE (Inner Side)
+        // Palm width is ~0.21. Thumb needs to be near 0.20.
+        thumb.position.set(0.20 * thumbSide, -0.05, 0.04);
+
+        // Angle out ~45deg
+        thumb.rotation.z = 0.6 * thumbSide;
+
+        // Curl forward/down
+        thumb.rotation.x = -0.3;
+
         hand.add(thumb);
 
         return g;
@@ -456,8 +500,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Orientation: Back faces user
         mobileProp.rotation.x = -0.2;
-        mobileProp.rotation.y = Math.PI + 0.2; // Turn around
-        mobileProp.rotation.z = -0.1;
+        mobileProp.rotation.y = 0.2; // Turn around so screen faces robot
+        mobileProp.rotation.z = Math.PI - 0.1; // Flip upright (screen still faces robot)
         mobileProp.position.set(0.05, -0.45, 0.15);
 
         mobileProp.visible = false;
@@ -725,6 +769,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let blinkProgress = 0;
     let blinkSpeed = 0.15;
 
+    // Waving State (New)
+    let isWaving = false;
+    let waveStartTime = 0;
+
+    // Trigger Wave on Load
+    setTimeout(() => {
+        isWaving = true;
+        waveStartTime = Date.now();
+
+        // Stop waving after 2.0 seconds (2 slow waves)
+        setTimeout(() => {
+            isWaving = false;
+        }, 2000);
+    }, 1000); // Wait 1s for robot to appear deeply
+
     function animate() {
         requestAnimationFrame(animate);
         time += 0.02;
@@ -735,6 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (heroVisual && targetHeading) {
             const r1 = heroVisual.getBoundingClientRect();
+            // ... (rest of scroll logic remains same as user edited it)
             const r2 = targetHeading.getBoundingClientRect();
 
             // Scroll Progress (Robust)
@@ -794,8 +854,45 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- 3. Body Animations ---
         bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
 
-        // Arms Sway
-        if (isHoldingObject) {
+        // Wave Animation
+        if (isWaving) {
+            // Body faces forward
+            bodyGroup.rotation.y += (0 - bodyGroup.rotation.y) * 0.1;
+
+            // Raise Right Arm High
+            const targetArmRotX = -2.5; // High up (approx 140 deg)
+
+            // Waving Motion
+            // Slower, cleaner wave: 2 full cycles in 2 seconds = 1 Hz
+            const elapsed = (Date.now() - waveStartTime) / 1000; // Seconds
+            const waveOscillation = Math.sin(elapsed * Math.PI * 2) * 0.3;
+
+            // Calculate target Z directly (Wave + Base Rotation 0.4 for clearance)
+            const targetArmRotZ = 0.4 + waveOscillation;
+
+            // Smoothly interpolate BOTH axes towards target (No snapping logic)
+            armR.rotation.x += (targetArmRotX - armR.rotation.x) * 0.1;
+            armR.rotation.z += (targetArmRotZ - armR.rotation.z) * 0.1;
+
+            // Hand Rotation (Wrist Action) - Fix "Weird" look by facing palm forward
+            if (handR) {
+                handR.rotation.x += (1.0 - handR.rotation.x) * 0.1; // Face palm forward
+                handR.rotation.z = Math.sin(time * 8) * 0.2; // Add independent wrist wave
+            }
+
+            // Left arm Idle
+            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+
+            // IMPORTANT: Head Tracking Logic moved to priority block below
+            // to override mouse tracking.
+
+        } else if (isHoldingObject) {
+            // Reset Wrist if holding (Unless object needs specific grip, but for now reset)
+            if (handR) {
+                handR.rotation.x *= 0.8;
+                handR.rotation.z *= 0.8;
+            }
+
             // Raised Arm State
             const raiseSpeed = 0.1;
 
@@ -816,6 +913,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Left arm still sways
             armL.rotation.x = Math.sin(time * 1.5) * 0.1;
         } else {
+            // Reset Wrist to neutral
+            if (handR) {
+                handR.rotation.x *= 0.8;
+                handR.rotation.z *= 0.8;
+            }
+
             // Normal Idle Sway
             armL.rotation.x = Math.sin(time * 1.5) * 0.1;
             // Smooth return to idle for Right Arm
@@ -828,6 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
+        // Match indentation of surrounding code
         // --- 4. Head Logic (Idle vs Looking) ---
         // Robust NaN recovery
         if (isNaN(headGroup.rotation.y)) headGroup.rotation.y = 0;
@@ -838,7 +942,31 @@ document.addEventListener('DOMContentLoaded', () => {
             isIdle = true;
         }
 
-        if (isIdle) {
+        // PRIORITY 1: WAVING (Overrides everything)
+        if (isWaving) {
+            // Force look at user (Camera at 0,0,9)
+            // Calculate angle to look at camera based on current position
+            const lookAtX = -currentPos.x;
+            const lookAtZ = 9 - currentPos.z;
+            const targetHeadRotY = Math.atan2(lookAtX, lookAtZ);
+
+            // Look slightly up/down towards camera Y=0 relative to head Y
+            // Head is at ~1.6 height relative to robot base
+            const lookAtY = -(currentPos.y + 1.6);
+            let targetHeadRotX = Math.atan2(-lookAtY, lookAtZ); // Positive = Look down
+
+            // Limit looking down (Prevent chin clipping)
+            if (targetHeadRotX > 0.15) targetHeadRotX = 0.15;
+
+            headGroup.rotation.y += (targetHeadRotY - headGroup.rotation.y) * 0.1;
+            headGroup.rotation.x += (targetHeadRotX - headGroup.rotation.x) * 0.1;
+
+            // Reset antenna & chest
+            antennaGroup.rotation.z *= 0.8;
+            chestLight.scale.set(1.2, 1.2, 1); // Pulse heart while waving
+        }
+        // PRIORITY 2: IDLE (Look around randomly)
+        else if (isIdle) {
             // Look around using layered sine waves
             const idleTX = Math.sin(time * 0.4) * 0.3 + Math.sin(time * 1.1) * 0.1;
             const idleTY = Math.sin(time * 0.3) * 0.15;
@@ -855,9 +983,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Chest Light Pulse
             const pulse = 1 + Math.sin(time * 3) * 0.15;
             chestLight.scale.set(pulse, pulse, 1);
-
-        } else {
-            // Track Mouse Logic
+        }
+        // PRIORITY 3: MOUSE TRACKING
+        else {
+            // Track Mouse Logic (IDLE)
             // Now safe to use robot.position because it was updated above!
 
             const robotScreen = robot.position.clone().project(camera);
@@ -903,7 +1032,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // (SIMPLIFIED: Removed eyelid update to prevent crash because eyelids are missing)
         /*
         if (Math.random() > 0.995) isBlinking = true;
-
+    
         if (isBlinking) {
             blinkProgress += blinkSpeed;
             if (blinkProgress >= 1) {
