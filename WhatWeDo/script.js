@@ -1481,10 +1481,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'fa-solid fa-code';
     };
 
-    const selectedProjectIds = [1, 2, 3, 5, 10];
-    // Default to first project
-    let activeProjectId = selectedProjectIds[0];
-
     // Function to render details with transition
     const renderDetails = (id) => {
         const p = projects[id];
@@ -1537,51 +1533,144 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Render Grid Cards
-    selectedProjectIds.forEach((id, index) => {
-        const p = projects[id];
-        if (!p) return;
+    // =========================================
+    // MULTI-BATCH BENTO GRID LOGIC
+    // =========================================
 
-        const card = document.createElement('div');
-        // Set active class if it's the default project
-        card.className = `bento-card ${parseInt(id) === parseInt(activeProjectId) ? 'active' : ''}`;
-        card.dataset.id = id;
+    // Config
+    const BATCH_SIZE = 5;
+    const ROTATION_DELAY = 3000; // 3 seconds
+    const allProjectIds = Object.keys(projects);
 
-        // Staggered entry animation
-        card.style.opacity = '0';
-        card.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.15}s`;
+    // State
+    let currentBatchStartIndex = 0;
+    let autoRotateInterval = null;
+    // We track the active card *within* the currently displayed batch (0 to BATCH_SIZE-1)
+    // If -1, it means we might be transitioning or user hovered out (though we want to keep one active usually)
+    let activeCardIndex = 0;
 
-        const iconClass = getIcon(p.title);
+    // Helper to render a specific batch of 5 cards
+    const renderBatch = (startIndex) => {
+        bentoGrid.innerHTML = ''; // Clear existing
 
-        card.innerHTML = `
-            <div class="bento-icon-wrapper">
-                <i class="${iconClass}"></i>
-            </div>
-            <h3>${p.title}</h3>
-            <p>${p.desc}</p>
-        `;
+        // Get the slice of IDs for this batch
+        // If we reach the end and have fewer than 5, we loop back to start to always fill 5 slots?
+        // Or just show what's left? The CSS assumes 5 items for the 2fr/1fr layout uniqueness.
+        // Let's ensure we always get 5 items by wrapping around if needed.
+        const batchIds = [];
+        for (let i = 0; i < BATCH_SIZE; i++) {
+            const index = (startIndex + i) % allProjectIds.length;
+            batchIds.push(allProjectIds[index]);
+        }
 
-        // Hover Interaction
-        card.addEventListener('mouseenter', () => {
-            const currentId = parseInt(id);
-            if (parseInt(activeProjectId) === currentId) return; // Ignore if already active
+        batchIds.forEach((id, index) => {
+            const p = projects[id];
+            const card = document.createElement('div');
 
-            // Update active visual state
-            const allCards = bentoGrid.querySelectorAll('.bento-card');
-            allCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
+            // Set active class if it matches the current active index state
+            const isActive = index === activeCardIndex;
+            card.className = `bento-card ${isActive ? 'active' : ''}`;
+            card.dataset.index = index; // Store local batch index (0-4)
+            card.dataset.id = id;
 
-            activeProjectId = currentId;
-            renderDetails(currentId);
+            // Staggered entry animation (reset on every batch change)
+            card.style.animation = 'none';
+            card.offsetHeight; /* trigger reflow */
+            card.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
+
+            const iconClass = getIcon(p.title);
+
+            card.innerHTML = `
+                <div class="bento-icon-wrapper">
+                    <i class="${iconClass}"></i>
+                </div>
+                <h3>${p.title}</h3>
+                <p>${p.desc}</p>
+            `;
+
+            // Interaction
+            card.addEventListener('mouseenter', () => {
+                stopAutoRotation();
+                setActiveCard(index);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                startAutoRotation();
+            });
+
+            bentoGrid.appendChild(card);
         });
 
-        bentoGrid.appendChild(card);
-    });
+        // Ensure details match the actively rendered card
+        if (batchIds[activeCardIndex]) {
+            renderDetails(batchIds[activeCardIndex]);
+        }
+    };
 
-    // Initial Render of Details
-    renderDetails(activeProjectId);
+    // Helper to set active card within the current batch
+    const setActiveCard = (index) => {
+        // Validation
+        const cards = bentoGrid.querySelectorAll('.bento-card');
+        if (!cards[index]) return;
 
-    // Add keyframes for entry animation
+        // Visual Update
+        cards.forEach(c => c.classList.remove('active'));
+        cards[index].classList.add('active');
+
+        // State Update
+        activeCardIndex = index;
+
+        // Details Update
+        const projectId = cards[index].dataset.id;
+        renderDetails(projectId);
+    };
+
+    // Auto Rotation Step
+    const rotateStep = () => {
+        // Move to next card in the batch
+        let nextIndex = activeCardIndex + 1;
+
+        // If we've gone through all cards in this batch (0 to 4), switch to NEXT BATCH
+        if (nextIndex >= BATCH_SIZE) {
+            // Calculate new start index for project list
+            currentBatchStartIndex = (currentBatchStartIndex + BATCH_SIZE) % allProjectIds.length;
+
+            // Reset active card to the first one of the new batch
+            activeCardIndex = 0;
+
+            // Re-render the whole grid with new projects
+            renderBatch(currentBatchStartIndex);
+        } else {
+            // Just highlight the next card in the SAME batch
+            setActiveCard(nextIndex);
+        }
+    };
+
+    const startAutoRotation = () => {
+        stopAutoRotation();
+        autoRotateInterval = setInterval(rotateStep, ROTATION_DELAY);
+    };
+
+    const stopAutoRotation = () => {
+        if (autoRotateInterval) {
+            clearInterval(autoRotateInterval);
+            autoRotateInterval = null;
+        }
+    };
+
+    // --- Initialization ---
+
+    // 1. Initial Render (Batch 0)
+    renderBatch(0);
+
+    // 2. Start Rotation
+    startAutoRotation();
+
+    // 3. Pause on Details Hover
+    detailsPanel.addEventListener('mouseenter', stopAutoRotation);
+    detailsPanel.addEventListener('mouseleave', startAutoRotation);
+
+    // 4. CSS for Animation
     if (!document.getElementById('bento-animations')) {
         const styleSheet = document.createElement("style");
         styleSheet.id = 'bento-animations';
