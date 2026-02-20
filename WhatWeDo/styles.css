@@ -6346,3 +6346,207 @@ html.lenis body {
     border: none !important;
     background: none !important;
 }
+
+
+/* =========================================
+   OUR WORKS SLIDER (New Layout)
+   ========================================= */
+
+#our-works-slider {
+    width: 100%;
+    max-width: 1000px;
+    /* narrowed from full 1200px container */
+    margin: 0 auto;
+    /* centered horizontally */
+    height: 100%;
+    min-height: 500px;
+    border-radius: 30px;
+    overflow: hidden;
+    display: flex;
+    background: white;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+#our-works-slider .left-column {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+#our-works-slider .card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+    box-shadow: none;
+    /* override old card shadow if any */
+}
+
+#our-works-slider .card.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#our-works-slider .left-column .card:nth-child(odd) {
+    background: white;
+    color: #111;
+}
+
+#our-works-slider .left-column .card:nth-child(even) {
+    background: #e6f2ff;
+    color: #111;
+}
+
+#our-works-slider .left-column h1 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+}
+
+#our-works-slider .left-column p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+#our-works-slider .left-column .card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+#our-works-slider .left-column .meta-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#our-works-slider .left-column .meta-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+    min-width: 100px;
+}
+
+#our-works-slider .left-column .tech-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#our-works-slider .left-column .tech-badge {
+    background: rgba(11, 83, 148, 0.1);
+    color: var(--primary-blue);
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+#our-works-slider .left-column .developer-avatars {
+    display: flex;
+}
+
+#our-works-slider .left-column .dev-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid white;
+    overflow: hidden;
+    margin-left: -10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#our-works-slider .left-column .dev-avatar:first-child {
+    margin-left: 0;
+}
+
+#our-works-slider .left-column .dev-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#our-works-slider .left-column .explore-btn {
+    padding: 12px 24px;
+    border-radius: 40px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    background: var(--primary-blue);
+    color: white;
+    width: fit-content;
+    text-decoration: none;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+#our-works-slider .left-column .explore-btn:hover {
+    background: #094780;
+    transform: translateY(-2px);
+}
+
+/* RIGHT SIDE */
+#our-works-slider .right-column {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+#our-works-slider .image-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+#our-works-slider .image-card.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+#our-works-slider .image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    #our-works-slider {
+        flex-direction: column;
+    }
+
+    #our-works-slider .left-column,
+    #our-works-slider .right-column {
+        width: 100%;
+        height: 50%;
+    }
+
+    #our-works-slider .card {
+        padding: 40px;
+    }
+
+    #our-works-slider .left-column h1 {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    #our-works-slider .left-column p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+}

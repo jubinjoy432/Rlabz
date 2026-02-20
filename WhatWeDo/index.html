@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
     <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -179,103 +179,21 @@
                 <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
-            <!-- CUBE SLIDER INTEGRATION -->
-            <div class="cube-structure-grid reveal-on-scroll">
-
-                <!-- LEFT PANEL: Dynamic Content -->
-                <div class="cube-details-panel">
-                    <h1 id="cube-title">Project Title</h1>
-                    <p id="cube-desc">
-                        Our tours are designed to transport you to the heart of the world's
-                        most captivating destinations.
-                    </p>
-
-                    <div class="cube-meta-section">
-                        <div class="cube-tech-stack" id="cube-tech">
-                            <!-- Tech badges injected via JS -->
-                        </div>
-
-                        <div class="cube-links">
-
-                            <a href="#" target="_blank" id="cube-live" class="cube-link-btn live">
-                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
-                            </a>
-                        </div>
-                    </div>
+            <div class="card-slider" id="our-works-slider">
+                <!-- LEFT CONTENT COLUMN -->
+                <div class="left-column">
+                    <!-- Cards will be injected via JS -->
                 </div>
 
-                <!-- RIGHT PANEL: Swiper Cube -->
-                <div class="swiper cube-swiper">
-                    <div class="swiper-wrapper">
-                        <!-- Slides injected via JS -->
-                    </div>
-
-                    <!-- Circular Reveal Overlay -->
-                    <div class="cube-hover-reveal">
-                        <div class="reveal-content">
-                            <h3 class="reveal-title">Developed By</h3>
-                            <div class="reveal-team">
-                                <div class="reveal-member">
-                                    <div class="reveal-avatar"><img src="https://i.pravatar.cc/150?img=12"
-                                            alt="Member 1"></div>
-                                    <p class="reveal-name">Alex Chen</p>
-                                </div>
-                                <div class="reveal-member">
-                                    <div class="reveal-avatar"><img src="https://i.pravatar.cc/150?img=13"
-                                            alt="Member 2"></div>
-                                    <p class="reveal-name">Sarah Miller</p>
-                                </div>
-                                <div class="reveal-member">
-                                    <div class="reveal-avatar"><img src="https://i.pravatar.cc/150?img=14"
-                                            alt="Member 3"></div>
-                                    <p class="reveal-name">David Kim</p>
-                                </div>
-                                <div class="reveal-member">
-                                    <div class="reveal-avatar"><img src="https://i.pravatar.cc/150?img=15"
-                                            alt="Member 4"></div>
-                                    <p class="reveal-name">Emily Wang</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- RIGHT IMAGE COLUMN -->
+                <div class="right-column">
+                    <!-- Image Cards will be injected via JS -->
                 </div>
-
             </div>
         </div>
     </section>
 
-    <!-- Detailed Project Modal -->
-    <div id="project-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-grid">
-                <div class="modal-image-wrapper">
-                    <img src="" alt="Project Image" id="modal-image">
-                </div>
-                <div class="modal-details">
-                    <h2 id="modal-title">Project Title</h2>
-                    <p id="modal-description">Full project description goes here.</p>
-                    <div class="modal-meta">
-                        <div class="meta-item">
-                            <strong>Client:</strong> <span id="modal-client">Client Name</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Date:</strong> <span id="modal-date">Date</span>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Skills:</strong>
-                            <div class="modal-tech-stack" id="modal-tech-stack">
-                                <!-- Tech badges injected via JS -->
-                            </div>
-                        </div>
-                        <div class="meta-item">
-                            <strong>Link:</strong> <a href="#" id="modal-website-link" target="_blank">Visit Website</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <!-- About Us Section -->
     <section class="about-us-section" id="aboutUsSection">

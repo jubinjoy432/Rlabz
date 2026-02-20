@@ -419,175 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// === 3D Coverflow Carousel ===
-const carouselSection = document.getElementById('our-works');
-const carouselContainer = document.querySelector('.carousel-container');
-const carouselTrack = document.querySelector('.carousel-track');
-const projectCards = document.querySelectorAll('.project-card');
-const prevBtn = document.querySelector('.nav-btn.prev');
-const nextBtn = document.querySelector('.nav-btn.next');
 
-if (carouselContainer && carouselTrack && projectCards.length > 0) {
-    let currentIndex = 0;
-    const totalCards = projectCards.length;
-
-    // Coverflow configuration
-    const spacing = 450;      // Horizontal spacing between cards
-    const sideAngle = 60;     // Rotation angle for side cards (degrees)
-    const sideDepth = -350;   // Z-depth for side cards (negative = away)
-    const sideScale = 0.9;    // Scale factor for side cards
-    const sideOpacity = 0.7;  // Opacity for side cards
-
-    let previousIndex = 0;
-
-    function updateCarousel() {
-        projectCards.forEach((card, index) => {
-            // Calculate distance from center (with wrapping)
-            let diff = index - currentIndex;
-
-            // Calculate previous distance for transition logic
-            let prevDiff = index - previousIndex;
-
-            // Normalize to shortest path around carousel
-            if (diff > totalCards / 2) diff -= totalCards;
-            if (diff < -totalCards / 2) diff += totalCards;
-
-            if (prevDiff > totalCards / 2) prevDiff -= totalCards;
-            if (prevDiff < -totalCards / 2) prevDiff += totalCards;
-
-            // Active card is the one at center (diff === 0)
-            const isActive = diff === 0;
-
-            // Check if card is moving between hidden positions (wrap-around)
-            // If both new and old positions are "far" (> 1 or < -1), disable transition
-            // This prevents cards from animating across the visible area when wrapping
-            const isHiddenMove = Math.abs(diff) > 1 && Math.abs(prevDiff) > 1;
-
-            if (isHiddenMove) {
-                card.style.transition = 'none';
-            } else {
-                // Slower, smoother transition (0.8s)
-                card.style.transition = 'transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease, box-shadow 0.3s ease';
-            }
-
-            // Calculate transforms based on distance from center
-            const translateX = diff * spacing;
-            const translateZ = isActive ? 0 : sideDepth;
-            const rotateY = isActive ? 0 : (diff > 0 ? -sideAngle : sideAngle);
-            const scale = isActive ? 1.0 : sideScale;
-            // Opacity: Visible only at 0 and adjacent ±1 positions (or adjust logic as needed)
-            const opacity = isActive ? 1 : (Math.abs(diff) > 1 ? 0 : sideOpacity);
-
-            // Apply transforms
-            // Force reflow if transition was disabled to ensure it snaps instantly
-            if (isHiddenMove) void card.offsetWidth;
-
-            card.style.transform = `translate(-50%, -50%) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale(${scale})`;
-
-            // Dynamic Shading: Darken side cards to frame the active one
-            // Active card is bright (1.0), side cards are dimmed (0.6)
-            const brightness = isActive ? 1.05 : 0.5;
-            card.style.filter = `brightness(${brightness})`;
-
-            card.style.opacity = opacity;
-            card.style.zIndex = totalCards - Math.abs(diff);
-            card.style.pointerEvents = isActive ? 'auto' : 'none';
-
-            // Toggle active class
-            if (isActive) {
-                card.classList.add('active');
-            } else {
-                card.classList.remove('active');
-            }
-        });
-    }
-
-    function nextCard() {
-        previousIndex = currentIndex;
-        currentIndex = (currentIndex + 1) % totalCards;
-        updateCarousel();
-    }
-
-    function prevCard() {
-        previousIndex = currentIndex;
-        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-        updateCarousel();
-    }
-
-    // Auto-rotation (Slower interval: 5000ms)
-    let autoRotateInterval = setInterval(nextCard, 5000);
-
-    function resetAutoRotate() {
-        clearInterval(autoRotateInterval);
-        autoRotateInterval = setInterval(nextCard, 5000);
-    }
-
-    // Pause on hover
-    carouselContainer.addEventListener('mouseenter', () => {
-        clearInterval(autoRotateInterval);
-    });
-
-    carouselContainer.addEventListener('mouseleave', () => {
-        resetAutoRotate();
-    });
-
-    // Navigation buttons
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-            nextCard();
-            resetAutoRotate();
-        });
-    }
-
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-            prevCard();
-            resetAutoRotate();
-        });
-    }
-
-    // Touch/swipe support
-    let touchStartX = 0;
-    carouselContainer.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        clearInterval(autoRotateInterval);
-    }, { passive: true });
-
-    carouselContainer.addEventListener('touchend', (e) => {
-        const touchEndX = e.changedTouches[0].clientX;
-        const diff = touchStartX - touchEndX;
-
-        if (Math.abs(diff) > 50) {
-            if (diff > 0) {
-                nextCard();
-            } else {
-                prevCard();
-            }
-        }
-        resetAutoRotate();
-    }, { passive: true });
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-        if (carouselSection) {
-            const rect = carouselSection.getBoundingClientRect();
-            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-
-            if (isVisible) {
-                if (e.key === 'ArrowRight') {
-                    nextCard();
-                    resetAutoRotate();
-                } else if (e.key === 'ArrowLeft') {
-                    prevCard();
-                    resetAutoRotate();
-                }
-            }
-        }
-    });
-
-    // Initialize
-    updateCarousel();
-}
 
 // 2. Project Data (Mock Data matching IDs)
 const projects = {
@@ -683,96 +515,7 @@ const projects = {
     }
 };
 
-// 3. Modal Logic
-const modal = document.getElementById('project-modal');
-const closeModalBtn = document.querySelector('.close-modal');
 
-// Modal Elements
-const modalImg = document.getElementById('modal-image');
-const modalTitle = document.getElementById('modal-title');
-const modalDesc = document.getElementById('modal-description');
-const modalStack = document.getElementById('modal-tech-stack');
-
-function openModal(id) {
-    const data = projects[id];
-    if (!data) return;
-
-    // Use detail image if available, otherwise use thumbnail
-    const imageSrc = data.detailImg || data.img;
-    console.log('Opening modal for:', data.title);
-    console.log('Image source:', imageSrc);
-    modalImg.src = imageSrc;
-    modalTitle.innerText = data.title;
-    modalDesc.innerText = data.desc;
-
-    // Populate client and date if available
-    const modalClient = document.getElementById('modal-client');
-    const modalDate = document.getElementById('modal-date');
-    const modalWebsiteLink = document.getElementById('modal-website-link');
-
-    if (modalClient) modalClient.innerText = data.client || data.title;
-    if (modalDate) modalDate.innerText = data.date || 'N/A';
-    if (modalWebsiteLink) {
-        modalWebsiteLink.href = data.link || '#';
-        modalWebsiteLink.innerText = data.link || 'N/A';
-    }
-
-    // Clear and add badges
-    modalStack.innerHTML = '';
-    data.tech.forEach(tech => {
-        const span = document.createElement('span');
-        span.className = 'tech-badge';
-        span.innerText = tech;
-        modalStack.appendChild(span);
-    });
-
-    // Show modal with animation
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // Prevent background scroll
-
-    // Trigger animation after browser has rendered initial state
-    setTimeout(() => {
-        modal.classList.add('show');
-    }, 10);
-}
-
-
-function closeModal() {
-    modal.classList.remove('show');
-    document.body.style.overflow = '';
-
-    // Hide modal after transition completes
-    setTimeout(() => {
-        modal.style.display = 'none';
-    }, 500); // Match the CSS transition duration
-}
-
-
-projectCards.forEach(card => {
-    // Spotlight Effect - Only update CSS variables, don't modify transform
-    card.addEventListener('mousemove', (e) => {
-        const cardRect = card.getBoundingClientRect();
-        const x = e.clientX - cardRect.left;
-        const y = e.clientY - cardRect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
-
-    // Click to Open
-    card.addEventListener('click', () => {
-        const id = card.getAttribute('data-id');
-        openModal(id);
-    });
-});
-
-if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-
-// Close on backdrop click
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        closeModal();
-    }
-});
 
 
 
@@ -1692,116 +1435,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-// =========================================
-// CUBE SLIDER LOGIC
-// =========================================
+
+// === Lenis Smooth Scroll Init ===
 document.addEventListener('DOMContentLoaded', () => {
-    const cubeWrapper = document.querySelector('.cube-swiper .swiper-wrapper');
-    const cubeTitle = document.getElementById('cube-title');
-    const cubeDesc = document.getElementById('cube-desc');
-    const cubeTech = document.getElementById('cube-tech');
-
-    const cubeLive = document.getElementById('cube-live');
-
-    if (cubeWrapper && typeof Swiper !== 'undefined') {
-        // 1. Inject Slides from 'projects' data
-        // Filter for specific projects: Splendore(2), Euphoria(3), Cocobies(6), The Luke(10)
-        const visibleProjectIds = ['2', '3', '6', '10'];
-        const projectIds = Object.keys(projects).filter(id => visibleProjectIds.includes(id));
-
-        projectIds.forEach(id => {
-            const p = projects[id];
-
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-            slide.setAttribute('data-id', id);
-
-            slide.innerHTML = `<img src="${p.img}" alt="${p.title}" />`;
-
-            cubeWrapper.appendChild(slide);
-        });
-
-        // 2. Initialize Swiper
-        const cubeSwiper = new Swiper(".cube-swiper", {
-            effect: "cube",
-            grabCursor: true,
-            loop: true,
-            speed: 1000,
-            cubeEffect: {
-                shadow: false,
-                slideShadows: true,
-                shadowOffset: 10,
-                shadowScale: 0.94,
-            },
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            on: {
-                slideChange: function () {
-                    updateDetails(this.realIndex);
-                }
-            }
-        });
-
-        // 3. Update Details Panel
-        function updateDetails(realIndex) {
-            const pKey = projectIds[realIndex];
-            const p = projects[pKey];
-
-            if (p) {
-                const detailsPanel = document.querySelector('.cube-details-panel');
-                if (detailsPanel) {
-                    detailsPanel.style.opacity = '0';
-                    detailsPanel.style.transform = 'translateY(10px)';
-                }
-
-                setTimeout(() => {
-                    cubeTitle.innerText = p.title;
-                    cubeDesc.innerText = p.desc;
-
-                    if (cubeTech) {
-                        cubeTech.innerHTML = '';
-                        if (p.tech && p.tech.length > 0) {
-                            p.tech.forEach(t => {
-                                const badge = document.createElement('span');
-                                badge.className = 'cube-tech-badge';
-                                badge.innerText = t;
-                                cubeTech.appendChild(badge);
-                            });
-                        }
-                    }
-
-
-                    if (cubeLive) {
-                        cubeLive.href = p.link || '#';
-                        cubeLive.style.opacity = (p.link === '#' || !p.link) ? '0.5' : '1';
-                        cubeLive.style.pointerEvents = (p.link === '#' || !p.link) ? 'none' : 'auto';
-                    }
-
-                    if (detailsPanel) {
-                        detailsPanel.style.opacity = '1';
-                        detailsPanel.style.transform = 'translateY(0)';
-                    }
-                }, 200);
-            }
-        }
-
-        // 4. Initialize with first project
-        updateDetails(0);
-
-        // 5. Pause autoplay on hover
-        const cubeContainer = document.querySelector('.cube-swiper');
-        if (cubeContainer && cubeSwiper.autoplay) {
-            cubeContainer.addEventListener('mouseenter', () => {
-                cubeSwiper.autoplay.stop();
-            });
-            cubeContainer.addEventListener('mouseleave', () => {
-                cubeSwiper.autoplay.start();
-            });
-        }
-    }
-    // === Lenis Smooth Scroll Init ===
     const lenis = new Lenis({
         duration: 1.5,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -1821,4 +1457,207 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     requestAnimationFrame(raf);
+});
+
+
+/* =========================================
+   OUR WORKS SLIDER LOGIC
+   ========================================= */
+document.addEventListener('DOMContentLoaded', () => {
+    const worksSlider = document.getElementById('our-works-slider');
+    if (!worksSlider) return;
+
+    // Tell Lenis to ignore wheel events over this slider
+    worksSlider.setAttribute('data-lenis-prevent', 'true');
+
+    const leftColumn = worksSlider.querySelector('.left-column');
+    const rightColumn = worksSlider.querySelector('.right-column');
+
+    // Inject cards
+    const allProjectIds = Object.keys(projects);
+
+    allProjectIds.forEach((id, index) => {
+        const p = projects[id];
+
+        // Generate Tech Stack Badges
+        const techBadges = p.tech ? p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('') : '';
+
+        // Generate Developed By avatars (mock data or real if exists)
+        // If p.developedBy doesn't exist, we provide a placeholder array of developers
+        const developers = p.developedBy || [
+            { name: "Alex B.", img: "https://ui-avatars.com/api/?name=Alex+B&background=random" },
+            { name: "Sarah M.", img: "https://ui-avatars.com/api/?name=Sarah+M&background=random" }
+        ];
+        const devAvatars = developers.map(dev => `
+            <div class="dev-avatar" title="${dev.name}">
+                <img src="${dev.img || 'https://ui-avatars.com/api/?name=' + dev.name + '&background=random'}" alt="${dev.name}">
+            </div>
+        `).join('');
+
+        // Left Card
+        const leftCard = document.createElement('div');
+        leftCard.className = `card ${index === 0 ? 'active' : ''}`;
+        leftCard.innerHTML = `
+            <h1>${p.title}</h1>
+            <p>${p.desc}</p>
+            
+            <div class="card-meta">
+                <div class="meta-section tech-stack-section">
+                    <span class="meta-label">Tech Stack:</span>
+                    <div class="tech-stack">${techBadges}</div>
+                </div>
+                
+                <div class="meta-section developers-section">
+                    <span class="meta-label">Developed By:</span>
+                    <div class="developer-avatars">${devAvatars}</div>
+                </div>
+            </div>
+
+            <a href="${p.link}" target="_blank" class="explore-btn">View Project →</a>
+        `;
+        leftColumn.appendChild(leftCard);
+
+        // Right Image Card
+        const rightCard = document.createElement('div');
+        rightCard.className = `image-card ${index === 0 ? 'active' : ''}`;
+        rightCard.innerHTML = `
+            <img src="${p.img}" alt="${p.title}">
+        `;
+        rightColumn.appendChild(rightCard);
+    });
+
+    const leftCards = leftColumn.querySelectorAll(".card");
+    const rightCards = rightColumn.querySelectorAll(".image-card");
+
+    let currentIndex = 0;
+    let isAnimating = false;
+    let scrollLocked = false;
+    const total = leftCards.length;
+
+    // --- Auto-play logic ---
+    let autoPlayTimeout;
+    const AUTO_PLAY_DELAY = 3000;
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimeout = setTimeout(() => {
+            if (!isAnimating && !scrollLocked) {
+                changeCard((currentIndex + 1) % total, "down");
+            } else {
+                // If currently animating/locked, try again shortly
+                startAutoPlay();
+            }
+        }, AUTO_PLAY_DELAY);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayTimeout) {
+            clearTimeout(autoPlayTimeout);
+            autoPlayTimeout = null;
+        }
+    }
+
+    // Start auto-play initially
+    startAutoPlay();
+
+    // Pause auto-play when hovering over the slider so users can read/scroll manualy
+    worksSlider.addEventListener('mouseenter', stopAutoPlay);
+    worksSlider.addEventListener('mouseleave', startAutoPlay);
+
+    // Capture wheel events directly on the slider block to prevent page scrolling
+    worksSlider.addEventListener("wheel", (e) => {
+        // Prevent Lenis and native page scrolling
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (isAnimating || scrollLocked) {
+            return;
+        }
+
+        // Small threshold to ignore tiny trackpad movements
+        if (Math.abs(e.deltaY) < 30) return;
+
+        // Determine scroll direction and loop mathematically
+        if (e.deltaY > 0) {
+            scrollLocked = true;
+            changeCard((currentIndex + 1) % total, "down");
+        } else if (e.deltaY < 0) {
+            scrollLocked = true;
+            changeCard((currentIndex - 1 + total) % total, "up");
+        }
+
+        // Unlock scroll after short delay
+        setTimeout(() => {
+            scrollLocked = false;
+        }, 900); // slightly more than animation time
+
+    }, { passive: false });
+
+    function changeCard(newIndex, direction) {
+        isAnimating = true;
+
+        const leftCurrent = leftCards[currentIndex];
+        const rightCurrent = rightCards[currentIndex];
+
+        const leftNext = leftCards[newIndex];
+        const rightNext = rightCards[newIndex];
+
+        // Remove active
+        leftCurrent.classList.remove("active");
+        rightCurrent.classList.remove("active");
+
+        // Disable transitions temporarily so we can instantly move cards to their starting positions
+        leftNext.style.transition = "none";
+        rightNext.style.transition = "none";
+
+        // Prepare next start position
+        if (direction === "down") {
+            leftNext.style.transform = "translateY(100%)";
+            rightNext.style.transform = "translateY(-100%)";
+        } else {
+            leftNext.style.transform = "translateY(-100%)";
+            rightNext.style.transform = "translateY(100%)";
+        }
+
+        leftNext.style.opacity = "1";
+        rightNext.style.opacity = "1";
+
+        // IMPORTANT: Force heavy reflow so browser applies the starting transforms instantly WITHOUT animating them
+        void leftNext.offsetWidth;
+        void rightNext.offsetWidth;
+
+        // Restore transitions
+        leftNext.style.transition = "";
+        rightNext.style.transition = "";
+
+        // Animate current out
+        if (direction === "down") {
+            leftCurrent.style.transform = "translateY(-100%)";
+            rightCurrent.style.transform = "translateY(100%)";
+        } else {
+            leftCurrent.style.transform = "translateY(100%)";
+            rightCurrent.style.transform = "translateY(-100%)";
+        }
+
+        // Animate next in
+        leftNext.style.transform = "translateY(0)";
+        rightNext.style.transform = "translateY(0)";
+
+        currentIndex = newIndex;
+
+        // Reset the auto-play timer exactly when a card changes (if not hovering)
+        if (!worksSlider.matches(':hover')) {
+            startAutoPlay();
+        }
+
+        setTimeout(() => {
+            leftCurrent.style.opacity = "0";
+            rightCurrent.style.opacity = "0";
+
+            leftNext.classList.add("active");
+            rightNext.classList.add("active");
+
+            isAnimating = false;
+        }, 800);
+    }
 });
