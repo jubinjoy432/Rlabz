@@ -1,77 +1,89 @@
-/* =========================================
-   OUR WORKS – BENTO GRID LOGIC
-========================================= */
+const leftCards = document.querySelectorAll(".left-column .card");
+const rightCards = document.querySelectorAll(".right-column .image-card");
 
-document.addEventListener("DOMContentLoaded", () => {
+let currentIndex = 0;
+let isAnimating = false;
+let scrollLocked = false;
+const total = leftCards.length;
 
-    const bentoGrid = document.getElementById("bento-grid");
+window.addEventListener("wheel", (e) => {
 
-    // Sample Projects (Replace with your actual project object)
-    const projects = [
-        { title: "Splendore", desc: "Luxury travel platform.", img: "https://picsum.photos/800/600?1" },
-        { title: "Euphoria", desc: "Event management system.", img: "https://picsum.photos/800/600?2" },
-        { title: "Cocobies", desc: "E-commerce web store.", img: "https://picsum.photos/800/600?3" },
-        { title: "The Luke", desc: "Creative portfolio site.", img: "https://picsum.photos/800/600?4" },
-        { title: "NovaX", desc: "AI SaaS Dashboard.", img: "https://picsum.photos/800/600?5" },
-        { title: "Skyline", desc: "Real estate platform.", img: "https://picsum.photos/800/600?6" },
-        { title: "Orbit", desc: "Startup landing page.", img: "https://picsum.photos/800/600?7" },
-        { title: "Zenith", desc: "Marketing automation tool.", img: "https://picsum.photos/800/600?8" },
-        { title: "Pulse", desc: "Healthcare analytics.", img: "https://picsum.photos/800/600?9" },
-        { title: "Aurora", desc: "Fintech mobile app.", img: "https://picsum.photos/800/600?10" }
-    ];
+    e.preventDefault(); // stop natural scroll
 
-    const itemsPerView = 5;
-    let currentIndex = 0;
+    if (isAnimating || scrollLocked) return;
 
-    function renderProjects() {
+    // Small threshold to ignore tiny trackpad movements
+    if (Math.abs(e.deltaY) < 30) return;
 
-        bentoGrid.classList.add("fade-out");
+    scrollLocked = true;
 
-        setTimeout(() => {
-            bentoGrid.innerHTML = "";
-
-            const visibleProjects = projects.slice(
-                currentIndex,
-                currentIndex + itemsPerView
-            );
-
-            visibleProjects.forEach(project => {
-
-                const card = document.createElement("div");
-                card.className = "bento-card";
-
-                card.innerHTML = `
-                    <img src="${project.img}" alt="${project.title}">
-                    <div class="bento-overlay">
-                        <div class="bento-content">
-                            <h3>${project.title}</h3>
-                            <p>${project.desc}</p>
-                        </div>
-                    </div>
-                `;
-
-                bentoGrid.appendChild(card);
-            });
-
-            bentoGrid.classList.remove("fade-out");
-            bentoGrid.classList.add("fade-in");
-
-        }, 500);
+    if (e.deltaY > 0 && currentIndex < total - 1) {
+        changeCard(currentIndex + 1, "down");
+    }
+    else if (e.deltaY < 0 && currentIndex > 0) {
+        changeCard(currentIndex - 1, "up");
     }
 
-    function nextSet() {
-        currentIndex += itemsPerView;
+    // Unlock scroll after short delay
+    setTimeout(() => {
+        scrollLocked = false;
+    }, 900); // slightly more than animation time
 
-        if (currentIndex >= projects.length) {
-            currentIndex = 0;
-        }
+}, { passive: false });
 
-        renderProjects();
+
+function changeCard(newIndex, direction) {
+
+    isAnimating = true;
+
+    const leftCurrent = leftCards[currentIndex];
+    const rightCurrent = rightCards[currentIndex];
+
+    const leftNext = leftCards[newIndex];
+    const rightNext = rightCards[newIndex];
+
+    // Remove active
+    leftCurrent.classList.remove("active");
+    rightCurrent.classList.remove("active");
+
+    // Prepare next start position
+    if (direction === "down") {
+        leftNext.style.transform = "translateY(100%)";
+        rightNext.style.transform = "translateY(-100%)";
+    } else {
+        leftNext.style.transform = "translateY(-100%)";
+        rightNext.style.transform = "translateY(100%)";
     }
 
-    renderProjects();
+    leftNext.style.opacity = "1";
+    rightNext.style.opacity = "1";
 
-    // Auto change every 5 seconds
-    setInterval(nextSet, 5000);
+    void leftNext.offsetWidth; // force reflow
 
-});
+    // Animate current out
+    if (direction === "down") {
+        leftCurrent.style.transform = "translateY(-100%)";
+        rightCurrent.style.transform = "translateY(100%)";
+    } else {
+        leftCurrent.style.transform = "translateY(100%)";
+        rightCurrent.style.transform = "translateY(-100%)";
+    }
+
+    // Animate next in
+    leftNext.style.transform = "translateY(0)";
+    rightNext.style.transform = "translateY(0)";
+
+    currentIndex = newIndex;
+
+    setTimeout(() => {
+
+        leftCurrent.style.opacity = "0";
+        rightCurrent.style.opacity = "0";
+
+        leftNext.classList.add("active");
+        rightNext.classList.add("active");
+
+        isAnimating = false;
+
+    }, 800);
+}

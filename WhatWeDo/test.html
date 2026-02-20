@@ -1,23 +1,59 @@
-<!-- OUR WORKS – BENTO GRID VERSION -->
-<section id="our-works" class="rounded-section light-blue-bg">
+<!DOCTYPE html>
+<html lang="en">
 
-    <div class="container">
-        <header class="section-header">
-            <h2 class="section-title">
-                Have You Seen <br>
-                <span class="highlight-text">Our Works?</span>
-            </h2>
-            <p class="subtitle">
-                Explore our portfolio of cutting-edge projects.
-            </p>
-        </header>
+<head>
+    <meta charset="UTF-8">
+    <title>Sticky Card Slide</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-        <!-- BENTO GRID -->
-        <div class="bento-wrapper">
-            <div class="bento-grid" id="bento-grid">
-                <!-- Cards injected via JS -->
+<body>
+
+    <section class="wrapper">
+
+        <div class="card-slider">
+
+            <!-- LEFT CONTENT COLUMN -->
+            <div class="left-column">
+                <div class="card active">
+                    <h1>AI Project</h1>
+                    <p>Artificial Intelligence solutions for automation.</p>
+                    <button>View Project →</button>
+                </div>
+
+                <div class="card">
+                    <h1>E-Commerce</h1>
+                    <p>Modern scalable online shopping platform.</p>
+                    <button>Explore →</button>
+                </div>
+
+                <div class="card">
+                    <h1>Marketing</h1>
+                    <p>Digital campaigns and brand growth strategies.</p>
+                    <button>Learn More →</button>
+                </div>
             </div>
+
+            <!-- RIGHT IMAGE COLUMN -->
+            <div class="right-column">
+                <div class="image-card active">
+                    <img src="https://picsum.photos/900/700?1">
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/900/700?2">
+                </div>
+
+                <div class="image-card">
+                    <img src="https://picsum.photos/900/700?3">
+                </div>
+            </div>
+
         </div>
 
-    </div>
-</section>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

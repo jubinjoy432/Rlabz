@@ -1459,227 +1459,137 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(raf);
 });
 
+
 /* =========================================
-   BENTO GRID & DETAILS LOGIC
+   OUR WORKS SLIDER LOGIC
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const bentoGrid = document.getElementById('bento-grid');
-    const detailsPanel = document.getElementById('project-details-panel');
+    const worksSlider = document.getElementById('our-works-slider');
+    if (!worksSlider) return;
 
-    if (!bentoGrid || !detailsPanel) return;
+    const leftColumn = worksSlider.querySelector('.left-column');
+    const rightColumn = worksSlider.querySelector('.right-column');
 
-    // Helper to get icon based on title or keywords
-    const getIcon = (title) => {
-        const t = title.toLowerCase();
-        if (t.includes('medical')) return 'fa-solid fa-heart-pulse';
-        if (t.includes('travel') || t.includes('splendore')) return 'fa-solid fa-plane-departure';
-        if (t.includes('event') || t.includes('euphoria') || t.includes('luke')) return 'fa-solid fa-calendar-star';
-        if (t.includes('commerce') || t.includes('cocobies') || t.includes('shop')) return 'fa-solid fa-cart-shopping';
-        if (t.includes('campus') || t.includes('connect')) return 'fa-solid fa-graduation-cap';
-        if (t.includes('management') || t.includes('ctrm')) return 'fa-solid fa-list-check';
-        if (t.includes('reach')) return 'fa-solid fa-hand-holding-heart';
-        return 'fa-solid fa-code';
-    };
-
-    // Function to render details with transition
-    const renderDetails = (id) => {
-        const p = projects[id];
-        if (!p) return;
-
-        // Create HTML structure
-        const html = `
-            <div class="detail-content-wrapper fading">
-                <img src="${p.img}" alt="${p.title}" class="detail-image">
-                <h2 class="detail-title">${p.title}</h2>
-                
-                <div class="detail-meta-row">
-                    <span><i class="fa-solid fa-user"></i> ${p.client}</span>
-                    <span><i class="fa-solid fa-calendar"></i> ${p.date}</span>
-                </div>
-
-                <p class="detail-desc">${p.desc}</p>
-
-                <div class="tech-stack">
-                    ${p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('')}
-                </div>
-
-                <a href="${p.link}" target="_blank" class="detail-btn">
-                    <span>Live Demo</span> <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        `;
-
-        // Smooth transition logic
-        const currentContent = detailsPanel.querySelector('.detail-content-wrapper');
-
-        if (currentContent) {
-            // Fade out current
-            currentContent.classList.add('fading');
-            setTimeout(() => {
-                detailsPanel.innerHTML = html;
-                // Fade in new (forced reflow/timeout to ensure transition triggers)
-                requestAnimationFrame(() => {
-                    const newContent = detailsPanel.querySelector('.detail-content-wrapper');
-                    if (newContent) newContent.classList.remove('fading');
-                });
-            }, 300); // Match CSS transition duration
-        } else {
-            // First render (instant or fade in)
-            detailsPanel.innerHTML = html;
-            requestAnimationFrame(() => {
-                const newContent = detailsPanel.querySelector('.detail-content-wrapper');
-                if (newContent) newContent.classList.remove('fading');
-            });
-        }
-    };
-
-    // =========================================
-    // MULTI-BATCH BENTO GRID LOGIC
-    // =========================================
-
-    // Config
-    const BATCH_SIZE = 5;
-    const ROTATION_DELAY = 3000; // 3 seconds
+    // Inject cards
     const allProjectIds = Object.keys(projects);
 
-    // State
-    let currentBatchStartIndex = 0;
-    let autoRotateInterval = null;
-    // We track the active card *within* the currently displayed batch (0 to BATCH_SIZE-1)
-    // If -1, it means we might be transitioning or user hovered out (though we want to keep one active usually)
-    let activeCardIndex = 0;
+    allProjectIds.forEach((id, index) => {
+        const p = projects[id];
 
-    // Helper to render a specific batch of 5 cards
-    const renderBatch = (startIndex) => {
-        bentoGrid.innerHTML = ''; // Clear existing
-
-        // Get the slice of IDs for this batch
-        // If we reach the end and have fewer than 5, we loop back to start to always fill 5 slots?
-        // Or just show what's left? The CSS assumes 5 items for the 2fr/1fr layout uniqueness.
-        // Let's ensure we always get 5 items by wrapping around if needed.
-        const batchIds = [];
-        for (let i = 0; i < BATCH_SIZE; i++) {
-            const index = (startIndex + i) % allProjectIds.length;
-            batchIds.push(allProjectIds[index]);
-        }
-
-        batchIds.forEach((id, index) => {
-            const p = projects[id];
-            const card = document.createElement('div');
-
-            // Set active class if it matches the current active index state
-            const isActive = index === activeCardIndex;
-            card.className = `bento-card ${isActive ? 'active' : ''}`;
-            card.dataset.index = index; // Store local batch index (0-4)
-            card.dataset.id = id;
-
-            // Staggered entry animation (reset on every batch change)
-            card.style.animation = 'none';
-            card.offsetHeight; /* trigger reflow */
-            card.style.animation = `fadeInUp 0.6s ease forwards ${index * 0.1}s`;
-
-            const iconClass = getIcon(p.title);
-
-            card.innerHTML = `
-                <div class="bento-icon-wrapper">
-                    <i class="${iconClass}"></i>
-                </div>
-                <h3>${p.title}</h3>
-                <p>${p.desc}</p>
-            `;
-
-            // Interaction
-            card.addEventListener('mouseenter', () => {
-                stopAutoRotation();
-                setActiveCard(index);
-            });
-
-            card.addEventListener('mouseleave', () => {
-                startAutoRotation();
-            });
-
-            bentoGrid.appendChild(card);
-        });
-
-        // Ensure details match the actively rendered card
-        if (batchIds[activeCardIndex]) {
-            renderDetails(batchIds[activeCardIndex]);
-        }
-    };
-
-    // Helper to set active card within the current batch
-    const setActiveCard = (index) => {
-        // Validation
-        const cards = bentoGrid.querySelectorAll('.bento-card');
-        if (!cards[index]) return;
-
-        // Visual Update
-        cards.forEach(c => c.classList.remove('active'));
-        cards[index].classList.add('active');
-
-        // State Update
-        activeCardIndex = index;
-
-        // Details Update
-        const projectId = cards[index].dataset.id;
-        renderDetails(projectId);
-    };
-
-    // Auto Rotation Step
-    const rotateStep = () => {
-        // Move to next card in the batch
-        let nextIndex = activeCardIndex + 1;
-
-        // If we've gone through all cards in this batch (0 to 4), switch to NEXT BATCH
-        if (nextIndex >= BATCH_SIZE) {
-            // Calculate new start index for project list
-            currentBatchStartIndex = (currentBatchStartIndex + BATCH_SIZE) % allProjectIds.length;
-
-            // Reset active card to the first one of the new batch
-            activeCardIndex = 0;
-
-            // Re-render the whole grid with new projects
-            renderBatch(currentBatchStartIndex);
-        } else {
-            // Just highlight the next card in the SAME batch
-            setActiveCard(nextIndex);
-        }
-    };
-
-    const startAutoRotation = () => {
-        stopAutoRotation();
-        autoRotateInterval = setInterval(rotateStep, ROTATION_DELAY);
-    };
-
-    const stopAutoRotation = () => {
-        if (autoRotateInterval) {
-            clearInterval(autoRotateInterval);
-            autoRotateInterval = null;
-        }
-    };
-
-    // --- Initialization ---
-
-    // 1. Initial Render (Batch 0)
-    renderBatch(0);
-
-    // 2. Start Rotation
-    startAutoRotation();
-
-    // 3. Pause on Details Hover
-    detailsPanel.addEventListener('mouseenter', stopAutoRotation);
-    detailsPanel.addEventListener('mouseleave', startAutoRotation);
-
-    // 4. CSS for Animation
-    if (!document.getElementById('bento-animations')) {
-        const styleSheet = document.createElement("style");
-        styleSheet.id = 'bento-animations';
-        styleSheet.innerText = `
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        // Left Card
+        const leftCard = document.createElement('div');
+        leftCard.className = `card ${index === 0 ? 'active' : ''}`;
+        leftCard.innerHTML = `
+            <h1>${p.title}</h1>
+            <p>${p.desc}</p>
+            <a href="${p.link}" target="_blank" class="explore-btn">View Project →</a>
         `;
-        document.head.appendChild(styleSheet);
+        leftColumn.appendChild(leftCard);
+
+        // Right Image Card
+        const rightCard = document.createElement('div');
+        rightCard.className = `image-card ${index === 0 ? 'active' : ''}`;
+        rightCard.innerHTML = `
+            <img src="${p.img}" alt="${p.title}">
+        `;
+        rightColumn.appendChild(rightCard);
+    });
+
+    const leftCards = leftColumn.querySelectorAll(".card");
+    const rightCards = rightColumn.querySelectorAll(".image-card");
+
+    let currentIndex = 0;
+    let isAnimating = false;
+    let scrollLocked = false;
+    const total = leftCards.length;
+
+    // Handle wheel event only when mouse is over the slider section
+    let isMouseOverSlider = false;
+    worksSlider.addEventListener('mouseenter', () => isMouseOverSlider = true);
+    worksSlider.addEventListener('mouseleave', () => isMouseOverSlider = false);
+
+    window.addEventListener("wheel", (e) => {
+        if (!isMouseOverSlider) return; // Only capture scroll when hovering the slider
+
+        if (isAnimating || scrollLocked) {
+            e.preventDefault(); // stop natural scroll if we are in the middle of animating
+            return;
+        }
+
+        // Small threshold to ignore tiny trackpad movements
+        if (Math.abs(e.deltaY) < 30) return;
+
+        // Determine if we can actually scroll the cards
+        if (e.deltaY > 0 && currentIndex < total - 1) {
+            e.preventDefault();
+            scrollLocked = true;
+            changeCard(currentIndex + 1, "down");
+        } else if (e.deltaY < 0 && currentIndex > 0) {
+            e.preventDefault();
+            scrollLocked = true;
+            changeCard(currentIndex - 1, "up");
+        } else {
+            // Allow natural scrolling if we are at the top/bottom boundary
+            return;
+        }
+
+        // Unlock scroll after short delay
+        setTimeout(() => {
+            scrollLocked = false;
+        }, 900); // slightly more than animation time
+
+    }, { passive: false });
+
+    function changeCard(newIndex, direction) {
+        isAnimating = true;
+
+        const leftCurrent = leftCards[currentIndex];
+        const rightCurrent = rightCards[currentIndex];
+
+        const leftNext = leftCards[newIndex];
+        const rightNext = rightCards[newIndex];
+
+        // Remove active
+        leftCurrent.classList.remove("active");
+        rightCurrent.classList.remove("active");
+
+        // Prepare next start position
+        if (direction === "down") {
+            leftNext.style.transform = "translateY(100%)";
+            rightNext.style.transform = "translateY(-100%)";
+        } else {
+            leftNext.style.transform = "translateY(-100%)";
+            rightNext.style.transform = "translateY(100%)";
+        }
+
+        leftNext.style.opacity = "1";
+        rightNext.style.opacity = "1";
+
+        void leftNext.offsetWidth; // force reflow
+
+        // Animate current out
+        if (direction === "down") {
+            leftCurrent.style.transform = "translateY(-100%)";
+            rightCurrent.style.transform = "translateY(100%)";
+        } else {
+            leftCurrent.style.transform = "translateY(100%)";
+            rightCurrent.style.transform = "translateY(-100%)";
+        }
+
+        // Animate next in
+        leftNext.style.transform = "translateY(0)";
+        rightNext.style.transform = "translateY(0)";
+
+        currentIndex = newIndex;
+
+        setTimeout(() => {
+            leftCurrent.style.opacity = "0";
+            rightCurrent.style.opacity = "0";
+
+            leftNext.classList.add("active");
+            rightNext.classList.add("active");
+
+            isAnimating = false;
+        }, 800);
     }
 });
