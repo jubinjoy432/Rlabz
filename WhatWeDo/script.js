@@ -1479,12 +1479,40 @@ document.addEventListener('DOMContentLoaded', () => {
     allProjectIds.forEach((id, index) => {
         const p = projects[id];
 
+        // Generate Tech Stack Badges
+        const techBadges = p.tech ? p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('') : '';
+
+        // Generate Developed By avatars (mock data or real if exists)
+        // If p.developedBy doesn't exist, we provide a placeholder array of developers
+        const developers = p.developedBy || [
+            { name: "Alex B.", img: "https://ui-avatars.com/api/?name=Alex+B&background=random" },
+            { name: "Sarah M.", img: "https://ui-avatars.com/api/?name=Sarah+M&background=random" }
+        ];
+        const devAvatars = developers.map(dev => `
+            <div class="dev-avatar" title="${dev.name}">
+                <img src="${dev.img || 'https://ui-avatars.com/api/?name=' + dev.name + '&background=random'}" alt="${dev.name}">
+            </div>
+        `).join('');
+
         // Left Card
         const leftCard = document.createElement('div');
         leftCard.className = `card ${index === 0 ? 'active' : ''}`;
         leftCard.innerHTML = `
             <h1>${p.title}</h1>
             <p>${p.desc}</p>
+            
+            <div class="card-meta">
+                <div class="meta-section tech-stack-section">
+                    <span class="meta-label">Tech Stack:</span>
+                    <div class="tech-stack">${techBadges}</div>
+                </div>
+                
+                <div class="meta-section developers-section">
+                    <span class="meta-label">Developed By:</span>
+                    <div class="developer-avatars">${devAvatars}</div>
+                </div>
+            </div>
+
             <a href="${p.link}" target="_blank" class="explore-btn">View Project →</a>
         `;
         leftColumn.appendChild(leftCard);
