@@ -1467,6 +1467,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const worksSlider = document.getElementById('our-works-slider');
     if (!worksSlider) return;
 
+    // Tell Lenis to ignore wheel events over this slider
+    worksSlider.setAttribute('data-lenis-prevent', 'true');
+
     const leftColumn = worksSlider.querySelector('.left-column');
     const rightColumn = worksSlider.querySelector('.right-column');
 
@@ -1503,16 +1506,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollLocked = false;
     const total = leftCards.length;
 
-    // Handle wheel event only when mouse is over the slider section
-    let isMouseOverSlider = false;
-    worksSlider.addEventListener('mouseenter', () => isMouseOverSlider = true);
-    worksSlider.addEventListener('mouseleave', () => isMouseOverSlider = false);
-
-    window.addEventListener("wheel", (e) => {
-        if (!isMouseOverSlider) return; // Only capture scroll when hovering the slider
+    // Capture wheel events directly on the slider block to prevent page scrolling
+    worksSlider.addEventListener("wheel", (e) => {
+        // Prevent Lenis and native page scrolling
+        e.preventDefault();
+        e.stopPropagation();
 
         if (isAnimating || scrollLocked) {
-            e.preventDefault(); // stop natural scroll if we are in the middle of animating
             return;
         }
 
@@ -1521,15 +1521,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Determine if we can actually scroll the cards
         if (e.deltaY > 0 && currentIndex < total - 1) {
-            e.preventDefault();
             scrollLocked = true;
             changeCard(currentIndex + 1, "down");
         } else if (e.deltaY < 0 && currentIndex > 0) {
-            e.preventDefault();
             scrollLocked = true;
             changeCard(currentIndex - 1, "up");
         } else {
-            // Allow natural scrolling if we are at the top/bottom boundary
+            // At boundaries, we do nothing. The page is still prevented from scrolling.
             return;
         }
 
