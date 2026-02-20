@@ -6341,6 +6341,10 @@ html.lenis body {
 
 #our-works-slider {
     width: 100%;
+    max-width: 1000px;
+    /* narrowed from full 1200px container */
+    margin: 0 auto;
+    /* centered horizontally */
     height: 100%;
     min-height: 500px;
     border-radius: 30px;

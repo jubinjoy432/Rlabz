@@ -1506,6 +1506,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollLocked = false;
     const total = leftCards.length;
 
+    // --- Auto-play logic ---
+    let autoPlayTimeout;
+    const AUTO_PLAY_DELAY = 3000;
+
+    function startAutoPlay() {
+        stopAutoPlay();
+        autoPlayTimeout = setTimeout(() => {
+            if (!isAnimating && !scrollLocked) {
+                changeCard((currentIndex + 1) % total, "down");
+            } else {
+                // If currently animating/locked, try again shortly
+                startAutoPlay();
+            }
+        }, AUTO_PLAY_DELAY);
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayTimeout) {
+            clearTimeout(autoPlayTimeout);
+            autoPlayTimeout = null;
+        }
+    }
+
+    // Start auto-play initially
+    startAutoPlay();
+
+    // Pause auto-play when hovering over the slider so users can read/scroll manualy
+    worksSlider.addEventListener('mouseenter', stopAutoPlay);
+    worksSlider.addEventListener('mouseleave', startAutoPlay);
+
     // Capture wheel events directly on the slider block to prevent page scrolling
     worksSlider.addEventListener("wheel", (e) => {
         // Prevent Lenis and native page scrolling
@@ -1519,16 +1549,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Small threshold to ignore tiny trackpad movements
         if (Math.abs(e.deltaY) < 30) return;
 
-        // Determine if we can actually scroll the cards
-        if (e.deltaY > 0 && currentIndex < total - 1) {
+        // Determine scroll direction and loop mathematically
+        if (e.deltaY > 0) {
             scrollLocked = true;
-            changeCard(currentIndex + 1, "down");
-        } else if (e.deltaY < 0 && currentIndex > 0) {
+            changeCard((currentIndex + 1) % total, "down");
+        } else if (e.deltaY < 0) {
             scrollLocked = true;
-            changeCard(currentIndex - 1, "up");
-        } else {
-            // At boundaries, we do nothing. The page is still prevented from scrolling.
-            return;
+            changeCard((currentIndex - 1 + total) % total, "up");
         }
 
         // Unlock scroll after short delay
@@ -1551,6 +1578,10 @@ document.addEventListener('DOMContentLoaded', () => {
         leftCurrent.classList.remove("active");
         rightCurrent.classList.remove("active");
 
+        // Disable transitions temporarily so we can instantly move cards to their starting positions
+        leftNext.style.transition = "none";
+        rightNext.style.transition = "none";
+
         // Prepare next start position
         if (direction === "down") {
             leftNext.style.transform = "translateY(100%)";
@@ -1563,7 +1594,13 @@ document.addEventListener('DOMContentLoaded', () => {
         leftNext.style.opacity = "1";
         rightNext.style.opacity = "1";
 
-        void leftNext.offsetWidth; // force reflow
+        // IMPORTANT: Force heavy reflow so browser applies the starting transforms instantly WITHOUT animating them
+        void leftNext.offsetWidth;
+        void rightNext.offsetWidth;
+
+        // Restore transitions
+        leftNext.style.transition = "";
+        rightNext.style.transition = "";
 
         // Animate current out
         if (direction === "down") {
@@ -1579,6 +1616,11 @@ document.addEventListener('DOMContentLoaded', () => {
         rightNext.style.transform = "translateY(0)";
 
         currentIndex = newIndex;
+
+        // Reset the auto-play timer exactly when a card changes (if not hovering)
+        if (!worksSlider.matches(':hover')) {
+            startAutoPlay();
+        }
 
         setTimeout(() => {
             leftCurrent.style.opacity = "0";
