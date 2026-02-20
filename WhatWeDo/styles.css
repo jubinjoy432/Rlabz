@@ -6533,136 +6533,326 @@ html.lenis body {
         grid-template-columns: 1fr;
     }
 
+    .our-works-layout {
+        display: flex;
+        align-items: flex-start;
+        /* Important for sticky */
+        gap: 40px;
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .project-details-panel {
+        flex: 1;
+        position: sticky;
+        top: 100px;
+        padding-right: 20px;
+        min-height: 500px;
+        /* Prevent layout jump */
+    }
+
+    /* Detail Panel Internal Elements */
+    .detail-content-wrapper {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    .detail-content-wrapper.fading {
+        opacity: 0;
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 20px 40px -10px rgba(11, 83, 148, 0.15);
+    }
+
+    .detail-title {
+        font-family: var(--font-heading);
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #0b5394;
+        margin-bottom: 12px;
+    }
+
+    .detail-desc {
+        font-size: 1.05rem;
+        color: #475569;
+        line-height: 1.7;
+        margin-bottom: 24px;
+    }
+
+    .detail-meta-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 24px;
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+    .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+    }
+
+    .tech-badge {
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .detail-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #0b5394;
+        color: #fff;
+        padding: 14px 28px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.3s, transform 0.2s;
+    }
+
+    .detail-btn:hover {
+        background: #084278;
+        transform: translateY(-2px);
+    }
+
+    .bento-grid-wrapper {
+        flex: 1;
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* 5 Cards Layout: Card 1 spans full width */
     .bento-card:nth-child(1) {
-        grid-column: span 1;
-    }
-}
-
-/ *   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =           O U R   W O R K S     B E N T O   G R I D     = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =   * /         # o u r - w o r k s    {
-                 p a d d i n g :    5 r e m   2 r e m ;
-                 m i n - h e i g h t :    1 0 0 v h ;
-         
-}
-
-         . b e n t o - w r a p p e r    {
-                 m a r g i n - t o p :    3 r e m ;
-                 p o s i t i o n :    r e l a t i v e ;
-                 o v e r f l o w :    h i d d e n ;
-         
-}
-
-         / *   G R I D   L A Y O U T   * /     . b e n t o - g r i d    {
-                 d i s p l a y :    g r i d ;
-                 g r i d - t e m p l a t e - c o l u m n s :    2 f r   1 f r   1 f r ;
-                 g r i d - t e m p l a t e - r o w s :    2 5 0 p x   2 5 0 p x ;
-                 g a p :    1 . 5 r e m ;
-                 t r a n s i t i o n :    o p a c i t y   0 . 6 s   e a s e ,    t r a n s f o r m   0 . 6 s   e a s e ;
-         
-}
-
-         / *   5 - c a r d   l a y o u t   p o s i t i o n s   * /     . b e n t o - c a r d : n t h - c h i l d ( 1 )    {
-                 g r i d - r o w :    s p a n   2 ;
-         
-}
-
-         . b e n t o - c a r d : n t h - c h i l d ( 4 )    {
-                 g r i d - c o l u m n :    s p a n   2 ;
-         
-}
-
-         / *   C A R D   S T Y L E   * /     . b e n t o - c a r d    {
-                 p o s i t i o n :    r e l a t i v e ;
-                 o v e r f l o w :    h i d d e n ;
-                 b o r d e r - r a d i u s :    2 0 p x ;
-                 c u r s o r :    p o i n t e r ;
-                 b a c k g r o u n d :    # 0 f 1 7 2 a ;
-                 c o l o r :    # f f f ;
-                 t r a n s i t i o n :    t r a n s f o r m   0 . 4 s   e a s e ,    b o x - s h a d o w   0 . 4 s   e a s e ;
-         
-}
-
-         . b e n t o - c a r d : h o v e r    {
-                 t r a n s f o r m :    t r a n s l a t e Y ( - 8 p x ) ;
-                 b o x - s h a d o w :    0   2 0 p x   4 0 p x   r g b a ( 0 ,    0 ,    0 ,    0 . 4 ) ;
-         
-}
-
-         / *   I M A G E   * /     . b e n t o - c a r d   i m g    {
-                 w i d t h :    1 0 0 % ;
-                 h e i g h t :    1 0 0 % ;
-                 o b j e c t - f i t :    c o v e r ;
-                 t r a n s i t i o n :    t r a n s f o r m   0 . 6 s   e a s e ;
-         
-}
-
-         . b e n t o - c a r d : h o v e r   i m g    {
-                 t r a n s f o r m :    s c a l e ( 1 . 0 8 ) ;
-         
-}
-
-         / *   O V E R L A Y   * /     . b e n t o - o v e r l a y    {
-                 p o s i t i o n :    a b s o l u t e ;
-                 i n s e t :    0 ;
-                 b a c k g r o u n d :    l i n e a r - g r a d i e n t ( t o   t o p ,    r g b a ( 0 ,    0 ,    0 ,    0 . 8 ) ,    t r a n s p a r e n t   6 0 % ) ;
-                 d i s p l a y :    f l e x ;
-                 a l i g n - i t e m s :    f l e x - e n d ;
-                 p a d d i n g :    1 . 5 r e m ;
-         
-}
-
-         . b e n t o - c o n t e n t   h 3    {
-                 f o n t - s i z e :    1 . 4 r e m ;
-                 m a r g i n - b o t t o m :    0 . 4 r e m ;
-         
-}
-
-         . b e n t o - c o n t e n t   p    {
-                 f o n t - s i z e :    0 . 9 r e m ;
-                 o p a c i t y :    0 . 8 5 ;
-         
-}
-
-         / *   A N I M A T I O N   S T A T E S   * /     . b e n t o - g r i d . f a d e - o u t    {
-                 o p a c i t y :    0 ;
-                 t r a n s f o r m :    s c a l e ( 0 . 9 8 ) ;
-         
-}
-
-         . b e n t o - g r i d . f a d e - i n    {
-                 o p a c i t y :    1 ;
-                 t r a n s f o r m :    s c a l e ( 1 ) ;
-         
-}
-
-         / *   R E S P O N S I V E   * /     @ m e d i a   ( m a x - w i d t h :   9 0 0 p x )    {
-                 . b e n t o - g r i d    {
-                             g r i d - t e m p l a t e - c o l u m n s :    1 f r   1 f r ;
-                             g r i d - t e m p l a t e - r o w s :    a u t o ;
-                     
+        grid-column: span 2;
     }
 
-                     . b e n t o - c a r d : n t h - c h i l d ( 1 ) ,
-                 . b e n t o - c a r d : n t h - c h i l d ( 4 )    {
-                             g r i d - c o l u m n :    s p a n   2 ;
-                             g r i d - r o w :    a u t o ;
-                     
+    .bento-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 1.5rem;
+        min-height: 180px;
+        /* Smaller size */
+        position: relative;
+        cursor: pointer;
+        border: 1px solid #e2e8f0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
-         
-}
-
-         @ m e d i a   ( m a x - w i d t h :   6 0 0 p x )    {
-                 . b e n t o - g r i d    {
-                             g r i d - t e m p l a t e - c o l u m n s :    1 f r ;
-                     
+    .bento-card.active,
+    .bento-card:hover {
+        border-color: #0b5394;
+        box-shadow: 0 10px 30px -5px rgba(11, 83, 148, 0.1);
+        transform: translateY(-4px);
     }
 
-                     . b e n t o - c a r d    {
-                             h e i g h t :    2 2 0 p x ;
-                     
+    .bento-icon-wrapper {
+        width: 44px;
+        height: 44px;
+        background: #eff6ff;
+        color: #0b5394;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        margin-bottom: auto;
+        /* Push to top */
+        transition: all 0.3s;
     }
 
-         
-}
+    .bento-card:hover .bento-icon-wrapper,
+    .bento-card.active .bento-icon-wrapper {
+        background: #0b5394;
+        color: #fff;
+    }
 
-     
+    .bento-card h3 {
+        font-family: var(--font-heading);
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin: 12px 0 6px 0;
+    }
+
+    .bento-card p {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+        .our-works-layout {
+            flex-direction: column;
+        }
+
+        .project-details-panel {
+            width: 100%;
+            margin-bottom: 40px;
+            position: static;
+            padding-right: 0;
+        }
+
+        .bento-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .bento-card:nth-child(1) {
+            grid-column: span 1;
+        }
+    }
+
+
+    /* =========================================
+   OUR WORKS – BENTO GRID
+========================================= */
+
+    #our-works {
+        padding: 5rem 2rem;
+        min-height: 100vh;
+    }
+
+    .bento-wrapper {
+        margin-top: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* GRID LAYOUT */
+    .bento-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-rows: 250px 250px;
+        gap: 1.5rem;
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    /* 5-card layout positions */
+    .bento-card:nth-child(1) {
+        grid-row: span 2;
+    }
+
+    /* Apply light blue gradient to 2nd and 5th cards */
+    .bento-card:nth-child(2),
+    .bento-card:nth-child(5) {
+        background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(11, 83, 148, 0.05) 100%);
+        border: 1px solid rgba(14, 165, 233, 0.2);
+    }
+
+    .bento-card:nth-child(4) {
+        grid-column: span 2;
+    }
+
+    /* CARD STYLE */
+    .bento-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+        cursor: pointer;
+        background: #0f172a;
+        color: #fff;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .bento-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    /* IMAGE */
+    .bento-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+
+    .bento-card:hover img {
+        transform: scale(1.08);
+    }
+
+    /* OVERLAY */
+    .bento-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 60%);
+        display: flex;
+        align-items: flex-end;
+        padding: 1.5rem;
+    }
+
+    .bento-content h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .bento-content p {
+        font-size: 0.9rem;
+        opacity: 0.85;
+    }
+
+    /* ANIMATION STATES */
+    .bento-grid.fade-out {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    .bento-grid.fade-in {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+        .bento-grid {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto;
+        }
+
+        .bento-card:nth-child(1),
+        .bento-card:nth-child(4) {
+            grid-column: span 2;
+            grid-row: auto;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .bento-card {
+            height: 220px;
+        }
+    }
