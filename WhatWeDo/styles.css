@@ -113,13 +113,73 @@ body {
 
 .nav-logo {
     font-family: var(--font-heading);
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    color: #ffffff;
-    /* White initially */
     text-decoration: none;
     letter-spacing: -0.5px;
-    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    transition: color 0.35s ease-in-out;
+}
+
+.logo-image {
+    height: 52px;
+    width: auto;
+    /* Optional: allows the SVG to drop a slight shadow if needed */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform 0.35s ease-in-out;
+    object-fit: contain;
+}
+
+.brand-icon {
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.35s ease-in-out;
+    transform-origin: left center;
+    margin-right: 2px;
+}
+
+.brand-text {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
+    max-width: 150px;
+    font-weight: 800;
+    transition: opacity 0.35s ease-in-out, max-width 0.35s ease-in-out, margin 0.35s ease-in-out;
+    transform-origin: left center;
+}
+
+.brand-green {
+    color: #2d8c2d;
+    /* Matching the logo's green */
+    transition: color 0.35s;
+}
+
+.brand-blue {
+    color: #1a7bbf;
+    /* Matching the logo's blue */
+    transition: color 0.35s;
+}
+
+.premium-nav.scrolled .brand-green {
+    color: #137213;
+    /* Slightly darker when scrolled on white */
+}
+
+.premium-nav.scrolled .brand-blue {
+    color: #0b5394;
+    /* Darker blue when scrolled */
+}
+
+.premium-nav.scrolled .brand-icon {
+    transform: translateX(0) scale(0.85);
+}
+
+.premium-nav.scrolled .brand-text {
+    opacity: 0;
+    max-width: 0;
+    margin-left: -8px;
 }
 
 .brand-highlight {

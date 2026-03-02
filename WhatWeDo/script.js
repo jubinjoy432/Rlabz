@@ -1661,3 +1661,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    // =========================================
+    // STICKY SCROLL NAVBAR LOGO ANIMATION
+    // =========================================
+    const nav = document.querySelector('.premium-nav');
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Trigger once on load in case user refreshed while down the page
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+        }
+    }
+});
