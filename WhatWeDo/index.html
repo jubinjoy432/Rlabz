@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -169,27 +169,28 @@
     </section>
 
     <!-- Have You Seen Our Works Section -->
-    <section id="our-works" class="rounded-section light-blue-bg">
+    <section id="our-works" class="rounded-section" style="background: white !important;">
         <!-- New Canvas for Background Animation -->
         <canvas id="works-canvas"></canvas>
-        <div class="container">
+        <div class="container relative-z">
             <header class="section-header reveal-on-scroll">
                 <h2 class="section-title">Have You Seen <br><span class="highlight-text" id="highlight-works">Our
                         Works?</span></h2>
                 <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
-            <div class="card-slider" id="our-works-slider">
-                <!-- LEFT CONTENT COLUMN -->
-                <div class="left-column">
-                    <!-- Cards will be injected via JS -->
+            <!-- Swiper Container -->
+            <div class="swiper" id="our-works-swiper">
+                <div class="swiper-wrapper" id="our-works-wrapper">
+                    <!-- Slides will be injected via JS -->
                 </div>
-
-                <!-- RIGHT IMAGE COLUMN -->
-                <div class="right-column">
-                    <!-- Image Cards will be injected via JS -->
-                </div>
+                
+                <!-- Navigation -->
+                <div class="swiper-button-prev glass-nav"></div>
+                <div class="swiper-button-next glass-nav"></div>
             </div>
+            <!-- Pagination outside of cards but inside container -->
+            <div class="swiper-pagination custom-pagination"></div>
         </div>
     </section>
 
@@ -584,6 +585,7 @@
     <div class="scroll-progress" id="scrollProgress"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="robot.js"></script>
     <script src="script.js"></script>
     <script>
