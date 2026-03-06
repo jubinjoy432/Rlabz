@@ -6550,20 +6550,24 @@ html.lenis body {
         margin-bottom: 20px;
     }
 }
+
 /* =========================================
    3D COVERFLOW CAROUSEL LOGIC
    ========================================= */
 .dark-bg-gradient {
     background: linear-gradient(135deg, #0f0f0f, #1b1b1b) !important;
 }
+
 .text-white {
     color: #fff !important;
 }
+
 .text-light {
-    color: rgba(255,255,255,0.7) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
+
 .text-glow {
-    text-shadow: 0 0 20px rgba(255,255,255,0.3);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
 #our-works-swiper {
@@ -6583,7 +6587,7 @@ html.lenis body {
     width: 300px;
     height: 300px;
     transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(255,40,40,0.4) 0%, rgba(255,40,40,0) 70%);
+    background: radial-gradient(circle, rgba(255, 40, 40, 0.4) 0%, rgba(255, 40, 40, 0) 70%);
     filter: blur(40px);
     z-index: 0;
     pointer-events: none;
@@ -6591,13 +6595,24 @@ html.lenis body {
 }
 
 @keyframes pulseGlow {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+
+    0%,
+    100% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
 }
 
 #our-works-swiper .swiper-slide {
-    width: 380px; /* Increased from 280px */
-    height: 480px; /* Increased from 420px */
+    width: 380px;
+    /* Increased from 280px */
+    height: 480px;
+    /* Increased from 420px */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6607,16 +6622,18 @@ html.lenis body {
     width: 100%;
     height: 100%;
     border-radius: 20px !important;
-    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.2)) !important;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1) !important;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5) !important;
+    background: linear-gradient(145deg, #f8fafc, #e2e8f0) !important;
+    /* Soft slate/blue glass instead of stark white */
+    border: 1px solid rgba(11, 83, 148, 0.1) !important;
+    /* Subtle blue border */
+    box-shadow: 0 10px 30px rgba(11, 83, 148, 0.1) !important;
+    /* Soft blue shadow instead of harsh black */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 1.5rem !important;
-    color: #fff !important;
+    color: #1e293b !important;
+    /* Dark text */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     transform-style: preserve-3d;
     cursor: grab;
@@ -6628,7 +6645,7 @@ html.lenis body {
 
 #our-works-swiper .card:hover {
     transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6) !important;
+    box-shadow: 0 20px 40px rgba(11, 83, 148, 0.2) !important;
 }
 
 /* Badge Container */
@@ -6638,14 +6655,17 @@ html.lenis body {
     flex-wrap: wrap;
     margin-bottom: 1rem;
 }
+
 .glass-badge {
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(11, 83, 148, 0.1);
+    /* Primary blue tinted */
+    border: 1px solid rgba(11, 83, 148, 0.2);
     padding: 0.3rem 0.6rem;
     border-radius: 20px;
     font-size: 0.75rem;
-    color: #fff;
+    font-weight: 600;
+    color: #0b5394;
+    /* Primary blue text */
     white-space: nowrap;
 }
 
@@ -6656,16 +6676,20 @@ html.lenis body {
     flex-direction: column;
     justify-content: center;
 }
+
 #our-works-swiper .card .works-card-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
-    color: #fff !important;
+    color: #0f172a !important;
+    /* Near black */
     font-family: var(--font-heading);
 }
+
 #our-works-swiper .card .works-card-desc {
     font-size: 0.9rem;
-    color: rgba(255,255,255,0.8) !important;
+    color: #475569 !important;
+    /* Slate gray */
     display: -webkit-box;
     -webkit-line-clamp: 4;
     line-clamp: 4;
@@ -6678,15 +6702,16 @@ html.lenis body {
 .card-meta-tags {
     margin-top: 1rem;
     padding-top: 1rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    border-top: 1px solid rgba(11, 83, 148, 0.1);
     font-size: 0.8rem;
-    color: rgba(255,255,255,0.6) !important;
+    color: #64748b !important;
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
+
 #our-works-swiper .card .card-meta-tags span {
-    color: rgba(255,255,255,0.6) !important;
+    color: #64748b !important;
 }
 
 .custom-pagination {
@@ -6698,45 +6723,56 @@ html.lenis body {
 .custom-pagination .swiper-pagination-bullet {
     width: 8px;
     height: 8px;
-    background: rgba(0,0,0,0.3); /* Darkened for white bg */
+    background: rgba(0, 0, 0, 0.3);
+    /* Darkened for white bg */
     opacity: 1;
     transition: all 0.3s ease;
     margin: 0 5px !important;
 }
+
 .custom-pagination .swiper-pagination-bullet-active {
     width: 24px;
     border-radius: 4px;
-    background: #ff4d4d; /* Red matching glow */
+    background: #ff4d4d;
+    /* Red matching glow */
 }
 
 /* Navigation Arrows */
 .glass-nav {
-    background: rgba(0,0,0,0.05) !important;
+    background: rgba(0, 0, 0, 0.05) !important;
     backdrop-filter: blur(5px);
     width: 40px !important;
     height: 40px !important;
     border-radius: 50% !important;
-    color: #333 !important; /* Dark text for white bg */
-    border: 1px solid rgba(0,0,0,0.1) !important;
+    color: #333 !important;
+    /* Dark text for white bg */
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
+
 .glass-nav::after {
     font-size: 1.2rem !important;
 }
+
 .glass-nav:hover {
-    background: rgba(0,0,0,0.1) !important;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1) !important;
+    background: rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1) !important;
 }
 
 @media (max-width: 768px) {
     #our-works-swiper .swiper-slide {
-        width: 300px; /* Increased from 240px */
-        height: 420px; /* Increased from 360px */
+        width: 300px;
+        /* Increased from 240px */
+        height: 420px;
+        /* Increased from 360px */
     }
 }
+
 @media (max-width: 480px) {
     #our-works-swiper .swiper-slide {
-        width: 260px; /* Increased from 200px */
-        height: 360px; /* Increased from 320px */
+        width: 260px;
+        /* Increased from 200px */
+        height: 360px;
+        /* Increased from 320px */
     }
 }
 
@@ -6746,4 +6782,18 @@ html.lenis body {
     margin: 0 !important;
     max-width: 100% !important;
     border-radius: 0 !important;
+}
+
+/* Adjust Glow effect back away from Red to subtle blue for light theme */
+#our-works-swiper::before {
+    background: radial-gradient(circle, rgba(11, 83, 148, 0.15) 0%, rgba(11, 83, 148, 0) 70%);
+}
+
+.custom-pagination .swiper-pagination-bullet-active {
+    background: var(--primary-blue) !important;
+    /* Update active dot to theme blue */
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--primary-blue) !important;
 }

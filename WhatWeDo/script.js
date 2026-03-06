@@ -1533,9 +1533,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (distance === 1) {
                 slide.style.opacity = '0.85';
                 slide.style.zIndex = '8';
-            } else if (distance === 2) {
-                slide.style.opacity = '0.65';
-                slide.style.zIndex = '6';
             } else {
                 slide.style.opacity = '0';
                 slide.style.pointerEvents = 'none';
