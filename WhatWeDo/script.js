@@ -1664,16 +1664,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
-    // STICKY SCROLL NAVBAR LOGO ANIMATION
+    // STICKY SCROLL NAVBAR LOGO ANIMATION & SCROLL SPY
     // =========================================
     const nav = document.querySelector('.premium-nav');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('section');
+
     if (nav) {
         window.addEventListener('scroll', () => {
+            // Navbar Background toggle
             if (window.scrollY > 50) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
+
+            // Scroll Spy Logic
+            let currentSectionId = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+
+                // Adjusting the offset so the active state triggers a bit before the section reaches the top
+                if (window.scrollY >= (sectionTop - 200)) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            // Update Active Link
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${currentSectionId}`) {
+                    link.classList.add('active');
+                }
+            });
         });
 
         // Trigger once on load in case user refreshed while down the page
