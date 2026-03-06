@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="styles.css">
 
 </head>
@@ -182,25 +182,46 @@
     </section>
 
     <!-- Have You Seen Our Works Section -->
-    <section id="our-works" class="rounded-section light-blue-bg">
+    <section id="our-works" class="rounded-section"
+        style="background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%) !important;">
         <!-- New Canvas for Background Animation -->
         <canvas id="works-canvas"></canvas>
-        <div class="container">
+        <div class="container relative-z">
             <header class="section-header reveal-on-scroll">
                 <h2 class="section-title">Have You Seen <br><span class="highlight-text" id="highlight-works">Our
                         Works?</span></h2>
                 <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
-            <div class="card-slider" id="our-works-slider">
-                <!-- LEFT CONTENT COLUMN -->
-                <div class="left-column">
-                    <!-- Cards will be injected via JS -->
+            <!-- Swiper Container -->
+            <div class="swiper" id="our-works-swiper">
+                <div class="swiper-wrapper" id="our-works-wrapper">
+                    <!-- Slides will be injected via JS -->
                 </div>
 
-                <!-- RIGHT IMAGE COLUMN -->
-                <div class="right-column">
-                    <!-- Image Cards will be injected via JS -->
+                <!-- Navigation -->
+                <div class="swiper-button-prev glass-nav"></div>
+                <div class="swiper-button-next glass-nav"></div>
+            </div>
+            <!-- Pagination outside of cards but inside container -->
+            <!-- Pagination outside of cards but inside container -->
+            <div class="swiper-pagination custom-pagination"></div>
+        </div>
+
+        <!-- Project Details Modal -->
+        <div id="project-modal" class="project-modal-overlay">
+            <div class="project-modal-content">
+                <button id="close-modal-btn" class="close-modal-btn"><i class="fas fa-times"></i></button>
+                <div class="modal-body">
+                    <div id="modal-icon" class="modal-icon"></div>
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <div id="modal-badges" class="modal-badges"></div>
+                    <p id="modal-desc" class="modal-desc"></p>
+                    <div class="modal-meta">
+                        <p><strong>Year:</strong> <span id="modal-year"></span></p>
+                        <p><strong>Client:</strong> <span id="modal-client"></span></p>
+                    </div>
+                    <a id="modal-link" href="#" target="_blank" class="modal-btn">View Project</a>
                 </div>
             </div>
         </div>
@@ -597,6 +618,7 @@
     <div class="scroll-progress" id="scrollProgress"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="robot.js"></script>
     <script src="script.js"></script>
     <script>

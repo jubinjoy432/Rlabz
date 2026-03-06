@@ -1461,249 +1461,499 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* =========================================
-   OUR WORKS SLIDER LOGIC
+   OUR WORKS SLIDER LOGIC - SWIPER 3D
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const worksSlider = document.getElementById('our-works-slider');
-    if (!worksSlider) return;
-
-    // Tell Lenis to ignore wheel events over this slider
-    worksSlider.setAttribute('data-lenis-prevent', 'true');
-
-    const leftColumn = worksSlider.querySelector('.left-column');
-    const rightColumn = worksSlider.querySelector('.right-column');
+    const swiperWrapper = document.getElementById('our-works-wrapper');
+    if (!swiperWrapper) return;
 
     // Inject cards
     const allProjectIds = Object.keys(projects);
 
-    allProjectIds.forEach((id, index) => {
+    allProjectIds.forEach((id) => {
         const p = projects[id];
 
+        // Format Date to Year
+        const year = p.date ? p.date.split(' ').pop() : 'N/A';
+
+        // Format Primary Tech/Category
+        const primaryTech = p.tech && p.tech.length > 0 ? p.tech[0] : 'Project';
+
+        // Check Highlight (Using ID for mock rating)
+        const isHighlight = parseInt(id) <= 3;
+
         // Generate Tech Stack Badges
-        const techBadges = p.tech ? p.tech.map(t => `<span class="tech-badge">${t}</span>`).join('') : '';
+        const techBadges = p.tech ? p.tech.map(t => `<span class="glass-badge">${t}</span>`).join('') : '';
 
-        // Generate Developed By avatars (mock data or real if exists)
-        // If p.developedBy doesn't exist, we provide a placeholder array of developers
-        const developers = p.developedBy || [
-            { name: "Alex B.", img: "https://ui-avatars.com/api/?name=Alex+B&background=random" },
-            { name: "Sarah M.", img: "https://ui-avatars.com/api/?name=Sarah+M&background=random" }
-        ];
-        const devAvatars = developers.map(dev => `
-            <div class="dev-avatar" title="${dev.name}">
-                <img src="${dev.img || 'https://ui-avatars.com/api/?name=' + dev.name + '&background=random'}" alt="${dev.name}">
-            </div>
-        `).join('');
+        // Temporary mapping of project IDs to FontAwesome icons (can be moved to data later)
+        const iconMap = {
+            1: "fa-heartbeat",     // Arkon Medical
+            2: "fa-music",         // Splendore
+            3: "fa-theater-masks", // Euphoria
+            4: "fa-calendar-alt",  // Fest Buddy
+            5: "fa-users",         // Campus Connect
+            6: "fa-mobile-alt",    // Cocobies
+            7: "fa-globe",         // ReX
+            8: "fa-chalkboard-teacher", // CTRM
+            9: "fa-hands-helping", // OutREACH
+            10: "fa-glass-cheers"  // The Luke
+        };
+        const iconClass = iconMap[id] || "fa-laptop-code";
 
-        // Left Card
-        const leftCard = document.createElement('div');
-        leftCard.className = `card ${index === 0 ? 'active' : ''}`;
-        leftCard.innerHTML = `
-            <h1>${p.title}</h1>
-            <p>${p.desc}</p>
-            
-            <div class="card-meta">
-                <div class="meta-section tech-stack-section">
-                    <span class="meta-label">Tech Stack:</span>
-                    <div class="tech-stack">${techBadges}</div>
+        // Slide wrapping card
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+
+        slide.innerHTML = `
+            <div class="card"
+                 data-id="${id}"
+                 data-title="${p.title}"
+                 data-desc="${p.desc}"
+                 data-client="${p.client}"
+                 data-year="${year}"
+                 data-tech='${JSON.stringify(p.tech || [])}'
+                 data-link="${p.link}"
+                 data-icon="${iconClass}">
+                <div class="badge-container">
+                    <span class="glass-badge">${primaryTech}</span>
                 </div>
                 
-                <div class="meta-section developers-section">
-                    <span class="meta-label">Developed By:</span>
-                    <div class="developer-avatars">${devAvatars}</div>
+                <div class="works-card-content">
+                    <div style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
+                    <h3 class="works-card-title">${p.title}</h3>
+                    <p class="works-card-desc">${p.desc}</p>
+                </div>
+                
+                <div class="card-meta-tags">
+                    <span>${year}</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${techBadges}</div>
+                    <span style="margin-top:4px;">Client: ${p.client}</span>
                 </div>
             </div>
-
-            <a href="${p.link}" target="_blank" class="explore-btn">View Project →</a>
         `;
-        leftColumn.appendChild(leftCard);
-
-        // Right Image Card
-        const rightCard = document.createElement('div');
-        rightCard.className = `image-card ${index === 0 ? 'active' : ''}`;
-        rightCard.innerHTML = `
-            <img src="${p.img}" alt="${p.title}">
-        `;
-        rightColumn.appendChild(rightCard);
+        swiperWrapper.appendChild(slide);
     });
 
-    const leftCards = leftColumn.querySelectorAll(".card");
-    const rightCards = rightColumn.querySelectorAll(".image-card");
+    // Custom Visibility Logic
+    function updateSlideStyles(swiperInstance) {
+        const slides = swiperInstance.slides;
+        const activeIndex = swiperInstance.activeIndex;
 
-    let currentIndex = 0;
-    let isAnimating = false;
-    let scrollLocked = false;
-    const total = leftCards.length;
+        slides.forEach((slide, index) => {
+            const distance = Math.abs(index - activeIndex);
 
-    // --- Auto-play logic ---
-    let autoPlayTimeout;
-    const AUTO_PLAY_DELAY = 3000;
+            // Default reset
+            slide.style.opacity = '1';
+            slide.style.zIndex = '1';
+            slide.style.pointerEvents = 'auto';
+            slide.style.visibility = 'visible';
 
-    function startAutoPlay() {
-        stopAutoPlay();
-        autoPlayTimeout = setTimeout(() => {
-            if (!isAnimating && !scrollLocked) {
-                changeCard((currentIndex + 1) % total, "down");
+            if (distance === 0) {
+                slide.style.opacity = '1';
+                slide.style.zIndex = '10';
+            } else if (distance === 1) {
+                slide.style.opacity = '0.85';
+                slide.style.zIndex = '8';
             } else {
-                // If currently animating/locked, try again shortly
-                startAutoPlay();
+                slide.style.opacity = '0';
+                slide.style.pointerEvents = 'none';
+                slide.style.visibility = 'hidden';
             }
-        }, AUTO_PLAY_DELAY);
+        });
     }
 
-    function stopAutoPlay() {
-        if (autoPlayTimeout) {
-            clearTimeout(autoPlayTimeout);
-            autoPlayTimeout = null;
+    // Initialize Swiper
+    const worksSwiper = new Swiper('#our-works-swiper', {
+        effect: 'coverflow',
+        speed: 800, // Smoother transition
+        grabCursor: false,
+        centeredSlides: true,
+        slidesPerView: 'auto',
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+        },
+        keyboard: {
+            enabled: true,
+        },
+        mousewheel: {
+            forceToAxis: true,
+        },
+        coverflowEffect: {
+            rotate: 50,
+            stretch: 40,
+            depth: 120,
+            modifier: 1,
+            slideShadows: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        on: {
+            init: function () {
+                updateSlideStyles(this);
+            },
+            slideChange: function () {
+                updateSlideStyles(this);
+            },
+            progress: function () {
+                updateSlideStyles(this);
+            },
+            setTransition: function (speed) {
+                this.slides.forEach(slide => {
+                    slide.style.transitionDuration = `${speed}ms`;
+                });
+            },
+            click: function (swiper, event) {
+                const clickedSlide = swiper.clickedSlide;
+                if (!clickedSlide) return;
+
+                if (clickedSlide.classList.contains('swiper-slide-active')) {
+                    const card = clickedSlide.querySelector('.card');
+                    if (card && typeof openProjectModal === 'function') {
+                        openProjectModal(card);
+                    }
+                }
+            }
         }
-    }
+    });
 
-    // Start auto-play initially
-    startAutoPlay();
+    // Parallax Mouse Effect (3D Tilt) on Active Card
+    let animationFrameId;
 
-    // Pause auto-play when hovering over the slider so users can read/scroll manualy
-    worksSlider.addEventListener('mouseenter', stopAutoPlay);
-    worksSlider.addEventListener('mouseleave', startAutoPlay);
+    document.getElementById('our-works-swiper').addEventListener('mousemove', (e) => {
+        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
+        if (!activeSlide) return;
 
-    // Capture wheel events directly on the slider block to prevent page scrolling
-    worksSlider.addEventListener("wheel", (e) => {
-        // Prevent Lenis and native page scrolling
-        e.preventDefault();
-        e.stopPropagation();
+        const rect = activeSlide.getBoundingClientRect();
 
-        if (isAnimating || scrollLocked) {
-            return;
-        }
+        // Check if mouse is within the active card bounds perfectly
+        if (
+            e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom
+        ) {
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
 
-        // Small threshold to ignore tiny trackpad movements
-        if (Math.abs(e.deltaY) < 30) return;
+            const mouseX = e.clientX - centerX;
+            const mouseY = e.clientY - centerY;
 
-        // Determine scroll direction and loop mathematically
-        if (e.deltaY > 0) {
-            scrollLocked = true;
-            changeCard((currentIndex + 1) % total, "down");
-        } else if (e.deltaY < 0) {
-            scrollLocked = true;
-            changeCard((currentIndex - 1 + total) % total, "up");
-        }
+            const rotateX = (mouseY / (rect.height / 2)) * -15; // Max 15deg
+            const rotateY = (mouseX / (rect.width / 2)) * 15;
 
-        // Unlock scroll after short delay
-        setTimeout(() => {
-            scrollLocked = false;
-        }, 900); // slightly more than animation time
-
-    }, { passive: false });
-
-    function changeCard(newIndex, direction) {
-        isAnimating = true;
-
-        const leftCurrent = leftCards[currentIndex];
-        const rightCurrent = rightCards[currentIndex];
-
-        const leftNext = leftCards[newIndex];
-        const rightNext = rightCards[newIndex];
-
-        // Remove active
-        leftCurrent.classList.remove("active");
-        rightCurrent.classList.remove("active");
-
-        // Disable transitions temporarily so we can instantly move cards to their starting positions
-        leftNext.style.transition = "none";
-        rightNext.style.transition = "none";
-
-        // Prepare next start position
-        if (direction === "down") {
-            leftNext.style.transform = "translateY(100%)";
-            rightNext.style.transform = "translateY(-100%)";
+            animationFrameId = requestAnimationFrame(() => {
+                activeSlide.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+            });
         } else {
-            leftNext.style.transform = "translateY(-100%)";
-            rightNext.style.transform = "translateY(100%)";
+            // Mouse outside active card, reset
+            resetCardTilt(activeSlide);
         }
+    });
 
-        leftNext.style.opacity = "1";
-        rightNext.style.opacity = "1";
-
-        // IMPORTANT: Force heavy reflow so browser applies the starting transforms instantly WITHOUT animating them
-        void leftNext.offsetWidth;
-        void rightNext.offsetWidth;
-
-        // Restore transitions
-        leftNext.style.transition = "";
-        rightNext.style.transition = "";
-
-        // Animate current out
-        if (direction === "down") {
-            leftCurrent.style.transform = "translateY(-100%)";
-            rightCurrent.style.transform = "translateY(100%)";
-        } else {
-            leftCurrent.style.transform = "translateY(100%)";
-            rightCurrent.style.transform = "translateY(-100%)";
+    document.getElementById('our-works-swiper').addEventListener('mouseleave', () => {
+        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
+        if (activeSlide) {
+            resetCardTilt(activeSlide);
         }
+    });
 
-        // Animate next in
-        leftNext.style.transform = "translateY(0)";
-        rightNext.style.transform = "translateY(0)";
-
-        currentIndex = newIndex;
-
-        // Reset the auto-play timer exactly when a card changes (if not hovering)
-        if (!worksSlider.matches(':hover')) {
-            startAutoPlay();
-        }
-
-        setTimeout(() => {
-            leftCurrent.style.opacity = "0";
-            rightCurrent.style.opacity = "0";
-
-            leftNext.classList.add("active");
-            rightNext.classList.add("active");
-
-            isAnimating = false;
-        }, 800);
+    function resetCardTilt(card) {
+        cancelAnimationFrame(animationFrameId);
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
     }
 });
+
+// Modal Interaction Logic for Our Works Section
+function openProjectModal(cardElement) {
+    if (!cardElement) return;
+
+    const modal = document.getElementById('project-modal');
+    if (!modal) return;
+
+    // Extract data from clicked card
+    const title = cardElement.getAttribute('data-title');
+    const desc = cardElement.getAttribute('data-desc');
+    const client = cardElement.getAttribute('data-client');
+    const year = cardElement.getAttribute('data-year');
+    const link = cardElement.getAttribute('data-link');
+    const iconClass = cardElement.getAttribute('data-icon');
+    let tech = [];
+    try { tech = JSON.parse(cardElement.getAttribute('data-tech')); } catch (e) { }
+
+    // Populate modal
+    document.getElementById('modal-title').textContent = title || '';
+    document.getElementById('modal-desc').textContent = desc || '';
+    document.getElementById('modal-client').textContent = client || '';
+    document.getElementById('modal-year').textContent = year || '';
+    document.getElementById('modal-icon').innerHTML = '<i class="fas ' + (iconClass || 'fa-laptop-code') + '"></i>';
+
+    const linkEl = document.getElementById('modal-link');
+    if (link && link !== "#" && linkEl) {
+        linkEl.href = link;
+        linkEl.style.display = 'block';
+    } else if (linkEl) {
+        linkEl.style.display = 'none';
+    }
+
+    // Populate tech badges
+    const badgesContainer = document.getElementById('modal-badges');
+    if (badgesContainer) {
+        badgesContainer.innerHTML = '';
+        tech.forEach(t => {
+            const badge = document.createElement('span');
+            badge.className = 'glass-badge';
+            badge.textContent = t;
+            badgesContainer.appendChild(badge);
+        });
+    }
+
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    // =========================================
-    // STICKY SCROLL NAVBAR LOGO ANIMATION & SCROLL SPY
-    // =========================================
-    const nav = document.querySelector('.premium-nav');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section');
+    const modal = document.getElementById('project-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
 
-    if (nav) {
-        window.addEventListener('scroll', () => {
-            // Navbar Background toggle
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-
-            // Scroll Spy Logic
-            let currentSectionId = '';
-
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-
-                // Adjusting the offset so the active state triggers a bit before the section reaches the top
-                if (window.scrollY >= (sectionTop - 200)) {
-                    currentSectionId = section.getAttribute('id');
-                }
-            });
-
-            // Update Active Link
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active');
-                }
-            });
+    if (modal && closeBtn) {
+        // Close on button click
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
         });
 
-        // Trigger once on load in case user refreshed while down the page
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        }
+        // Close on click outside modal content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
 });
+
+// =========================================
+// OUR WORKS SECTION - PARALLAX SCROLL EFFECT
+// =========================================
+(function () {
+    const ourWorks = document.getElementById('our-works');
+    const whatWeDo = document.getElementById('what-we-do');
+    if (!ourWorks || !whatWeDo) return;
+
+    // Apply initial CSS to create clip-path / translateY reveal
+    Object.assign(ourWorks.style, {
+        position: 'relative',
+        willChange: 'transform',
+        transition: 'none'
+    });
+
+    function onParallaxScroll() {
+        const wwdRect = whatWeDo.getBoundingClientRect();
+        const owRect = ourWorks.getBoundingClientRect();
+
+        // How far the previous section has scrolled past the viewport top
+        const scrolled = -wwdRect.top;
+        const sectionHeight = whatWeDo.offsetHeight;
+
+        // Clamp progress 0 → 1 while user scrolls through `what-we-do`
+        const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
+
+        // Parallax: section starts 80px below its natural position and rises to 0
+        const translateY = (1 - progress) * 80;
+
+        // Opacity: fade in from 0.4 → 1
+        const opacity = 0.4 + progress * 0.6;
+
+        // Scale: subtle zoom from 0.97 → 1
+        const scale = 0.97 + progress * 0.03;
+
+        ourWorks.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        ourWorks.style.opacity = opacity;
+    }
+
+    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+    onParallaxScroll(); // Run once on load
+})();
+// =========================================
+// OUR WORKS - HEADING SCROLL PARALLAX (kept)
+// =========================================
+(function () {
+    function initHeadingParallax() {
+        const heading = document.querySelector('#our-works .section-header');
+        if (!heading) return;
+
+        let ticking = false;
+
+        function applyHeadingParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = heading.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.08;
+                    heading.style.transform = `translateY(${translateY}px)`;
+                    heading.style.willChange = 'transform';
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', applyHeadingParallax, { passive: true });
+        applyHeadingParallax();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHeadingParallax);
+    } else {
+        initHeadingParallax();
+    }
+})();
+
+// =========================================
+// OUR WORKS - CARDS INTRO ANIMATION (on scroll into view)
+// =========================================
+(function () {
+    function initCardsIntro() {
+        const swiperEl = document.getElementById('our-works-swiper');
+        if (!swiperEl) return;
+
+        // Start very hidden: shifted down, faded, blurred and scaled down
+        swiperEl.style.opacity = '0';
+        swiperEl.style.transform = 'translateY(120px) scale(0.88)';
+        swiperEl.style.filter = 'blur(8px)';
+        swiperEl.style.transition = [
+            'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+            'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+            'filter 1.0s ease'
+        ].join(', ');
+        swiperEl.style.willChange = 'opacity, transform, filter';
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 80ms delay — makes it feel intentional
+                    setTimeout(() => {
+                        swiperEl.style.opacity = '1';
+                        swiperEl.style.transform = 'translateY(0px) scale(1)';
+                        swiperEl.style.filter = 'blur(0px)';
+                    }, 80);
+                    observer.unobserve(swiperEl);
+                }
+            });
+        }, { threshold: 0.05 }); // Fire when just 5% visible = earlier trigger
+
+        observer.observe(swiperEl);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCardsIntro);
+    } else {
+        initCardsIntro();
+    }
+})();
+
+
+// =========================================
+// OUR WORKS - CARDS SCROLL PARALLAX (slower than heading)
+// =========================================
+(function () {
+    function initCardsParallax() {
+        const swiperEl = document.getElementById('our-works-swiper');
+        if (!swiperEl) return;
+
+        let ticking = false;
+
+        function applyCardsParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = swiperEl.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    // 0.04 = slower than heading (0.08)
+                    const translateY = fromCenter * 0.04;
+                    // Preserve the existing intro transform by using a CSS variable
+                    swiperEl.style.setProperty('--cards-parallax-y', `${translateY}px`);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Merge parallax into the existing transform via a wrapper transform
+        // We apply separately on the inner container to avoid conflicting with intro animation
+        const inner = swiperEl.querySelector('.swiper-wrapper') || swiperEl;
+        if (!inner) return;
+        inner.style.willChange = 'transform';
+
+        function applyInnerParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = swiperEl.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.04;
+                    // Offset the inner wrapper — Swiper keeps its own transform on wrapper
+                    // so we target each visible slide instead to avoid breaking Swiper layout
+                    const activeSlides = swiperEl.querySelectorAll('.swiper-slide-active, .swiper-slide-next, .swiper-slide-prev');
+                    activeSlides.forEach(slide => {
+                        slide.style.marginTop = `${translateY * 0.5}px`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Better approach: use a wrapper div around the swiper for parallax movement
+        let parallaxWrapper = swiperEl.closest('.swiper-parallax-wrapper');
+        if (!parallaxWrapper) {
+            parallaxWrapper = document.createElement('div');
+            parallaxWrapper.className = 'swiper-parallax-wrapper';
+            parallaxWrapper.style.willChange = 'transform';
+            swiperEl.parentNode.insertBefore(parallaxWrapper, swiperEl);
+            parallaxWrapper.appendChild(swiperEl);
+        }
+
+        function applyWrapperParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = parallaxWrapper.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.04;
+                    parallaxWrapper.style.transform = `translateY(${translateY}px)`;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', applyWrapperParallax, { passive: true });
+        applyWrapperParallax();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCardsParallax);
+    } else {
+        initCardsParallax();
+    }
+})();
