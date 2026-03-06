@@ -1475,30 +1475,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Format Date to Year
         const year = p.date ? p.date.split(' ').pop() : 'N/A';
-        
+
         // Format Primary Tech/Category
         const primaryTech = p.tech && p.tech.length > 0 ? p.tech[0] : 'Project';
 
         // Check Highlight (Using ID for mock rating)
         const isHighlight = parseInt(id) <= 3;
-        const highlightBadge = isHighlight ? '<span class="glass-badge">⭐ Featured</span>' : '';
 
         // Generate Tech Stack Badges
         const techBadges = p.tech ? p.tech.map(t => `<span class="glass-badge">${t}</span>`).join('') : '';
 
+        // Temporary mapping of project IDs to FontAwesome icons (can be moved to data later)
+        const iconMap = {
+            1: "fa-heartbeat",     // Arkon Medical
+            2: "fa-music",         // Splendore
+            3: "fa-theater-masks", // Euphoria
+            4: "fa-calendar-alt",  // Fest Buddy
+            5: "fa-users",         // Campus Connect
+            6: "fa-mobile-alt",    // Cocobies
+            7: "fa-globe",         // ReX
+            8: "fa-chalkboard-teacher", // CTRM
+            9: "fa-hands-helping", // OutREACH
+            10: "fa-glass-cheers"  // The Luke
+        };
+        const iconClass = iconMap[id] || "fa-laptop-code";
+
         // Slide wrapping card
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
-        
+
         // Card content
         slide.innerHTML = `
             <div class="card">
                 <div class="badge-container">
                     <span class="glass-badge">${primaryTech}</span>
-                    ${highlightBadge}
                 </div>
                 
                 <div class="works-card-content">
+                    <div style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+                        <i class="fas ${iconClass}"></i>
+                    </div>
                     <h3 class="works-card-title">${p.title}</h3>
                     <p class="works-card-desc">${p.desc}</p>
                 </div>
@@ -1520,7 +1536,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         slides.forEach((slide, index) => {
             const distance = Math.abs(index - activeIndex);
-            
+
             // Default reset
             slide.style.opacity = '1';
             slide.style.zIndex = '1';
@@ -1544,10 +1560,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize Swiper
     const worksSwiper = new Swiper('#our-works-swiper', {
         effect: 'coverflow',
+        speed: 800, // Smoother transition
         grabCursor: true,
         centeredSlides: true,
         slidesPerView: 'auto',
         loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
         keyboard: {
             enabled: true,
         },
@@ -1570,14 +1591,19 @@ document.addEventListener('DOMContentLoaded', () => {
             prevEl: '.swiper-button-prev',
         },
         on: {
-            init: function() {
+            init: function () {
                 updateSlideStyles(this);
             },
-            slideChange: function() {
+            slideChange: function () {
                 updateSlideStyles(this);
             },
-            progress: function() {
+            progress: function () {
                 updateSlideStyles(this);
+            },
+            setTransition: function (speed) {
+                this.slides.forEach(slide => {
+                    slide.style.transitionDuration = `${speed}ms`;
+                });
             }
         }
     });
@@ -1590,7 +1616,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!activeSlide) return;
 
         const rect = activeSlide.getBoundingClientRect();
-        
+
         // Check if mouse is within the active card bounds perfectly
         if (
             e.clientX >= rect.left && e.clientX <= rect.right &&
@@ -1598,10 +1624,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            
+
             const mouseX = e.clientX - centerX;
             const mouseY = e.clientY - centerY;
-            
+
             const rotateX = (mouseY / (rect.height / 2)) * -15; // Max 15deg
             const rotateY = (mouseX / (rect.width / 2)) * 15;
 
