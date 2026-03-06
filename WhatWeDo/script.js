@@ -1749,3 +1749,211 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// =========================================
+// OUR WORKS SECTION - PARALLAX SCROLL EFFECT
+// =========================================
+(function() {
+    const ourWorks = document.getElementById('our-works');
+    const whatWeDo = document.getElementById('what-we-do');
+    if (!ourWorks || !whatWeDo) return;
+
+    // Apply initial CSS to create clip-path / translateY reveal
+    Object.assign(ourWorks.style, {
+        position: 'relative',
+        willChange: 'transform',
+        transition: 'none'
+    });
+
+    function onParallaxScroll() {
+        const wwdRect = whatWeDo.getBoundingClientRect();
+        const owRect  = ourWorks.getBoundingClientRect();
+
+        // How far the previous section has scrolled past the viewport top
+        const scrolled = -wwdRect.top;
+        const sectionHeight = whatWeDo.offsetHeight;
+
+        // Clamp progress 0 → 1 while user scrolls through `what-we-do`
+        const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
+
+        // Parallax: section starts 80px below its natural position and rises to 0
+        const translateY = (1 - progress) * 80;
+
+        // Opacity: fade in from 0.4 → 1
+        const opacity = 0.4 + progress * 0.6;
+
+        // Scale: subtle zoom from 0.97 → 1
+        const scale = 0.97 + progress * 0.03;
+
+        ourWorks.style.transform = `translateY(${translateY}px) scale(${scale})`;
+        ourWorks.style.opacity   = opacity;
+    }
+
+    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+    onParallaxScroll(); // Run once on load
+})();
+// =========================================
+// OUR WORKS - HEADING SCROLL PARALLAX (kept)
+// =========================================
+(function () {
+    function initHeadingParallax() {
+        const heading = document.querySelector('#our-works .section-header');
+        if (!heading) return;
+
+        let ticking = false;
+
+        function applyHeadingParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = heading.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.08;
+                    heading.style.transform = `translateY(${translateY}px)`;
+                    heading.style.willChange = 'transform';
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', applyHeadingParallax, { passive: true });
+        applyHeadingParallax();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHeadingParallax);
+    } else {
+        initHeadingParallax();
+    }
+})();
+
+// =========================================
+// OUR WORKS - CARDS INTRO ANIMATION (on scroll into view)
+// =========================================
+(function () {
+    function initCardsIntro() {
+        const swiperEl = document.getElementById('our-works-swiper');
+        if (!swiperEl) return;
+
+        // Start very hidden: shifted down, faded, blurred and scaled down
+        swiperEl.style.opacity    = '0';
+        swiperEl.style.transform  = 'translateY(120px) scale(0.88)';
+        swiperEl.style.filter     = 'blur(8px)';
+        swiperEl.style.transition = [
+            'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+            'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+            'filter 1.0s ease'
+        ].join(', ');
+        swiperEl.style.willChange = 'opacity, transform, filter';
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 80ms delay — makes it feel intentional
+                    setTimeout(() => {
+                        swiperEl.style.opacity   = '1';
+                        swiperEl.style.transform = 'translateY(0px) scale(1)';
+                        swiperEl.style.filter    = 'blur(0px)';
+                    }, 80);
+                    observer.unobserve(swiperEl);
+                }
+            });
+        }, { threshold: 0.05 }); // Fire when just 5% visible = earlier trigger
+
+        observer.observe(swiperEl);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCardsIntro);
+    } else {
+        initCardsIntro();
+    }
+})();
+
+
+// =========================================
+// OUR WORKS - CARDS SCROLL PARALLAX (slower than heading)
+// =========================================
+(function () {
+    function initCardsParallax() {
+        const swiperEl = document.getElementById('our-works-swiper');
+        if (!swiperEl) return;
+
+        let ticking = false;
+
+        function applyCardsParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = swiperEl.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    // 0.04 = slower than heading (0.08)
+                    const translateY = fromCenter * 0.04;
+                    // Preserve the existing intro transform by using a CSS variable
+                    swiperEl.style.setProperty('--cards-parallax-y', `${translateY}px`);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Merge parallax into the existing transform via a wrapper transform
+        // We apply separately on the inner container to avoid conflicting with intro animation
+        const inner = swiperEl.querySelector('.swiper-wrapper') || swiperEl;
+        if (!inner) return;
+        inner.style.willChange = 'transform';
+
+        function applyInnerParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = swiperEl.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.04;
+                    // Offset the inner wrapper — Swiper keeps its own transform on wrapper
+                    // so we target each visible slide instead to avoid breaking Swiper layout
+                    const activeSlides = swiperEl.querySelectorAll('.swiper-slide-active, .swiper-slide-next, .swiper-slide-prev');
+                    activeSlides.forEach(slide => {
+                        slide.style.marginTop = `${translateY * 0.5}px`;
+                    });
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        // Better approach: use a wrapper div around the swiper for parallax movement
+        let parallaxWrapper = swiperEl.closest('.swiper-parallax-wrapper');
+        if (!parallaxWrapper) {
+            parallaxWrapper = document.createElement('div');
+            parallaxWrapper.className = 'swiper-parallax-wrapper';
+            parallaxWrapper.style.willChange = 'transform';
+            swiperEl.parentNode.insertBefore(parallaxWrapper, swiperEl);
+            parallaxWrapper.appendChild(swiperEl);
+        }
+
+        function applyWrapperParallax() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const rect = parallaxWrapper.getBoundingClientRect();
+                    const viewportMid = window.innerHeight / 2;
+                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
+                    const translateY = fromCenter * 0.04;
+                    parallaxWrapper.style.transform = `translateY(${translateY}px)`;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', applyWrapperParallax, { passive: true });
+        applyWrapperParallax();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCardsParallax);
+    } else {
+        initCardsParallax();
+    }
+})();

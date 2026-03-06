@@ -4124,7 +4124,7 @@ h2 {
 }
 
 #our-works .section-header {
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
 }
 
 #our-works .section-title,
@@ -6620,10 +6620,8 @@ html.lenis body {
 }
 
 #our-works-swiper .swiper-slide {
-    width: 380px;
-    /* Increased from 280px */
-    height: 480px;
-    /* Increased from 420px */
+    width: 310px;
+    height: 390px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -6750,40 +6748,39 @@ html.lenis body {
 
 /* Navigation Arrows */
 .glass-nav {
-    background: rgba(0, 0, 0, 0.05) !important;
-    backdrop-filter: blur(5px);
-    width: 40px !important;
-    height: 40px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    width: 44px !important;
+    height: 44px !important;
     border-radius: 50% !important;
-    color: #333 !important;
-    /* Dark text for white bg */
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .glass-nav::after {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
+    color: #ffffff !important;
 }
 
 .glass-nav:hover {
-    background: rgba(0, 0, 0, 0.1) !important;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1) !important;
+    background: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2) !important;
 }
 
 @media (max-width: 768px) {
     #our-works-swiper .swiper-slide {
-        width: 300px;
-        /* Increased from 240px */
-        height: 420px;
-        /* Increased from 360px */
+        width: 250px;
+        height: 340px;
     }
 }
 
 @media (max-width: 480px) {
     #our-works-swiper .swiper-slide {
-        width: 260px;
-        /* Increased from 200px */
-        height: 360px;
-        /* Increased from 320px */
+        width: 220px;
+        height: 300px;
     }
 }
 
@@ -7090,4 +7087,14 @@ html.lenis body {
 .modal-btn:hover {
     background: #0b5394;
     transform: translateY(-2px);
+}
+/* Hide scrollbar inside the project modal */
+.project-modal-content {
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+}
+
+.project-modal-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
 }
