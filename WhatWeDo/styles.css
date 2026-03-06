@@ -1453,6 +1453,7 @@ h2 {
     background: transparent;
     min-height: 100vh;
     z-index: 1;
+    border-radius: 3;
 }
 
 
@@ -4118,11 +4119,21 @@ h2 {
 #our-works {
     margin-top: 0;
     padding-top: 4rem;
+    border-radius: 48px;
     /* Adjust padding if needed */
 }
 
 #our-works .section-header {
     margin-bottom: 2rem;
+}
+
+#our-works .section-title,
+#our-works .highlight-text {
+    background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    color: transparent !important;
 }
 
 #our-works .subtitle {
@@ -6781,7 +6792,7 @@ html.lenis body {
 #our-works {
     margin: 0 !important;
     max-width: 100% !important;
-    border-radius: 0 !important;
+    border-radius: 20 !important;
 }
 
 /* Adjust Glow effect back away from Red to subtle blue for light theme */
@@ -6797,8 +6808,9 @@ html.lenis body {
 .swiper-pagination-bullet-active {
     background: var(--primary-blue) !important;
 }
+
 /* Adjust icon layout inside card */
-#our-works-swiper .card .works-card-content > div:first-child {
+#our-works-swiper .card .works-card-content>div:first-child {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -6936,4 +6948,146 @@ html.lenis body {
 /* Ensure Swiper slide transitions apply to opacity, visibility and z-index smoothly */
 #our-works-swiper .swiper-slide {
     transition-property: opacity, visibility, z-index, transform !important;
+}
+
+/* Ensure Swiper slide transitions apply to opacity, visibility and z-index smoothly */
+#our-works-swiper .swiper-slide {
+    transition-property: opacity, visibility, z-index, transform !important;
+}
+
+/* Override Grab Cursor to Default */
+#our-works-swiper .swiper-slide .card {
+    cursor: default !important;
+}
+
+#our-works-swiper .swiper-slide .card:active {
+    cursor: default !important;
+}
+
+/* =========================================
+   PROJECT DETAILS MODAL STYLES
+   ========================================= */
+.project-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.project-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.project-modal-content {
+    background: linear-gradient(145deg, #f5f5f5, #ebebeb);
+    border: 3px solid #000080;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 128, 0.3);
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2.5rem;
+    position: relative;
+    transform: scale(0.8) translateY(50px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: #1e293b;
+}
+
+.project-modal-overlay.active .project-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #000080;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.close-modal-btn:hover {
+    transform: rotate(90deg) scale(1.1);
+    color: #0b5394;
+}
+
+.modal-icon {
+    font-size: 3rem;
+    color: #000080;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.modal-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-desc {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #475569;
+    margin-bottom: 2rem;
+    text-align: justify;
+}
+
+.modal-meta {
+    background: rgba(11, 83, 148, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(11, 83, 148, 0.1);
+    margin-bottom: 2rem;
+}
+
+.modal-meta p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.modal-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #000080;
+    color: #fff !important;
+    padding: 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.modal-btn:hover {
+    background: #0b5394;
+    transform: translateY(-2px);
 }

@@ -1504,9 +1504,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const slide = document.createElement('div');
         slide.className = 'swiper-slide';
 
-        // Card content
         slide.innerHTML = `
-            <div class="card">
+            <div class="card"
+                 data-id="${id}"
+                 data-title="${p.title}"
+                 data-desc="${p.desc}"
+                 data-client="${p.client}"
+                 data-year="${year}"
+                 data-tech='${JSON.stringify(p.tech || [])}'
+                 data-link="${p.link}"
+                 data-icon="${iconClass}">
                 <div class="badge-container">
                     <span class="glass-badge">${primaryTech}</span>
                 </div>
@@ -1561,13 +1568,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const worksSwiper = new Swiper('#our-works-swiper', {
         effect: 'coverflow',
         speed: 800, // Smoother transition
-        grabCursor: true,
+        grabCursor: false,
         centeredSlides: true,
         slidesPerView: 'auto',
         loop: true,
         autoplay: {
             delay: 3000,
             disableOnInteraction: false,
+            pauseOnMouseEnter: true,
         },
         keyboard: {
             enabled: true,
@@ -1604,6 +1612,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 this.slides.forEach(slide => {
                     slide.style.transitionDuration = `${speed}ms`;
                 });
+            },
+            click: function(swiper, event) {
+                const clickedSlide = swiper.clickedSlide;
+                if (!clickedSlide) return;
+                
+                if (clickedSlide.classList.contains('swiper-slide-active')) {
+                    const card = clickedSlide.querySelector('.card');
+                    if (card && typeof openProjectModal === 'function') {
+                        openProjectModal(card);
+                    }
+                }
             }
         }
     });
@@ -1650,5 +1669,83 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetCardTilt(card) {
         cancelAnimationFrame(animationFrameId);
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    }
+});
+
+// Modal Interaction Logic for Our Works Section
+function openProjectModal(cardElement) {
+    if (!cardElement) return;
+
+    const modal = document.getElementById('project-modal');
+    if (!modal) return;
+
+    // Extract data from clicked card
+    const title = cardElement.getAttribute('data-title');
+    const desc = cardElement.getAttribute('data-desc');
+    const client = cardElement.getAttribute('data-client');
+    const year = cardElement.getAttribute('data-year');
+    const link = cardElement.getAttribute('data-link');
+    const iconClass = cardElement.getAttribute('data-icon');
+    let tech = [];
+    try { tech = JSON.parse(cardElement.getAttribute('data-tech')); } catch (e) {}
+
+    // Populate modal
+    document.getElementById('modal-title').textContent = title || '';
+    document.getElementById('modal-desc').textContent = desc || '';
+    document.getElementById('modal-client').textContent = client || '';
+    document.getElementById('modal-year').textContent = year || '';
+    document.getElementById('modal-icon').innerHTML = '<i class="fas ' + (iconClass || 'fa-laptop-code') + '"></i>';
+
+    const linkEl = document.getElementById('modal-link');
+    if (link && link !== "#" && linkEl) {
+        linkEl.href = link;
+        linkEl.style.display = 'block';
+    } else if (linkEl) {
+        linkEl.style.display = 'none';
+    }
+
+    // Populate tech badges
+    const badgesContainer = document.getElementById('modal-badges');
+    if (badgesContainer) {
+        badgesContainer.innerHTML = '';
+        tech.forEach(t => {
+            const badge = document.createElement('span');
+            badge.className = 'glass-badge';
+            badge.textContent = t;
+            badgesContainer.appendChild(badge);
+        });
+    }
+
+    // Show modal
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('project-modal');
+    const closeBtn = document.getElementById('close-modal-btn');
+
+    if (modal && closeBtn) {
+        // Close on button click
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        });
+
+        // Close on click outside modal content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
     }
 });

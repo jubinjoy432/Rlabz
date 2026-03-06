@@ -169,7 +169,8 @@
     </section>
 
     <!-- Have You Seen Our Works Section -->
-    <section id="our-works" class="rounded-section" style="background: var(--bg-color) !important;">
+    <section id="our-works" class="rounded-section"
+        style="background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%) !important;">
         <!-- New Canvas for Background Animation -->
         <canvas id="works-canvas"></canvas>
         <div class="container relative-z">
@@ -190,7 +191,26 @@
                 <div class="swiper-button-next glass-nav"></div>
             </div>
             <!-- Pagination outside of cards but inside container -->
+            <!-- Pagination outside of cards but inside container -->
             <div class="swiper-pagination custom-pagination"></div>
+        </div>
+
+        <!-- Project Details Modal -->
+        <div id="project-modal" class="project-modal-overlay">
+            <div class="project-modal-content">
+                <button id="close-modal-btn" class="close-modal-btn"><i class="fas fa-times"></i></button>
+                <div class="modal-body">
+                    <div id="modal-icon" class="modal-icon"></div>
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <div id="modal-badges" class="modal-badges"></div>
+                    <p id="modal-desc" class="modal-desc"></p>
+                    <div class="modal-meta">
+                        <p><strong>Year:</strong> <span id="modal-year"></span></p>
+                        <p><strong>Client:</strong> <span id="modal-client"></span></p>
+                    </div>
+                    <a id="modal-link" href="#" target="_blank" class="modal-btn">View Project</a>
+                </div>
+            </div>
         </div>
     </section>
 
