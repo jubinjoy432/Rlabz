@@ -74,7 +74,7 @@ body {
     max-width: none;
     border-radius: 0;
     /* Remove pill shape */
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem;
     /* Adjust padding */
     z-index: 9999;
     box-shadow: none;
@@ -113,17 +113,18 @@ body {
 
 .nav-logo {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: 2.6rem;
     font-weight: 800;
     text-decoration: none;
     letter-spacing: -0.5px;
     display: flex;
     align-items: center;
     transition: color 0.35s ease-in-out;
+    margin-top: -11px;
 }
 
 .logo-image {
-    height: 52px;
+    height: 65px;
     width: auto;
     /* Optional: allows the SVG to drop a slight shadow if needed */
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
