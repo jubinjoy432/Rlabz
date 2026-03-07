@@ -298,13 +298,45 @@ document.addEventListener('DOMContentLoaded', () => {
     chestScreen.position.y = 0.1;
     bodyGroup.add(chestScreen);
 
+    // RLabz Logo on Chest Screen (Cropped to just the icon)
+    // Bypass local file CORS strictly by using an embedded base64 string of the logo
+    const rlabzBase64 = "data:image/png;base64,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";
+    const logoTexture = new THREE.TextureLoader().load(rlabzBase64, function (texture) {
+        if (THREE.SRGBColorSpace) {
+            texture.colorSpace = THREE.SRGBColorSpace;
+        } else if (THREE.sRGBEncoding) {
+            texture.encoding = THREE.sRGBEncoding;
+        }
+        console.log("ROBOT INFO: Base64 logo loaded!");
+    });
+
+    const logoWidth = 0.72;  // Slightly larger on the chest screen
+    const logoHeight = logoWidth * (180 / 256); // Preserve aspect ratio 256x180
+    const logoGeo = new THREE.PlaneGeometry(logoWidth, logoHeight);
+
+    const logoMat = new THREE.MeshBasicMaterial({
+        map: logoTexture,
+        transparent: true,
+        alphaTest: 0.1, // Discard invisible pixels
+        depthWrite: false
+    });
+
+    const logoMesh = new THREE.Mesh(logoGeo, logoMat);
+
+    // Position right on the chest screen
+    logoMesh.position.set(0, 0.1, 0.61);
+    bodyGroup.add(logoMesh);
+
+    /* Default Heart removed for RLabz Logo
     // HEART (Glowing Pulse)
     const chestLight = new THREE.Mesh(
         new THREE.CircleGeometry(0.15, 32),
-        new THREE.MeshBasicMaterial({ color: 0x00ffcc })
+        new THREE.MeshBasicMaterial({ color: 0x0ea5e9 }) // Cyan glow
     );
-    chestLight.position.set(0, 0.1, 0.54);
+    chestLight.position.z = 0.51 + 0.05 / 2 + 0.01;
+    chestLight.position.y = 0.1;
     bodyGroup.add(chestLight);
+    */
 
     // Neck
     const neck = createRibbedTube(0.5, 0.3, 3, chrome);
@@ -796,286 +828,205 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1000); // Wait 1s for robot to appear deeply
 
     function animate() {
-        requestAnimationFrame(animate);
-        time += 0.02;
+        try {
+            requestAnimationFrame(animate);
+            time += 0.02;
 
-        // --- 1. Position & Scroll Logic (Run First) ---
-        let currentPos = new THREE.Vector3(0, 0, 0);
-        let currentScale = 1;
+            // --- 1. Position & Scroll Logic (Run First) ---
+            let currentPos = new THREE.Vector3(0, 0, 0);
+            let currentScale = 1;
 
-        if (heroVisual && targetHeading) {
-            const bentoSection = document.getElementById('what-we-do');
-            const targetAnchor = document.querySelector('#robot-target-anchor');
+            if (heroVisual && targetHeading) {
+                const bentoSection = document.getElementById('what-we-do');
+                const targetAnchor = document.querySelector('#robot-target-anchor');
 
-            const rHero = heroVisual.getBoundingClientRect();
-            const rBento = bentoSection.getBoundingClientRect();
-            const targetElement = targetAnchor ? targetAnchor : targetHeading;
-            const rAnchor = targetElement.getBoundingClientRect();
+                const rHero = heroVisual.getBoundingClientRect();
+                const rBento = bentoSection.getBoundingClientRect();
+                const targetElement = targetAnchor ? targetAnchor : targetHeading;
+                const rAnchor = targetElement.getBoundingClientRect();
 
-            const rCenter = {
-                left: window.innerWidth / 2,
-                top: window.innerHeight * 0.98, // Shifted slightly down to completely clear text
-                width: 0, height: 0,
-                right: window.innerWidth / 2,
-                bottom: window.innerHeight * 0.98
-            };
+                const rCenter = {
+                    left: window.innerWidth / 2,
+                    top: window.innerHeight * 0.98,
+                    width: 0, height: 0,
+                    right: window.innerWidth / 2,
+                    bottom: window.innerHeight * 0.98
+                };
 
-            // Phase 1 Progress: Scroll from Hero to Bento
-            let progress1 = 0;
-            if (rBento.top > 0) {
-                progress1 = 1 - Math.min(1, rBento.top / window.innerHeight);
+                // Phase 1 Progress: Scroll from Hero to Bento
+                let progress1 = 0;
+                if (rBento.top > 0) {
+                    progress1 = 1 - Math.min(1, rBento.top / window.innerHeight);
+                } else {
+                    progress1 = 1;
+                }
+                const ease1 = 1 - Math.pow(1 - progress1, 3);
+
+                // Phase 2 Progress: Driven by GSAP from script.js
+                const progress2 = window.bentoScrollProgress || 0;
+                const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
+
+                const depth0 = 0;
+                const posHero = mapDomToWorld(rHero, depth0, 'center');
+                const posCenter = mapDomToWorld(rCenter, depth0, 'center');
+                const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
+
+                const scaleHero = 0.82;
+                const scaleCenter = 0.85;
+                const scaleAnchor = targetAnchor ? 0.38 : 0.32;
+
+                // Compute Base Phase 1 Output
+                currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;
+                currentPos.y = posHero.y + (posCenter.y - posHero.y) * ease1;
+                currentScale = scaleHero + (scaleCenter - scaleHero) * ease1;
+
+                // Compute Overlay Phase 2 Output
+                if (progress2 > 0) {
+                    const centerAdjustedY = posCenter.y + 0.15;
+                    currentPos.x = posCenter.x + (posAnchor.x - posCenter.x) * ease2;
+                    currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
+                    currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
+                }
+
+                currentPos.z = depth0;
+                container.style.opacity = '1';
+
+                if (shadow) {
+                    shadow.material.opacity = 0.2 * (1 - ease2);
+                }
+            }
+
+            // --- 2. Apply Position + Bobbing ---
+            const bobOffset = Math.sin(time * 1.2) * 0.06;
+
+            if (isFinite(currentPos.x) && isFinite(currentPos.y) && isFinite(currentPos.z)) {
+                robot.position.set(currentPos.x, currentPos.y + bobOffset, currentPos.z);
+                robot.scale.set(currentScale, currentScale, currentScale);
             } else {
-                progress1 = 1;
-            }
-            const ease1 = 1 - Math.pow(1 - progress1, 3);
-
-            // Phase 2 Progress: Driven by GSAP from script.js
-            const progress2 = window.bentoScrollProgress || 0;
-            const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
-
-            const depth0 = 0;
-            // Map the virtual bounding rectangles to Three.js world coordinates
-            const posHero = mapDomToWorld(rHero, depth0, 'center');
-            const posCenter = mapDomToWorld(rCenter, depth0, 'center');
-            const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
-
-            const scaleHero = 0.82;
-            const scaleCenter = 0.85;
-            const scaleAnchor = targetAnchor ? 0.38 : 0.32; // Restored larger size for docked state
-
-            // Compute Base Phase 1 Output
-            currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;
-            currentPos.y = posHero.y + (posCenter.y - posHero.y) * ease1;
-            currentScale = scaleHero + (scaleCenter - scaleHero) * ease1;
-
-            // Compute Overlay Phase 2 Output
-            if (progress2 > 0) {
-                const centerAdjustedY = posCenter.y + 0.15; // Hover slightly above true center text
-                currentPos.x = posCenter.x + (posAnchor.x - posCenter.x) * ease2;
-                currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
-                currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
+                robot.position.set(0, -1 + bobOffset, 0);
+                robot.scale.set(1, 1, 1);
             }
 
-            currentPos.z = depth0;
-            container.style.opacity = '1';
+            // --- 3. Body Animations ---
+            bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
 
-            if (shadow) {
-                // Shadow fades out as it moves to Phase 2
-                shadow.material.opacity = 0.2 * (1 - ease2);
-            }
-        }
+            if (isWaving) {
+                bodyGroup.rotation.y += (0 - bodyGroup.rotation.y) * 0.1;
+                const targetArmRotX = -2.5;
+                const elapsed = (Date.now() - waveStartTime) / 1000;
+                const waveOscillation = Math.sin(elapsed * Math.PI * 2) * 0.3;
+                const targetArmRotZ = 0.4 + waveOscillation;
 
-        // --- 2. Apply Position + Bobbing ---
-        // Add bobbing to the calculated Y position
-        const bobOffset = Math.sin(time * 1.2) * 0.06;
+                armR.rotation.x += (targetArmRotX - armR.rotation.x) * 0.1;
+                armR.rotation.z += (targetArmRotZ - armR.rotation.z) * 0.1;
 
-        // Safety: If calculations fail, fallback to center
-        if (isFinite(currentPos.x) && isFinite(currentPos.y) && isFinite(currentPos.z)) {
-            robot.position.set(currentPos.x, currentPos.y + bobOffset, currentPos.z);
-            robot.scale.set(currentScale, currentScale, currentScale);
-        } else {
-            // FALLBACK TO DEFAULT CENTER if math fails
-            robot.position.set(0, -1 + bobOffset, 0);
-            robot.scale.set(1, 1, 1);
-        }
+                if (handR) {
+                    handR.rotation.x += (1.0 - handR.rotation.x) * 0.1;
+                    handR.rotation.z = Math.sin(time * 8) * 0.2;
+                }
+                armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+            } else if (isHoldingObject) {
+                if (handR) {
+                    handR.rotation.x *= 0.8;
+                    handR.rotation.z *= 0.8;
+                }
+                const raiseSpeed = 0.1;
+                let holdRotX = -1.8;
+                let holdRotZ = -0.5;
 
+                if (props['Web Solutions'] && props['Web Solutions'].visible) {
+                    holdRotX = -1.2;
+                    holdRotZ = -0.3;
+                }
 
-        // --- 3. Body Animations ---
-        bodyGroup.rotation.y = Math.sin(time * 0.5 - 0.5) * 0.02;
-
-        // Wave Animation
-        if (isWaving) {
-            // Body faces forward
-            bodyGroup.rotation.y += (0 - bodyGroup.rotation.y) * 0.1;
-
-            // Raise Right Arm High
-            const targetArmRotX = -2.5; // High up (approx 140 deg)
-
-            // Waving Motion
-            // Slower, cleaner wave: 2 full cycles in 2 seconds = 1 Hz
-            const elapsed = (Date.now() - waveStartTime) / 1000; // Seconds
-            const waveOscillation = Math.sin(elapsed * Math.PI * 2) * 0.3;
-
-            // Calculate target Z directly (Wave + Base Rotation 0.4 for clearance)
-            const targetArmRotZ = 0.4 + waveOscillation;
-
-            // Smoothly interpolate BOTH axes towards target (No snapping logic)
-            armR.rotation.x += (targetArmRotX - armR.rotation.x) * 0.1;
-            armR.rotation.z += (targetArmRotZ - armR.rotation.z) * 0.1;
-
-            // Hand Rotation (Wrist Action) - Fix "Weird" look by facing palm forward
-            if (handR) {
-                handR.rotation.x += (1.0 - handR.rotation.x) * 0.1; // Face palm forward
-                handR.rotation.z = Math.sin(time * 8) * 0.2; // Add independent wrist wave
-            }
-
-            // Left arm Idle
-            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
-
-            // IMPORTANT: Head Tracking Logic moved to priority block below
-            // to override mouse tracking.
-
-        } else if (isHoldingObject) {
-            // Reset Wrist if holding (Unless object needs specific grip, but for now reset)
-            if (handR) {
-                handR.rotation.x *= 0.8;
-                handR.rotation.z *= 0.8;
-            }
-
-            // Raised Arm State
-            const raiseSpeed = 0.1;
-
-            // Dynamic Pose based on active prop
-            // Default: High hold (Phone, Rocket, Cloud)
-            let holdRotX = -1.8;
-            let holdRotZ = -0.5;
-
-            // Laptop: Low hold (Presenting at chest level)
-            if (props['Web Solutions'] && props['Web Solutions'].visible) {
-                holdRotX = -1.2;
-                holdRotZ = -0.3;
-            }
-
-            armR.rotation.x += (holdRotX - armR.rotation.x) * raiseSpeed;
-            armR.rotation.z += (holdRotZ - armR.rotation.z) * raiseSpeed;
-
-            // Left arm still sways
-            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
-        } else {
-            // Reset Wrist to neutral
-            if (handR) {
-                handR.rotation.x *= 0.8;
-                handR.rotation.z *= 0.8;
-            }
-
-            // Normal Idle Sway
-            armL.rotation.x = Math.sin(time * 1.5) * 0.1;
-            // Smooth return to idle for Right Arm
-            // We blend the sine wave with the current transition
-            const idleRotX = Math.sin(time * 1.5 + 1) * 0.1;
-            const idleRotZ = -0.1;
-
-            armR.rotation.x += (idleRotX - armR.rotation.x) * 0.1;
-            armR.rotation.z += (idleRotZ - armR.rotation.z) * 0.1;
-        }
-
-
-        // Match indentation of surrounding code
-        // --- 4. Head Logic (Idle vs Looking) ---
-        // Robust NaN recovery
-        if (isNaN(headGroup.rotation.y)) headGroup.rotation.y = 0;
-        if (isNaN(headGroup.rotation.x)) headGroup.rotation.x = 0;
-
-        // Check Idle
-        if (Date.now() - lastMouseMoveTime > 500) {
-            isIdle = true;
-        }
-
-        // PRIORITY 1: WAVING (Overrides everything)
-        if (isWaving) {
-            // Force look at user (Camera at 0,0,9)
-            // Calculate angle to look at camera based on current position
-            const lookAtX = -currentPos.x;
-            const lookAtZ = 9 - currentPos.z;
-            const targetHeadRotY = Math.atan2(lookAtX, lookAtZ);
-
-            // Look slightly up/down towards camera Y=0 relative to head Y
-            // Head is at ~1.6 height relative to robot base
-            const lookAtY = -(currentPos.y + 1.6);
-            let targetHeadRotX = Math.atan2(-lookAtY, lookAtZ); // Positive = Look down
-
-            // Limit looking down (Prevent chin clipping)
-            if (targetHeadRotX > 0.15) targetHeadRotX = 0.15;
-
-            headGroup.rotation.y += (targetHeadRotY - headGroup.rotation.y) * 0.1;
-            headGroup.rotation.x += (targetHeadRotX - headGroup.rotation.x) * 0.1;
-
-            // Reset antenna & chest
-            antennaGroup.rotation.z *= 0.8;
-            chestLight.scale.set(1.2, 1.2, 1); // Pulse heart while waving
-        }
-        // PRIORITY 2: IDLE (Look around randomly)
-        else if (isIdle) {
-            // Look around using layered sine waves
-            const idleTX = Math.sin(time * 0.4) * 0.3 + Math.sin(time * 1.1) * 0.1;
-            const idleTY = Math.sin(time * 0.3) * 0.15;
-            headGroup.rotation.y += (idleTX - headGroup.rotation.y) * 0.05;
-            headGroup.rotation.x += (idleTY - headGroup.rotation.x) * 0.05;
-
-            // Antenna Twitch
-            if (Math.random() > 0.985) {
-                antennaGroup.rotation.z = (Math.random() - 0.5) * 0.6;
+                armR.rotation.x += (holdRotX - armR.rotation.x) * raiseSpeed;
+                armR.rotation.z += (holdRotZ - armR.rotation.z) * raiseSpeed;
+                armL.rotation.x = Math.sin(time * 1.5) * 0.1;
             } else {
-                antennaGroup.rotation.z *= 0.9;
+                if (handR) {
+                    handR.rotation.x *= 0.8;
+                    handR.rotation.z *= 0.8;
+                }
+                armL.rotation.x = Math.sin(time * 1.5) * 0.1;
+                const idleRotX = Math.sin(time * 1.5 + 1) * 0.1;
+                const idleRotZ = -0.1;
+
+                armR.rotation.x += (idleRotX - armR.rotation.x) * 0.1;
+                armR.rotation.z += (idleRotZ - armR.rotation.z) * 0.1;
             }
 
-            // Chest Light Pulse
-            const pulse = 1 + Math.sin(time * 3) * 0.15;
-            chestLight.scale.set(pulse, pulse, 1);
+            // --- 4. Head Logic (Idle vs Looking) ---
+            if (isNaN(headGroup.rotation.y)) headGroup.rotation.y = 0;
+            if (isNaN(headGroup.rotation.x)) headGroup.rotation.x = 0;
+
+            if (Date.now() - lastMouseMoveTime > 500) {
+                isIdle = true;
+            }
+
+            if (isWaving) {
+                const lookAtX = -currentPos.x;
+                const lookAtZ = 9 - currentPos.z;
+                const targetHeadRotY = Math.atan2(lookAtX, lookAtZ);
+                const lookAtY = -(currentPos.y + 1.6);
+                let targetHeadRotX = Math.atan2(-lookAtY, lookAtZ);
+                if (targetHeadRotX > 0.15) targetHeadRotX = 0.15;
+
+                headGroup.rotation.y += (targetHeadRotY - headGroup.rotation.y) * 0.1;
+                headGroup.rotation.x += (targetHeadRotX - headGroup.rotation.x) * 0.1;
+
+                antennaGroup.rotation.z *= 0.8;
+            } else if (isIdle) {
+                const idleTX = Math.sin(time * 0.4) * 0.3 + Math.sin(time * 1.1) * 0.1;
+                const idleTY = Math.sin(time * 0.3) * 0.15;
+                headGroup.rotation.y += (idleTX - headGroup.rotation.y) * 0.05;
+                headGroup.rotation.x += (idleTY - headGroup.rotation.x) * 0.05;
+
+                if (Math.random() > 0.985) {
+                    antennaGroup.rotation.z = (Math.random() - 0.5) * 0.6;
+                } else {
+                    antennaGroup.rotation.z *= 0.9;
+                }
+            } else {
+                const robotScreen = robot.position.clone().project(camera);
+                const triggerStart = 0;
+                const triggerEnd = window.innerHeight * 0.8;
+                const range = triggerEnd - triggerStart;
+                let currentScrollT = (Math.abs(range) > 1) ? (scrollY - triggerStart) / range : 0;
+                currentScrollT = Math.max(0, Math.min(1, isFinite(currentScrollT) ? currentScrollT : 0));
+                const ease = currentScrollT * currentScrollT * (3 - 2 * currentScrollT);
+
+                const refX = robotScreen.x * ease;
+                const refY = robotScreen.y * ease;
+                const dx = mouse.x - refX;
+                const dy = mouse.y - refY;
+
+                const targetX = dx * 0.6;
+                let targetY = -dy * 0.4;
+                if (targetY > 0.15) targetY = 0.15;
+
+                if (!isNaN(targetX)) {
+                    headGroup.rotation.y += (targetX - headGroup.rotation.y) * 0.1;
+                }
+                if (!isNaN(targetY)) {
+                    headGroup.rotation.x += (targetY - headGroup.rotation.x) * 0.1;
+                }
+
+                antennaGroup.rotation.z *= 0.8;
+            }
+
+            renderer.render(scene, camera);
+        } catch (err) {
+            console.error("CRASH IN ANIMATE LOOP:", err);
+            // Render it to screen so the user can see exactly what broke
+            let debugBlock = document.getElementById('robot-debug-error');
+            if (!debugBlock) {
+                debugBlock = document.createElement('div');
+                debugBlock.id = 'robot-debug-error';
+                debugBlock.style.cssText = "position:fixed; top:10%; left:10%; right:10%; background:red; color:white; p-4; z-index:99999; font-size:16px; font-family:monospace; padding: 20px;";
+                document.body.appendChild(debugBlock);
+            }
+            debugBlock.innerHTML = "Robot crashed!<br>" + err.stack.replace(/\n/g, '<br>');
         }
-        // PRIORITY 3: MOUSE TRACKING
-        else {
-            // Track Mouse Logic (IDLE)
-            // Now safe to use robot.position because it was updated above!
-
-            const robotScreen = robot.position.clone().project(camera);
-
-            // Interpolate Reference Point (Center -> Robot) based on scroll ease
-            // Re-calculate ease here or reuse it? Re-calculating correctly for safety
-            const triggerStart = 0;
-            const triggerEnd = window.innerHeight * 0.8;
-            const range = triggerEnd - triggerStart;
-            let currentScrollT = (Math.abs(range) > 1) ? (scrollY - triggerStart) / range : 0;
-            currentScrollT = Math.max(0, Math.min(1, isFinite(currentScrollT) ? currentScrollT : 0));
-            const ease = currentScrollT * currentScrollT * (3 - 2 * currentScrollT);
-
-            // If ease=0 (Page1), ref is (0,0) -> look at mouse relative to center
-            // If ease=1 (Page2), ref is robotScreen -> look at mouse relative to robot
-            const refX = robotScreen.x * ease;
-            const refY = robotScreen.y * ease;
-
-            const dx = mouse.x - refX;
-            const dy = mouse.y - refY;
-
-            const targetX = dx * 0.6;
-            let targetY = -dy * 0.4;
-
-            // Limit looking down
-            if (targetY > 0.15) targetY = 0.15;
-
-            // Apply rotation with NaN safety
-            if (!isNaN(targetX)) {
-                headGroup.rotation.y += (targetX - headGroup.rotation.y) * 0.1;
-            }
-            if (!isNaN(targetY)) {
-                headGroup.rotation.x += (targetY - headGroup.rotation.x) * 0.1;
-            }
-
-            // Reset antenna & chest
-            antennaGroup.rotation.z *= 0.8;
-            chestLight.scale.set(1, 1, 1);
-        }
-
-
-        // --- 5. Blinking Logic ---
-        // (SIMPLIFIED: Removed eyelid update to prevent crash because eyelids are missing)
-        /*
-        if (Math.random() > 0.995) isBlinking = true;
-     
-        if (isBlinking) {
-            blinkProgress += blinkSpeed;
-            if (blinkProgress >= 1) {
-                blinkProgress = 1;
-                blinkSpeed = -0.15;
-            } else if (blinkProgress <= 0) {
-                blinkProgress = 0;
-                blinkSpeed = 0.15;
-                isBlinking = false;
-            }
-        }
-        */
-
-        renderer.render(scene, camera);
     }
 
     // Start Animation with Try-Catch for safety
