@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Scroll Animation Setup ---
     // 1. Get Anchors
     const heroVisual = document.querySelector('.hero-blue-visual');
-    const targetHeading = document.querySelector('#what-we-do .section-title'); // "Comprehensive Solutions..."
+    const targetHeading = document.querySelector('.center-bento-title'); // "Comprehensive Solutions..."
 
     // 2. Detach and Fix Container
     // We need to set explicit size because 'fixed' removes it from flow
@@ -794,35 +794,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (heroVisual && targetHeading) {
             const r1 = heroVisual.getBoundingClientRect();
-            // ... (rest of scroll logic remains same as user edited it)
-            const r2 = targetHeading.getBoundingClientRect();
+
+            const targetAnchor = document.querySelector('#robot-target-anchor');
+            const targetElement = targetAnchor ? targetAnchor : targetHeading;
+            const r2 = targetElement.getBoundingClientRect();
 
             // Scroll Progress (Robust)
             const triggerStart = 0;
-            const triggerEnd = window.innerHeight * 0.8;
-            const range = triggerEnd - triggerStart;
-            let t = (Math.abs(range) > 1) ? (scrollY - triggerStart) / range : 0;
-            t = Math.max(0, Math.min(1, isFinite(t) ? t : 0)); // Clamp [0, 1]
-            const ease = t * t * (3 - 2 * t);
+            const scrollDistance = window.innerHeight * 1.5;
+            const absoluteScroll = Math.max(0, window.scrollY);
+            let progress = Math.min(1, Math.max(0, absoluteScroll / scrollDistance));
+
+            // Easing
+            const ease = 1 - Math.pow(1 - progress, 3);
 
             // Initial State (Hero)
             const depth0 = 0;
             const pos1 = mapDomToWorld(r1, depth0, 'center');
 
-            // Target State (Heading)
-            const pos2 = mapDomToWorld(r2, depth0, 'right-center');
+            // Target State (Anchor or Heading)
+            const pos2 = mapDomToWorld(r2, depth0, targetAnchor ? 'center' : 'right-center');
 
             // Target Scale
             const startScale = 0.82;
-            const targetScale = 0.32;
+            const targetScale = targetAnchor ? 0.38 : 0.32;
 
             // Offset
             const { width: viewW } = getZPosition(depth0);
             const pixelsPerUnit = window.innerWidth / viewW;
             const offsetWorld = (60 + (100 * targetScale)) / pixelsPerUnit;
 
-            const targetX = pos2.x + offsetWorld;
-            const targetY = pos2.y - 0.15;
+            const targetX = targetAnchor ? pos2.x : pos2.x + offsetWorld;
+            const targetY = targetAnchor ? pos2.y + 0.05 : pos2.y - 0.15;
 
             // Interpolate Base Position
             currentPos.x = pos1.x + (targetX - pos1.x) * ease;
