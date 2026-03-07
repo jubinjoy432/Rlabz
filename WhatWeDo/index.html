@@ -448,34 +448,293 @@
         </div>
     </section>
 
-    <!-- Clients Section -->
-    <!-- New Clients Feedback Section with Sticky Scroll Stacking -->
-    <section id="clientsSection" class="testimonials-section">
-        <!-- Sticky Viewport Wrapper -->
-        <div class="testimonials-sticky-wrapper">
-            <!-- Animated Background Particles -->
-            <div class="client_form_bg_particles" id="client_form_bg_particles"></div>
+    <!-- Clients Section Start -->
+    <style>
+        /* Scoped to .client-scoped-section to avoid conflicts */
+        .client-scoped-section {
+            background-color: transparent;
+            /* Inherits dark background from parent */
+            color: #ffffff;
+            padding: 80px 20px;
+            font-family: inherit;
+        }
 
-            <!-- Client Feedback Section -->
-            <div class="client_form_section">
-                <div class="client_form_container">
-                    <!-- Left Side -->
-                    <div class="client_form_left">
-                        <h1 class="client_form_heading"
-                            style="color: #0b5394 !important; -webkit-text-fill-color: #0b5394 !important; background: none !important;">
-                            What Our Clients Say</h1>
-                        <p class="client_form_description">
-                            Don't just take our word for it. Hear directly from our valued clients about their
-                            experiences
-                            working with us. Their success stories drive our passion for excellence.
-                        </p>
-                    </div>
+        .client-scoped-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+            align-items: center;
+            gap: 60px;
+        }
 
-                    <!-- Right Side - Cards -->
-                    <div class="client_form_right">
-                        <div class="client_form_cards_wrapper">
-                            <div class="client_form_cards_container" id="client_form_cards_container">
-                                <!-- Cards will be populated by JavaScript -->
+        .client-scoped-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .client-scoped-heading {
+            color: #0b5394 !important;
+            -webkit-text-fill-color: #0b5394 !important;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: none !important;
+        }
+
+        .client-scoped-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #cccccc;
+        }
+
+        .client-scoped-right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            min-width: 300px;
+        }
+
+        /* Phone Mockup */
+        .client-phone-mockup {
+            width: 320px;
+            height: 600px;
+            background-color: #1a1a1a;
+            border-radius: 40px;
+            border: 12px solid #333;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(11, 83, 148, 0.4);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 30px;
+            background-color: #333;
+            border-bottom-left-radius: 18px;
+            border-bottom-right-radius: 18px;
+            z-index: 10;
+        }
+
+        .phone-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 40px;
+            background-color: #121212;
+            background-image: linear-gradient(to bottom, #121212, #0d0d0d);
+        }
+
+        .chat-header {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .message-bubble {
+            background: linear-gradient(135deg, #0b5394, #022c5e);
+            padding: 20px;
+            border-radius: 20px;
+            border-bottom-right-radius: 4px;
+            color: #ffffff;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(11, 83, 148, 0.5);
+            margin-left: 20px;
+        }
+
+        .typing-container {
+            min-height: 90px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            background-color: #ffffff;
+            animation: client-cursor-blink 0.8s infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+
+        @keyframes client-cursor-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Client Info */
+        .client-info-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            align-self: flex-end;
+        }
+
+        .client-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b5394, #00d2ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #ffffff;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s;
+        }
+
+        .client-details {
+            text-align: right;
+            transition: opacity 0.3s;
+        }
+
+        .client-name {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .client-role {
+            font-size: 0.8rem;
+            color: #aaaaaa;
+        }
+
+        /* Logos Section */
+        .client-logos-section {
+            padding: 60px 20px;
+            text-align: center;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .client-logos-heading {
+            color: #0b5394 !important;
+            -webkit-text-fill-color: #0b5394 !important;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: none !important;
+        }
+
+        .client-logos-subtitle {
+            color: #aaaaaa;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .client-marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            width: 100%;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .client-marquee-track {
+            display: flex;
+            gap: 50px;
+            padding-right: 50px;
+            animation: client-scroll-left 25s linear infinite;
+        }
+
+        .client-marquee-wrapper:hover .client-marquee-track {
+            animation-play-state: paused;
+        }
+
+        .logo-item {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ffffff;
+            padding: 20px 40px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s, background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .logo-item:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        @keyframes client-scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+
+    <section id="clientsSection" class="client-scoped-section">
+        <div class="client-scoped-container">
+            <!-- Left Side -->
+            <div class="client-scoped-left">
+                <h1 class="client-scoped-heading">What Our Clients Say</h1>
+                <p class="client-scoped-description">
+                    Don't just take our word for it. Hear directly from our valued clients about their experiences
+                    working with us. Their success stories drive our passion for excellence.
+                </p>
+            </div>
+
+            <!-- Right Side - Phone Mockup -->
+            <div class="client-scoped-right">
+                <div class="client-phone-mockup">
+                    <div class="phone-notch"></div>
+                    <div class="phone-screen">
+                        <div class="chat-header">
+                            <span class="chat-title">Feedback</span>
+                        </div>
+                        <div class="chat-body">
+                            <!-- Testimonial message bubble -->
+                            <div class="message-bubble">
+                                <div class="typing-container">
+                                    <span id="testimonial-text"></span><span class="cursor">|</span>
+                                </div>
+                            </div>
+                            <!-- Client Info -->
+                            <div class="client-info-container">
+                                <div class="client-details">
+                                    <div class="client-name" id="client-name">Name</div>
+                                    <div class="client-role" id="client-role">Role</div>
+                                </div>
+                                <div class="client-avatar" id="client-avatar">O</div>
                             </div>
                         </div>
                     </div>
@@ -485,19 +744,128 @@
     </section>
 
     <!-- Our Clients Logo Section -->
-    <section class="client_form_logos_section">
-        <div class="client_form_logos_container">
-            <h2 class="client_form_logos_heading"
-                style="color: #0b5394 !important; -webkit-text-fill-color: #0b5394 !important; background: none !important;">
-                Our Clients</h2>
-            <p class="client_form_logos_subtitle">Trusted by leading companies worldwide</p>
-            <div class="client_form_marquee_wrapper">
-                <div class="client_form_marquee_track" id="client_form_marquee_track">
-                    <!-- Logo items will be populated by JavaScript -->
+    <section class="client-logos-section client-scoped-section">
+        <div class="client-logos-container">
+            <h2 class="client-logos-heading">Our Clients</h2>
+            <p class="client-logos-subtitle">Trusted by leading companies worldwide</p>
+            <div class="client-marquee-wrapper">
+                <div class="client-marquee-track">
+                    <!-- Logos Group 1 -->
+                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item">StartupX</div>
+                    <div class="logo-item">InnovateUs</div>
+                    <div class="logo-item">NextGen</div>
+                    <div class="logo-item">GlobalWeb</div>
+                    <div class="logo-item">CloudSync</div>
+                    <!-- Logos Group 2 (Duplicate for seamless loop) -->
+                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item">StartupX</div>
+                    <div class="logo-item">InnovateUs</div>
+                    <div class="logo-item">NextGen</div>
+                    <div class="logo-item">GlobalWeb</div>
+                    <div class="logo-item">CloudSync</div>
                 </div>
             </div>
         </div>
     </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const testimonials = [
+                {
+                    text: "Working with this team made our workflow faster and more organized.",
+                    name: "Alice Johnson",
+                    role: "CTO, TechCorp",
+                    initial: "A"
+                },
+                {
+                    text: "Their solutions helped us scale without unnecessary complexity.",
+                    name: "Mark Smith",
+                    role: "Founder, StartupX",
+                    initial: "M"
+                },
+                {
+                    text: "Professional, reliable, and easy to work with.",
+                    name: "Sarah Lee",
+                    role: "Product Manager, InnovateUs",
+                    initial: "S"
+                },
+                {
+                    text: "They understood our needs and delivered exactly what we expected.",
+                    name: "David Kim",
+                    role: "Director, NextGen",
+                    initial: "D"
+                }
+            ];
+
+            const textEl = document.getElementById("testimonial-text");
+            const nameEl = document.getElementById("client-name");
+            const roleEl = document.getElementById("client-role");
+            const avatarEl = document.getElementById("client-avatar");
+            const detailsEl = document.querySelector(".client-details");
+            const avatarContainerEl = document.querySelector(".client-avatar");
+
+            let currentIdx = 0;
+            let charIdx = 0;
+            let isDeleting = false;
+            let isTyping = false;
+
+            // Initial setup
+            nameEl.textContent = testimonials[0].name;
+            roleEl.textContent = testimonials[0].role;
+            avatarEl.textContent = testimonials[0].initial;
+
+            function typeEffect() {
+                const currentTestimonial = testimonials[currentIdx];
+                let typeSpeed = 50;
+
+                if (isDeleting) {
+                    // Deleting text
+                    textEl.textContent = currentTestimonial.text.substring(0, charIdx - 1);
+                    charIdx--;
+                    typeSpeed = 20; // Fast delete
+
+                    if (charIdx === 0) {
+                        // Finished deleting, move to next
+                        isDeleting = false;
+                        currentIdx = (currentIdx + 1) % testimonials.length;
+
+                        // Fade out old info
+                        detailsEl.style.opacity = 0;
+                        avatarContainerEl.style.opacity = 0;
+
+                        setTimeout(() => {
+                            // Update info and fade in
+                            nameEl.textContent = testimonials[currentIdx].name;
+                            roleEl.textContent = testimonials[currentIdx].role;
+                            avatarEl.textContent = testimonials[currentIdx].initial;
+                            detailsEl.style.opacity = 1;
+                            avatarContainerEl.style.opacity = 1;
+                        }, 300);
+
+                        typeSpeed = 600; // Pause before typing new text
+                    }
+                } else {
+                    // Typing text
+                    textEl.textContent = currentTestimonial.text.substring(0, charIdx + 1);
+                    charIdx++;
+                    typeSpeed = Math.random() * 30 + 40; // Variable spelling speed for natural feel
+
+                    if (charIdx === currentTestimonial.text.length) {
+                        // Finished typing, pause to read
+                        isDeleting = true;
+                        typeSpeed = 3000;
+                    }
+                }
+
+                setTimeout(typeEffect, typeSpeed);
+            }
+
+            // Start typing effect after slight delay
+            setTimeout(typeEffect, 1000);
+        });
+    </script>
+    <!-- Clients Section End -->
     </div>
 
     <!-- Contact Us Section -->
