@@ -48,6 +48,49 @@ body {
     height: 100vh;
     /* Target viewport height */
     max-height: 100vh;
+    background: #f8faff;
+}
+
+/* Animated aurora / gradient mesh background */
+#what-we-do::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    z-index: 0;
+    opacity: 1;
+    pointer-events: none;
+    background:
+        radial-gradient(circle 400px at 15% 30%, rgba(11, 83, 148, 0.35) 0%, transparent 70%),
+        radial-gradient(circle 350px at 85% 25%, rgba(100, 60, 200, 0.25) 0%, transparent 70%),
+        radial-gradient(circle 300px at 70% 80%, rgba(56, 189, 248, 0.20) 0%, transparent 70%),
+        radial-gradient(circle 320px at 20% 75%, rgba(139, 92, 246, 0.20) 0%, transparent 70%);
+    animation: aurora-drift 20s ease-in-out infinite alternate;
+    filter: blur(60px);
+}
+
+@keyframes aurora-drift {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: translate(5%, -3%) rotate(2deg) scale(1.02);
+    }
+
+    50% {
+        transform: translate(-3%, 5%) rotate(-1deg) scale(0.98);
+    }
+
+    75% {
+        transform: translate(4%, 2%) rotate(1.5deg) scale(1.03);
+    }
+
+    100% {
+        transform: translate(-2%, -4%) rotate(-2deg) scale(1);
+    }
 }
 
 /* Ambient Canvas */
@@ -92,6 +135,8 @@ body {
     justify-content: space-between;
     max-width: 1600px;
     margin: 0 auto;
+    position: relative;
+    /* Positioning context for absolutely-centered nav links */
 }
 
 .nav-logo {
@@ -104,6 +149,8 @@ body {
     align-items: center;
     transition: color 0.35s ease-in-out;
     margin-top: -11px;
+    min-width: 160px;
+    /* Prevent nav links from shifting when brand text collapses */
 }
 
 .logo-image {
@@ -152,7 +199,8 @@ body {
 }
 
 .premium-nav.scrolled .brand-icon {
-    transform: translateX(0) scale(0.85);
+    transform: translateX(0) scale(1.15);
+    /* Slightly larger when text disappears */
 }
 
 .premium-nav.scrolled .brand-text {
@@ -170,6 +218,27 @@ body {
     padding: 0.35rem;
     border-radius: 50px;
     gap: 0.5rem;
+    /* Absolutely center in the navbar — immune to logo/actions width changes */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.sliding-pill {
+    position: absolute;
+    top: 0.35rem;
+    /* Match container padding */
+    left: 0;
+    /* Will be set via JS */
+    height: calc(100% - 0.70rem);
+    background: var(--primary-blue);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    /* Keep behind text */
+    pointer-events: none;
 }
 
 .nav-link {
@@ -179,14 +248,18 @@ body {
     font-size: 0.95rem;
     padding: 0.6rem 1.5rem;
     border-radius: 50px;
-    transition: all 0.2s ease;
+    transition: color 0.3s ease;
+    /* Only animate text color */
 }
 
 .nav-link.active,
 .nav-link:hover {
-    background: var(--primary-blue);
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Clever trick: when another tab is hovered, make the old active tab dark again */
+.nav-links-container:hover .nav-link.active:not(:hover) {
+    color: #1a362d;
 }
 
 .nav-actions {
@@ -1349,20 +1422,7 @@ h2 {
     border: 1px solid rgba(11, 83, 148, 0.06);
 }
 
-/* Subtle top accent gradient (appears on hover) */
-.feature-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg,
-            rgba(11, 83, 148, 0.6),
-            rgba(14, 165, 233, 0.6));
-    opacity: 0;
-    transition: opacity 0.35s ease-in-out;
-}
+/* Accent border removed per user request */
 
 /* Calm hover lift with soft glow */
 .feature-card:hover {
@@ -1376,10 +1436,6 @@ h2 {
         0 0 40px rgba(14, 165, 233, 0.08);
 
     border-color: rgba(11, 83, 148, 0.12);
-}
-
-.feature-card:hover::after {
-    opacity: 1;
 }
 
 /* Premium Icon Box */
@@ -3934,18 +3990,7 @@ h2 {
     overflow: hidden;
 }
 
-/* Top gradient border — always visible */
-.feature-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-blue), #38bdf8);
-    border-radius: 20px 20px 0 0;
-    transition: height 0.3s ease;
-}
+/* Top gradient border deleted per user request */
 
 /* Subtle background tint layer — fades in on hover */
 .feature-card::after {
@@ -4160,9 +4205,7 @@ h2 {
     /* Adjust padding if needed */
 }
 
-#our-works .section-header {
-    /* margin-bottom: 2rem; */
-}
+
 
 #our-works .section-title,
 #our-works .highlight-text {
@@ -7139,3 +7182,195 @@ html.lenis body {
     display: none;
     /* Chrome, Safari, Edge */
 }
+
+/* Bento Grid for What We Do Section */
+.feature-bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+    padding-bottom: 1rem;
+    flex: 1;
+}
+
+@media (max-width: 900px) {
+    .feature-bento-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+    }
+
+    .bento-top-left,
+    .bento-bottom-left,
+    .bento-center,
+    .bento-top-right,
+    .bento-bottom-right {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+    }
+
+    .bento-center {
+        min-height: 400px;
+        /* height for robot on mobile */
+    }
+}
+
+.feature-bento-grid>.feature-card {
+    border-radius: 20px;
+    padding: 1.5rem;
+    background: #ffffff;
+    box-shadow: 0 10px 30px -5px rgba(11, 83, 148, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature-bento-grid>.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(11, 83, 148, 0.15);
+}
+
+/* Match the screenshot colors conceptually */
+.bento-top-left {
+    grid-column: 1;
+    grid-row: 1;
+    border-top-left-radius: 40px !important;
+    background: #310b65 !important;
+    color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
+}
+
+.bento-top-left p,
+.bento-top-left h3 {
+    color: white !important;
+}
+
+.bento-bottom-left {
+    grid-column: 1;
+    grid-row: 2;
+    border-bottom-left-radius: 40px !important;
+    background: #1a0f5a !important;
+    color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
+}
+
+.bento-bottom-left p,
+.bento-bottom-left h3 {
+    color: white !important;
+}
+
+.bento-center {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    background: transparent;
+    /* GSAP initial state */
+    border-radius: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: none;
+    /* GSAP initial state */
+    position: relative;
+    padding: 1.5rem;
+    overflow: visible;
+    /* Allow scaled text to overflow initially */
+    border: 1.5px solid transparent;
+    /* Invisible initially — GSAP animates it in */
+}
+
+/* Slide-up mask reveal: each line is clipped by overflow:hidden */
+.reveal-mask {
+    display: block;
+    overflow: hidden;
+    line-height: 1.2;
+    padding-bottom: 0.05em;
+    /* Prevents descenders from being clipped */
+}
+
+.reveal-text {
+    display: block;
+    transform: translateY(105%);
+    /* Hidden below the mask boundary */
+}
+
+.bento-top-right {
+    grid-column: 3;
+    grid-row: 1;
+    border-top-right-radius: 40px !important;
+    background: #0f402f !important;
+    color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
+}
+
+.bento-top-right p,
+.bento-top-right h3 {
+    color: white !important;
+}
+
+.bento-bottom-right {
+    grid-column: 3;
+    grid-row: 2;
+    border-bottom-right-radius: 40px !important;
+    background: #ff7640 !important;
+    color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
+}
+
+.bento-bottom-right p,
+.bento-bottom-right h3 {
+    color: white !important;
+}
+
+.center-bento-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.0rem;
+    line-height: 1.05;
+    font-weight: 800;
+    color: #0f1c3f !important;
+    text-transform: uppercase;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+    margin: 0;
+    padding-top: 1rem;
+    letter-spacing: 1px;
+    -webkit-text-fill-color: #0f1c3f !important;
+    background: none !important;
+}
+
+#robot-target-anchor {
+    position: absolute;
+    bottom: 10%;
+    /* Pushed slightly up from the bottom edge of the card */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 1px;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.bento-center-default {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* MUST be center so that `scale: 3` transform correctly centers the text visually */
+    width: 100%;
+    height: 100%;
+}
+
+/* Dynamic Preview Overlays (Removed) */
