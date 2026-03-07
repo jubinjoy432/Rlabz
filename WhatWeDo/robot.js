@@ -698,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.feature-card');
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
-            const title = card.querySelector('h3').textContent.trim();
+            const title = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : '';
             if (props[title]) {
                 // Hide all first
                 Object.values(props).forEach(p => p.visible = false);
@@ -711,10 +711,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         card.addEventListener('mouseleave', () => {
             isHoldingObject = false;
-            // Hide all after a short delay or immediately? 
-            // Immediately for responsiveness
             Object.values(props).forEach(p => p.visible = false);
         });
+    });
+
+    // Custom Event from script.js GSAP hover logic
+    // Fade out the robot when a dynamic preview is shown in the bento grid
+    window.addEventListener('bento-hover', (e) => {
+        if (e.detail.active) {
+            container.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            container.style.opacity = '0';
+            container.style.transform = 'scale(0.95)';
+        } else {
+            container.style.opacity = '1';
+            container.style.transform = 'scale(1)';
+        }
     });
 
     // Resize Handling
@@ -793,49 +804,64 @@ document.addEventListener('DOMContentLoaded', () => {
         let currentScale = 1;
 
         if (heroVisual && targetHeading) {
-            const r1 = heroVisual.getBoundingClientRect();
-
+            const bentoSection = document.getElementById('what-we-do');
             const targetAnchor = document.querySelector('#robot-target-anchor');
+
+            const rHero = heroVisual.getBoundingClientRect();
+            const rBento = bentoSection.getBoundingClientRect();
             const targetElement = targetAnchor ? targetAnchor : targetHeading;
-            const r2 = targetElement.getBoundingClientRect();
+            const rAnchor = targetElement.getBoundingClientRect();
 
-            // Scroll Progress (Robust)
-            const triggerStart = 0;
-            const scrollDistance = window.innerHeight * 1.5;
-            const absoluteScroll = Math.max(0, window.scrollY);
-            let progress = Math.min(1, Math.max(0, absoluteScroll / scrollDistance));
+            const rCenter = {
+                left: window.innerWidth / 2,
+                top: window.innerHeight * 0.98, // Shifted slightly down to completely clear text
+                width: 0, height: 0,
+                right: window.innerWidth / 2,
+                bottom: window.innerHeight * 0.98
+            };
 
-            // Easing
-            const ease = 1 - Math.pow(1 - progress, 3);
+            // Phase 1 Progress: Scroll from Hero to Bento
+            let progress1 = 0;
+            if (rBento.top > 0) {
+                progress1 = 1 - Math.min(1, rBento.top / window.innerHeight);
+            } else {
+                progress1 = 1;
+            }
+            const ease1 = 1 - Math.pow(1 - progress1, 3);
 
-            // Initial State (Hero)
+            // Phase 2 Progress: Driven by GSAP from script.js
+            const progress2 = window.bentoScrollProgress || 0;
+            const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
+
             const depth0 = 0;
-            const pos1 = mapDomToWorld(r1, depth0, 'center');
+            // Map the virtual bounding rectangles to Three.js world coordinates
+            const posHero = mapDomToWorld(rHero, depth0, 'center');
+            const posCenter = mapDomToWorld(rCenter, depth0, 'center');
+            const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
 
-            // Target State (Anchor or Heading)
-            const pos2 = mapDomToWorld(r2, depth0, targetAnchor ? 'center' : 'right-center');
+            const scaleHero = 0.82;
+            const scaleCenter = 0.85;
+            const scaleAnchor = targetAnchor ? 0.38 : 0.32; // Restored larger size for docked state
 
-            // Target Scale
-            const startScale = 0.82;
-            const targetScale = targetAnchor ? 0.38 : 0.32;
+            // Compute Base Phase 1 Output
+            currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;
+            currentPos.y = posHero.y + (posCenter.y - posHero.y) * ease1;
+            currentScale = scaleHero + (scaleCenter - scaleHero) * ease1;
 
-            // Offset
-            const { width: viewW } = getZPosition(depth0);
-            const pixelsPerUnit = window.innerWidth / viewW;
-            const offsetWorld = (60 + (100 * targetScale)) / pixelsPerUnit;
+            // Compute Overlay Phase 2 Output
+            if (progress2 > 0) {
+                const centerAdjustedY = posCenter.y + 0.15; // Hover slightly above true center text
+                currentPos.x = posCenter.x + (posAnchor.x - posCenter.x) * ease2;
+                currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
+                currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
+            }
 
-            const targetX = targetAnchor ? pos2.x : pos2.x + offsetWorld;
-            const targetY = targetAnchor ? pos2.y + 0.05 : pos2.y - 0.15;
-
-            // Interpolate Base Position
-            currentPos.x = pos1.x + (targetX - pos1.x) * ease;
-            currentPos.y = pos1.y + (targetY - pos1.y) * ease;
             currentPos.z = depth0;
-            currentScale = startScale + (targetScale - startScale) * ease;
+            container.style.opacity = '1';
 
-            // Shadow Opacity Fade
             if (shadow) {
-                shadow.material.opacity = 0.2 * (1 - ease);
+                // Shadow fades out as it moves to Phase 2
+                shadow.material.opacity = 0.2 * (1 - ease2);
             }
         }
 
@@ -1035,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // (SIMPLIFIED: Removed eyelid update to prevent crash because eyelids are missing)
         /*
         if (Math.random() > 0.995) isBlinking = true;
-    
+     
         if (isBlinking) {
             blinkProgress += blinkSpeed;
             if (blinkProgress >= 1) {

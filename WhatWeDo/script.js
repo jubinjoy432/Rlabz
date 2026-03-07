@@ -1,4 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Sliding Pill Navbar Animation ---
+    const navLinksContainer = document.querySelector('.nav-links-container');
+    const links = document.querySelectorAll('.nav-link');
+    const pill = document.querySelector('.sliding-pill');
+
+    if (navLinksContainer && links.length && pill) {
+        let activeLink = document.querySelector('.nav-link.active') || links[0];
+
+        function updatePill(link) {
+            if (!link) return;
+            const linkRect = link.getBoundingClientRect();
+            const containerRect = navLinksContainer.getBoundingClientRect();
+
+            pill.style.width = `${linkRect.width}px`;
+            pill.style.left = `${linkRect.left - containerRect.left}px`;
+        }
+
+        // Initialize pill position (timeout ensures fonts/layout have loaded)
+        setTimeout(() => updatePill(activeLink), 50);
+
+        window.addEventListener('resize', () => {
+            updatePill(document.querySelector('.nav-link.active') || links[0]);
+        });
+
+        // Track active class changes caused by ScrollSpy down the page
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class' && mutation.target.classList.contains('active')) {
+                    activeLink = mutation.target;
+                    // Only forcefully move pill if user isn't actively hovering somewhere else
+                    if (!navLinksContainer.matches(':hover')) {
+                        updatePill(activeLink);
+                    }
+                }
+            });
+        });
+
+        links.forEach(link => {
+            observer.observe(link, { attributes: true });
+
+            link.addEventListener('mouseenter', () => updatePill(link));
+
+            link.addEventListener('click', () => {
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                activeLink = link;
+                updatePill(link);
+            });
+        });
+
+        navLinksContainer.addEventListener('mouseleave', () => {
+            activeLink = document.querySelector('.nav-link.active') || links[0];
+            updatePill(activeLink);
+        });
+    }
     // --- Entrance Animations ---
     const devices = document.querySelectorAll('.device');
     // Small delay to ensure styles are ready
@@ -415,8 +470,92 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(card);
     });
 
+    // =========================================
+    // GSAP SCROLL-DRIVEN BENTO ANIMATION
+    // =========================================
+    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+        gsap.registerPlugin(ScrollTrigger);
 
+        const bentoSection = document.getElementById('what-we-do');
+        const bentoGrid = document.querySelector('.feature-bento-grid');
+        const centerDefault = document.querySelector('.bento-center-default');
+        const centerBg = document.querySelector('.bento-center');
+        const outerCards = [
+            document.querySelector('.bento-top-left'),
+            document.querySelector('.bento-top-right'),
+            document.querySelector('.bento-bottom-left'),
+            document.querySelector('.bento-bottom-right')
+        ];
 
+        if (bentoSection && bentoGrid) {
+            // First, override the CSS transition from the observer above
+            outerCards.forEach(card => {
+                if (card) {
+                    card.style.transition = 'none';
+                    // We also set autoAlpha: 0 down below
+                }
+            });
+
+            // Make the center background initially transparent
+            // ELEVATE the entire center column above the robot canvas context (zIndex: 50)
+            gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
+
+            // Start the central text HUGE and absolutely centered in its parent grid layout
+            gsap.set(centerDefault, {
+                position: "absolute",
+                top: "30%", // Reverted to the user's preferred previous position
+                left: "50%",
+                xPercent: -50,
+                yPercent: -50,
+                scale: 3,
+                zIndex: 101, // Stay above Robot (z-index 50) and parent wrapper
+                transformOrigin: "center center"
+            });
+
+            // Set autoAlpha to 0 (hidden + opacity 0) for outer cards initially
+            outerCards.forEach(card => {
+                if (card) gsap.set(card, { autoAlpha: 0 });
+            });
+
+            // Create the Pinning Timeline
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: bentoSection,
+                    start: "top top", // Trigger when section hits top of viewport
+                    end: "+=150%",     // Pin for 1.5x viewport height of scrolling
+                    pin: true,
+                    scrub: 1,         // Smooth scrubbing
+                    onUpdate: (self) => {
+                        window.bentoScrollProgress = self.progress;
+                    }
+                }
+            });
+
+            // 1. Center text shrinks (stays absolute so it remains perfectly centered)
+            tl.to(centerDefault, {
+                scale: 1,
+                zIndex: 10, // Drops back behind robot if needed, or stays at 10 to match grid layout
+                ease: "power2.inOut",
+                duration: 2
+            }, 0);
+
+            // 2. Background fades in
+            tl.to(centerBg, {
+                backgroundColor: '#fbf5ef',
+                boxShadow: '0 20px 40px -5px rgba(11, 83, 148, 0.15)',
+                ease: "power1.inOut",
+                duration: 1
+            }, 1);
+
+            // 3. Outer cards slide in
+            tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
+            tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
+            tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4); // Bottom Left
+            tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6); // Bottom Right
+        }
+
+        // Hover effects disabled as requested by user. The center robot and title will remain permanently visible.
+    }
 });
 
 
@@ -1990,11 +2129,10 @@ document.addEventListener('DOMContentLoaded', () => {
             let currentSectionId = '';
 
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
+                const rect = section.getBoundingClientRect();
 
-                // Adjusting the offset so the active state triggers a bit before the section reaches the top
-                if (window.scrollY >= (sectionTop - 200)) {
+                // Trigger if the top of the section has reached the upper half of the viewport
+                if (rect.top <= window.innerHeight / 2) {
                     currentSectionId = section.getAttribute('id');
                 }
             });

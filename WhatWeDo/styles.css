@@ -170,6 +170,25 @@ body {
     padding: 0.35rem;
     border-radius: 50px;
     gap: 0.5rem;
+    position: relative;
+    /* Setup context for sliding pill */
+    z-index: 1;
+}
+
+.sliding-pill {
+    position: absolute;
+    top: 0.35rem;
+    /* Match container padding */
+    left: 0;
+    /* Will be set via JS */
+    height: calc(100% - 0.70rem);
+    background: var(--primary-blue);
+    border-radius: 50px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+    /* Keep behind text */
+    pointer-events: none;
 }
 
 .nav-link {
@@ -179,14 +198,18 @@ body {
     font-size: 0.95rem;
     padding: 0.6rem 1.5rem;
     border-radius: 50px;
-    transition: all 0.2s ease;
+    transition: color 0.3s ease;
+    /* Only animate text color */
 }
 
 .nav-link.active,
 .nav-link:hover {
-    background: var(--primary-blue);
     color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Clever trick: when another tab is hovered, make the old active tab dark again */
+.nav-links-container:hover .nav-link.active:not(:hover) {
+    color: #1a362d;
 }
 
 .nav-actions {
@@ -4160,9 +4183,7 @@ h2 {
     /* Adjust padding if needed */
 }
 
-#our-works .section-header {
-    /* margin-bottom: 2rem; */
-}
+
 
 #our-works .section-title,
 #our-works .highlight-text {
@@ -7198,6 +7219,9 @@ html.lenis body {
     border-top-left-radius: 40px !important;
     background: #310b65 !important;
     color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
 }
 
 .bento-top-left p,
@@ -7211,6 +7235,9 @@ html.lenis body {
     border-bottom-left-radius: 40px !important;
     background: #1a0f5a !important;
     color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
 }
 
 .bento-bottom-left p,
@@ -7221,16 +7248,19 @@ html.lenis body {
 .bento-center {
     grid-column: 2;
     grid-row: 1 / 3;
-    background: #fbf5ef;
+    background: transparent;
+    /* GSAP initial state */
     border-radius: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 20px 40px -5px rgba(11, 83, 148, 0.15);
+    box-shadow: none;
+    /* GSAP initial state */
     position: relative;
     padding: 1.5rem;
-    overflow: hidden;
+    overflow: visible;
+    /* Allow scaled text to overflow initially */
 }
 
 .bento-top-right {
@@ -7239,6 +7269,9 @@ html.lenis body {
     border-top-right-radius: 40px !important;
     background: #0f402f !important;
     color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
 }
 
 .bento-top-right p,
@@ -7252,6 +7285,9 @@ html.lenis body {
     border-bottom-right-radius: 40px !important;
     background: #ff7640 !important;
     color: white !important;
+    opacity: 0;
+    /* GSAP initial state */
+    visibility: hidden;
 }
 
 .bento-bottom-right p,
@@ -7261,24 +7297,26 @@ html.lenis body {
 
 .center-bento-title {
     font-family: var(--font-heading);
-    font-size: 2.5rem;
-    line-height: 1.1;
+    font-size: 2.1rem;
+    line-height: 0.95;
+    /* Scaled down to give the big robot some room */
     font-weight: 800;
     color: #4a2b7a !important;
     text-transform: uppercase;
     text-align: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+    position: relative;
     z-index: 10;
     margin: 0;
+    padding-top: 1rem;
+    /* Push slightly down from the card top edge */
     -webkit-text-fill-color: #4a2b7a !important;
     background: none !important;
 }
 
 #robot-target-anchor {
     position: absolute;
-    bottom: 12%;
+    bottom: 10%;
+    /* Pushed slightly up from the bottom edge of the card */
     left: 50%;
     transform: translateX(-50%);
     width: 1px;
@@ -7286,3 +7324,15 @@ html.lenis body {
     pointer-events: none;
     z-index: 20;
 }
+
+.bento-center-default {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* MUST be center so that `scale: 3` transform correctly centers the text visually */
+    width: 100%;
+    height: 100%;
+}
+
+/* Dynamic Preview Overlays (Removed) */
