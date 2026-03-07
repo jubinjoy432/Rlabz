@@ -517,6 +517,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (card) gsap.set(card, { autoAlpha: 0 });
             });
 
+            // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
+            const revealTexts = document.querySelectorAll('.reveal-text');
+            if (revealTexts.length > 0) {
+                gsap.to(revealTexts, {
+                    y: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    stagger: 0.2, // Staggered reveal for each line
+                    scrollTrigger: {
+                        trigger: bentoSection,
+                        start: "top 80%",
+                        once: true // Trigger only once
+                    }
+                });
+            }
+
             // Create the Pinning Timeline
             const tl = gsap.timeline({
                 scrollTrigger: {
@@ -539,10 +555,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 duration: 2
             }, 0);
 
-            // 2. Background fades in
+            // 2. Background fades in (soft lavender-blue, pairs with the purple side cards)
             tl.to(centerBg, {
-                backgroundColor: '#fbf5ef',
-                boxShadow: '0 20px 40px -5px rgba(11, 83, 148, 0.15)',
+                backgroundColor: '#eef0ff',
+                borderColor: 'rgba(120, 100, 220, 0.25)',
+                // Multi-layer 3D shadow: top highlight border + ambient + directional + deep shadow
+                boxShadow: `
+                    0 1px 0 0 rgba(255,255,255,0.8) inset,
+                    0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
+                    0 4px 6px -1px rgba(80, 60, 180, 0.08),
+                    0 12px 24px -4px rgba(80, 60, 180, 0.14),
+                    0 32px 64px -8px rgba(80, 60, 180, 0.18),
+                    0 2px 4px 0 rgba(80, 60, 180, 0.06)
+                `,
                 ease: "power1.inOut",
                 duration: 1
             }, 1);

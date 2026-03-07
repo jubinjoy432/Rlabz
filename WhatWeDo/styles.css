@@ -48,6 +48,49 @@ body {
     height: 100vh;
     /* Target viewport height */
     max-height: 100vh;
+    background: #f8faff;
+}
+
+/* Animated aurora / gradient mesh background */
+#what-we-do::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -20%;
+    width: 140%;
+    height: 140%;
+    z-index: 0;
+    opacity: 1;
+    pointer-events: none;
+    background:
+        radial-gradient(circle 400px at 15% 30%, rgba(11, 83, 148, 0.35) 0%, transparent 70%),
+        radial-gradient(circle 350px at 85% 25%, rgba(100, 60, 200, 0.25) 0%, transparent 70%),
+        radial-gradient(circle 300px at 70% 80%, rgba(56, 189, 248, 0.20) 0%, transparent 70%),
+        radial-gradient(circle 320px at 20% 75%, rgba(139, 92, 246, 0.20) 0%, transparent 70%);
+    animation: aurora-drift 20s ease-in-out infinite alternate;
+    filter: blur(60px);
+}
+
+@keyframes aurora-drift {
+    0% {
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: translate(5%, -3%) rotate(2deg) scale(1.02);
+    }
+
+    50% {
+        transform: translate(-3%, 5%) rotate(-1deg) scale(0.98);
+    }
+
+    75% {
+        transform: translate(4%, 2%) rotate(1.5deg) scale(1.03);
+    }
+
+    100% {
+        transform: translate(-2%, -4%) rotate(-2deg) scale(1);
+    }
 }
 
 /* Ambient Canvas */
@@ -92,6 +135,8 @@ body {
     justify-content: space-between;
     max-width: 1600px;
     margin: 0 auto;
+    position: relative;
+    /* Positioning context for absolutely-centered nav links */
 }
 
 .nav-logo {
@@ -104,6 +149,8 @@ body {
     align-items: center;
     transition: color 0.35s ease-in-out;
     margin-top: -11px;
+    min-width: 160px;
+    /* Prevent nav links from shifting when brand text collapses */
 }
 
 .logo-image {
@@ -152,7 +199,8 @@ body {
 }
 
 .premium-nav.scrolled .brand-icon {
-    transform: translateX(0) scale(0.85);
+    transform: translateX(0) scale(1.15);
+    /* Slightly larger when text disappears */
 }
 
 .premium-nav.scrolled .brand-text {
@@ -170,8 +218,10 @@ body {
     padding: 0.35rem;
     border-radius: 50px;
     gap: 0.5rem;
-    position: relative;
-    /* Setup context for sliding pill */
+    /* Absolutely center in the navbar — immune to logo/actions width changes */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 1;
 }
 
@@ -7233,6 +7283,23 @@ html.lenis body {
     padding: 1.5rem;
     overflow: visible;
     /* Allow scaled text to overflow initially */
+    border: 1.5px solid transparent;
+    /* Invisible initially — GSAP animates it in */
+}
+
+/* Slide-up mask reveal: each line is clipped by overflow:hidden */
+.reveal-mask {
+    display: block;
+    overflow: hidden;
+    line-height: 1.2;
+    padding-bottom: 0.05em;
+    /* Prevents descenders from being clipped */
+}
+
+.reveal-text {
+    display: block;
+    transform: translateY(105%);
+    /* Hidden below the mask boundary */
 }
 
 .bento-top-right {
@@ -7268,20 +7335,19 @@ html.lenis body {
 }
 
 .center-bento-title {
-    font-family: var(--font-heading);
-    font-size: 2.1rem;
-    line-height: 0.95;
-    /* Scaled down to give the big robot some room */
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.0rem;
+    line-height: 1.05;
     font-weight: 800;
-    color: #4a2b7a !important;
+    color: #0f1c3f !important;
     text-transform: uppercase;
     text-align: center;
     position: relative;
     z-index: 10;
     margin: 0;
     padding-top: 1rem;
-    /* Push slightly down from the card top edge */
-    -webkit-text-fill-color: #4a2b7a !important;
+    letter-spacing: 1px;
+    -webkit-text-fill-color: #0f1c3f !important;
     background: none !important;
 }
 
