@@ -452,11 +452,41 @@
     <style>
         /* Scoped to .client-scoped-section to avoid conflicts */
         .client-scoped-section {
-            background-color: transparent;
-            /* Inherits dark background from parent */
+            background: linear-gradient(to bottom, #022c5e 0%, #051428 100%);
             color: #ffffff;
-            padding: 80px 20px;
+            padding: 100px 20px 80px 20px;
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top border gradient or divider is optional, let's keep it smooth */
+
+        /* Background Glow Effects */
+        .client-bg-glow-1 {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(11, 83, 148, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(40px);
+        }
+
+        .client-bg-glow-2 {
+            position: absolute;
+            bottom: -150px;
+            right: -100px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(50px);
         }
 
         .client-scoped-container {
@@ -465,47 +495,99 @@
             max-width: 1200px;
             margin: 0 auto;
             align-items: center;
-            gap: 60px;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .client-scoped-left {
             flex: 1;
             min-width: 300px;
+            padding-right: 40px;
+        }
+
+        .client-section-badge {
+            display: inline-block;
+            background: rgba(0, 210, 255, 0.1);
+            color: #00d2ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
         }
 
         .client-scoped-heading {
-            color: #0b5394 !important;
-            -webkit-text-fill-color: #0b5394 !important;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 25px;
             background: none !important;
+            line-height: 1.2;
+        }
+
+        .client-heading-highlight {
+            color: #00d2ff;
         }
 
         .client-scoped-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #cccccc;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #b0c4de;
+            margin-bottom: 40px;
+        }
+
+        .client-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #00d2ff;
+            color: #022c5e;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .client-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.5);
+            background: #ffffff;
+            color: #0b5394;
         }
 
         .client-scoped-right {
-            flex: 1;
+            flex: 1.2;
             display: flex;
             justify-content: center;
-            min-width: 300px;
+            align-items: center;
+            min-width: 350px;
+            position: relative;
+            height: 600px;
         }
 
         /* Phone Mockup */
         .client-phone-mockup {
-            width: 320px;
-            height: 600px;
-            background-color: #1a1a1a;
-            border-radius: 40px;
-            border: 12px solid #333;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(11, 83, 148, 0.4);
+            width: 280px;
+            height: 560px;
+            background-color: #0d1624;
+            border-radius: 35px;
+            border: 10px solid #1a2942;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: -15px 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            z-index: 10;
         }
 
         .phone-notch {
@@ -513,67 +595,168 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 140px;
-            height: 30px;
-            background-color: #333;
-            border-bottom-left-radius: 18px;
-            border-bottom-right-radius: 18px;
-            z-index: 10;
+            width: 120px;
+            height: 25px;
+            background-color: #1a2942;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-speaker {
+            width: 40px;
+            height: 4px;
+            background: #0d1624;
+            border-radius: 2px;
+        }
+
+        .phone-camera {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0d1624;
+            position: relative;
+        }
+
+        .phone-camera::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00d2ff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            opacity: 0.4;
         }
 
         .phone-screen {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding-top: 40px;
-            background-color: #121212;
-            background-image: linear-gradient(to bottom, #121212, #0d0d0d);
+            padding-top: 35px;
+            background: linear-gradient(to bottom, #0a111a, #050a10);
+            position: relative;
         }
 
-        .chat-header {
-            text-align: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-weight: 600;
-            color: #aaaaaa;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .phone-ui-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .chat-body {
-            flex: 1;
-            padding: 25px 20px;
+        .phone-ui-title {
+            font-size: 0.85rem;
+            color: #b0c4de;
+            font-weight: 500;
+        }
+
+        .phone-ui-icons i {
+            color: #b0c4de;
+            font-size: 1rem;
+            margin-left: 12px;
+        }
+
+        /* Placeholder UI items inside phone to look like a list/chat app */
+        .phone-placeholder-list {
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .message-bubble {
-            background: linear-gradient(135deg, #0b5394, #022c5e);
-            padding: 20px;
+        .phone-placeholder-item {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 15px;
+        }
+
+        .phone-placeholder-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .phone-placeholder-text {
+            flex: 1;
+        }
+
+        .phone-placeholder-line1 {
+            height: 8px;
+            width: 60%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 6px;
+        }
+
+        .phone-placeholder-line2 {
+            height: 6px;
+            width: 40%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        /* Floating Message Card (Pops OUTSIDE the phone) */
+        .floating-testimonial-card {
+            position: absolute;
+            left: -80px;
+            /* Pulls it out to the left of the phone */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 380px;
+            background: rgba(11, 83, 148, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 210, 255, 0.2);
             border-radius: 20px;
-            border-bottom-right-radius: 4px;
-            color: #ffffff;
-            font-size: 1.05rem;
-            line-height: 1.5;
-            position: relative;
-            box-shadow: 0 5px 20px rgba(11, 83, 148, 0.5);
-            margin-left: 20px;
+            padding: 30px;
+            box-shadow: -10px 15px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 210, 255, 0.1);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .floating-quote-mark {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 3rem;
+            color: rgba(0, 210, 255, 0.15);
+            font-family: serif;
+            line-height: 1;
         }
 
         .typing-container {
-            min-height: 90px;
+            min-height: 100px;
+            margin-bottom: 25px;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #ffffff;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
         }
 
         .cursor {
             display: inline-block;
             width: 2px;
-            background-color: #ffffff;
+            background-color: #00d2ff;
             animation: client-cursor-blink 0.8s infinite;
-            margin-left: 2px;
+            margin-left: 3px;
             vertical-align: middle;
+            height: 1.15rem;
         }
 
         @keyframes client-cursor-blink {
@@ -593,12 +776,13 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            align-self: flex-end;
+            position: relative;
+            z-index: 2;
         }
 
         .client-avatar {
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             background: linear-gradient(135deg, #0b5394, #00d2ff);
             display: flex;
@@ -608,46 +792,63 @@
             color: #ffffff;
             font-size: 1.2rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
             transition: opacity 0.3s;
         }
 
+        .client-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .client-details {
-            text-align: right;
+            display: flex;
+            flex-direction: column;
             transition: opacity 0.3s;
         }
 
         .client-name {
-            font-weight: bold;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 1.05rem;
             color: #ffffff;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .client-role {
-            font-size: 0.8rem;
-            color: #aaaaaa;
+            font-size: 0.85rem;
+            color: #00d2ff;
         }
 
-        /* Logos Section */
+        /* Continuous Logos Section Dropdown */
         .client-logos-section {
-            padding: 60px 20px;
-            text-align: center;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px 20px 50px 20px;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 60px;
         }
 
-        .client-logos-heading {
-            color: #0b5394 !important;
-            -webkit-text-fill-color: #0b5394 !important;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: none !important;
-        }
-
-        .client-logos-subtitle {
-            color: #aaaaaa;
+        .client-logos-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 40px;
-            font-size: 1.1rem;
+            padding-left: 20px;
+        }
+
+        .client-logos-header-text {
+            color: #b0c4de;
+            font-size: 1rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .client-logos-header-line {
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
         }
 
         .client-marquee-wrapper {
@@ -662,9 +863,9 @@
 
         .client-marquee-track {
             display: flex;
-            gap: 50px;
-            padding-right: 50px;
-            animation: client-scroll-left 25s linear infinite;
+            gap: 40px;
+            padding-right: 40px;
+            animation: client-scroll-left 35s linear infinite;
         }
 
         .client-marquee-wrapper:hover .client-marquee-track {
@@ -672,23 +873,28 @@
         }
 
         .logo-item {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            color: #ffffff;
-            padding: 20px 40px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
+            color: #8da4c0;
+            padding: 20px 45px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s, background-color 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s ease;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .logo-item:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            background: rgba(11, 83, 148, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 210, 255, 0.1);
         }
 
         @keyframes client-scroll-left {
@@ -700,70 +906,177 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .client-scoped-container {
+                flex-direction: column;
+                gap: 60px;
+            }
+
+            .client-scoped-right {
+                width: 100%;
+                justify-content: center;
+                height: 500px;
+            }
+
+            .client-phone-mockup {
+                right: auto;
+                left: 50%;
+                transform: translate(-30%, -50%);
+            }
+
+            .floating-testimonial-card {
+                left: -30%;
+                width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .client-scoped-section {
+                padding: 60px 15px 40px 15px;
+            }
+
+            .client-scoped-heading {
+                font-size: 2.2rem;
+            }
+
+            .client-phone-mockup {
+                display: none;
+                /* Hide phone on very small screens to save space */
+            }
+
+            .client-scoped-right {
+                height: auto;
+            }
+
+            .floating-testimonial-card {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                width: 100%;
+                background: rgba(11, 83, 148, 0.3);
+                border-color: rgba(0, 210, 255, 0.15);
+            }
+
+            .client-logos-section {
+                margin-top: 40px;
+                padding-bottom: 20px;
+            }
+        }
     </style>
 
     <section id="clientsSection" class="client-scoped-section">
+        <!-- Ambient Glow Elements -->
+        <div class="client-bg-glow-1"></div>
+        <div class="client-bg-glow-2"></div>
+
         <div class="client-scoped-container">
-            <!-- Left Side -->
+            <!-- Left Side: Header & Text -->
             <div class="client-scoped-left">
-                <h1 class="client-scoped-heading">What Our Clients Say</h1>
+                <div class="client-section-badge">Client Stories</div>
+                <h1 class="client-scoped-heading">Feedback from<br><span class="client-heading-highlight">Our
+                        Partners</span></h1>
                 <p class="client-scoped-description">
                     Don't just take our word for it. Hear directly from our valued clients about their experiences
-                    working with us. Their success stories drive our passion for excellence.
+                    working with us. Their success stories drive our passion for continuous excellence and innovation.
                 </p>
+                <a href="#contactSection" class="client-cta-btn">
+                    Start Your Project <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
 
-            <!-- Right Side - Phone Mockup -->
+            <!-- Right Side: Phone & Floating Card -->
             <div class="client-scoped-right">
+
+                <!-- Phone Mockup background element -->
                 <div class="client-phone-mockup">
-                    <div class="phone-notch"></div>
+                    <div class="phone-notch">
+                        <div class="phone-speaker"></div>
+                        <div class="phone-camera"></div>
+                    </div>
                     <div class="phone-screen">
-                        <div class="chat-header">
-                            <span class="chat-title">Feedback</span>
+                        <div class="phone-ui-header">
+                            <span class="phone-ui-title">Reviews</span>
+                            <div class="phone-ui-icons">
+                                <i class="fa-solid fa-search"></i>
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </div>
                         </div>
-                        <div class="chat-body">
-                            <!-- Testimonial message bubble -->
-                            <div class="message-bubble">
-                                <div class="typing-container">
-                                    <span id="testimonial-text"></span><span class="cursor">|</span>
+                        <div class="phone-placeholder-list">
+                            <!-- Dummy items to make the phone look active -->
+                            <div class="phone-placeholder-item">
+                                <div class="phone-placeholder-avatar"></div>
+                                <div class="phone-placeholder-text">
+                                    <div class="phone-placeholder-line1"></div>
+                                    <div class="phone-placeholder-line2"></div>
                                 </div>
                             </div>
-                            <!-- Client Info -->
-                            <div class="client-info-container">
-                                <div class="client-details">
-                                    <div class="client-name" id="client-name">Name</div>
-                                    <div class="client-role" id="client-role">Role</div>
+                            <div class="phone-placeholder-item" style="opacity: 0.6;">
+                                <div class="phone-placeholder-avatar"></div>
+                                <div class="phone-placeholder-text">
+                                    <div class="phone-placeholder-line1"></div>
+                                    <div class="phone-placeholder-line2"></div>
                                 </div>
-                                <div class="client-avatar" id="client-avatar">O</div>
                             </div>
+                            <div class="phone-placeholder-item" style="opacity: 0.3;">
+                                <div class="phone-placeholder-avatar"></div>
+                                <div class="phone-placeholder-text">
+                                    <div class="phone-placeholder-line1"></div>
+                                    <div class="phone-placeholder-line2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Floating Testimonial Card (Pops out of phone) -->
+                <div class="floating-testimonial-card">
+                    <div class="floating-quote-mark">"</div>
+                    <div class="typing-container">
+                        <span id="testimonial-text"></span><span class="cursor"></span>
+                    </div>
+                    <!-- Client Info -->
+                    <div class="client-info-container">
+                        <div class="client-avatar" id="client-avatar">
+                            <!-- Updated dynamically, can be image or initial -->
+                            A
+                        </div>
+                        <div class="client-details">
+                            <div class="client-name" id="client-name">Name</div>
+                            <div class="client-role" id="client-role">Role</div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Our Clients Logo Section -->
-    <section class="client-logos-section client-scoped-section">
-        <div class="client-logos-container">
-            <h2 class="client-logos-heading">Our Clients</h2>
-            <p class="client-logos-subtitle">Trusted by leading companies worldwide</p>
+        <!-- Continuous Our Clients Logo Area -->
+        <div class="client-logos-section">
+            <div class="client-logos-header">
+                <span class="client-logos-header-text">Trusted by leading companies worldwide</span>
+                <div class="client-logos-header-line"></div>
+            </div>
+
             <div class="client-marquee-wrapper">
                 <div class="client-marquee-track">
                     <!-- Logos Group 1 -->
-                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google</div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i> Microsoft
+                    </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
-                    <div class="logo-item">NextGen</div>
-                    <div class="logo-item">GlobalWeb</div>
-                    <div class="logo-item">CloudSync</div>
+                    <div class="logo-item">TechCorp</div>
                     <!-- Logos Group 2 (Duplicate for seamless loop) -->
-                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google</div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i> Microsoft
+                    </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
-                    <div class="logo-item">NextGen</div>
-                    <div class="logo-item">GlobalWeb</div>
-                    <div class="logo-item">CloudSync</div>
+                    <div class="logo-item">TechCorp</div>
                 </div>
             </div>
         </div>
@@ -773,25 +1086,25 @@
         document.addEventListener("DOMContentLoaded", () => {
             const testimonials = [
                 {
-                    text: "Working with this team made our workflow faster and more organized.",
+                    text: "Working with this team made our workflow faster and more organized. Highly scalable solutions.",
                     name: "Alice Johnson",
                     role: "CTO, TechCorp",
                     initial: "A"
                 },
                 {
-                    text: "Their solutions helped us scale without unnecessary complexity.",
+                    text: "Their solutions helped us scale without unnecessary complexity. A true partner in growth.",
                     name: "Mark Smith",
                     role: "Founder, StartupX",
                     initial: "M"
                 },
                 {
-                    text: "Professional, reliable, and easy to work with.",
+                    text: "Professional, reliable, and easy to work with. They delivered exactly what we needed.",
                     name: "Sarah Lee",
                     role: "Product Manager, InnovateUs",
                     initial: "S"
                 },
                 {
-                    text: "They understood our needs and delivered exactly what we expected.",
+                    text: "They understood our needs and delivered an exceptional product ahead of schedule.",
                     name: "David Kim",
                     role: "Director, NextGen",
                     initial: "D"
@@ -808,7 +1121,6 @@
             let currentIdx = 0;
             let charIdx = 0;
             let isDeleting = false;
-            let isTyping = false;
 
             // Initial setup
             nameEl.textContent = testimonials[0].name;
@@ -823,7 +1135,7 @@
                     // Deleting text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx - 1);
                     charIdx--;
-                    typeSpeed = 20; // Fast delete
+                    typeSpeed = 15; // Fast delete
 
                     if (charIdx === 0) {
                         // Finished deleting, move to next
@@ -849,12 +1161,12 @@
                     // Typing text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx + 1);
                     charIdx++;
-                    typeSpeed = Math.random() * 30 + 40; // Variable spelling speed for natural feel
+                    typeSpeed = Math.random() * 30 + 30; // Variable spelling speed for natural feel
 
                     if (charIdx === currentTestimonial.text.length) {
                         // Finished typing, pause to read
                         isDeleting = true;
-                        typeSpeed = 3000;
+                        typeSpeed = 4000;
                     }
                 }
 
