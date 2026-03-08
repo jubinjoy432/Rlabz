@@ -2290,27 +2290,13 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 
-    // 5. Heading — Staggered Word Reveal
+    // 5. Heading — Fade-up the whole container
     const heading = aboutSection.querySelector('.about-heading');
     if (heading) {
-        const parts = [];
-        heading.childNodes.forEach(node => {
-            if (node.nodeType === 3 && node.textContent.trim()) {
-                const w = document.createElement('span');
-                w.style.cssText = 'display:inline-block;opacity:0';
-                w.textContent = node.textContent;
-                node.parentNode.replaceChild(w, node);
-                parts.push(w);
-            } else if (node.nodeType === 1 && node.tagName !== 'BR') {
-                node.style.opacity = '0';
-                node.style.display = 'inline-block';
-                parts.push(node);
-            }
-        });
-        gsap.set(heading, { opacity: 1, visibility: 'visible' });
-        gsap.fromTo(parts, { opacity: 0, y: 30 },
+        gsap.fromTo(heading,
+            { opacity: 0, y: 30, visibility: 'hidden' },
             {
-                opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.2,
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.7, ease: 'power3.out', delay: 0.3,
                 scrollTrigger: stDefaults
             }
         );

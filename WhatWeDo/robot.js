@@ -930,7 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     handR.rotation.x *= 0.8;
                     handR.rotation.z *= 0.8;
                 }
-                const raiseSpeed = 0.1;
+                const raiseSpeed = 0.03; // Slower, smoother reveal
                 let holdRotX = -1.8;
                 let holdRotZ = -0.5;
 
@@ -951,8 +951,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const idleRotX = Math.sin(time * 1.5 + 1) * 0.1;
                 const idleRotZ = -0.1;
 
-                armR.rotation.x += (idleRotX - armR.rotation.x) * 0.1;
-                armR.rotation.z += (idleRotZ - armR.rotation.z) * 0.1;
+                armR.rotation.x += (idleRotX - armR.rotation.x) * 0.05; // Smoother return to idle
+                armR.rotation.z += (idleRotZ - armR.rotation.z) * 0.05; // Smoother return to idle
             }
 
             // --- 4. Head Logic (Idle vs Looking) ---
