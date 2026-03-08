@@ -573,6 +573,13 @@
             color: #0b5394;
         }
 
+        .client-section-divider {
+            width: 1px;
+            height: 480px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 210, 255, 0.2), transparent);
+            margin: 0 30px;
+        }
+
         .client-scoped-right {
             flex: 1.2;
             display: flex;
@@ -581,19 +588,20 @@
             min-width: 350px;
             position: relative;
             height: 600px;
+            perspective: 1200px;
         }
 
         /* Phone Mockup */
         .client-phone-mockup {
-            width: 290px;
+            width: 300px;
             height: 580px;
             background-color: #08111d;
             border-radius: 40px;
             border: 12px solid #14233a;
             position: absolute;
-            right: 0;
+            left: 50%;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
             box-shadow: -20px 30px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.8);
             overflow: hidden;
             display: flex;
@@ -650,134 +658,167 @@
             display: flex;
             flex-direction: column;
             padding-top: 35px;
-            background: linear-gradient(to bottom, #0a111a, #050a10);
+            background: linear-gradient(to bottom, #060d14, #03060a);
             position: relative;
         }
 
-        .phone-ui-header {
-            padding: 15px 20px;
+        .phone-app-top {
+            padding: 20px 20px 10px 20px;
+        }
+
+        .greeting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 20px;
         }
 
-        .phone-ui-title {
-            font-size: 0.85rem;
-            color: #b0c4de;
-            font-weight: 500;
+        .greeting-time {
+            font-size: 0.75rem;
+            color: #8da4c0;
+            margin-bottom: 4px;
         }
 
-        .phone-ui-icons i {
-            color: #b0c4de;
-            font-size: 1rem;
-            margin-left: 12px;
+        .greeting-name {
+            font-size: 0.95rem;
+            color: #ffffff;
+            font-weight: 600;
         }
 
-        /* Placeholder UI items inside phone to look like a list/chat app */
-        .phone-placeholder-list {
-            padding: 20px;
+        .app-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b5394, #00d2ff);
+            border: 2px solid #00d2ff;
+        }
+
+        .app-search-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .search-text {
+            font-size: 0.8rem;
+            color: #8da4c0;
+        }
+
+        .search-icon-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 210, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00d2ff;
+            font-size: 0.65rem;
+        }
+
+        .app-cards-container {
+            padding: 20px 20px 0;
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .phone-placeholder-item {
-            height: 60px;
+        .app-ui-card {
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
+            border-radius: 16px;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
             display: flex;
-            align-items: center;
-            padding: 0 15px;
-            gap: 15px;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .phone-placeholder-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+        .ui-card-square {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(11, 83, 148, 0.5), rgba(0, 210, 255, 0.2));
         }
 
-        .phone-placeholder-text {
-            flex: 1;
+        .ui-card-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .phone-placeholder-line1 {
-            height: 8px;
-            width: 60%;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            margin-bottom: 6px;
-        }
-
-        .phone-placeholder-line2 {
+        .ui-line {
             height: 6px;
-            width: 40%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
+        }
+
+        .ui-line.long {
+            width: 80%;
+        }
+
+        .ui-line.short {
+            width: 50%;
+        }
+
+        .ui-card-stars {
+            color: rgba(0, 210, 255, 0.3);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
         }
 
         .floating-card-wrapper {
             position: absolute;
-            right: 145px;
+            left: 50%;
             top: 50%;
-            transform: translate(50%, -50%) scale(0.8) translateY(20px);
+            transform: translate(-50%, -40%) scale(0.9) translateZ(-50px);
             opacity: 0;
             z-index: 20;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.6s ease;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
             pointer-events: none;
+            perspective: 1000px;
         }
 
         .floating-card-wrapper.pop-out {
-            transform: translate(50%, -50%) scale(1) translateY(0);
+            transform: translate(-50%, -50%) scale(1) translateZ(0px);
             opacity: 1;
             pointer-events: auto;
         }
 
-        /* Floating Message Card (Pops OUTSIDE the phone) */
+        /* Floating Message Card */
         .floating-testimonial-card {
-            width: 420px;
-            background: rgba(8, 30, 60, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 210, 255, 0.25);
-            border-radius: 24px;
+            width: 440px;
+            background: rgba(6, 20, 40, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            border-radius: 20px;
             padding: 35px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.05);
-            /* Centered drop shadow */
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 2px 20px rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
             position: relative;
         }
 
-        .floating-testimonial-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border-radius: 26px;
-            background: linear-gradient(135deg, rgba(0, 210, 255, 0.4), transparent 60%);
-            z-index: -1;
-            opacity: 0.5;
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
         }
 
         .floating-quote-mark {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 3rem;
-            color: rgba(0, 210, 255, 0.15);
-            font-family: serif;
+            font-size: 2.2rem;
+            color: rgba(0, 210, 255, 0.3);
             line-height: 1;
         }
 
         .typing-container {
-            min-height: 100px;
-            margin-bottom: 25px;
+            min-height: 90px;
+            margin-bottom: 20px;
             font-size: 1.15rem;
             line-height: 1.6;
             color: #ffffff;
@@ -818,8 +859,8 @@
         }
 
         .client-avatar {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(135deg, #0b5394, #00d2ff);
             display: flex;
@@ -827,17 +868,11 @@
             justify-content: center;
             font-weight: bold;
             color: #ffffff;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             border: 2px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
             transition: opacity 0.3s;
-        }
-
-        .client-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         .client-details {
@@ -850,12 +885,53 @@
             font-weight: 600;
             font-size: 1.05rem;
             color: #ffffff;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .client-role {
             font-size: 0.85rem;
             color: #00d2ff;
+        }
+
+        .client-tag {
+            font-size: 0.75rem;
+            color: #8da4c0;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .testimonial-arrows {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 25;
+        }
+
+        .testi-arrow {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(11, 83, 148, 0.3);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: #00d2ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-size: 1rem;
+        }
+
+        .testi-arrow:hover {
+            background: #00d2ff;
+            color: #ffffff;
+            border-color: #00d2ff;
+            transform: scale(1.05);
         }
 
         /* Continuous Logos Section Dropdown */
@@ -951,6 +1027,13 @@
                 gap: 60px;
             }
 
+            .client-section-divider {
+                width: 80%;
+                height: 1px;
+                background: linear-gradient(to right, transparent, rgba(0, 210, 255, 0.2), transparent);
+                margin: 20px auto;
+            }
+
             .client-scoped-right {
                 width: 100%;
                 justify-content: center;
@@ -966,15 +1049,23 @@
             .floating-card-wrapper {
                 right: auto;
                 left: 50%;
-                transform: translate(-50%, -50%) scale(0.8) translateY(20px);
+                transform: translate(-50%, -40%) scale(0.9);
             }
 
             .floating-card-wrapper.pop-out {
-                transform: translate(-50%, -50%) scale(1) translateY(0);
+                transform: translate(-50%, -50%) scale(1);
             }
 
             .floating-testimonial-card {
-                width: 340px;
+                width: 380px;
+            }
+
+            .testimonial-arrows {
+                right: 50%;
+                top: auto;
+                bottom: -60px;
+                transform: translateX(50%);
+                flex-direction: row;
             }
         }
 
@@ -1014,6 +1105,13 @@
                 border-color: rgba(0, 210, 255, 0.15);
             }
 
+            .testimonial-arrows {
+                position: relative;
+                bottom: auto;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
             .client-logos-section {
                 margin-top: 40px;
                 padding-bottom: 20px;
@@ -1042,6 +1140,9 @@
                 </a>
             </div>
 
+            <!-- Divider -->
+            <div class="client-section-divider"></div>
+
             <!-- Right Side: Phone & Floating Card -->
             <div class="client-scoped-right">
 
@@ -1052,35 +1153,43 @@
                         <div class="phone-camera"></div>
                     </div>
                     <div class="phone-screen">
-                        <div class="phone-ui-header">
-                            <span class="phone-ui-title">Reviews</span>
-                            <div class="phone-ui-icons">
-                                <i class="fa-solid fa-search"></i>
-                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                        <div class="phone-app-top">
+                            <div class="greeting-row">
+                                <div>
+                                    <div class="greeting-time">Good Morning!</div>
+                                    <div class="greeting-name">Steave John</div>
+                                </div>
+                                <div class="app-user-avatar"></div>
+                            </div>
+                            <div class="app-search-bar">
+                                <span class="search-text">Search Here</span>
+                                <div class="search-icon-btn"><i class="fa-solid fa-search"></i></div>
                             </div>
                         </div>
-                        <div class="phone-placeholder-list">
-                            <!-- Dummy items to make the phone look active -->
-                            <div class="phone-placeholder-item">
-                                <div class="phone-placeholder-avatar"></div>
-                                <div class="phone-placeholder-text">
-                                    <div class="phone-placeholder-line1"></div>
-                                    <div class="phone-placeholder-line2"></div>
+                        <div class="app-cards-container">
+                            <div class="app-ui-card">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
                                 </div>
+                                <div class="ui-card-stars">★★★★★</div>
                             </div>
-                            <div class="phone-placeholder-item" style="opacity: 0.6;">
-                                <div class="phone-placeholder-avatar"></div>
-                                <div class="phone-placeholder-text">
-                                    <div class="phone-placeholder-line1"></div>
-                                    <div class="phone-placeholder-line2"></div>
+                            <div class="app-ui-card" style="opacity: 0.6;">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
                                 </div>
+                                <div class="ui-card-stars">★★★★★</div>
                             </div>
-                            <div class="phone-placeholder-item" style="opacity: 0.3;">
-                                <div class="phone-placeholder-avatar"></div>
-                                <div class="phone-placeholder-text">
-                                    <div class="phone-placeholder-line1"></div>
-                                    <div class="phone-placeholder-line2"></div>
+                            <div class="app-ui-card" style="opacity: 0.3;">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
                                 </div>
+                                <div class="ui-card-stars">★★★★★</div>
                             </div>
                         </div>
                     </div>
@@ -1089,22 +1198,28 @@
                 <!-- Floating Testimonial Card (Pops out of phone with subtle slide) -->
                 <div class="floating-card-wrapper">
                     <div class="floating-testimonial-card">
-                        <div class="floating-quote-mark">"</div>
+                        <div class="card-header-row">
+                            <div class="client-info-container">
+                                <div class="client-avatar" id="client-avatar">A</div>
+                                <div class="client-details">
+                                    <div class="client-name" id="client-name">Name</div>
+                                    <div class="client-role" id="client-role">Role</div>
+                                </div>
+                            </div>
+                            <div class="floating-quote-mark"><i class="fa-solid fa-quote-right"></i></div>
+                        </div>
                         <div class="typing-container">
                             <span id="testimonial-text"></span><span class="cursor"></span>
                         </div>
-                        <!-- Client Info -->
-                        <div class="client-info-container">
-                            <div class="client-avatar" id="client-avatar">
-                                <!-- Updated dynamically, can be image or initial -->
-                                A
-                            </div>
-                            <div class="client-details">
-                                <div class="client-name" id="client-name">Name</div>
-                                <div class="client-role" id="client-role">Role</div>
-                            </div>
-                        </div>
+                        <div class="client-tag"><i class="fa-solid fa-table-cells"
+                                style="color:#00d2ff; margin-right:5px;"></i> Rlabz user, Client</div>
                     </div>
+                </div>
+
+                <!-- Manual Arrows -->
+                <div class="testimonial-arrows">
+                    <button class="testi-arrow prev-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="testi-arrow next-btn"><i class="fa-solid fa-arrow-right"></i></button>
                 </div>
             </div>
         </div>
@@ -1182,6 +1297,7 @@
             let currentIdx = 0;
             let charIdx = 0;
             let isDeleting = false;
+            let typingTimer;
 
             // Initial setup
             nameEl.textContent = testimonials[0].name;
@@ -1190,13 +1306,13 @@
 
             function typeEffect() {
                 const currentTestimonial = testimonials[currentIdx];
-                let typeSpeed = 50;
+                let typeSpeed = 25; // Faster typing
 
                 if (isDeleting) {
                     // Deleting text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx - 1);
                     charIdx--;
-                    typeSpeed = 15; // Fast delete
+                    typeSpeed = 10; // Faster delete
 
                     if (charIdx === 0) {
                         // Finished deleting, move to next
@@ -1214,28 +1330,64 @@
                             avatarEl.textContent = testimonials[currentIdx].initial;
                             detailsEl.style.opacity = 1;
                             avatarContainerEl.style.opacity = 1;
-                        }, 300);
+                        }, 250);
 
-                        typeSpeed = 600; // Pause before typing new text
+                        typeSpeed = 300; // Pause before typing new text
                     }
                 } else {
                     // Typing text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx + 1);
                     charIdx++;
-                    typeSpeed = Math.random() * 30 + 30; // Variable spelling speed for natural feel
+                    typeSpeed = Math.random() * 15 + 15; // Variable quick speed
 
                     if (charIdx === currentTestimonial.text.length) {
                         // Finished typing, pause to read
                         isDeleting = true;
-                        typeSpeed = 4000;
+                        typeSpeed = 2500;
                     }
                 }
 
-                setTimeout(typeEffect, typeSpeed);
+                typingTimer = setTimeout(typeEffect, typeSpeed);
             }
 
             // Start typing effect after slight delay
-            setTimeout(typeEffect, 1000);
+            typingTimer = setTimeout(typeEffect, 800);
+
+            // Manual Navigation
+            function goToTestimonial(idx) {
+                clearTimeout(typingTimer);
+                isDeleting = false;
+                charIdx = 0;
+                currentIdx = idx;
+
+                detailsEl.style.opacity = 0;
+                avatarContainerEl.style.opacity = 0;
+                textEl.style.opacity = 0; // fade text out
+
+                setTimeout(() => {
+                    nameEl.textContent = testimonials[currentIdx].name;
+                    roleEl.textContent = testimonials[currentIdx].role;
+                    avatarEl.textContent = testimonials[currentIdx].initial;
+                    textEl.textContent = "";
+
+                    detailsEl.style.opacity = 1;
+                    avatarContainerEl.style.opacity = 1;
+                    textEl.style.opacity = 1; // fade text in
+
+                    typeEffect(); // restart typing
+                }, 300);
+            }
+
+            const nextBtn = document.querySelector('.next-btn');
+            const prevBtn = document.querySelector('.prev-btn');
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener('click', () => {
+                    goToTestimonial((currentIdx + 1) % testimonials.length);
+                });
+                prevBtn.addEventListener('click', () => {
+                    goToTestimonial((currentIdx - 1 + testimonials.length) % testimonials.length);
+                });
+            }
 
             // Scroll Pop-out for Testimonial Card
             const cardWrapper = document.querySelector('.floating-card-wrapper');
