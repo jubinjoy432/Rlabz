@@ -338,11 +338,41 @@
     <style>
         /* Scoped to .client-scoped-section to avoid conflicts */
         .client-scoped-section {
-            background-color: transparent;
-            /* Inherits dark background from parent */
+            background: #020c1b;
             color: #ffffff;
-            padding: 80px 20px;
+            padding: 100px 20px 80px 20px;
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top border gradient or divider is optional, let's keep it smooth */
+
+        /* Background Glow Effects */
+        .client-bg-glow-1 {
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(11, 83, 148, 0.3) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
+        }
+
+        .client-bg-glow-2 {
+            position: absolute;
+            bottom: -200px;
+            right: -100px;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
         }
 
         .client-scoped-container {
@@ -351,47 +381,107 @@
             max-width: 1200px;
             margin: 0 auto;
             align-items: center;
-            gap: 60px;
+            gap: 40px;
+            position: relative;
+            z-index: 2;
         }
 
         .client-scoped-left {
             flex: 1;
             min-width: 300px;
+            padding-right: 20px;
+        }
+
+        .client-section-badge {
+            display: inline-block;
+            background: rgba(0, 210, 255, 0.1);
+            color: #00d2ff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
         }
 
         .client-scoped-heading {
-            color: #0b5394 !important;
-            -webkit-text-fill-color: #0b5394 !important;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 25px;
             background: none !important;
+            line-height: 1.2;
+        }
+
+        .client-heading-highlight {
+            color: #00d2ff;
         }
 
         .client-scoped-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #cccccc;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #b0c4de;
+            margin-bottom: 40px;
+        }
+
+        .client-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #00d2ff;
+            color: #022c5e;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+        }
+
+        .client-cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 210, 255, 0.5);
+            background: #ffffff;
+            color: #0b5394;
+        }
+
+        .client-section-divider {
+            width: 1px;
+            height: 480px;
+            background: linear-gradient(to bottom, transparent, rgba(0, 210, 255, 0.2), transparent);
+            margin: 0 30px;
         }
 
         .client-scoped-right {
-            flex: 1;
+            flex: 1.2;
             display: flex;
             justify-content: center;
-            min-width: 300px;
+            align-items: center;
+            min-width: 350px;
+            position: relative;
+            height: 600px;
+            perspective: 1200px;
         }
 
         /* Phone Mockup */
         .client-phone-mockup {
-            width: 320px;
-            height: 600px;
-            background-color: #1a1a1a;
+            width: 300px;
+            height: 580px;
+            background-color: #08111d;
             border-radius: 40px;
-            border: 12px solid #333;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(11, 83, 148, 0.4);
+            border: 12px solid #14233a;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: -20px 30px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.8);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            z-index: 10;
         }
 
         .phone-notch {
@@ -399,67 +489,227 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 140px;
-            height: 30px;
-            background-color: #333;
-            border-bottom-left-radius: 18px;
-            border-bottom-right-radius: 18px;
-            z-index: 10;
+            width: 120px;
+            height: 25px;
+            background-color: #1a2942;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-speaker {
+            width: 40px;
+            height: 4px;
+            background: #0d1624;
+            border-radius: 2px;
+        }
+
+        .phone-camera {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #0d1624;
+            position: relative;
+        }
+
+        .phone-camera::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00d2ff;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            opacity: 0.4;
         }
 
         .phone-screen {
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding-top: 40px;
-            background-color: #121212;
-            background-image: linear-gradient(to bottom, #121212, #0d0d0d);
+            padding-top: 35px;
+            background: linear-gradient(to bottom, #060d14, #03060a);
+            position: relative;
         }
 
-        .chat-header {
-            text-align: center;
-            padding: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .phone-app-top {
+            padding: 20px 20px 10px 20px;
+        }
+
+        .greeting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .greeting-time {
+            font-size: 0.75rem;
+            color: #8da4c0;
+            margin-bottom: 4px;
+        }
+
+        .greeting-name {
+            font-size: 0.95rem;
+            color: #ffffff;
             font-weight: 600;
-            color: #aaaaaa;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
         }
 
-        .chat-body {
-            flex: 1;
-            padding: 25px 20px;
+        .app-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0b5394, #00d2ff);
+            border: 2px solid #00d2ff;
+        }
+
+        .app-search-bar {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .search-text {
+            font-size: 0.8rem;
+            color: #8da4c0;
+        }
+
+        .search-icon-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 210, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #00d2ff;
+            font-size: 0.65rem;
+        }
+
+        .app-cards-container {
+            padding: 20px 20px 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .message-bubble {
-            background: linear-gradient(135deg, #0b5394, #022c5e);
-            padding: 20px;
+        .app-ui-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ui-card-square {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(11, 83, 148, 0.5), rgba(0, 210, 255, 0.2));
+        }
+
+        .ui-card-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ui-line {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .ui-line.long {
+            width: 80%;
+        }
+
+        .ui-line.short {
+            width: 50%;
+        }
+
+        .ui-card-stars {
+            color: rgba(0, 210, 255, 0.3);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+        }
+
+        .floating-card-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -40%) scale(0.9) translateZ(-50px);
+            opacity: 0;
+            z-index: 20;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
+            pointer-events: none;
+            perspective: 1000px;
+        }
+
+        .floating-card-wrapper.pop-out {
+            transform: translate(-50%, -50%) scale(1) translateZ(0px);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Floating Message Card */
+        .floating-testimonial-card {
+            width: 440px;
+            background: rgba(6, 20, 40, 0.95);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 210, 255, 0.3);
             border-radius: 20px;
-            border-bottom-right-radius: 4px;
-            color: #ffffff;
-            font-size: 1.05rem;
-            line-height: 1.5;
+            padding: 35px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), inset 0 2px 20px rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
             position: relative;
-            box-shadow: 0 5px 20px rgba(11, 83, 148, 0.5);
-            margin-left: 20px;
+        }
+
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .floating-quote-mark {
+            font-size: 2.2rem;
+            color: rgba(0, 210, 255, 0.3);
+            line-height: 1;
         }
 
         .typing-container {
             min-height: 90px;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            color: #ffffff;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
         }
 
         .cursor {
             display: inline-block;
             width: 2px;
-            background-color: #ffffff;
+            background-color: #00d2ff;
             animation: client-cursor-blink 0.8s infinite;
-            margin-left: 2px;
+            margin-left: 3px;
             vertical-align: middle;
+            height: 1.15rem;
         }
 
         @keyframes client-cursor-blink {
@@ -479,7 +729,8 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            align-self: flex-end;
+            position: relative;
+            z-index: 2;
         }
 
         .client-avatar {
@@ -492,48 +743,100 @@
             justify-content: center;
             font-weight: bold;
             color: #ffffff;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
             transition: opacity 0.3s;
         }
 
         .client-details {
-            text-align: right;
+            display: flex;
+            flex-direction: column;
             transition: opacity 0.3s;
         }
 
         .client-name {
-            font-weight: bold;
-            font-size: 1rem;
+            font-weight: 600;
+            font-size: 1.05rem;
             color: #ffffff;
             margin-bottom: 2px;
         }
 
         .client-role {
-            font-size: 0.8rem;
-            color: #aaaaaa;
+            font-size: 0.85rem;
+            color: #00d2ff;
         }
 
-        /* Logos Section */
+        .client-tag {
+            font-size: 0.75rem;
+            color: #8da4c0;
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .testimonial-arrows {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 25;
+        }
+
+        .testi-arrow {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(11, 83, 148, 0.3);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: #00d2ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            font-size: 1rem;
+        }
+
+        .testi-arrow:hover {
+            background: #00d2ff;
+            color: #ffffff;
+            border-color: #00d2ff;
+            transform: scale(1.05);
+        }
+
+        /* Continuous Logos Section Dropdown */
         .client-logos-section {
-            padding: 60px 20px;
-            text-align: center;
-            overflow: hidden;
-            background-color: rgba(0, 0, 0, 0.1);
+            padding: 20px 20px 50px 20px;
+            position: relative;
+            z-index: 2;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 60px;
         }
 
-        .client-logos-heading {
-            color: #0b5394 !important;
-            -webkit-text-fill-color: #0b5394 !important;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: none !important;
-        }
-
-        .client-logos-subtitle {
-            color: #aaaaaa;
+        .client-logos-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 40px;
-            font-size: 1.1rem;
+            padding-left: 20px;
+        }
+
+        .client-logos-header-text {
+            color: #b0c4de;
+            font-size: 1rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .client-logos-header-line {
+            height: 1px;
+            flex: 1;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
         }
 
         .client-marquee-wrapper {
@@ -548,9 +851,9 @@
 
         .client-marquee-track {
             display: flex;
-            gap: 50px;
-            padding-right: 50px;
-            animation: client-scroll-left 25s linear infinite;
+            gap: 40px;
+            padding-right: 40px;
+            animation: client-scroll-left 35s linear infinite;
         }
 
         .client-marquee-wrapper:hover .client-marquee-track {
@@ -558,23 +861,28 @@
         }
 
         .logo-item {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 600;
-            color: #ffffff;
-            padding: 20px 40px;
-            background-color: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
+            color: #8da4c0;
+            padding: 20px 45px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: transform 0.3s, background-color 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.4s ease;
             cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
         }
 
         .logo-item:hover {
-            transform: scale(1.05);
-            background-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-5px);
+            background: rgba(11, 83, 148, 0.2);
+            color: #ffffff;
+            border-color: rgba(0, 210, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 210, 255, 0.1);
         }
 
         @keyframes client-scroll-left {
@@ -586,70 +894,240 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .client-scoped-container {
+                flex-direction: column;
+                gap: 60px;
+            }
+
+            .client-section-divider {
+                width: 80%;
+                height: 1px;
+                background: linear-gradient(to right, transparent, rgba(0, 210, 255, 0.2), transparent);
+                margin: 20px auto;
+            }
+
+            .client-scoped-right {
+                width: 100%;
+                justify-content: center;
+                height: 500px;
+            }
+
+            .client-phone-mockup {
+                right: auto;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .floating-card-wrapper {
+                right: auto;
+                left: 50%;
+                transform: translate(-50%, -40%) scale(0.9);
+            }
+
+            .floating-card-wrapper.pop-out {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            .floating-testimonial-card {
+                width: 380px;
+            }
+
+            .testimonial-arrows {
+                right: 50%;
+                top: auto;
+                bottom: -60px;
+                transform: translateX(50%);
+                flex-direction: row;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .client-scoped-section {
+                padding: 60px 15px 40px 15px;
+            }
+
+            .client-scoped-heading {
+                font-size: 2.2rem;
+            }
+
+            .client-phone-mockup {
+                display: none;
+                /* Hide phone on very small screens to save space */
+            }
+
+            .client-scoped-right {
+                height: auto;
+            }
+
+            .floating-card-wrapper {
+                position: relative;
+                right: auto;
+                left: auto;
+                top: auto;
+                transform: none !important;
+                opacity: 1;
+                /* Always visible without scroll animation on mobile */
+                width: 100%;
+                animation: none;
+            }
+
+            .floating-testimonial-card {
+                width: 100%;
+                background: rgba(11, 83, 148, 0.3);
+                border-color: rgba(0, 210, 255, 0.15);
+            }
+
+            .testimonial-arrows {
+                position: relative;
+                bottom: auto;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .client-logos-section {
+                margin-top: 40px;
+                padding-bottom: 20px;
+            }
+        }
     </style>
 
     <section id="clientsSection" class="client-scoped-section">
+        <!-- Ambient Glow Elements -->
+        <div class="client-bg-glow-1"></div>
+        <div class="client-bg-glow-2"></div>
+
         <div class="client-scoped-container">
-            <!-- Left Side -->
+            <!-- Left Side: Header & Text -->
             <div class="client-scoped-left">
-                <h1 class="client-scoped-heading">What Our Clients Say</h1>
+                <div class="client-section-badge">Client Stories</div>
+                <h1 class="client-scoped-heading">Feedback from<br><span class="client-heading-highlight">Our
+                        Partners</span></h1>
                 <p class="client-scoped-description">
                     Don't just take our word for it. Hear directly from our valued clients about their experiences
-                    working with us. Their success stories drive our passion for excellence.
+                    working with us. Their success stories drive our passion for continuous excellence and
+                    innovation.
                 </p>
+                <a href="#contactSection" class="client-cta-btn">
+                    Start Your Project <i class="fa-solid fa-arrow-right"></i>
+                </a>
             </div>
 
-            <!-- Right Side - Phone Mockup -->
+            <!-- Divider -->
+            <div class="client-section-divider"></div>
+
+            <!-- Right Side: Phone & Floating Card -->
             <div class="client-scoped-right">
+
+                <!-- Phone Mockup background element -->
                 <div class="client-phone-mockup">
-                    <div class="phone-notch"></div>
+                    <div class="phone-notch">
+                        <div class="phone-speaker"></div>
+                        <div class="phone-camera"></div>
+                    </div>
                     <div class="phone-screen">
-                        <div class="chat-header">
-                            <span class="chat-title">Feedback</span>
-                        </div>
-                        <div class="chat-body">
-                            <!-- Testimonial message bubble -->
-                            <div class="message-bubble">
-                                <div class="typing-container">
-                                    <span id="testimonial-text"></span><span class="cursor">|</span>
+                        <div class="phone-app-top">
+                            <div class="greeting-row">
+                                <div>
+                                    <div class="greeting-time">Good Morning!</div>
+                                    <div class="greeting-name">Steave John</div>
                                 </div>
+                                <div class="app-user-avatar"></div>
                             </div>
-                            <!-- Client Info -->
-                            <div class="client-info-container">
-                                <div class="client-details">
-                                    <div class="client-name" id="client-name">Name</div>
-                                    <div class="client-role" id="client-role">Role</div>
+                            <div class="app-search-bar">
+                                <span class="search-text">Search Here</span>
+                                <div class="search-icon-btn"><i class="fa-solid fa-search"></i></div>
+                            </div>
+                        </div>
+                        <div class="app-cards-container">
+                            <div class="app-ui-card">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
                                 </div>
-                                <div class="client-avatar" id="client-avatar">O</div>
+                                <div class="ui-card-stars">★★★★★</div>
+                            </div>
+                            <div class="app-ui-card" style="opacity: 0.6;">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
+                                </div>
+                                <div class="ui-card-stars">★★★★★</div>
+                            </div>
+                            <div class="app-ui-card" style="opacity: 0.3;">
+                                <div class="ui-card-square"></div>
+                                <div class="ui-card-lines">
+                                    <div class="ui-line long"></div>
+                                    <div class="ui-line short"></div>
+                                </div>
+                                <div class="ui-card-stars">★★★★★</div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Floating Testimonial Card (Pops out of phone with subtle slide) -->
+                <div class="floating-card-wrapper">
+                    <div class="floating-testimonial-card">
+                        <div class="card-header-row">
+                            <div class="client-info-container">
+                                <div class="client-avatar" id="client-avatar">A</div>
+                                <div class="client-details">
+                                    <div class="client-name" id="client-name">Name</div>
+                                    <div class="client-role" id="client-role">Role</div>
+                                </div>
+                            </div>
+                            <div class="floating-quote-mark"><i class="fa-solid fa-quote-right"></i></div>
+                        </div>
+                        <div class="typing-container">
+                            <span id="testimonial-text"></span><span class="cursor"></span>
+                        </div>
+                        <div class="client-tag"><i class="fa-solid fa-table-cells"
+                                style="color:#00d2ff; margin-right:5px;"></i> Rlabz user, Client</div>
+                    </div>
+                </div>
+
+                <!-- Manual Arrows -->
+                <div class="testimonial-arrows">
+                    <button class="testi-arrow prev-btn"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="testi-arrow next-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
         </div>
-    </section>
 
-    <!-- Our Clients Logo Section -->
-    <section class="client-logos-section client-scoped-section">
-        <div class="client-logos-container">
-            <h2 class="client-logos-heading">Our Clients</h2>
-            <p class="client-logos-subtitle">Trusted by leading companies worldwide</p>
+        <!-- Continuous Our Clients Logo Area -->
+        <div class="client-logos-section">
+            <div class="client-logos-header">
+                <span class="client-logos-header-text">Trusted by leading companies worldwide</span>
+                <div class="client-logos-header-line"></div>
+            </div>
+
             <div class="client-marquee-wrapper">
                 <div class="client-marquee-track">
                     <!-- Logos Group 1 -->
-                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
+                    </div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
+                        Microsoft
+                    </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
-                    <div class="logo-item">NextGen</div>
-                    <div class="logo-item">GlobalWeb</div>
-                    <div class="logo-item">CloudSync</div>
+                    <div class="logo-item">TechCorp</div>
                     <!-- Logos Group 2 (Duplicate for seamless loop) -->
-                    <div class="logo-item">TechCorp</div>
+                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
+                    </div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
+                        Microsoft
+                    </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
-                    <div class="logo-item">NextGen</div>
-                    <div class="logo-item">GlobalWeb</div>
-                    <div class="logo-item">CloudSync</div>
+                    <div class="logo-item">TechCorp</div>
                 </div>
             </div>
         </div>
@@ -659,25 +1137,25 @@
         document.addEventListener("DOMContentLoaded", () => {
             const testimonials = [
                 {
-                    text: "Working with this team made our workflow faster and more organized.",
+                    text: "Working with this team made our workflow faster and more organized. Highly scalable solutions.",
                     name: "Alice Johnson",
                     role: "CTO, TechCorp",
                     initial: "A"
                 },
                 {
-                    text: "Their solutions helped us scale without unnecessary complexity.",
+                    text: "Their solutions helped us scale without unnecessary complexity. A true partner in growth.",
                     name: "Mark Smith",
                     role: "Founder, StartupX",
                     initial: "M"
                 },
                 {
-                    text: "Professional, reliable, and easy to work with.",
+                    text: "Professional, reliable, and easy to work with. They delivered exactly what we needed.",
                     name: "Sarah Lee",
                     role: "Product Manager, InnovateUs",
                     initial: "S"
                 },
                 {
-                    text: "They understood our needs and delivered exactly what we expected.",
+                    text: "They understood our needs and delivered an exceptional product ahead of schedule.",
                     name: "David Kim",
                     role: "Director, NextGen",
                     initial: "D"
@@ -694,7 +1172,7 @@
             let currentIdx = 0;
             let charIdx = 0;
             let isDeleting = false;
-            let isTyping = false;
+            let typingTimer;
 
             // Initial setup
             nameEl.textContent = testimonials[0].name;
@@ -703,13 +1181,13 @@
 
             function typeEffect() {
                 const currentTestimonial = testimonials[currentIdx];
-                let typeSpeed = 50;
+                let typeSpeed = 25; // Faster typing
 
                 if (isDeleting) {
                     // Deleting text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx - 1);
                     charIdx--;
-                    typeSpeed = 20; // Fast delete
+                    typeSpeed = 10; // Faster delete
 
                     if (charIdx === 0) {
                         // Finished deleting, move to next
@@ -727,28 +1205,82 @@
                             avatarEl.textContent = testimonials[currentIdx].initial;
                             detailsEl.style.opacity = 1;
                             avatarContainerEl.style.opacity = 1;
-                        }, 300);
+                        }, 250);
 
-                        typeSpeed = 600; // Pause before typing new text
+                        typeSpeed = 300; // Pause before typing new text
                     }
                 } else {
                     // Typing text
                     textEl.textContent = currentTestimonial.text.substring(0, charIdx + 1);
                     charIdx++;
-                    typeSpeed = Math.random() * 30 + 40; // Variable spelling speed for natural feel
+                    typeSpeed = Math.random() * 15 + 15; // Variable quick speed
 
                     if (charIdx === currentTestimonial.text.length) {
                         // Finished typing, pause to read
                         isDeleting = true;
-                        typeSpeed = 3000;
+                        typeSpeed = 2500;
                     }
                 }
 
-                setTimeout(typeEffect, typeSpeed);
+                typingTimer = setTimeout(typeEffect, typeSpeed);
             }
 
             // Start typing effect after slight delay
-            setTimeout(typeEffect, 1000);
+            typingTimer = setTimeout(typeEffect, 800);
+
+            // Manual Navigation
+            function goToTestimonial(idx) {
+                clearTimeout(typingTimer);
+                isDeleting = false;
+                charIdx = 0;
+                currentIdx = idx;
+
+                detailsEl.style.opacity = 0;
+                avatarContainerEl.style.opacity = 0;
+                textEl.style.opacity = 0; // fade text out
+
+                setTimeout(() => {
+                    nameEl.textContent = testimonials[currentIdx].name;
+                    roleEl.textContent = testimonials[currentIdx].role;
+                    avatarEl.textContent = testimonials[currentIdx].initial;
+                    textEl.textContent = "";
+
+                    detailsEl.style.opacity = 1;
+                    avatarContainerEl.style.opacity = 1;
+                    textEl.style.opacity = 1; // fade text in
+
+                    typeEffect(); // restart typing
+                }, 300);
+            }
+
+            const nextBtn = document.querySelector('.next-btn');
+            const prevBtn = document.querySelector('.prev-btn');
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener('click', () => {
+                    goToTestimonial((currentIdx + 1) % testimonials.length);
+                });
+                prevBtn.addEventListener('click', () => {
+                    goToTestimonial((currentIdx - 1 + testimonials.length) % testimonials.length);
+                });
+            }
+
+            // Scroll Pop-out for Testimonial Card
+            const cardWrapper = document.querySelector('.floating-card-wrapper');
+            const rightColumn = document.querySelector('.client-scoped-right');
+            if (cardWrapper && rightColumn && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            cardWrapper.classList.add('pop-out');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                observer.observe(rightColumn);
+            } else if (cardWrapper) {
+                // Fallback
+                cardWrapper.classList.add('pop-out');
+            }
         });
     </script>
     <!-- Clients Section End -->
