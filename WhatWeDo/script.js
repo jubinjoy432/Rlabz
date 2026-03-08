@@ -2229,3 +2229,133 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// =========================================
+// ABOUT / DISCOVER RLABZ - SCROLL ANIMATIONS (GSAP + ScrollTrigger)
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const aboutSection = document.getElementById('aboutUsSection');
+    if (!aboutSection) return;
+
+    const stDefaults = { trigger: aboutSection, start: 'top 80%', once: true };
+
+    // 1. Main Image — Scale-in + Fade
+    const imgHero = aboutSection.querySelector('.img-hero');
+    if (imgHero) {
+        gsap.fromTo(imgHero,
+            { opacity: 0, scale: 0.85, visibility: 'hidden' },
+            {
+                opacity: 1, scale: 1, visibility: 'visible', duration: 1, ease: 'power3.out',
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 2. Overlap Image — Slide from Right
+    const imgOverlap = aboutSection.querySelector('.img-overlap');
+    if (imgOverlap) {
+        gsap.fromTo(imgOverlap,
+            { opacity: 0, x: 80, visibility: 'hidden' },
+            {
+                opacity: 1, x: 0, visibility: 'visible', duration: 0.9, ease: 'power3.out', delay: 0.3,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 3. Innovation Hub Card — Elastic Bounce-in
+    const statCard = aboutSection.querySelector('.floating-stat-card');
+    if (statCard) {
+        gsap.fromTo(statCard,
+            { opacity: 0, y: 40, scale: 0.6, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, scale: 1, visibility: 'visible', duration: 1, ease: 'elastic.out(1, 0.5)', delay: 0.6,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 4. Badge — Slide Down + Fade
+    const badge = aboutSection.querySelector('.about-badge');
+    if (badge) {
+        gsap.fromTo(badge,
+            { opacity: 0, y: -20, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.6, ease: 'power2.out', delay: 0.15,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 5. Heading — Staggered Word Reveal
+    const heading = aboutSection.querySelector('.about-heading');
+    if (heading) {
+        const parts = [];
+        heading.childNodes.forEach(node => {
+            if (node.nodeType === 3 && node.textContent.trim()) {
+                const w = document.createElement('span');
+                w.style.cssText = 'display:inline-block;opacity:0';
+                w.textContent = node.textContent;
+                node.parentNode.replaceChild(w, node);
+                parts.push(w);
+            } else if (node.nodeType === 1 && node.tagName !== 'BR') {
+                node.style.opacity = '0';
+                node.style.display = 'inline-block';
+                parts.push(node);
+            }
+        });
+        gsap.set(heading, { opacity: 1, visibility: 'visible' });
+        gsap.fromTo(parts, { opacity: 0, y: 30 },
+            {
+                opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.2,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 6. Paragraph — Fade-up
+    const lead = aboutSection.querySelector('.about-lead');
+    if (lead) {
+        gsap.fromTo(lead,
+            { opacity: 0, y: 25, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.7, ease: 'power2.out', delay: 0.5,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 7. Blockquote — Border Draw + Text Fade
+    const quote = aboutSection.querySelector('.about-quote');
+    if (quote) {
+        quote.classList.add('anim-ready');
+
+        const qTl = gsap.timeline({
+            scrollTrigger: stDefaults,
+            delay: 0.7
+        });
+
+        qTl.set(quote, { visibility: 'visible' });
+        // Draw the pseudo-element border via scaleY
+        qTl.fromTo(quote, { '--quote-border-scale': '0' }, {
+            '--quote-border-scale': '1', duration: 0.5, ease: 'power2.inOut'
+        });
+        // Fade in quote text overlapping border draw
+        qTl.fromTo(quote, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3');
+    }
+
+    // 8. Incubation Card — Slide Up
+    const incubationCard = aboutSection.querySelector('.incubation-card');
+    if (incubationCard) {
+        gsap.fromTo(incubationCard,
+            { opacity: 0, y: 40, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.8, ease: 'power3.out', delay: 0.9,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+});

@@ -1121,7 +1121,7 @@
         // Preloader Logic
         window.addEventListener('load', () => {
             const preloader = document.getElementById('rlabz-preloader');
-            const minimumDisplayTime = 1500; // 1.5 seconds minimum 
+            const minimumDisplayTime = 750; // 0.75 seconds minimum 
             const startTime = performance.now();
 
             // This function hides the preloader but ensures the minimum time has elapsed
@@ -1145,7 +1145,7 @@
                 if (preloader && preloader.style.display !== 'none') {
                     window.hideRLabzPreloader();
                 }
-            }, 3000);
+            }, 1500);
         });
     </script>
 </body>

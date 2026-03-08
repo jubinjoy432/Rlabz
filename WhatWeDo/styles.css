@@ -186,7 +186,7 @@ body {
 }
 
 .brand-blue {
-    color: #1a7bbf;
+    color: #ffffff;
     transition: color 0.35s;
 }
 
@@ -7741,6 +7741,47 @@ html.lenis body {
     line-height: 1.5;
     color: #475569;
     margin: 0;
+}
+
+/* --- GSAP Animation Initial States --- */
+.img-hero,
+.img-overlap,
+.floating-stat-card,
+.about-badge,
+.about-heading,
+.about-lead,
+.incubation-card {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.about-quote {
+    opacity: 0;
+    visibility: hidden;
+    border-left-color: transparent;
+}
+
+.about-quote.anim-ready {
+    border-left-color: transparent;
+    transition: border-left-color 0s;
+}
+
+/* Pseudo-element for animatable quote border (GSAP draws it) */
+.about-quote {
+    position: relative;
+}
+
+.about-quote::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #0ea5e9;
+    transform-origin: top center;
+    transform: scaleY(var(--quote-border-scale, 0));
+    border-radius: 2px;
 }
 
 /* --- Responsive Adjustments --- */
