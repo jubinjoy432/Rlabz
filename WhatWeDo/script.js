@@ -581,8 +581,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Hover effects disabled as requested by user. The center robot and title will remain permanently visible.
     }
-});
 
+    // =========================================
+    // GSAP ANIMATIONS FOR "WHO WE ARE" PREMIUM SECTION
+    // =========================================
+    const aboutSection = document.getElementById('aboutUsSection');
+    if (aboutSection && typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+        const aboutTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: aboutSection,
+                start: "top 70%",
+                once: true
+            }
+        });
+
+        // Background Elements Reveal
+        aboutTl.to(aboutSection.querySelectorAll('.bg-sweep'), {
+            opacity: 0.15,
+            duration: 2,
+            stagger: 0.2,
+            ease: "power2.out"
+        }, 0);
+
+        // Text Content Reveal
+        aboutTl.to(aboutSection.querySelectorAll('.reveal-up'), {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "back.out(1.2)"
+        }, 0.2);
+
+        // Image Gallery Reveal (Target the exact classes and properties)
+        aboutTl.to(aboutSection.querySelector('.img-hero'), {
+            scale: 1, // Remove scaling
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out"
+        }, 0.5);
+
+        aboutTl.to(aboutSection.querySelector('.img-overlap'), {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out"
+        }, 0.7);
+    }
+});
 
 
 // 2. Project Data (Mock Data matching IDs)
