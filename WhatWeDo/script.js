@@ -2208,12 +2208,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Update Active Link
+            let matchingLink = null;
             navLinks.forEach(link => {
-                link.classList.remove('active');
                 if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active');
+                    matchingLink = link;
                 }
             });
+
+            // Only update the active class if we found a matching link for this section
+            // This prevents the active link from losing its white text color when scrolling past sections without nav items (like About Us)
+            if (matchingLink) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                matchingLink.classList.add('active');
+            }
         });
 
         // Trigger once on load in case user refreshed while down the page

@@ -7786,3 +7786,202 @@ html.lenis body {
         height: 50%;
     }
 }
+
+/* ========================================= */
+/* RLabz Branded Preloader                   */
+/* ========================================= */
+.rlabz-preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+}
+
+/* Subtle pulsing background glow */
+.rlabz-preloader::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
+    animation: bgPulse 3s ease-in-out infinite alternate;
+}
+
+.rlabz-preloader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.preloader-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+}
+
+/* ─── Central Logo ─── */
+.spinner-logo {
+    width: 48px;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 50%;
+    box-sizing: content-box;
+    animation: centerPulse 2.5s ease-in-out infinite alternate;
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 40px rgba(0, 210, 255, 0.15);
+}
+
+/* ─── Static Track Circles (faint full circles behind arcs) ─── */
+.spinner-track {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.spinner-track.track-1 {
+    width: 180px;
+    height: 180px;
+    margin-top: -90px;
+    margin-left: -90px;
+}
+
+.spinner-track.track-2 {
+    width: 144px;
+    height: 144px;
+    margin-top: -72px;
+    margin-left: -72px;
+}
+
+.spinner-track.track-3 {
+    width: 110px;
+    height: 110px;
+    margin-top: -55px;
+    margin-left: -55px;
+}
+
+/* ─── Spinning Arcs (base) ─── */
+.spinner-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 4px solid transparent;
+}
+
+/* Outer Decorative Dashed Ring – slow spin */
+.spinner-ring.ring-outer {
+    width: 200px;
+    height: 200px;
+    margin-top: -100px;
+    margin-left: -100px;
+    border: 1.5px dashed rgba(255, 255, 255, 0.08);
+    animation: spinCW 12s linear infinite;
+}
+
+/* Ring 1 – Outer, Cyan – 3/4 arc */
+.spinner-ring.ring-1 {
+    width: 180px;
+    height: 180px;
+    margin-top: -90px;
+    margin-left: -90px;
+    border-top-color: #00d2ff;
+    border-right-color: #00d2ff;
+    border-bottom-color: rgba(0, 210, 255, 0.25);
+    animation: spinCW 1.8s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.7));
+}
+
+/* Ring 2 – Middle, Green – 3/4 arc */
+.spinner-ring.ring-2 {
+    width: 144px;
+    height: 144px;
+    margin-top: -72px;
+    margin-left: -72px;
+    border-top-color: #2d8c2d;
+    border-left-color: #2d8c2d;
+    border-bottom-color: rgba(45, 140, 45, 0.25);
+    animation: spinCCW 2.2s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(45, 140, 45, 0.7));
+}
+
+/* Ring 3 – Inner, Light Blue – 3/4 arc */
+.spinner-ring.ring-3 {
+    width: 110px;
+    height: 110px;
+    margin-top: -55px;
+    margin-left: -55px;
+    border-top-color: #38bdf8;
+    border-right-color: #38bdf8;
+    border-bottom-color: rgba(56, 189, 248, 0.25);
+    animation: spinCW 1.4s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
+}
+
+/* ─── Keyframes ─── */
+@keyframes spinCW {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes spinCCW {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes centerPulse {
+    0% {
+        box-shadow:
+            0 0 12px rgba(255, 255, 255, 0.4),
+            0 0 30px rgba(0, 210, 255, 0.1);
+    }
+
+    100% {
+        box-shadow:
+            0 0 28px rgba(255, 255, 255, 0.8),
+            0 0 60px rgba(0, 210, 255, 0.3);
+    }
+}
+
+@keyframes bgPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+}

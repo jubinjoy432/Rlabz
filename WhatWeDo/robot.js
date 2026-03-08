@@ -1033,7 +1033,17 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         animate();
         console.log("ROBOT: Animation loop started.");
+
+        // Trigger Preloader Removal
+        if (typeof window.hideRLabzPreloader === 'function') {
+            window.hideRLabzPreloader();
+        }
     } catch (e) {
         console.error("ROBOT: Animation failed to start:", e);
+
+        // Trigger Preloader Removal on error to ensure user can still see the site
+        if (typeof window.hideRLabzPreloader === 'function') {
+            window.hideRLabzPreloader();
+        }
     }
 });

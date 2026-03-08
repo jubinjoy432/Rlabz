@@ -19,8 +19,25 @@
 </head>
 
 <body>
-
-
+    <!-- RLabz Branded Preloader -->
+    <div id="rlabz-preloader" class="rlabz-preloader">
+        <div class="preloader-content">
+            <div class="spinner-wrapper">
+                <!-- Faint track circles (static background rings) -->
+                <div class="spinner-track track-1"></div>
+                <div class="spinner-track track-2"></div>
+                <div class="spinner-track track-3"></div>
+                <!-- Outer decorative dashed ring -->
+                <div class="spinner-ring ring-outer"></div>
+                <!-- Main spinning arcs -->
+                <div class="spinner-ring ring-1"></div>
+                <div class="spinner-ring ring-2"></div>
+                <div class="spinner-ring ring-3"></div>
+                <!-- Centered logo -->
+                <img src="images/rz-logo.png" alt="RLabz Logo" class="spinner-logo">
+            </div>
+        </div>
+    </div>
     <!-- Premium Floating Navbar -->
     <nav class="premium-nav">
         <div class="nav-content">
@@ -1099,6 +1116,38 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
 
+
+    <script>
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('rlabz-preloader');
+            const minimumDisplayTime = 1500; // 1.5 seconds minimum 
+            const startTime = performance.now();
+
+            // This function hides the preloader but ensures the minimum time has elapsed
+            window.hideRLabzPreloader = function () {
+                if (!preloader) return;
+
+                const elapsedTime = performance.now() - startTime;
+                const remainingTime = Math.max(0, minimumDisplayTime - elapsedTime);
+
+                setTimeout(() => {
+                    preloader.classList.add('fade-out');
+                    // Remove from DOM after fade animation completes
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 800);
+                }, remainingTime);
+            };
+
+            // If robot.js doesn't exist or fails, fallback to auto-hiding after 3 seconds total
+            setTimeout(() => {
+                if (preloader && preloader.style.display !== 'none') {
+                    window.hideRLabzPreloader();
+                }
+            }, 3000);
+        });
+    </script>
 </body>
 
 </html>
