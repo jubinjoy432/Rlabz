@@ -452,7 +452,7 @@
     <style>
         /* Scoped to .client-scoped-section to avoid conflicts */
         .client-scoped-section {
-            background: linear-gradient(to bottom, #022c5e 0%, #051428 100%);
+            background: #020c1b;
             color: #ffffff;
             padding: 100px 20px 80px 20px;
             font-family: inherit;
@@ -465,28 +465,28 @@
         /* Background Glow Effects */
         .client-bg-glow-1 {
             position: absolute;
-            top: -100px;
-            left: -100px;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(11, 83, 148, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+            top: -150px;
+            left: -150px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(11, 83, 148, 0.3) 0%, rgba(0, 0, 0, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            filter: blur(40px);
+            filter: blur(60px);
         }
 
         .client-bg-glow-2 {
             position: absolute;
-            bottom: -150px;
+            bottom: -200px;
             right: -100px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 0;
-            filter: blur(50px);
+            filter: blur(80px);
         }
 
         .client-scoped-container {
@@ -503,7 +503,7 @@
         .client-scoped-left {
             flex: 1;
             min-width: 300px;
-            padding-right: 40px;
+            padding-right: 20px;
         }
 
         .client-section-badge {
@@ -574,16 +574,16 @@
 
         /* Phone Mockup */
         .client-phone-mockup {
-            width: 280px;
-            height: 560px;
-            background-color: #0d1624;
-            border-radius: 35px;
-            border: 10px solid #1a2942;
+            width: 290px;
+            height: 580px;
+            background-color: #08111d;
+            border-radius: 40px;
+            border: 12px solid #14233a;
             position: absolute;
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            box-shadow: -15px 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.5);
+            box-shadow: -20px 30px 50px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0, 0, 0, 0.8);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -708,24 +708,50 @@
             border-radius: 3px;
         }
 
+        .floating-card-wrapper {
+            position: absolute;
+            right: 145px;
+            top: 50%;
+            transform: translate(50%, -50%) scale(0.8) translateY(20px);
+            opacity: 0;
+            z-index: 20;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.6s ease;
+            pointer-events: none;
+        }
+
+        .floating-card-wrapper.pop-out {
+            transform: translate(50%, -50%) scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         /* Floating Message Card (Pops OUTSIDE the phone) */
         .floating-testimonial-card {
-            position: absolute;
-            left: -80px;
-            /* Pulls it out to the left of the phone */
-            top: 50%;
-            transform: translateY(-50%);
-            width: 380px;
-            background: rgba(11, 83, 148, 0.4);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: -10px 15px 30px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0, 210, 255, 0.1);
-            z-index: 20;
+            width: 420px;
+            background: rgba(8, 30, 60, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 2px 10px rgba(255, 255, 255, 0.05);
+            /* Centered drop shadow */
             display: flex;
             flex-direction: column;
+            position: relative;
+        }
+
+        .floating-testimonial-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 26px;
+            background: linear-gradient(135deg, rgba(0, 210, 255, 0.4), transparent 60%);
+            z-index: -1;
+            opacity: 0.5;
         }
 
         .floating-quote-mark {
@@ -923,12 +949,21 @@
             .client-phone-mockup {
                 right: auto;
                 left: 50%;
-                transform: translate(-30%, -50%);
+                transform: translate(-50%, -50%);
+            }
+
+            .floating-card-wrapper {
+                right: auto;
+                left: 50%;
+                transform: translate(-50%, -50%) scale(0.8) translateY(20px);
+            }
+
+            .floating-card-wrapper.pop-out {
+                transform: translate(-50%, -50%) scale(1) translateY(0);
             }
 
             .floating-testimonial-card {
-                left: -30%;
-                width: 320px;
+                width: 340px;
             }
         }
 
@@ -950,11 +985,19 @@
                 height: auto;
             }
 
-            .floating-testimonial-card {
+            .floating-card-wrapper {
                 position: relative;
-                left: 0;
-                top: 0;
-                transform: none;
+                right: auto;
+                left: auto;
+                top: auto;
+                transform: none !important;
+                opacity: 1;
+                /* Always visible without scroll animation on mobile */
+                width: 100%;
+                animation: none;
+            }
+
+            .floating-testimonial-card {
                 width: 100%;
                 background: rgba(11, 83, 148, 0.3);
                 border-color: rgba(0, 210, 255, 0.15);
@@ -980,7 +1023,8 @@
                         Partners</span></h1>
                 <p class="client-scoped-description">
                     Don't just take our word for it. Hear directly from our valued clients about their experiences
-                    working with us. Their success stories drive our passion for continuous excellence and innovation.
+                    working with us. Their success stories drive our passion for continuous excellence and
+                    innovation.
                 </p>
                 <a href="#contactSection" class="client-cta-btn">
                     Start Your Project <i class="fa-solid fa-arrow-right"></i>
@@ -1031,21 +1075,23 @@
                     </div>
                 </div>
 
-                <!-- Floating Testimonial Card (Pops out of phone) -->
-                <div class="floating-testimonial-card">
-                    <div class="floating-quote-mark">"</div>
-                    <div class="typing-container">
-                        <span id="testimonial-text"></span><span class="cursor"></span>
-                    </div>
-                    <!-- Client Info -->
-                    <div class="client-info-container">
-                        <div class="client-avatar" id="client-avatar">
-                            <!-- Updated dynamically, can be image or initial -->
-                            A
+                <!-- Floating Testimonial Card (Pops out of phone with subtle slide) -->
+                <div class="floating-card-wrapper">
+                    <div class="floating-testimonial-card">
+                        <div class="floating-quote-mark">"</div>
+                        <div class="typing-container">
+                            <span id="testimonial-text"></span><span class="cursor"></span>
                         </div>
-                        <div class="client-details">
-                            <div class="client-name" id="client-name">Name</div>
-                            <div class="client-role" id="client-role">Role</div>
+                        <!-- Client Info -->
+                        <div class="client-info-container">
+                            <div class="client-avatar" id="client-avatar">
+                                <!-- Updated dynamically, can be image or initial -->
+                                A
+                            </div>
+                            <div class="client-details">
+                                <div class="client-name" id="client-name">Name</div>
+                                <div class="client-role" id="client-role">Role</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1063,16 +1109,20 @@
                 <div class="client-marquee-track">
                     <!-- Logos Group 1 -->
                     <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
-                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google</div>
-                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i> Microsoft
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
+                    </div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
+                        Microsoft
                     </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
                     <div class="logo-item">TechCorp</div>
                     <!-- Logos Group 2 (Duplicate for seamless loop) -->
                     <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
-                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google</div>
-                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i> Microsoft
+                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
+                    </div>
+                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
+                        Microsoft
                     </div>
                     <div class="logo-item">StartupX</div>
                     <div class="logo-item">InnovateUs</div>
@@ -1175,6 +1225,24 @@
 
             // Start typing effect after slight delay
             setTimeout(typeEffect, 1000);
+
+            // Scroll Pop-out for Testimonial Card
+            const cardWrapper = document.querySelector('.floating-card-wrapper');
+            const rightColumn = document.querySelector('.client-scoped-right');
+            if (cardWrapper && rightColumn && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            cardWrapper.classList.add('pop-out');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                observer.observe(rightColumn);
+            } else if (cardWrapper) {
+                // Fallback
+                cardWrapper.classList.add('pop-out');
+            }
         });
     </script>
     <!-- Clients Section End -->
