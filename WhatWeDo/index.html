@@ -811,18 +811,21 @@
 
         /* Continuous Logos Section Dropdown */
         .client-logos-section {
-            padding: 20px 20px 50px 20px;
+            padding: 50px 20px 50px 20px;
+            /* Increased from 20px */
             position: relative;
             z-index: 2;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 60px;
+            margin-top: 100px;
+            /* Increased from 60px */
         }
 
         .client-logos-header {
             display: flex;
             align-items: center;
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
+            /* Increased from 40px */
             padding-left: 20px;
         }
 
@@ -1002,13 +1005,9 @@
         <div class="client-scoped-container">
             <!-- Left Side: Header & Text -->
             <div class="client-scoped-left">
-                <div class="client-section-badge">Client Stories</div>
-                <h1 class="client-scoped-heading">Feedback from<br><span class="client-heading-highlight">Our
-                        Partners</span></h1>
+                <h1 class="client-scoped-heading">What Client Say?</h1>
                 <p class="client-scoped-description">
-                    Don't just take our word for it. Hear directly from our valued clients about their experiences
-                    working with us. Their success stories drive our passion for continuous excellence and
-                    innovation.
+                    Whoever is happy will make others happy too...
                 </p>
                 <a href="#contactSection" class="client-cta-btn">
                     Start Your Project <i class="fa-solid fa-arrow-right"></i>
@@ -1029,15 +1028,9 @@
                     </div>
                     <div class="phone-screen">
                         <div class="phone-app-top">
-                            <div class="greeting-row">
-                                <div>
-                                    <div class="greeting-time">Good Morning!</div>
-                                    <div class="greeting-name">Steave John</div>
-                                </div>
-                                <div class="app-user-avatar"></div>
-                            </div>
-                            <div class="app-search-bar">
-                                <span class="search-text">Search Here</span>
+                            <!-- Removed user name and greeting -->
+                            <div class="app-search-bar" style="margin-top: 20px;">
+                                <span class="search-text">Search Feedback</span>
                                 <div class="search-icon-btn"><i class="fa-solid fa-search"></i></div>
                             </div>
                         </div>
@@ -1109,24 +1102,14 @@
             <div class="client-marquee-wrapper">
                 <div class="client-marquee-track">
                     <!-- Logos Group 1 -->
-                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
-                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
-                    </div>
-                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
-                        Microsoft
-                    </div>
-                    <div class="logo-item">StartupX</div>
-                    <div class="logo-item">InnovateUs</div>
+                    <div class="logo-item">The Luke</div>
+                    <div class="logo-item">Arkon</div>
+                    <div class="logo-item"><i class="fa-solid fa-lightbulb" style="margin-right:8px;"></i> InnoBiz</div>
                     <div class="logo-item">TechCorp</div>
                     <!-- Logos Group 2 (Duplicate for seamless loop) -->
-                    <div class="logo-item"><i class="fa-brands fa-aws" style="margin-right:8px;"></i> AWS</div>
-                    <div class="logo-item"><i class="fa-brands fa-google" style="margin-right:8px;"></i> Google
-                    </div>
-                    <div class="logo-item"><i class="fa-brands fa-microsoft" style="margin-right:8px;"></i>
-                        Microsoft
-                    </div>
-                    <div class="logo-item">StartupX</div>
-                    <div class="logo-item">InnovateUs</div>
+                    <div class="logo-item">The Luke</div>
+                    <div class="logo-item">Arkon</div>
+                    <div class="logo-item"><i class="fa-solid fa-lightbulb" style="margin-right:8px;"></i> InnoBiz</div>
                     <div class="logo-item">TechCorp</div>
                 </div>
             </div>
@@ -1137,28 +1120,22 @@
         document.addEventListener("DOMContentLoaded", () => {
             const testimonials = [
                 {
-                    text: "Working with this team made our workflow faster and more organized. Highly scalable solutions.",
-                    name: "Alice Johnson",
-                    role: "CTO, TechCorp",
-                    initial: "A"
+                    text: "RlabZ is very punctual, responsive, flexible, fast and overall provided a fantastic service. We are very happy with the results and I'd highly recommend them.",
+                    name: "Mr.Pothen John",
+                    role: "Arkon Medical Systems",
+                    initial: "P"
                 },
                 {
-                    text: "Their solutions helped us scale without unnecessary complexity. A true partner in growth.",
-                    name: "Mark Smith",
-                    role: "Founder, StartupX",
+                    text: "The guys over at RlabZ have gone above and beyond as our technological partner. Excellent communication, great energy and talent to manifest the potential of world class ideas.",
+                    name: "DR. MARY VENUS JOSEPH",
+                    role: "icsw",
                     initial: "M"
                 },
                 {
-                    text: "Professional, reliable, and easy to work with. They delivered exactly what we needed.",
-                    name: "Sarah Lee",
-                    role: "Product Manager, InnovateUs",
+                    text: "To Those who consider RlabZ, I can tell you that we at the Luke are pleased, delighted and completely satisfied with the very professional service provided by the company.",
+                    name: "Mr.Stebin Sebastian",
+                    role: "The Luke Event Management",
                     initial: "S"
-                },
-                {
-                    text: "They understood our needs and delivered an exceptional product ahead of schedule.",
-                    name: "David Kim",
-                    role: "Director, NextGen",
-                    initial: "D"
                 }
             ];
 
