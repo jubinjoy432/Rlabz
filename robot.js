@@ -728,22 +728,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetArmRotZ = -0.1; // Default idle
 
     const cards = document.querySelectorAll('.feature-card');
+    
+    // Global event listener for explicitly forcing a prop (used by mobile swiper)
+    window.addEventListener('robot-show-prop', (e) => {
+        const title = e.detail.title;
+        if (!title) {
+            isHoldingObject = false;
+            Object.values(props).forEach(p => p.visible = false);
+        } else if (props[title]) {
+            Object.values(props).forEach(p => p.visible = false);
+            props[title].visible = true;
+            isHoldingObject = true;
+            isIdle = false; // Wake up robot
+        }
+    });
+
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
+            if (window.innerWidth <= 992) return; // Ignore on mobile (handled by scroll sync)
             const title = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : '';
-            if (props[title]) {
-                // Hide all first
-                Object.values(props).forEach(p => p.visible = false);
-                // Show specific
-                props[title].visible = true;
-                isHoldingObject = true;
-                isIdle = false; // Wake up robot
-            }
+            window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
         });
 
         card.addEventListener('mouseleave', () => {
-            isHoldingObject = false;
-            Object.values(props).forEach(p => p.visible = false);
+            if (window.innerWidth <= 992) return;
+            window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
         });
     });
 

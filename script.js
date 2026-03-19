@@ -628,6 +628,21 @@ document.addEventListener('DOMContentLoaded', () => {
                             swipeArrow.style.transition = 'opacity 0.3s ease';
                             swipeArrow.style.opacity = index >= dots.length - 1 ? '0' : '1';
                         }
+
+                        // Programmatically trigger robot prop holding by checking active centered card
+                        const allCards = mobileSliderWrapper.querySelectorAll('.feature-card-slide, .feature-card');
+                        if (allCards[index] && allCards[index].classList.contains('feature-card')) {
+                            const title = allCards[index].querySelector('h3') ? allCards[index].querySelector('h3').textContent.trim() : null;
+                            if (window.lastActiveRobotProp !== title) {
+                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
+                                window.lastActiveRobotProp = title;
+                            }
+                        } else {
+                            if (window.lastActiveRobotProp !== null) {
+                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
+                                window.lastActiveRobotProp = null;
+                            }
+                        }
                     });
 
                     // Make dots clickable
