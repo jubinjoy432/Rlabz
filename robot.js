@@ -838,7 +838,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (heroVisual && targetHeading) {
                 const bentoSection = document.getElementById('what-we-do');
-                const targetAnchor = document.querySelector('#robot-target-anchor');
+                let targetAnchor = document.querySelector('#robot-target-anchor');
+                
+                // Hijack the anchor trajectory on mobile to push the robot safely to the bottom of the screen
+                if (window.innerWidth <= 992) {
+                    const mobileAnchor = document.querySelector('#robot-target-anchor-mobile');
+                    if (mobileAnchor) targetAnchor = mobileAnchor;
+                }
 
                 const rHero = heroVisual.getBoundingClientRect();
                 const rBento = bentoSection.getBoundingClientRect();
@@ -874,7 +880,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
                 const scaleHero = responsiveScale;
                 const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
-                const scaleAnchor = targetAnchor ? 0.38 : 0.32;
+                // Drastically shrink the robot on mobile so it doesn't occlude the slider
+                const scaleAnchor = window.innerWidth <= 992 ? 0.20 : (targetAnchor ? 0.38 : 0.32);
 
                 // Compute Base Phase 1 Output
                 currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;

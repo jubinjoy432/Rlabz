@@ -126,21 +126,22 @@
             <!-- Header removed and moved to bento center -->
 
             <div class="feature-bento-grid">
-                <!-- Center Container (Robot Area / Main Title) -->
-                <div class="bento-center">
-                    <div class="bento-center-default">
-                        <h2 class="center-bento-title">
-                            <span class="reveal-mask"><span class="reveal-text">Comprehensive</span></span>
-                            <span class="reveal-mask"><span class="reveal-text"><span class="highlight-text"
-                                        id="highlight-solutions">Solutions</span></span></span>
-                            <span class="reveal-mask"><span class="reveal-text">for Your Business</span></span>
-                        </h2>
-                        <div id="robot-target-anchor"></div>
-                    </div>
-                </div>
-
+                <!-- Center Container (Robot Area / Main Title) is now Slide 0 -->
                 <!-- Slider wrapper explicitly for mobile (transparent on desktop) -->
                 <div class="mobile-feature-slider">
+                    
+                    <div class="bento-center feature-card-slide">
+                        <div class="bento-center-default">
+                            <h2 class="center-bento-title">
+                                <span class="reveal-mask"><span class="reveal-text">Comprehensive</span></span>
+                                <span class="reveal-mask"><span class="reveal-text"><span class="highlight-text"
+                                            id="highlight-solutions">Solutions</span></span></span>
+                                <span class="reveal-mask"><span class="reveal-text">for Your Business</span></span>
+                            </h2>
+                            <div id="robot-target-anchor"></div>
+                        </div>
+                    </div>
+
                     <!-- Card 1: Mobile Solutions -->
                     <div class="feature-card bento-card bento-top-left" data-tilt>
                         <div class="feature-icon-box">
@@ -213,9 +214,13 @@
                     <span class="feature-dot" data-index="1"></span>
                     <span class="feature-dot" data-index="2"></span>
                     <span class="feature-dot" data-index="3"></span>
+                    <span class="feature-dot" data-index="4"></span>
                 </div>
             </div>
         </div>
+        
+        <!-- Mobile Robot Anchor (Resting bottom state matching MetaMask UI geometry) -->
+        <div id="robot-target-anchor-mobile" style="position: absolute; bottom: 2%; left: 50%; transform: translateX(-50%); width: 1px; height: 1px; pointer-events: none; z-index: 20;"></div>
     </section>
 
     <!-- Have You Seen Our Works Section -->

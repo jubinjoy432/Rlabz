@@ -490,61 +490,124 @@ document.addEventListener('DOMContentLoaded', () => {
         if (bentoSection && bentoGrid) {
             const isMobile = window.innerWidth <= 992;
 
+            // First, override the CSS transition from the observer above
+            outerCards.forEach(card => {
+                if (card) {
+                    card.style.transition = 'none';
+                }
+            });
+
+            // Make the center background initially transparent
+            gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
+
+            // Start the central text appropriately sized and positioned based on flow
+            gsap.set(centerDefault, {
+                position: isMobile ? "relative" : "absolute",
+                top: isMobile ? "auto" : "30%", // Perfectly positions exactly above robot destination on desktop
+                left: isMobile ? "auto" : "50%",
+                xPercent: isMobile ? 0 : -50,
+                yPercent: isMobile ? 0 : -50,
+                scale: isMobile ? 1.25 : 3, // Smaller cinematic starting scale on phone to prevent wrapping
+                zIndex: 101, // Stay above Robot (z-index 50) and parent wrapper
+                transformOrigin: "center center"
+            });
+
+            // Initially hide the targets depending on device layout
             if (isMobile) {
-                // ===== MOBILE PATH =====
-                // On mobile, completely skip all GSAP absolute-positioning, scaling,
-                // and pinning animations. Let everything flow naturally via CSS flex.
-
-                // Reset centerDefault to normal flow (undo any residual GSAP from cache)
-                gsap.set(centerDefault, {
-                    position: "relative",
-                    top: "auto",
-                    left: "auto",
-                    xPercent: 0,
-                    yPercent: 0,
-                    scale: 1,
-                    zIndex: 10,
-                    transformOrigin: "center center"
-                });
-
-                // Make center background visible immediately with its final style
-                gsap.set(centerBg, {
-                    backgroundColor: '#eef0ff',
-                    borderColor: 'rgba(120, 100, 220, 0.25)',
-                    boxShadow: `
-                        0 1px 0 0 rgba(255,255,255,0.8) inset,
-                        0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
-                        0 4px 6px -1px rgba(80, 60, 180, 0.08),
-                        0 12px 24px -4px rgba(80, 60, 180, 0.14),
-                        0 32px 64px -8px rgba(80, 60, 180, 0.18),
-                        0 2px 4px 0 rgba(80, 60, 180, 0.06)
-                    `,
-                    zIndex: 2
-                });
-
-                // Make all cards visible immediately (no hiding, no animation)
+                // outerCards (slides 1-4) should be hidden until the title slide finishes its entrance
                 outerCards.forEach(card => {
-                    if (card) {
-                        card.style.transition = 'none';
-                        gsap.set(card, { autoAlpha: 1, x: 0, y: 0 });
+                    if (card) gsap.set(card, { autoAlpha: 0 });
+                });
+                const dots = document.querySelector('.feature-slider-dots');
+                if (dots) gsap.set(dots, { autoAlpha: 0 });
+                // We do NOT hide the mobileSliderWrapper anymore because it now holds the title text slide!
+            } else {
+                outerCards.forEach(card => {
+                    if (card) gsap.set(card, { autoAlpha: 0 });
+                });
+            }
+
+            // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
+            const revealTexts = document.querySelectorAll('.reveal-text');
+            if (revealTexts.length > 0) {
+                gsap.set(revealTexts, { clearProps: "transform" }); // clear static transform
+                gsap.from(revealTexts, {
+                    y: 100,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power3.out",
+                    stagger: 0.2, // Staggered reveal for each line
+                    scrollTrigger: {
+                        trigger: bentoSection,
+                        start: "top 80%",
+                        once: true // Trigger only once
                     }
                 });
+            }
 
-                // Reveal text immediately (no mask animation needed on mobile)
-                const revealTexts = document.querySelectorAll('.reveal-text');
-                revealTexts.forEach(t => { t.style.transform = 'translateY(0)'; });
+            // Create the Pinning Timeline (Identical for Desktop & Mobile to empower Robot.js completely)
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: bentoSection,
+                    start: "top top", // Trigger when section hits top of viewport
+                    end: "+=150%",     // Pin for 1.5x viewport height of scrolling
+                    pin: true,        // Screen lock for both!
+                    scrub: 1,         // Smooth scrubbing
+                    onUpdate: (self) => {
+                        window.bentoScrollProgress = self.progress; // Critically powers Robot.js
+                    }
+                }
+            });
 
-                // --- Mobile Slider Navigation Dots Sync ---
-                const mobileSliderWrapper = document.querySelector('.mobile-feature-slider');
+            // 1. Center text shrinks down to standard size
+            tl.to(centerDefault, {
+                scale: 1,
+                zIndex: 10,
+                ease: "power2.inOut",
+                duration: 2
+            }, 0);
+
+            // 2. Background fades in (soft lavender-blue, pairs with the purple side cards)
+            tl.to(centerBg, {
+                backgroundColor: '#eef0ff',
+                borderColor: 'rgba(120, 100, 220, 0.25)',
+                boxShadow: `
+                    0 1px 0 0 rgba(255,255,255,0.8) inset,
+                    0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
+                    0 4px 6px -1px rgba(80, 60, 180, 0.08),
+                    0 12px 24px -4px rgba(80, 60, 180, 0.14),
+                    0 32px 64px -8px rgba(80, 60, 180, 0.18),
+                    0 2px 4px 0 rgba(80, 60, 180, 0.06)
+                `,
+                ease: "power1.inOut",
+                duration: 1
+            }, 1);
+
+            // 3. UI Splice Entrance (Cards or Slider)
+            if (isMobile) {
+                // The subsequent 4 slides and the dots fade into view adjacent to the title slide
+                tl.fromTo(outerCards, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.5, stagger: 0.1, ease: "power2.out" }, 1);
+                tl.fromTo('.feature-slider-dots', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
+            } else {
+                tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
+                tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
+                tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4); // Bottom Left
+                tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6); // Bottom Right
+            }
+
+            // --- Mobile Slider Navigation Dots Sync ---
+            const mobileSliderWrapper = document.querySelector('.mobile-feature-slider');
+            if (mobileSliderWrapper) {
                 const dots = document.querySelectorAll('.feature-slider-dots .feature-dot');
-                if (mobileSliderWrapper && dots.length > 0) {
+                if (dots.length > 0) {
                     mobileSliderWrapper.addEventListener('scroll', () => {
                         const scrollLeft = mobileSliderWrapper.scrollLeft;
-                        const cardElement = mobileSliderWrapper.querySelector('.feature-card');
+                        // Query the first slide (which could be the feature-card or the bento-center slide)
+                        const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                         if (!cardElement) return;
                         
                         const cardWidth = cardElement.offsetWidth;
-                        const gap = 20;
+                        const gap = 20; // Matches CSS 1.25rem gap
                         const index = Math.round(scrollLeft / (cardWidth + gap));
                         
                         dots.forEach((dot, i) => {
@@ -555,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Make dots clickable
                     dots.forEach((dot, index) => {
                         dot.addEventListener('click', () => {
-                            const cardElement = mobileSliderWrapper.querySelector('.feature-card');
+                            const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                             if (!cardElement) return;
                             
                             const cardWidth = cardElement.offsetWidth;
@@ -564,95 +627,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
                 }
-
-            } else {
-                // ===== DESKTOP PATH (unchanged) =====
-                // Override CSS transition from observer
-                outerCards.forEach(card => {
-                    if (card) {
-                        card.style.transition = 'none';
-                    }
-                });
-
-                // Make the center background initially transparent
-                gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
-
-                // Start the central text HUGE and absolutely centered
-                gsap.set(centerDefault, {
-                    position: "absolute",
-                    top: "30%",
-                    left: "50%",
-                    xPercent: -50,
-                    yPercent: -50,
-                    scale: 3,
-                    zIndex: 101,
-                    transformOrigin: "center center"
-                });
-
-                // Set autoAlpha to 0 for outer cards initially
-                outerCards.forEach(card => {
-                    if (card) gsap.set(card, { autoAlpha: 0 });
-                });
-
-                // Mask Reveal Entrance Animation
-                const revealTexts = document.querySelectorAll('.reveal-text');
-                if (revealTexts.length > 0) {
-                    gsap.to(revealTexts, {
-                        y: 0,
-                        duration: 1,
-                        ease: "power3.out",
-                        stagger: 0.2,
-                        scrollTrigger: {
-                            trigger: bentoSection,
-                            start: "top 80%",
-                            once: true
-                        }
-                    });
-                }
-
-                // Create the Pinning Timeline
-                const tl = gsap.timeline({
-                    scrollTrigger: {
-                        trigger: bentoSection,
-                        start: "top top",
-                        end: "+=150%",
-                        pin: true,
-                        scrub: 1,
-                        onUpdate: (self) => {
-                            window.bentoScrollProgress = self.progress;
-                        }
-                    }
-                });
-
-                // 1. Center text shrinks
-                tl.to(centerDefault, {
-                    scale: 1,
-                    zIndex: 10,
-                    ease: "power2.inOut",
-                    duration: 2
-                }, 0);
-
-                // 2. Background fades in
-                tl.to(centerBg, {
-                    backgroundColor: '#eef0ff',
-                    borderColor: 'rgba(120, 100, 220, 0.25)',
-                    boxShadow: `
-                        0 1px 0 0 rgba(255,255,255,0.8) inset,
-                        0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
-                        0 4px 6px -1px rgba(80, 60, 180, 0.08),
-                        0 12px 24px -4px rgba(80, 60, 180, 0.14),
-                        0 32px 64px -8px rgba(80, 60, 180, 0.18),
-                        0 2px 4px 0 rgba(80, 60, 180, 0.06)
-                    `,
-                    ease: "power1.inOut",
-                    duration: 1
-                }, 1);
-
-                // 3. Outer cards slide in
-                tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
-                tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2);
-                tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4);
-                tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6);
             }
         }
 

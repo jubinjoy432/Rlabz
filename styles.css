@@ -7307,7 +7307,8 @@ html.lenis body {
         display: none;
     }
 
-    .mobile-feature-slider > .feature-card {
+    .mobile-feature-slider > .feature-card,
+    .mobile-feature-slider > .feature-card-slide {
         scroll-snap-align: center;
         flex: 0 0 85%;
         max-width: 320px;
@@ -7315,13 +7316,21 @@ html.lenis body {
         /* Override arbitrary grid coordinates from desktop */
         grid-column: auto !important;
         grid-row: auto !important;
-        /* Negate desktop GSAP initial hidden states */
+        /* Negate desktop GSAP initial hidden states if necessary */
         opacity: 1 !important;
         visibility: visible !important;
     }
 
+    .mobile-feature-slider > .feature-card-slide {
+        /* For the slide-card specifically (the title block) */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
     .bento-center {
-        min-height: auto; /* Kill the 400px void - just wrap tightly around content */
+        min-height: 250px; /* Minimal height to act as a proper card slide */
         grid-column: auto !important;
         grid-row: auto !important;
         padding: 1rem;
