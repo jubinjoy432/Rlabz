@@ -7285,8 +7285,7 @@ html.lenis body {
         height: auto;
         min-height: 100svh; /* Restore full viewport coverage to prevent canvas collapse void */
         max-height: none;
-        overflow-y: visible;
-        overflow-x: hidden;
+        overflow: hidden;
         padding: 5rem 1rem 5rem; /* Symmetric padding to frame the centered slider */
         align-items: center; /* Suspend the swiper in the middle */
         justify-content: center;
@@ -7311,6 +7310,7 @@ html.lenis body {
         -ms-overflow-style: none;
         align-items: stretch;
         scroll-behavior: smooth;
+        touch-action: pan-y;
     }
     
     .mobile-feature-slider::-webkit-scrollbar {
