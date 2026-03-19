@@ -488,95 +488,172 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         if (bentoSection && bentoGrid) {
-            // First, override the CSS transition from the observer above
-            outerCards.forEach(card => {
-                if (card) {
-                    card.style.transition = 'none';
-                    // We also set autoAlpha: 0 down below
-                }
-            });
+            const isMobile = window.innerWidth <= 992;
 
-            // Make the center background initially transparent
-            // ELEVATE the entire center column above the robot canvas context (zIndex: 50)
-            gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
+            if (isMobile) {
+                // ===== MOBILE PATH =====
+                // On mobile, completely skip all GSAP absolute-positioning, scaling,
+                // and pinning animations. Let everything flow naturally via CSS flex.
 
-            // Start the central text HUGE and absolutely centered in its parent grid layout
-            gsap.set(centerDefault, {
-                position: "absolute",
-                top: "30%", // Reverted to the user's preferred previous position
-                left: "50%",
-                xPercent: -50,
-                yPercent: -50,
-                scale: 3,
-                zIndex: 101, // Stay above Robot (z-index 50) and parent wrapper
-                transformOrigin: "center center"
-            });
+                // Reset centerDefault to normal flow (undo any residual GSAP from cache)
+                gsap.set(centerDefault, {
+                    position: "relative",
+                    top: "auto",
+                    left: "auto",
+                    xPercent: 0,
+                    yPercent: 0,
+                    scale: 1,
+                    zIndex: 10,
+                    transformOrigin: "center center"
+                });
 
-            // Set autoAlpha to 0 (hidden + opacity 0) for outer cards initially
-            outerCards.forEach(card => {
-                if (card) gsap.set(card, { autoAlpha: 0 });
-            });
+                // Make center background visible immediately with its final style
+                gsap.set(centerBg, {
+                    backgroundColor: '#eef0ff',
+                    borderColor: 'rgba(120, 100, 220, 0.25)',
+                    boxShadow: `
+                        0 1px 0 0 rgba(255,255,255,0.8) inset,
+                        0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
+                        0 4px 6px -1px rgba(80, 60, 180, 0.08),
+                        0 12px 24px -4px rgba(80, 60, 180, 0.14),
+                        0 32px 64px -8px rgba(80, 60, 180, 0.18),
+                        0 2px 4px 0 rgba(80, 60, 180, 0.06)
+                    `,
+                    zIndex: 2
+                });
 
-            // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
-            const revealTexts = document.querySelectorAll('.reveal-text');
-            if (revealTexts.length > 0) {
-                gsap.to(revealTexts, {
-                    y: 0,
-                    duration: 1,
-                    ease: "power3.out",
-                    stagger: 0.2, // Staggered reveal for each line
-                    scrollTrigger: {
-                        trigger: bentoSection,
-                        start: "top 80%",
-                        once: true // Trigger only once
+                // Make all cards visible immediately (no hiding, no animation)
+                outerCards.forEach(card => {
+                    if (card) {
+                        card.style.transition = 'none';
+                        gsap.set(card, { autoAlpha: 1, x: 0, y: 0 });
                     }
                 });
-            }
 
-            // Create the Pinning Timeline
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: bentoSection,
-                    start: "top top", // Trigger when section hits top of viewport
-                    end: "+=150%",     // Pin for 1.5x viewport height of scrolling
-                    pin: true,
-                    scrub: 1,         // Smooth scrubbing
-                    onUpdate: (self) => {
-                        window.bentoScrollProgress = self.progress;
-                    }
+                // Reveal text immediately (no mask animation needed on mobile)
+                const revealTexts = document.querySelectorAll('.reveal-text');
+                revealTexts.forEach(t => { t.style.transform = 'translateY(0)'; });
+
+                // --- Mobile Slider Navigation Dots Sync ---
+                const mobileSliderWrapper = document.querySelector('.mobile-feature-slider');
+                const dots = document.querySelectorAll('.feature-slider-dots .feature-dot');
+                if (mobileSliderWrapper && dots.length > 0) {
+                    mobileSliderWrapper.addEventListener('scroll', () => {
+                        const scrollLeft = mobileSliderWrapper.scrollLeft;
+                        const cardElement = mobileSliderWrapper.querySelector('.feature-card');
+                        if (!cardElement) return;
+                        
+                        const cardWidth = cardElement.offsetWidth;
+                        const gap = 20;
+                        const index = Math.round(scrollLeft / (cardWidth + gap));
+                        
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle('active', i === index);
+                        });
+                    });
+
+                    // Make dots clickable
+                    dots.forEach((dot, index) => {
+                        dot.addEventListener('click', () => {
+                            const cardElement = mobileSliderWrapper.querySelector('.feature-card');
+                            if (!cardElement) return;
+                            
+                            const cardWidth = cardElement.offsetWidth;
+                            const gap = 20;
+                            mobileSliderWrapper.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
+                        });
+                    });
                 }
-            });
 
-            // 1. Center text shrinks (stays absolute so it remains perfectly centered)
-            tl.to(centerDefault, {
-                scale: 1,
-                zIndex: 10, // Drops back behind robot if needed, or stays at 10 to match grid layout
-                ease: "power2.inOut",
-                duration: 2
-            }, 0);
+            } else {
+                // ===== DESKTOP PATH (unchanged) =====
+                // Override CSS transition from observer
+                outerCards.forEach(card => {
+                    if (card) {
+                        card.style.transition = 'none';
+                    }
+                });
 
-            // 2. Background fades in (soft lavender-blue, pairs with the purple side cards)
-            tl.to(centerBg, {
-                backgroundColor: '#eef0ff',
-                borderColor: 'rgba(120, 100, 220, 0.25)',
-                // Multi-layer 3D shadow: top highlight border + ambient + directional + deep shadow
-                boxShadow: `
-                    0 1px 0 0 rgba(255,255,255,0.8) inset,
-                    0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
-                    0 4px 6px -1px rgba(80, 60, 180, 0.08),
-                    0 12px 24px -4px rgba(80, 60, 180, 0.14),
-                    0 32px 64px -8px rgba(80, 60, 180, 0.18),
-                    0 2px 4px 0 rgba(80, 60, 180, 0.06)
-                `,
-                ease: "power1.inOut",
-                duration: 1
-            }, 1);
+                // Make the center background initially transparent
+                gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
 
-            // 3. Outer cards slide in
-            tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
-            tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
-            tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4); // Bottom Left
-            tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6); // Bottom Right
+                // Start the central text HUGE and absolutely centered
+                gsap.set(centerDefault, {
+                    position: "absolute",
+                    top: "30%",
+                    left: "50%",
+                    xPercent: -50,
+                    yPercent: -50,
+                    scale: 3,
+                    zIndex: 101,
+                    transformOrigin: "center center"
+                });
+
+                // Set autoAlpha to 0 for outer cards initially
+                outerCards.forEach(card => {
+                    if (card) gsap.set(card, { autoAlpha: 0 });
+                });
+
+                // Mask Reveal Entrance Animation
+                const revealTexts = document.querySelectorAll('.reveal-text');
+                if (revealTexts.length > 0) {
+                    gsap.to(revealTexts, {
+                        y: 0,
+                        duration: 1,
+                        ease: "power3.out",
+                        stagger: 0.2,
+                        scrollTrigger: {
+                            trigger: bentoSection,
+                            start: "top 80%",
+                            once: true
+                        }
+                    });
+                }
+
+                // Create the Pinning Timeline
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: bentoSection,
+                        start: "top top",
+                        end: "+=150%",
+                        pin: true,
+                        scrub: 1,
+                        onUpdate: (self) => {
+                            window.bentoScrollProgress = self.progress;
+                        }
+                    }
+                });
+
+                // 1. Center text shrinks
+                tl.to(centerDefault, {
+                    scale: 1,
+                    zIndex: 10,
+                    ease: "power2.inOut",
+                    duration: 2
+                }, 0);
+
+                // 2. Background fades in
+                tl.to(centerBg, {
+                    backgroundColor: '#eef0ff',
+                    borderColor: 'rgba(120, 100, 220, 0.25)',
+                    boxShadow: `
+                        0 1px 0 0 rgba(255,255,255,0.8) inset,
+                        0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
+                        0 4px 6px -1px rgba(80, 60, 180, 0.08),
+                        0 12px 24px -4px rgba(80, 60, 180, 0.14),
+                        0 32px 64px -8px rgba(80, 60, 180, 0.18),
+                        0 2px 4px 0 rgba(80, 60, 180, 0.06)
+                    `,
+                    ease: "power1.inOut",
+                    duration: 1
+                }, 1);
+
+                // 3. Outer cards slide in
+                tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
+                tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2);
+                tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4);
+                tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6);
+            }
         }
 
         // Hover effects disabled as requested by user. The center robot and title will remain permanently visible.

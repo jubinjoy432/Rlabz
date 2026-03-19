@@ -871,8 +871,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const posCenter = mapDomToWorld(rCenter, depth0, 'center');
                 const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
 
-                const scaleHero = 0.82;
-                const scaleCenter = 0.85;
+                let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
+                const scaleHero = responsiveScale;
+                const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
                 const scaleAnchor = targetAnchor ? 0.38 : 0.32;
 
                 // Compute Base Phase 1 Output

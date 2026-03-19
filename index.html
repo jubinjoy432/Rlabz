@@ -126,40 +126,7 @@
             <!-- Header removed and moved to bento center -->
 
             <div class="feature-bento-grid">
-                <!-- Card 1: Mobile Solutions -->
-                <div class="feature-card bento-card bento-top-left" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Mobile Solutions</h3>
-                        <p>Seamless offline and online mobile experiences designed for performance.</p>
-                        <div class="feature-tags">
-                            <span>Android</span>
-                            <span>iOS</span>
-                            <span>Flutter</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Web Solutions -->
-                <div class="feature-card bento-card bento-bottom-left" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Web Solutions</h3>
-                        <p>Robust web applications and responsive designs using modern frameworks.</p>
-                        <div class="feature-tags">
-                            <span>PHP</span>
-                            <span>.NET</span>
-                            <span>Python</span>
-                            <span>Angular</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center Container (Robot Area) -->
+                <!-- Center Container (Robot Area / Main Title) -->
                 <div class="bento-center">
                     <div class="bento-center-default">
                         <h2 class="center-bento-title">
@@ -170,40 +137,82 @@
                         </h2>
                         <div id="robot-target-anchor"></div>
                     </div>
-
-                    <!-- Hover preview overlays removed by user request -->
                 </div>
 
-                <!-- Card 3: Services -->
-                <div class="feature-card bento-card bento-top-right" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-rocket"></i>
+                <!-- Slider wrapper explicitly for mobile (transparent on desktop) -->
+                <div class="mobile-feature-slider">
+                    <!-- Card 1: Mobile Solutions -->
+                    <div class="feature-card bento-card bento-top-left" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Mobile Solutions</h3>
+                            <p>Seamless offline and online mobile experiences designed for performance.</p>
+                            <div class="feature-tags">
+                                <span>Android</span>
+                                <span>iOS</span>
+                                <span>Flutter</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature-content">
-                        <h3>Digital Services</h3>
-                        <p>Hosting, Domain registration, SEO, and Social Media promotions.</p>
-                        <div class="feature-tags">
-                            <span>Hosting</span>
-                            <span>SEO</span>
-                            <span>Marketing</span>
+
+                    <!-- Card 2: Web Solutions -->
+                    <div class="feature-card bento-card bento-bottom-left" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Web Solutions</h3>
+                            <p>Robust web applications and responsive designs using modern frameworks.</p>
+                            <div class="feature-tags">
+                                <span>PHP</span>
+                                <span>.NET</span>
+                                <span>Python</span>
+                                <span>Angular</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Digital Services -->
+                    <div class="feature-card bento-card bento-top-right" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Digital Services</h3>
+                            <p>Hosting, Domain registration, SEO, and Social Media promotions.</p>
+                            <div class="feature-tags">
+                                <span>Hosting</span>
+                                <span>SEO</span>
+                                <span>Marketing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Cloud Integration -->
+                    <div class="feature-card bento-card bento-bottom-right" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Cloud Integration</h3>
+                            <p>Scalable cloud infrastructure and deployment solutions.</p>
+                            <div class="feature-tags">
+                                <span>AWS</span>
+                                <span>Azure</span>
+                                <span>GCP</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 4: Placeholder for Grid Balance (Optional or Real Content) -->
-                <div class="feature-card bento-card bento-bottom-right" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-cloud"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Cloud Integration</h3>
-                        <p>Scalable cloud infrastructure and deployment solutions.</p>
-                        <div class="feature-tags">
-                            <span>AWS</span>
-                            <span>Azure</span>
-                            <span>GCP</span>
-                        </div>
-                    </div>
+                <!-- Navigation Dots specifically for mobile swiper -->
+                <div class="feature-slider-dots">
+                    <span class="feature-dot active" data-index="0"></span>
+                    <span class="feature-dot" data-index="1"></span>
+                    <span class="feature-dot" data-index="2"></span>
+                    <span class="feature-dot" data-index="3"></span>
                 </div>
             </div>
         </div>
