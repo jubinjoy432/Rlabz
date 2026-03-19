@@ -771,15 +771,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Resize Handling
     window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        // Ignore height-only resizes (mobile address bar) to prevent massive jitter
+        if (Math.abs(window.innerWidth - vw) > 50) {
+            vw = window.innerWidth;
+            vh = window.innerHeight;
+            camera.aspect = vw / vh;
+            camera.updateProjectionMatrix();
+            renderer.setSize(vw, vh);
+        }
     });
 
     let scrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         scrollY = window.scrollY;
     });
+
+    // Stable Viewport Caching for Mobile Jitter Fix
+    let vw = window.innerWidth;
+    let vh = window.innerHeight;
 
     // Helper: Map DOM (pixels) to World (3D units) at a given depth
     function getZPosition(depth) {
@@ -792,8 +801,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mapDomToWorld(rect, depth, alignMode = 'center') {
         const { width: viewW, height: viewH } = getZPosition(depth);
-        const canvasW = window.innerWidth;
-        const canvasH = window.innerHeight;
+        const canvasW = vw;
+        const canvasH = vh;
 
         // Normalized coordinates (-1 to +1)
         // Center of rect
@@ -861,17 +870,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rAnchor = targetElement.getBoundingClientRect();
 
                 const rCenter = {
-                    left: window.innerWidth / 2,
-                    top: window.innerHeight * 0.98,
+                    left: vw / 2,
+                    top: vh * 0.98,
                     width: 0, height: 0,
-                    right: window.innerWidth / 2,
-                    bottom: window.innerHeight * 0.98
+                    right: vw / 2,
+                    bottom: vh * 0.98
                 };
 
                 // Phase 1 Progress: Scroll from Hero to Bento
                 let progress1 = 0;
                 if (rBento.top > 0) {
-                    progress1 = 1 - Math.min(1, rBento.top / window.innerHeight);
+                    progress1 = 1 - Math.min(1, rBento.top / vh);
                 } else {
                     progress1 = 1;
                 }
