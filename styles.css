@@ -28,6 +28,7 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
 }
 
@@ -36,6 +37,7 @@ body {
     color: var(--text-color);
     font-family: var(--font-body);
     overflow-x: hidden;
+    overflow-x: clip;
     max-width: 100%;
     width: 100%;
 }
@@ -326,6 +328,10 @@ body {
 @media (max-width: 768px) {
     .premium-nav {
         padding: 1rem 1.2rem;
+    }
+
+    .premium-nav.scrolled {
+        padding: 0.5rem 1.2rem;
     }
 
     .nav-contact-btn {
@@ -5257,6 +5263,10 @@ footer {
     .premium-nav {
         padding: 0.8rem 1rem;
     }
+
+    .premium-nav.scrolled {
+        padding: 0.5rem 1rem;
+    }
 }
 
 /* Code Screen Styling */
@@ -5972,9 +5982,7 @@ footer {
 /* Marquee Section Wrapper - Full Width Breakout */
 .client_form_marquee_wrapper {
     position: relative;
-    width: 100vw;
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
     overflow: hidden;
     padding: 2rem 0;
 
@@ -7275,12 +7283,13 @@ html.lenis body {
     /* Release restrictive geometric bounds on entire container to prevent component slaughter */
     #what-we-do {
         height: auto;
-        min-height: auto;
+        min-height: 100svh; /* Restore full viewport coverage to prevent canvas collapse void */
         max-height: none;
         overflow-y: visible;
         overflow-x: hidden;
-        padding: 5rem 1rem 2rem; /* Tighter padding: just enough to clear navbar */
-        align-items: flex-start; /* Don't center vertically; let content flow top-down */
+        padding: 5rem 1rem 5rem; /* Symmetric padding to frame the centered slider */
+        align-items: center; /* Suspend the swiper in the middle */
+        justify-content: center;
     }
 
     .feature-bento-grid {
@@ -7295,7 +7304,7 @@ html.lenis body {
         display: flex;
         overflow-x: auto;
         scroll-snap-type: x mandatory;
-        gap: 1.25rem;
+        gap: 7.5%; /* Scaled precisely to the inverse card centering ratio to ensure next-slides render invisibly at exactly 100% bounds */
         padding-bottom: 2rem;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -7311,9 +7320,7 @@ html.lenis body {
     .mobile-feature-slider > .feature-card-slide {
         scroll-snap-align: center;
         flex: 0 0 85%;
-        max-width: 320px;
-        min-width: 250px;
-        /* Override arbitrary grid coordinates from desktop */
+        /* Stripped max/min bounds so 85% fluid math perfectly centers the card via 7.5% margins natively on all devices */
         grid-column: auto !important;
         grid-row: auto !important;
     }
@@ -7331,6 +7338,31 @@ html.lenis body {
         grid-column: auto !important;
         grid-row: auto !important;
         padding: 1rem;
+    }
+
+    /* Force the long multi-word title to mathematically fit inside the mobile card */
+    .bento-center .center-bento-title {
+        font-size: clamp(1.4rem, 8vw, 2.0rem) !important; /* Optimized to maximum safe width for 13-char line */
+        text-align: center !important;
+        width: 100%;
+        margin: 0 auto;
+        line-height: 1.25;
+        letter-spacing: -0.5px !important; /* Slight tracking squeeze to allow larger base font */
+    }
+
+    /* Destroy the animation boundary slice to prevent optical left-shift overflow bugs natively */
+    .bento-center .reveal-mask {
+        overflow: visible !important;
+        display: block; /* guarantee sentences drop evenly without inline collision */
+    }
+
+    /* Auto-center the boundary slides natively in the swiper interface */
+    .mobile-feature-slider > .feature-card-slide {
+        margin-left: 7.5%;
+    }
+    
+    .mobile-feature-slider > .feature-card:last-child {
+        margin-right: 7.5%;
     }
 
     /* Reveal Navigation Dots */
@@ -7360,6 +7392,38 @@ html.lenis body {
         background: #310b65; /* Match mockup dark purple */
         width: 20px;
         border-radius: 4px;
+    }
+
+    .bento-center-default {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-swipe-arrow {
+        position: absolute;
+        bottom: 1rem;
+        right: 0rem;
+        width: 40px;
+        height: 40px;
+        background-color: #0b5394;
+        color: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(11, 83, 148, 0.3);
+        font-size: 1rem;
+        z-index: 10;
+        animation: swipeButtonPulse 2s infinite;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    @keyframes swipeButtonPulse {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
     }
 }
 

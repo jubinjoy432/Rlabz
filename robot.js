@@ -881,7 +881,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const scaleHero = responsiveScale;
                 const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
                 // Drastically shrink the robot on mobile so it doesn't occlude the slider
-                const scaleAnchor = window.innerWidth <= 992 ? 0.20 : (targetAnchor ? 0.38 : 0.32);
+                const scaleAnchor = window.innerWidth <= 992 ? 0.35 : (targetAnchor ? 0.38 : 0.32);
 
                 // Compute Base Phase 1 Output
                 currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;

@@ -507,7 +507,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 left: isMobile ? "auto" : "50%",
                 xPercent: isMobile ? 0 : -50,
                 yPercent: isMobile ? 0 : -50,
-                scale: isMobile ? 1.25 : 3, // Smaller cinematic starting scale on phone to prevent wrapping
+                // On mobile, allow a moderate initial scale factor to achieve the "hero shrink" effect without harsh boundary cropping
+                scale: isMobile ? 1.15 : 3,
                 zIndex: 101, // Stay above Robot (z-index 50) and parent wrapper
                 transformOrigin: "center center"
             });
@@ -565,6 +566,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // 1. Center text shrinks down to standard size
             tl.to(centerDefault, {
                 scale: 1,
+                // Do not deploy absolute positioning translations on mobile since it utilizes native flex-grid layout!
+                top: isMobile ? "auto" : "50%",
+                left: isMobile ? "auto" : "50%",
+                xPercent: isMobile ? 0 : -50,
+                yPercent: isMobile ? 0 : -50,
                 zIndex: 10,
                 ease: "power2.inOut",
                 duration: 2
@@ -572,9 +578,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 2. Background fades in (soft lavender-blue, pairs with the purple side cards)
             tl.to(centerBg, {
-                backgroundColor: '#eef0ff',
-                borderColor: 'rgba(120, 100, 220, 0.25)',
-                boxShadow: `
+                backgroundColor: isMobile ? '#ffffff' : '#eef0ff',
+                borderColor: isMobile ? 'transparent' : 'rgba(120, 100, 220, 0.25)',
+                boxShadow: isMobile ? '0 10px 30px -5px rgba(11, 83, 148, 0.15)' : `
                     0 1px 0 0 rgba(255,255,255,0.8) inset,
                     0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
                     0 4px 6px -1px rgba(80, 60, 180, 0.08),
@@ -588,9 +594,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 3. UI Splice Entrance (Cards or Slider)
             if (isMobile) {
-                // The subsequent 4 slides and the dots fade into view adjacent to the title slide
+                // The subsequent 4 slides, dots, and swipe indicator fade into view adjacent to the title slide
                 tl.fromTo(outerCards, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.5, stagger: 0.1, ease: "power2.out" }, 1);
-                tl.fromTo('.feature-slider-dots', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
+                tl.fromTo('.feature-slider-dots, .card-swipe-arrow', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
             } else {
                 tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
                 tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
@@ -602,6 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const mobileSliderWrapper = document.querySelector('.mobile-feature-slider');
             if (mobileSliderWrapper) {
                 const dots = document.querySelectorAll('.feature-slider-dots .feature-dot');
+                const swipeArrow = document.querySelector('.card-swipe-arrow');
                 if (dots.length > 0) {
                     mobileSliderWrapper.addEventListener('scroll', () => {
                         const scrollLeft = mobileSliderWrapper.scrollLeft;
@@ -616,6 +623,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         dots.forEach((dot, i) => {
                             dot.classList.toggle('active', i === index);
                         });
+
+                        if (swipeArrow) {
+                            swipeArrow.style.transition = 'opacity 0.3s ease';
+                            swipeArrow.style.opacity = index >= dots.length - 1 ? '0' : '1';
+                        }
                     });
 
                     // Make dots clickable
