@@ -300,7 +300,7 @@ body {
     border-radius: 50%;
     background: #ffffff;
     border: none;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     color: #1a362d;
@@ -312,10 +312,82 @@ body {
     background: #f8fafc;
 }
 
+/* Hamburger to Close Button Animation */
+.menu-toggle-btn svg {
+    transition: transform 0.8s ease-in-out;
+}
+
+.menu-toggle-btn path {
+    transform-origin: center;
+    transform-box: fill-box;
+    transition: transform 0.8s ease-in-out;
+}
+
+.premium-nav.nav-open .menu-toggle-btn svg {
+    transform: rotate(360deg);
+}
+
+.premium-nav.nav-open .menu-toggle-btn path:nth-child(1) {
+    transform: translateY(3px) rotate(45deg);
+}
+
+.premium-nav.nav-open .menu-toggle-btn path:nth-child(2) {
+    transform: translateY(-3px) rotate(-45deg);
+}
+
 /* Responsive Navbar */
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     .nav-links-container {
         display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 1rem;
+        right: 1rem;
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1rem;
+        box-shadow: 0 10px 40px rgba(11, 83, 148, 0.15);
+        gap: 0.5rem;
+    }
+
+    .premium-nav.nav-open .nav-links-container {
+        display: flex;
+        animation: slideDown 0.3s ease-out forwards;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .nav-links-container .sliding-pill {
+        display: none !important;
+    }
+
+    .nav-links-container .nav-link {
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        text-align: center;
+        width: 100%;
+        color: #1a362d;
+    }
+
+    .nav-links-container .nav-link:hover,
+    .nav-links-container .nav-link.active {
+        background: #f8faff;
+        color: var(--primary-blue);
+    }
+
+    .menu-toggle-btn {
+        display: flex;
     }
 }
 

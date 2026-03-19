@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Mobile Menu Toggle ---
+    const menuBtn = document.querySelector('.menu-toggle-btn');
+    const nav = document.querySelector('.premium-nav');
+
+    if (menuBtn && nav) {
+        menuBtn.addEventListener('click', () => {
+            nav.classList.toggle('nav-open');
+        });
+        
+        // Close menu when clicking a link
+        const mobileLinks = nav.querySelectorAll('.nav-link');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('nav-open');
+            });
+        });
+    }
+
     // --- Sliding Pill Navbar Animation ---
     const navLinksContainer = document.querySelector('.nav-links-container');
     const links = document.querySelectorAll('.nav-link');
