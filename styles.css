@@ -7303,6 +7303,7 @@ html.lenis body {
     .mobile-feature-slider {
         display: flex;
         overflow-x: auto;
+        overflow-y: hidden; /* Prevent internal vertical scroll from stealing GSAP pin drag events */
         scroll-snap-type: x mandatory;
         gap: 7.5%; /* Scaled precisely to the inverse card centering ratio to ensure next-slides render invisibly at exactly 100% bounds */
         padding-bottom: 2rem;
