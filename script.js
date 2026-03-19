@@ -530,19 +530,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
             const revealTexts = document.querySelectorAll('.reveal-text');
             if (revealTexts.length > 0) {
-                gsap.set(revealTexts, { clearProps: "transform" }); // clear static transform
-                gsap.from(revealTexts, {
-                    y: 100,
-                    opacity: 0,
-                    duration: 1,
-                    ease: "power3.out",
-                    stagger: 0.2, // Staggered reveal for each line
-                    scrollTrigger: {
-                        trigger: bentoSection,
-                        start: "top 80%",
-                        once: true // Trigger only once
+                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" }); 
+                gsap.fromTo(revealTexts, 
+                    { y: 100, autoAlpha: 0 },
+                    {
+                        y: 0,
+                        autoAlpha: 1,
+                        duration: 1,
+                        ease: "power3.out",
+                        stagger: 0.2, // Staggered reveal for each line
+                        scrollTrigger: {
+                            trigger: bentoSection,
+                            start: "top 80%",
+                            once: true // Trigger only once
+                        }
                     }
-                });
+                );
             }
 
             // Create the Pinning Timeline (Identical for Desktop & Mobile to empower Robot.js completely)

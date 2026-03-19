@@ -7316,9 +7316,6 @@ html.lenis body {
         /* Override arbitrary grid coordinates from desktop */
         grid-column: auto !important;
         grid-row: auto !important;
-        /* Negate desktop GSAP initial hidden states if necessary */
-        opacity: 1 !important;
-        visibility: visible !important;
     }
 
     .mobile-feature-slider > .feature-card-slide {
