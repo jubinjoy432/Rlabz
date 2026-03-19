@@ -7310,7 +7310,6 @@ html.lenis body {
         -ms-overflow-style: none;
         align-items: stretch;
         scroll-behavior: smooth;
-        touch-action: pan-y;
     }
     
     .mobile-feature-slider::-webkit-scrollbar {
