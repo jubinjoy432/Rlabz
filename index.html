@@ -338,28 +338,31 @@
     <style>
         /*
          * ================================================================
-         * CLIENT FORM SECTION — inherits global site theme:
-         *   Primary Blue: #0b5394
-         *   Dark Section BG: radial-gradient matching #our-works
-         *   Button Style: linear-gradient(135deg, #0b5394, #2563eb)
-         *   Font Heading: 'Space Grotesk'
-         *   Font Body: 'Outfit'
-         *   All classes prefixed: client_form_
+         * CLIENT FORM SECTION — Solid Deep Midnight Theme
+         *
+         *  Background is locked to a single, solid tech-navy (#0B172A)
+         *  that seamlessly merges with the footer. Absolutely zero
+         *  gradients, fade-ins, or white edges.
+         *
+         *  padding: Generous spacing top and bottom for a highly
+         *  premium, spacious layout.
          * ================================================================
          */
-
         .client_form_section {
-            background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%);
+            /* Exact match from the uploaded reference card */
+            background-color: #0b172a;
             color: #ffffff;
-            padding: 100px 20px 80px 20px;
+            /* Spacious top padding without the need for a colour bridge */
+            padding: 140px 20px 80px 20px;
             font-family: 'Outfit', sans-serif;
             position: relative;
             overflow: hidden;
-            /* Luxury reveal: starts invisible, fades in on scroll */
+            min-height: 920px;
+            /* Reveal Animation */
             opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1),
-                        transform 0.9s cubic-bezier(0.25, 1, 0.5, 1);
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out,
+                        transform 0.8s ease-out;
         }
 
         .client_form_section.client_form_visible {
@@ -367,32 +370,10 @@
             transform: translateY(0);
         }
 
-        /* Subtle ambient glow elements matching site's blue palette */
-        .client_form_bg_glow_1 {
-            position: absolute;
-            top: -120px;
-            left: -120px;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.22) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(70px);
-        }
-
-        .client_form_bg_glow_2 {
-            position: absolute;
-            bottom: -180px;
-            right: -80px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(11, 83, 148, 0.18) 0%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            filter: blur(90px);
-        }
+        /* Glows disabled — solid #050505 content zone must stay perfectly flat */
+        .client_form_bg_glow_1,
+        .client_form_bg_glow_2,
+        .client_form_phone_glow { display: none; }
 
         /* ── Main layout grid ── */
         .client_form_inner {
@@ -560,20 +541,21 @@
             will-change: transform;
         }
 
-        /* ── PHONE MOCKUP ── */
+        /* ── PHONE MOCKUP — restored solid dark frame (Image 4) ── */
         .client_form_phone_mockup {
             width: 280px;
             height: 540px;
-            background: #060d14;
+            /* Solid very dark navy — matches the dark device in the reference image */
+            background: #060e1c;
             border-radius: 38px;
-            border: 10px solid rgba(255,255,255,0.12);
+            border: 10px solid #0d1b35;
             position: absolute;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             box-shadow:
-                -18px 28px 50px rgba(0,0,0,0.55),
-                inset 0 0 12px rgba(0,0,0,0.8);
+                0 20px 60px rgba(0,0,0,0.70),
+                inset 0 0 16px rgba(0,0,0,0.85);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -729,18 +711,26 @@
             pointer-events: auto;
         }
 
-        /* Glass card — dark glass matching site dark-section cards */
+        /* Glass card — pops against the deepening dark background */
         .client_form_testimonial_card {
             width: 420px;
-            background: rgba(2, 12, 27, 0.75);
-            backdrop-filter: blur(22px);
-            -webkit-backdrop-filter: blur(22px);
-            border: 1px solid rgba(37, 99, 235, 0.3);
+            background: rgba(0, 11, 36, 0.78);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(37, 99, 235, 0.35);
             border-radius: 20px;
             padding: 30px;
+            /*
+             * Layered glow so the card "pops":
+             *  1. Large dark drop shadow for depth
+             *  2. Diffuse blue ambient glow (dark→light) matching site blue
+             *  3. Subtle top-edge glass highlight
+             */
             box-shadow:
-                0 35px 70px rgba(0,0,0,0.75),
-                inset 0 1px 0 rgba(255,255,255,0.06);
+                0 35px 70px rgba(0,0,0,0.80),
+                0 0 50px rgba(11, 83, 148, 0.30),
+                0 0 100px rgba(37, 99, 235, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.08);
             display: flex;
             flex-direction: column;
             position: relative;
@@ -750,9 +740,10 @@
         .client_form_testimonial_card:hover {
             transform: translateY(-7px);
             box-shadow:
-                0 45px 90px rgba(0,0,0,0.85),
-                0 0 30px rgba(37, 99, 235, 0.35),
-                inset 0 1px 0 rgba(255,255,255,0.08);
+                0 50px 100px rgba(0,0,0,0.90),
+                0 0 60px rgba(11, 83, 148, 0.45),
+                0 0 120px rgba(37, 99, 235, 0.20),
+                inset 0 1px 0 rgba(255,255,255,0.10);
         }
 
         .client_form_card_header {
@@ -878,16 +869,21 @@
             transform: scale(1.08);
         }
 
-        /* ── LOGOS SECTION ── */
+        /* ── LOGOS SECTION — synced to the #0b172a solid dark theme ──
+           Continuous zero-seam join with the footer. */
         .client_form_logos_section {
-            padding: 60px 20px 20px;
+            padding: 60px 20px 40px;
             position: relative;
             z-index: 2;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
             margin-top: 80px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            margin-right: -20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            /* Exact match to the section */
+            background: #0b172a;
+            border-top: 1px solid rgba(255,255,255,0.06);
         }
 
         .client_form_logos_header {
@@ -1087,6 +1083,9 @@
             <!-- RIGHT: Phone + floating testimonial card -->
             <div class="client_form_right">
                 <div class="client_form_parallax_target" id="client_form_parallax">
+
+                    <!-- Phone Glow — muted purple/blue halo behind the mockup -->
+                    <div class="client_form_phone_glow"></div>
 
                     <!-- Phone Mockup -->
                     <div class="client_form_phone_mockup">
@@ -1364,7 +1363,11 @@
             }
         }
 
-        /* ─── Subtle Parallax on phone graphic while scrolling ─────────── */
+        /* ─── Parallax: phone slides up slightly faster than background ───
+           This creates genuine 3D depth — background "washes" down at 1×
+           scroll speed while the phone panel moves up at ~1.4× speed.
+           No JS is needed for the background gradient (pure CSS handles it).
+        ─────────────────────────────────────────────────────────────────── */
         const client_form_parallaxEl = document.getElementById('client_form_parallax');
         let client_form_rafId = null;
 
@@ -1373,18 +1376,24 @@
             client_form_rafId = requestAnimationFrame(() => {
                 client_form_rafId = null;
                 if (!client_form_parallaxEl || !client_form_section) return;
-                const rect = client_form_section.getBoundingClientRect();
+                const rect  = client_form_section.getBoundingClientRect();
                 const viewH = window.innerHeight;
-                /* Only apply when section is in view */
+
                 if (rect.bottom < 0 || rect.top > viewH) return;
-                /* Phone moves at 40% of scroll speed → slower than background */
-                const progress  = (viewH - rect.top) / (viewH + rect.height);
-                const shiftPx   = (progress - 0.5) * 60; /* max ±30px */
+
+                /*
+                 * progress: 0 at section entrance, 1 at section exit.
+                 * Phone moves at 70% of the section scroll distance
+                 * (max ±50px), so it drifts upward faster = 3D depth.
+                 */
+                const progress = (viewH - rect.top) / (viewH + rect.height);
+                const shiftPx  = (progress - 0.5) * -100; /* negative = slide up faster */
                 client_form_parallaxEl.style.transform = `translateY(${shiftPx}px)`;
             });
         }
 
         window.addEventListener('scroll', client_form_onScroll, { passive: true });
+        client_form_onScroll(); /* run once on load */
 
     })();
     </script>
