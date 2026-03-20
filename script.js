@@ -531,8 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
             const revealTexts = document.querySelectorAll('.reveal-text');
             if (revealTexts.length > 0) {
-                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" }); 
-                gsap.fromTo(revealTexts, 
+                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" });
+                gsap.fromTo(revealTexts,
                     { y: 100, autoAlpha: 0 },
                     {
                         y: 0,
@@ -615,11 +615,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Query the first slide (which could be the feature-card or the bento-center slide)
                         const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                         if (!cardElement) return;
-                        
+
                         const cardWidth = cardElement.offsetWidth;
                         const gap = 20; // Matches CSS 1.25rem gap
                         const index = Math.round(scrollLeft / (cardWidth + gap));
-                        
+
                         dots.forEach((dot, i) => {
                             dot.classList.toggle('active', i === index);
                         });
@@ -650,7 +650,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         dot.addEventListener('click', () => {
                             const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                             if (!cardElement) return;
-                            
+
                             const cardWidth = cardElement.offsetWidth;
                             const gap = 20;
                             mobileSliderWrapper.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });

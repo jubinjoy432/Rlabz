@@ -728,7 +728,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetArmRotZ = -0.1; // Default idle
 
     const cards = document.querySelectorAll('.feature-card');
-    
+
     // Global event listener for explicitly forcing a prop (used by mobile swiper)
     window.addEventListener('robot-show-prop', (e) => {
         const title = e.detail.title;
@@ -770,15 +770,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Resize Handling
+    let resizeTimer;
     window.addEventListener('resize', () => {
-        // Ignore height-only resizes (mobile address bar) to prevent massive jitter
-        if (Math.abs(window.innerWidth - vw) > 50) {
+        clearTimeout(resizeTimer);
+        // Debounce resize to handle mobile address bar hiding without causing jitter
+        resizeTimer = setTimeout(() => {
             vw = window.innerWidth;
             vh = window.innerHeight;
             camera.aspect = vw / vh;
             camera.updateProjectionMatrix();
             renderer.setSize(vw, vh);
-        }
+        }, 150);
     });
 
     let scrollY = window.scrollY;
@@ -857,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroVisual && targetHeading) {
                 const bentoSection = document.getElementById('what-we-do');
                 let targetAnchor = document.querySelector('#robot-target-anchor');
-                
+
                 // Hijack the anchor trajectory on mobile to push the robot safely to the bottom of the screen
                 if (window.innerWidth <= 992) {
                     const mobileAnchor = document.querySelector('#robot-target-anchor-mobile');
