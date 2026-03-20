@@ -488,79 +488,99 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         if (bentoSection && bentoGrid) {
+            const isMobile = window.innerWidth <= 992;
+
             // First, override the CSS transition from the observer above
             outerCards.forEach(card => {
                 if (card) {
                     card.style.transition = 'none';
-                    // We also set autoAlpha: 0 down below
                 }
             });
 
             // Make the center background initially transparent
-            // ELEVATE the entire center column above the robot canvas context (zIndex: 50)
             gsap.set(centerBg, { backgroundColor: 'transparent', boxShadow: 'none', zIndex: 100 });
 
-            // Start the central text HUGE and absolutely centered in its parent grid layout
+            // Start the central text appropriately sized and positioned based on flow
             gsap.set(centerDefault, {
-                position: "absolute",
-                top: "30%", // Reverted to the user's preferred previous position
-                left: "50%",
-                xPercent: -50,
-                yPercent: -50,
-                scale: 3,
+                position: isMobile ? "relative" : "absolute",
+                top: isMobile ? "auto" : "30%", // Perfectly positions exactly above robot destination on desktop
+                left: isMobile ? "auto" : "50%",
+                xPercent: isMobile ? 0 : -50,
+                yPercent: isMobile ? 0 : -50,
+                // On mobile, allow a moderate initial scale factor to achieve the "hero shrink" effect without harsh boundary cropping
+                scale: isMobile ? 1.15 : 3,
                 zIndex: 101, // Stay above Robot (z-index 50) and parent wrapper
                 transformOrigin: "center center"
             });
 
-            // Set autoAlpha to 0 (hidden + opacity 0) for outer cards initially
-            outerCards.forEach(card => {
-                if (card) gsap.set(card, { autoAlpha: 0 });
-            });
+            // Initially hide the targets depending on device layout
+            if (isMobile) {
+                // outerCards (slides 1-4) should be hidden until the title slide finishes its entrance
+                outerCards.forEach(card => {
+                    if (card) gsap.set(card, { autoAlpha: 0 });
+                });
+                const dots = document.querySelector('.feature-slider-dots');
+                if (dots) gsap.set(dots, { autoAlpha: 0 });
+                // We do NOT hide the mobileSliderWrapper anymore because it now holds the title text slide!
+            } else {
+                outerCards.forEach(card => {
+                    if (card) gsap.set(card, { autoAlpha: 0 });
+                });
+            }
 
             // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
             const revealTexts = document.querySelectorAll('.reveal-text');
             if (revealTexts.length > 0) {
-                gsap.to(revealTexts, {
-                    y: 0,
-                    duration: 1,
-                    ease: "power3.out",
-                    stagger: 0.2, // Staggered reveal for each line
-                    scrollTrigger: {
-                        trigger: bentoSection,
-                        start: "top 80%",
-                        once: true // Trigger only once
+                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" }); 
+                gsap.fromTo(revealTexts, 
+                    { y: 100, autoAlpha: 0 },
+                    {
+                        y: 0,
+                        autoAlpha: 1,
+                        duration: 1,
+                        ease: "power3.out",
+                        stagger: 0.2, // Staggered reveal for each line
+                        scrollTrigger: {
+                            trigger: bentoSection,
+                            start: "top 80%",
+                            once: true // Trigger only once
+                        }
                     }
-                });
+                );
             }
 
-            // Create the Pinning Timeline
+            // Create the Pinning Timeline (Identical for Desktop & Mobile to empower Robot.js completely)
             const tl = gsap.timeline({
                 scrollTrigger: {
                     trigger: bentoSection,
                     start: "top top", // Trigger when section hits top of viewport
                     end: "+=150%",     // Pin for 1.5x viewport height of scrolling
-                    pin: true,
+                    pin: true,        // Screen lock for both!
                     scrub: 1,         // Smooth scrubbing
                     onUpdate: (self) => {
-                        window.bentoScrollProgress = self.progress;
+                        window.bentoScrollProgress = self.progress; // Critically powers Robot.js
                     }
                 }
             });
 
-            // 1. Center text shrinks (stays absolute so it remains perfectly centered)
+            // 1. Center text shrinks down to standard size
             tl.to(centerDefault, {
                 scale: 1,
-                zIndex: 10, // Drops back behind robot if needed, or stays at 10 to match grid layout
+                // Do not deploy absolute positioning translations on mobile since it utilizes native flex-grid layout!
+                top: isMobile ? "auto" : "50%",
+                left: isMobile ? "auto" : "50%",
+                xPercent: isMobile ? 0 : -50,
+                yPercent: isMobile ? 0 : -50,
+                zIndex: 10,
                 ease: "power2.inOut",
                 duration: 2
             }, 0);
 
             // 2. Background fades in (soft lavender-blue, pairs with the purple side cards)
             tl.to(centerBg, {
-                backgroundColor: '#eef0ff',
-                borderColor: 'rgba(120, 100, 220, 0.25)',
-                // Multi-layer 3D shadow: top highlight border + ambient + directional + deep shadow
-                boxShadow: `
+                backgroundColor: isMobile ? '#ffffff' : '#eef0ff',
+                borderColor: isMobile ? 'transparent' : 'rgba(120, 100, 220, 0.25)',
+                boxShadow: isMobile ? '0 10px 30px -5px rgba(11, 83, 148, 0.15)' : `
                     0 1px 0 0 rgba(255,255,255,0.8) inset,
                     0 -1px 0 0 rgba(100, 80, 200, 0.12) inset,
                     0 4px 6px -1px rgba(80, 60, 180, 0.08),
@@ -572,17 +592,123 @@ document.addEventListener('DOMContentLoaded', () => {
                 duration: 1
             }, 1);
 
-            // 3. Outer cards slide in
-            tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
-            tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
-            tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4); // Bottom Left
-            tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6); // Bottom Right
+            // 3. UI Splice Entrance (Cards or Slider)
+            if (isMobile) {
+                // The subsequent 4 slides, dots, and swipe indicator fade into view adjacent to the title slide
+                tl.fromTo(outerCards, { y: 20, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 1.5, stagger: 0.1, ease: "power2.out" }, 1);
+                tl.fromTo('.feature-slider-dots, .card-swipe-arrow', { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1);
+            } else {
+                tl.fromTo(outerCards[0], { x: -100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1); // Top Left
+                tl.fromTo(outerCards[1], { x: 100, y: -50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.2); // Top Right
+                tl.fromTo(outerCards[2], { x: -100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.4); // Bottom Left
+                tl.fromTo(outerCards[3], { x: 100, y: 50 }, { x: 0, y: 0, autoAlpha: 1, duration: 1.5, ease: "power2.out" }, 1.6); // Bottom Right
+            }
+
+            // --- Mobile Slider Navigation Dots Sync ---
+            const mobileSliderWrapper = document.querySelector('.mobile-feature-slider');
+            if (mobileSliderWrapper) {
+                const dots = document.querySelectorAll('.feature-slider-dots .feature-dot');
+                const swipeArrow = document.querySelector('.card-swipe-arrow');
+                if (dots.length > 0) {
+                    mobileSliderWrapper.addEventListener('scroll', () => {
+                        const scrollLeft = mobileSliderWrapper.scrollLeft;
+                        // Query the first slide (which could be the feature-card or the bento-center slide)
+                        const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
+                        if (!cardElement) return;
+                        
+                        const cardWidth = cardElement.offsetWidth;
+                        const gap = 20; // Matches CSS 1.25rem gap
+                        const index = Math.round(scrollLeft / (cardWidth + gap));
+                        
+                        dots.forEach((dot, i) => {
+                            dot.classList.toggle('active', i === index);
+                        });
+
+                        if (swipeArrow) {
+                            swipeArrow.style.transition = 'opacity 0.3s ease';
+                            swipeArrow.style.opacity = index >= dots.length - 1 ? '0' : '1';
+                        }
+
+                        // Programmatically trigger robot prop holding by checking active centered card
+                        const allCards = mobileSliderWrapper.querySelectorAll('.feature-card-slide, .feature-card');
+                        if (allCards[index] && allCards[index].classList.contains('feature-card')) {
+                            const title = allCards[index].querySelector('h3') ? allCards[index].querySelector('h3').textContent.trim() : null;
+                            if (window.lastActiveRobotProp !== title) {
+                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
+                                window.lastActiveRobotProp = title;
+                            }
+                        } else {
+                            if (window.lastActiveRobotProp !== null) {
+                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
+                                window.lastActiveRobotProp = null;
+                            }
+                        }
+                    });
+
+                    // Make dots clickable
+                    dots.forEach((dot, index) => {
+                        dot.addEventListener('click', () => {
+                            const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
+                            if (!cardElement) return;
+                            
+                            const cardWidth = cardElement.offsetWidth;
+                            const gap = 20;
+                            mobileSliderWrapper.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
+                        });
+                    });
+                }
+            }
         }
 
         // Hover effects disabled as requested by user. The center robot and title will remain permanently visible.
     }
-});
 
+    // =========================================
+    // GSAP ANIMATIONS FOR "WHO WE ARE" PREMIUM SECTION
+    // =========================================
+    const aboutSection = document.getElementById('aboutUsSection');
+    if (aboutSection && typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+        const aboutTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: aboutSection,
+                start: "top 70%",
+                once: true
+            }
+        });
+
+        // Background Elements Reveal
+        aboutTl.to(aboutSection.querySelectorAll('.bg-sweep'), {
+            opacity: 0.15,
+            duration: 2,
+            stagger: 0.2,
+            ease: "power2.out"
+        }, 0);
+
+        // Text Content Reveal
+        aboutTl.to(aboutSection.querySelectorAll('.reveal-up'), {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "back.out(1.2)"
+        }, 0.2);
+
+        // Image Gallery Reveal (Target the exact classes and properties)
+        aboutTl.to(aboutSection.querySelector('.img-hero'), {
+            scale: 1, // Remove scaling
+            opacity: 1,
+            duration: 1,
+            ease: "power3.out"
+        }, 0.5);
+
+        aboutTl.to(aboutSection.querySelector('.img-overlap'), {
+            x: 0,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power2.out"
+        }, 0.7);
+    }
+});
 
 
 // 2. Project Data (Mock Data matching IDs)
@@ -2163,17 +2289,140 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             // Update Active Link
+            let matchingLink = null;
             navLinks.forEach(link => {
-                link.classList.remove('active');
                 if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active');
+                    matchingLink = link;
                 }
             });
+
+            // Only update the active class if we found a matching link for this section
+            // This prevents the active link from losing its white text color when scrolling past sections without nav items (like About Us)
+            if (matchingLink) {
+                navLinks.forEach(link => link.classList.remove('active'));
+                matchingLink.classList.add('active');
+            }
         });
 
         // Trigger once on load in case user refreshed while down the page
         if (window.scrollY > 50) {
             nav.classList.add('scrolled');
         }
+    }
+});
+
+// =========================================
+// ABOUT / DISCOVER RLABZ - SCROLL ANIMATIONS (GSAP + ScrollTrigger)
+// =========================================
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const aboutSection = document.getElementById('aboutUsSection');
+    if (!aboutSection) return;
+
+    const stDefaults = { trigger: aboutSection, start: 'top 80%', once: true };
+
+    // 1. Main Image — Scale-in + Fade
+    const imgHero = aboutSection.querySelector('.img-hero');
+    if (imgHero) {
+        gsap.fromTo(imgHero,
+            { opacity: 0, scale: 0.85, visibility: 'hidden' },
+            {
+                opacity: 1, scale: 1, visibility: 'visible', duration: 1, ease: 'power3.out',
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 2. Overlap Image — Slide from Right
+    const imgOverlap = aboutSection.querySelector('.img-overlap');
+    if (imgOverlap) {
+        gsap.fromTo(imgOverlap,
+            { opacity: 0, x: 80, visibility: 'hidden' },
+            {
+                opacity: 1, x: 0, visibility: 'visible', duration: 0.9, ease: 'power3.out', delay: 0.3,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 3. Innovation Hub Card — Elastic Bounce-in
+    const statCard = aboutSection.querySelector('.floating-stat-card');
+    if (statCard) {
+        gsap.fromTo(statCard,
+            { opacity: 0, y: 40, scale: 0.6, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, scale: 1, visibility: 'visible', duration: 1, ease: 'elastic.out(1, 0.5)', delay: 0.6,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 4. Badge — Slide Down + Fade
+    const badge = aboutSection.querySelector('.about-badge');
+    if (badge) {
+        gsap.fromTo(badge,
+            { opacity: 0, y: -20, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.6, ease: 'power2.out', delay: 0.15,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 5. Heading — Fade-up the whole container
+    const heading = aboutSection.querySelector('.about-heading');
+    if (heading) {
+        gsap.fromTo(heading,
+            { opacity: 0, y: 30, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.7, ease: 'power3.out', delay: 0.3,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 6. Paragraph — Fade-up
+    const lead = aboutSection.querySelector('.about-lead');
+    if (lead) {
+        gsap.fromTo(lead,
+            { opacity: 0, y: 25, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.7, ease: 'power2.out', delay: 0.5,
+                scrollTrigger: stDefaults
+            }
+        );
+    }
+
+    // 7. Blockquote — Border Draw + Text Fade
+    const quote = aboutSection.querySelector('.about-quote');
+    if (quote) {
+        quote.classList.add('anim-ready');
+
+        const qTl = gsap.timeline({
+            scrollTrigger: stDefaults,
+            delay: 0.7
+        });
+
+        qTl.set(quote, { visibility: 'visible' });
+        // Draw the pseudo-element border via scaleY
+        qTl.fromTo(quote, { '--quote-border-scale': '0' }, {
+            '--quote-border-scale': '1', duration: 0.5, ease: 'power2.inOut'
+        });
+        // Fade in quote text overlapping border draw
+        qTl.fromTo(quote, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.3');
+    }
+
+    // 8. Incubation Card — Slide Up
+    const incubationCard = aboutSection.querySelector('.incubation-card');
+    if (incubationCard) {
+        gsap.fromTo(incubationCard,
+            { opacity: 0, y: 40, visibility: 'hidden' },
+            {
+                opacity: 1, y: 0, visibility: 'visible', duration: 0.8, ease: 'power3.out', delay: 0.9,
+                scrollTrigger: stDefaults
+            }
+        );
     }
 });

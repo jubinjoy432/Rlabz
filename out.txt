@@ -1,0 +1,77 @@
+2:     // --- Sliding Pill Navbar Animation ---
+
+3:     const navLinksContainer = document.querySelector('.nav-links-container');
+
+4:     const links = document.querySelectorAll('.nav-link');
+
+7:     if (navLinksContainer && links.length && pill) {
+
+8:         let activeLink = document.querySelector('.nav-link.active') || links[0];
+
+13:             const containerRect = navLinksContainer.getBoundingClientRect();
+
+23:             updatePill(document.querySelector('.nav-link.active') || links[0]);
+
+32:                     if (!navLinksContainer.matches(':hover')) {
+
+52:         navLinksContainer.addEventListener('mouseleave', () => {
+
+53:             activeLink = document.querySelector('.nav-link.active') || links[0];
+
+1375:     // --- Navbar Scroll Effect ---
+
+1376:     const navbar = document.querySelector('.premium-nav');
+
+1377:     if (navbar) {
+
+1380:                 navbar.classList.add('scrolled');
+
+1382:                 navbar.classList.remove('scrolled');
+
+1611:     // Target the section header
+
+1612:     const solutionsHeader = document.querySelector('#what-we-do .section-header');
+
+1613:     if (solutionsHeader) {
+
+1614:         solutionsHeader.classList.add('reveal-on-scroll');
+
+1615:         revealObserver.observe(solutionsHeader);
+
+1630:     // Target the section header
+
+1631:     const worksHeader = document.querySelector('#our-works .section-header');
+
+1632:     if (worksHeader) {
+
+1633:         worksHeader.classList.add('reveal-on-scroll');
+
+1634:         revealObserver.observe(worksHeader);
+
+1817:         navigation: {
+
+1992:         // How far the previous section has scrolled past the viewport top
+
+1993:         const scrolled = -wwdRect.top;
+
+1997:         const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
+
+2020:         const heading = document.querySelector('#our-works .section-header');
+
+2183:     // STICKY SCROLL NAVBAR LOGO ANIMATION & SCROLL SPY
+
+2185:     const nav = document.querySelector('.premium-nav');
+
+2186:     const navLinks = document.querySelectorAll('.nav-link');
+
+2189:     if (nav) {
+
+2191:             // Navbar Background toggle
+
+2193:                 nav.classList.add('scrolled');
+
+2195:                 nav.classList.remove('scrolled');
+
+2211:             navLinks.forEach(link => {
+
+2221:             nav.classList.add('scrolled');
