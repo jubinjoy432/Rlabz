@@ -7407,6 +7407,7 @@ html.lenis body {
         padding-right: 0;
         max-width: 650px;
         margin: 0 auto;
+        width: 100%;
     }
 
     .about-heading {
@@ -7416,27 +7417,89 @@ html.lenis body {
 
 @media (max-width: 768px) {
     .premium-about-section {
-        padding: 4rem 1rem 3rem;
+        padding: 4rem 1.5rem 3rem;
         height: auto;
     }
 
+    .about-asym-grid {
+        gap: 2.5rem;
+    }
+
     .visual-composition {
-        height: 350px;
+        height: min(90vw, 400px); /* Keeps aspect ratio realistic on phone width */
     }
 
     .floating-stat-card {
-        top: -5%;
+        top: -4%;
         right: 0;
         padding: 0.6rem 0.8rem;
+        max-width: 180px; 
     }
 
     .about-heading {
-        font-size: 2.4rem;
+        font-size: 2.2rem;
     }
 
     .img-overlap {
         width: 60%;
-        height: 50%;
+        height: 48%; /* Adjust for mobile aspect */
+    }
+    
+    .incubation-card {
+        padding: 1.2rem;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .premium-about-section {
+        padding: 3.5rem 1.2rem 2rem;
+    }
+    
+    .visual-composition {
+        height: min(90vw, 320px);
+    }
+
+    .floating-stat-card {
+        max-width: 150px;
+        padding: 0.5rem;
+        top: -6%;
+    }
+
+    .floating-stat-card .stat-info h3 {
+        font-size: 0.85rem;
+    }
+
+    .floating-stat-card .stat-info p {
+        font-size: 0.65rem;
+    }
+
+    .about-heading {
+        font-size: 1.9rem;
+    }
+
+    .about-lead {
+        font-size: 0.95rem;
+    }
+
+    .about-quote {
+        font-size: 0.95rem;
+        padding-left: 1rem;
+    }
+
+    .incubation-card {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    
+    .incubation-card .card-text h3 {
+        font-size: 1.05rem;
+    }
+    
+    .incubation-card .card-text p {
+        font-size: 0.85rem;
     }
 }
 
