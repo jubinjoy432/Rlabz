@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: "top top", // Trigger when section hits top of viewport
                     end: "+=150%",     // Pin for 1.5x viewport height of scrolling
                     pin: true,        // Screen lock for both!
-                    scrub: isMobile ? 2.5 : 1, // Higher scrub on mobile masks compositor-thread jitter
+                    scrub: 1,         // Smooth scrubbing
                     onUpdate: (self) => {
                         window.bentoScrollProgress = self.progress; // Critically powers Robot.js
                         
