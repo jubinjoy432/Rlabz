@@ -728,22 +728,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetArmRotZ = -0.1; // Default idle
 
     const cards = document.querySelectorAll('.feature-card');
+    
+    // Global event listener for explicitly forcing a prop (used by mobile swiper)
+    window.addEventListener('robot-show-prop', (e) => {
+        const title = e.detail.title;
+        if (!title) {
+            isHoldingObject = false;
+            Object.values(props).forEach(p => p.visible = false);
+        } else if (props[title]) {
+            Object.values(props).forEach(p => p.visible = false);
+            props[title].visible = true;
+            isHoldingObject = true;
+            isIdle = false; // Wake up robot
+        }
+    });
+
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
+            if (window.innerWidth <= 992) return; // Ignore on mobile (handled by scroll sync)
             const title = card.querySelector('h3') ? card.querySelector('h3').textContent.trim() : '';
-            if (props[title]) {
-                // Hide all first
-                Object.values(props).forEach(p => p.visible = false);
-                // Show specific
-                props[title].visible = true;
-                isHoldingObject = true;
-                isIdle = false; // Wake up robot
-            }
+            window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
         });
 
         card.addEventListener('mouseleave', () => {
-            isHoldingObject = false;
-            Object.values(props).forEach(p => p.visible = false);
+            if (window.innerWidth <= 992) return;
+            window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
         });
     });
 
@@ -762,15 +771,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Resize Handling
     window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        // Ignore height-only resizes (mobile address bar) to prevent massive jitter
+        if (Math.abs(window.innerWidth - vw) > 50) {
+            vw = window.innerWidth;
+            vh = window.innerHeight;
+            camera.aspect = vw / vh;
+            camera.updateProjectionMatrix();
+            renderer.setSize(vw, vh);
+        }
     });
 
     let scrollY = window.scrollY;
     window.addEventListener('scroll', () => {
         scrollY = window.scrollY;
     });
+
+    // Stable Viewport Caching for Mobile Jitter Fix
+    let vw = window.innerWidth;
+    let vh = window.innerHeight;
 
     // Helper: Map DOM (pixels) to World (3D units) at a given depth
     function getZPosition(depth) {
@@ -783,8 +801,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mapDomToWorld(rect, depth, alignMode = 'center') {
         const { width: viewW, height: viewH } = getZPosition(depth);
-        const canvasW = window.innerWidth;
-        const canvasH = window.innerHeight;
+        const canvasW = vw;
+        const canvasH = vh;
 
         // Normalized coordinates (-1 to +1)
         // Center of rect
@@ -838,7 +856,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (heroVisual && targetHeading) {
                 const bentoSection = document.getElementById('what-we-do');
-                const targetAnchor = document.querySelector('#robot-target-anchor');
+                let targetAnchor = document.querySelector('#robot-target-anchor');
+                
+                // Hijack the anchor trajectory on mobile to push the robot safely to the bottom of the screen
+                if (window.innerWidth <= 992) {
+                    const mobileAnchor = document.querySelector('#robot-target-anchor-mobile');
+                    if (mobileAnchor) targetAnchor = mobileAnchor;
+                }
 
                 const rHero = heroVisual.getBoundingClientRect();
                 const rBento = bentoSection.getBoundingClientRect();
@@ -846,17 +870,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rAnchor = targetElement.getBoundingClientRect();
 
                 const rCenter = {
-                    left: window.innerWidth / 2,
-                    top: window.innerHeight * 0.98,
+                    left: vw / 2,
+                    top: vh * 0.98,
                     width: 0, height: 0,
-                    right: window.innerWidth / 2,
-                    bottom: window.innerHeight * 0.98
+                    right: vw / 2,
+                    bottom: vh * 0.98
                 };
 
                 // Phase 1 Progress: Scroll from Hero to Bento
                 let progress1 = 0;
                 if (rBento.top > 0) {
-                    progress1 = 1 - Math.min(1, rBento.top / window.innerHeight);
+                    progress1 = 1 - Math.min(1, rBento.top / vh);
                 } else {
                     progress1 = 1;
                 }
@@ -871,9 +895,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const posCenter = mapDomToWorld(rCenter, depth0, 'center');
                 const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
 
-                const scaleHero = 0.82;
-                const scaleCenter = 0.85;
-                const scaleAnchor = targetAnchor ? 0.38 : 0.32;
+                let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
+                const scaleHero = responsiveScale;
+                const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
+                // Drastically shrink the robot on mobile so it doesn't occlude the slider
+                const scaleAnchor = window.innerWidth <= 992 ? 0.35 : (targetAnchor ? 0.38 : 0.32);
 
                 // Compute Base Phase 1 Output
                 currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;

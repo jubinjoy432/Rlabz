@@ -126,86 +126,103 @@
             <!-- Header removed and moved to bento center -->
 
             <div class="feature-bento-grid">
-                <!-- Card 1: Mobile Solutions -->
-                <div class="feature-card bento-card bento-top-left" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-mobile-screen-button"></i>
+                <!-- Center Container (Robot Area / Main Title) is now Slide 0 -->
+                <!-- Slider wrapper explicitly for mobile (transparent on desktop) -->
+                <div class="mobile-feature-slider">
+
+                    <div class="bento-center feature-card-slide">
+                        <div class="bento-center-default">
+                            <h2 class="center-bento-title">
+                                <span class="reveal-mask"><span class="reveal-text">Comprehensive</span></span>
+                                <span class="reveal-mask"><span class="reveal-text"><span class="highlight-text"
+                                            id="highlight-solutions">Solutions</span></span></span>
+                                <span class="reveal-mask"><span class="reveal-text">for Your Business</span></span>
+                            </h2>
+                            <div id="robot-target-anchor"></div>
+                            <div class="card-swipe-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        </div>
                     </div>
-                    <div class="feature-content">
-                        <h3>Mobile Solutions</h3>
-                        <p>Seamless offline and online mobile experiences designed for performance.</p>
-                        <div class="feature-tags">
-                            <span>Android</span>
-                            <span>iOS</span>
-                            <span>Flutter</span>
+
+                    <!-- Card 1: Mobile Solutions -->
+                    <div class="feature-card bento-card bento-top-left" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-mobile-screen-button"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Mobile Solutions</h3>
+                            <p>Seamless offline and online mobile experiences designed for performance.</p>
+                            <div class="feature-tags">
+                                <span>Android</span>
+                                <span>iOS</span>
+                                <span>Flutter</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Web Solutions -->
+                    <div class="feature-card bento-card bento-bottom-left" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Web Solutions</h3>
+                            <p>Robust web applications and responsive designs using modern frameworks.</p>
+                            <div class="feature-tags">
+                                <span>PHP</span>
+                                <span>.NET</span>
+                                <span>Python</span>
+                                <span>Angular</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Digital Services -->
+                    <div class="feature-card bento-card bento-top-right" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Digital Services</h3>
+                            <p>Hosting, Domain registration, SEO, and Social Media promotions.</p>
+                            <div class="feature-tags">
+                                <span>Hosting</span>
+                                <span>SEO</span>
+                                <span>Marketing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Cloud Integration -->
+                    <div class="feature-card bento-card bento-bottom-right" data-tilt>
+                        <div class="feature-icon-box">
+                            <i class="fa-solid fa-cloud"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Cloud Integration</h3>
+                            <p>Scalable cloud infrastructure and deployment solutions.</p>
+                            <div class="feature-tags">
+                                <span>AWS</span>
+                                <span>Azure</span>
+                                <span>GCP</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card 2: Web Solutions -->
-                <div class="feature-card bento-card bento-bottom-left" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-code"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Web Solutions</h3>
-                        <p>Robust web applications and responsive designs using modern frameworks.</p>
-                        <div class="feature-tags">
-                            <span>PHP</span>
-                            <span>.NET</span>
-                            <span>Python</span>
-                            <span>Angular</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Center Container (Robot Area) -->
-                <div class="bento-center">
-                    <div class="bento-center-default">
-                        <h2 class="center-bento-title">
-                            <span class="reveal-mask"><span class="reveal-text">Comprehensive</span></span>
-                            <span class="reveal-mask"><span class="reveal-text"><span class="highlight-text"
-                                        id="highlight-solutions">Solutions</span></span></span>
-                            <span class="reveal-mask"><span class="reveal-text">for Your Business</span></span>
-                        </h2>
-                        <div id="robot-target-anchor"></div>
-                    </div>
-
-                    <!-- Hover preview overlays removed by user request -->
-                </div>
-
-                <!-- Card 3: Services -->
-                <div class="feature-card bento-card bento-top-right" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-rocket"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Digital Services</h3>
-                        <p>Hosting, Domain registration, SEO, and Social Media promotions.</p>
-                        <div class="feature-tags">
-                            <span>Hosting</span>
-                            <span>SEO</span>
-                            <span>Marketing</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 4: Placeholder for Grid Balance (Optional or Real Content) -->
-                <div class="feature-card bento-card bento-bottom-right" data-tilt>
-                    <div class="feature-icon-box">
-                        <i class="fa-solid fa-cloud"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>Cloud Integration</h3>
-                        <p>Scalable cloud infrastructure and deployment solutions.</p>
-                        <div class="feature-tags">
-                            <span>AWS</span>
-                            <span>Azure</span>
-                            <span>GCP</span>
-                        </div>
-                    </div>
+                <!-- Navigation Dots specifically for mobile swiper -->
+                <div class="feature-slider-dots">
+                    <span class="feature-dot active" data-index="0"></span>
+                    <span class="feature-dot" data-index="1"></span>
+                    <span class="feature-dot" data-index="2"></span>
+                    <span class="feature-dot" data-index="3"></span>
+                    <span class="feature-dot" data-index="4"></span>
                 </div>
             </div>
+        </div>
+
+        <!-- Mobile Robot Anchor (Resting bottom state matching MetaMask UI geometry) -->
+        <div id="robot-target-anchor-mobile"
+            style="position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%); width: 1px; height: 1px; pointer-events: none; z-index: 20;">
         </div>
     </section>
 
@@ -334,7 +351,7 @@
         </div>
     </section>
 
-        <!-- Clients Section Start -->
+    <!-- Clients Section Start -->
     <style>
         /*
          * ================================================================
@@ -362,7 +379,7 @@
             opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out,
-                        transform 0.8s ease-out;
+                transform 0.8s ease-out;
         }
 
         .client_form_section.client_form_visible {
@@ -373,7 +390,9 @@
         /* Glows disabled — solid #050505 content zone must stay perfectly flat */
         .client_form_bg_glow_1,
         .client_form_bg_glow_2,
-        .client_form_phone_glow { display: none; }
+        .client_form_phone_glow {
+            display: none;
+        }
 
         /* ── Main layout grid ── */
         .client_form_inner {
@@ -470,7 +489,7 @@
             opacity: 0;
             transform: translateY(24px);
             transition: opacity 0.7s ease 0.45s, transform 0.7s ease 0.45s,
-                        box-shadow 0.3s ease, background 0.3s ease;
+                box-shadow 0.3s ease, background 0.3s ease;
         }
 
         .client_form_cta_btn::before {
@@ -480,7 +499,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
@@ -489,7 +508,9 @@
             box-shadow: 0 15px 30px -10px rgba(11, 83, 148, 0.75);
         }
 
-        .client_form_cta_btn:hover::before { left: 100%; }
+        .client_form_cta_btn:hover::before {
+            left: 100%;
+        }
 
         .client_form_cta_btn.client_form_stagger_in {
             opacity: 1;
@@ -506,10 +527,10 @@
             height: 460px;
             flex-shrink: 0;
             background: linear-gradient(to bottom,
-                transparent,
-                rgba(255,255,255,0.2) 30%,
-                rgba(255,255,255,0.2) 70%,
-                transparent);
+                    transparent,
+                    rgba(255, 255, 255, 0.2) 30%,
+                    rgba(255, 255, 255, 0.2) 70%,
+                    transparent);
         }
 
         /* ── RIGHT SIDE ── */
@@ -526,7 +547,7 @@
             opacity: 0;
             transform: translateX(40px);
             transition: opacity 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.25s,
-                        transform 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.25s;
+                transform 0.9s cubic-bezier(0.25, 1, 0.5, 1) 0.25s;
         }
 
         .client_form_right.client_form_stagger_in {
@@ -555,8 +576,8 @@
             top: 50%;
             transform: translate(-50%, -50%);
             box-shadow:
-                0 20px 60px rgba(0,0,0,0.70),
-                inset 0 0 16px rgba(0,0,0,0.85);
+                0 20px 60px rgba(0, 0, 0, 0.70),
+                inset 0 0 16px rgba(0, 0, 0, 0.85);
             overflow: hidden;
             display: flex;
             flex-direction: column;
@@ -570,7 +591,7 @@
             transform: translateX(-50%);
             width: 100px;
             height: 22px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
             z-index: 15;
@@ -620,19 +641,19 @@
         }
 
         .client_form_search_bar {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             padding: 9px 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             margin-top: 16px;
         }
 
         .client_form_search_text {
             font-size: 0.78rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .client_form_search_icon {
@@ -655,9 +676,9 @@
         }
 
         .client_form_phone_card {
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             padding: 12px;
             display: flex;
             flex-direction: column;
@@ -679,12 +700,17 @@
 
         .client_form_phone_card_line {
             height: 5px;
-            background: rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: 3px;
         }
 
-        .client_form_phone_card_line.long  { width: 78%; }
-        .client_form_phone_card_line.short { width: 48%; }
+        .client_form_phone_card_line.long {
+            width: 78%;
+        }
+
+        .client_form_phone_card_line.short {
+            width: 48%;
+        }
 
         .client_form_phone_card_stars {
             color: rgba(96, 165, 250, 0.45);
@@ -703,7 +729,7 @@
             z-index: 20;
             pointer-events: none;
             transition: transform 0.85s cubic-bezier(0.34, 1.56, 0.64, 1),
-                        opacity 0.65s ease;
+                opacity 0.65s ease;
         }
 
         .client_form_float_wrapper.client_form_card_revealed {
@@ -728,10 +754,10 @@
              *  3. Subtle top-edge glass highlight
              */
             box-shadow:
-                0 35px 70px rgba(0,0,0,0.80),
+                0 35px 70px rgba(0, 0, 0, 0.80),
                 0 0 50px rgba(11, 83, 148, 0.30),
                 0 0 100px rgba(37, 99, 235, 0.12),
-                inset 0 1px 0 rgba(255,255,255,0.08);
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
             display: flex;
             flex-direction: column;
             position: relative;
@@ -741,10 +767,10 @@
         .client_form_testimonial_card:hover {
             transform: translateY(-7px);
             box-shadow:
-                0 50px 100px rgba(0,0,0,0.90),
+                0 50px 100px rgba(0, 0, 0, 0.90),
                 0 0 60px rgba(11, 83, 148, 0.45),
                 0 0 120px rgba(37, 99, 235, 0.20),
-                inset 0 1px 0 rgba(255,255,255,0.10);
+                inset 0 1px 0 rgba(255, 255, 255, 0.10);
         }
 
         .client_form_card_header {
@@ -780,8 +806,15 @@
         }
 
         @keyframes client_form_blink {
-            0%, 100% { opacity: 1; }
-            50%       { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
 
         .client_form_client_info {
@@ -802,7 +835,7 @@
             font-weight: 700;
             color: #ffffff;
             font-size: 1rem;
-            border: 2px solid rgba(255,255,255,0.12);
+            border: 2px solid rgba(255, 255, 255, 0.12);
             transition: opacity 0.3s;
             flex-shrink: 0;
         }
@@ -822,12 +855,13 @@
 
         .client_form_role_text {
             font-size: 0.82rem;
-            color: #93c5fd; /* blue-300 — matches site blue palette */
+            color: #93c5fd;
+            /* blue-300 — matches site blue palette */
         }
 
         .client_form_card_footer_tag {
             font-size: 0.72rem;
-            color: rgba(255,255,255,0.45);
+            color: rgba(255, 255, 255, 0.45);
             display: flex;
             align-items: center;
             gap: 5px;
@@ -884,7 +918,7 @@
             padding-right: 20px;
             /* Exact match to the section */
             background: #010421;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .client_form_logos_header {
@@ -903,7 +937,7 @@
         }
 
         .client_form_logos_label {
-            color: rgba(255,255,255,0.55);
+            color: rgba(255, 255, 255, 0.55);
             font-size: 0.9rem;
             font-weight: 500;
             white-space: nowrap;
@@ -913,7 +947,7 @@
         .client_form_logos_line {
             height: 1px;
             flex: 1;
-            background: linear-gradient(to right, rgba(255,255,255,0.12), transparent);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.12), transparent);
         }
 
         /* Marquee wrapper */
@@ -922,9 +956,9 @@
             width: 100%;
             position: relative;
             mask-image: linear-gradient(to right,
-                transparent, black 10%, black 90%, transparent);
+                    transparent, black 10%, black 90%, transparent);
             -webkit-mask-image: linear-gradient(to right,
-                transparent, black 10%, black 90%, transparent);
+                    transparent, black 10%, black 90%, transparent);
         }
 
         .client_form_marquee_track {
@@ -941,8 +975,13 @@
         }
 
         @keyframes client_form_scroll {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-50%); }
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
         }
 
         .client_form_logo_group {
@@ -955,14 +994,14 @@
             font-family: 'Space Grotesk', sans-serif;
             font-size: 1.1rem;
             font-weight: 600;
-            color: rgba(255,255,255,0.55);
+            color: rgba(255, 255, 255, 0.55);
             padding: 18px 40px;
-            background: rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.04);
             border-radius: 14px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             transition: all 0.35s ease;
             cursor: default;
             white-space: nowrap;
@@ -974,13 +1013,14 @@
             color: #ffffff;
             border-color: rgba(37, 99, 235, 0.4);
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
         }
 
         /* ══════════════════════════════════
            RESPONSIVE — mobile-first <1024px
            ══════════════════════════════════ */
         @media (max-width: 1024px) {
+
             /* Single column: text TOP, card BOTTOM */
             .client_form_inner {
                 flex-direction: column;
@@ -990,7 +1030,8 @@
             }
 
             .client_form_left {
-                order: 1; /* text always on top */
+                order: 1;
+                /* text always on top */
                 padding-right: 0;
             }
 
@@ -1005,11 +1046,13 @@
             }
 
             .client_form_divider {
-                display: none; /* hide vertical divider, replaced by spacing */
+                display: none;
+                /* hide vertical divider, replaced by spacing */
             }
 
             .client_form_right {
-                order: 2; /* card/phone BELOW text */
+                order: 2;
+                /* card/phone BELOW text */
                 width: 100%;
                 min-width: unset;
                 height: 560px;
@@ -1047,8 +1090,15 @@
                 transform: translate(-50%, -50%) scale(0.82);
             }
 
+            .client_form_float_wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
             .client_form_testimonial_card {
-                width: calc(100vw - 40px);
+                width: calc(100% - 40px);
                 max-width: 380px;
             }
 
@@ -1181,8 +1231,8 @@
 
             <div class="client_form_marquee_outer">
                 <div class="client_form_marquee_track" id="client_form_marquee_track">
-                    <!-- Group 1 -->
-                    <div class="client_form_logo_group">
+                    <!-- Original group — JS will clone this 2× for 3 groups total (33.33% scroll) -->
+                    <div class="client_form_logo_group" id="client_form_logo_group_orig">
                         <div class="client_form_logo_item">The Luke</div>
                         <div class="client_form_logo_item">Arkon</div>
                         <div class="client_form_logo_item"><i class="fa-solid fa-lightbulb"></i> InnoBiz</div>
@@ -1218,6 +1268,58 @@
                         <div class="client_form_logo_item">Arkon</div>
                         <div class="client_form_logo_item"><i class="fa-solid fa-lightbulb"></i> InnoBiz</div>
                         <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 2 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 3 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 4 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                    </div>
+                    <!-- Group 2 -->
+                    <div class="client_form_logo_group">
+                        <!-- Copy 1 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 2 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 3 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 4 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
                     </div>
                 </div>
             </div>
@@ -1226,197 +1328,197 @@
     </section>
 
     <script>
-    (function () {
-        'use strict';
+        (function () {
+            'use strict';
 
-        /* ─── Testimonials data ─────────────────────────────────────────── */
-        const client_form_data = [
-            {
-                text: "RlabZ is very punctual, responsive, flexible, fast and overall provided a fantastic service. We are very happy with the results and I'd highly recommend them.",
-                name: "Mr. Pothen John",
-                role: "Arkon Medical Systems",
-                initial: "P"
-            },
-            {
-                text: "The guys over at RlabZ have gone above and beyond as our technological partner. Excellent communication, great energy and talent to manifest the potential of world class ideas.",
-                name: "DR. Mary Venus Joseph",
-                role: "ICSW",
-                initial: "M"
-            },
-            {
-                text: "To those who consider RlabZ — we at The Luke are pleased, delighted and completely satisfied with the very professional service provided by the company.",
-                name: "Mr. Stebin Sebastian",
-                role: "The Luke Event Management",
-                initial: "S"
-            }
-        ];
-
-        /* ─── Element refs ──────────────────────────────────────────────── */
-        const client_form_textEl    = document.getElementById('client_form_text');
-        const client_form_nameEl    = document.getElementById('client_form_name');
-        const client_form_roleEl    = document.getElementById('client_form_role');
-        const client_form_avatarEl  = document.getElementById('client_form_avatar');
-        const client_form_detailsEl = document.getElementById('client_form_details');
-
-        /* ─── Typing state ──────────────────────────────────────────────── */
-        let client_form_idx      = 0;
-        let client_form_charIdx  = 0;
-        let client_form_deleting = false;
-        let client_form_timer;
-
-        function client_form_setClient(i) {
-            if (client_form_nameEl)   client_form_nameEl.textContent   = client_form_data[i].name;
-            if (client_form_roleEl)   client_form_roleEl.textContent   = client_form_data[i].role;
-            if (client_form_avatarEl) client_form_avatarEl.textContent = client_form_data[i].initial;
-        }
-
-        function client_form_type() {
-            if (!client_form_textEl) return;
-            const entry = client_form_data[client_form_idx];
-            let speed = 28;
-
-            if (client_form_deleting) {
-                client_form_textEl.textContent = entry.text.slice(0, --client_form_charIdx);
-                speed = 10;
-                if (client_form_charIdx === 0) {
-                    client_form_deleting = false;
-                    client_form_idx = (client_form_idx + 1) % client_form_data.length;
-                    /* fade-swap the client info */
-                    if (client_form_detailsEl) client_form_detailsEl.style.opacity = 0;
-                    if (client_form_avatarEl)  client_form_avatarEl.style.opacity  = 0;
-                    setTimeout(() => {
-                        client_form_setClient(client_form_idx);
-                        if (client_form_detailsEl) client_form_detailsEl.style.opacity = 1;
-                        if (client_form_avatarEl)  client_form_avatarEl.style.opacity  = 1;
-                    }, 260);
-                    speed = 320;
+            /* ─── Testimonials data ─────────────────────────────────────────── */
+            const client_form_data = [
+                {
+                    text: "RlabZ is very punctual, responsive, flexible, fast and overall provided a fantastic service. We are very happy with the results and I'd highly recommend them.",
+                    name: "Mr. Pothen John",
+                    role: "Arkon Medical Systems",
+                    initial: "P"
+                },
+                {
+                    text: "The guys over at RlabZ have gone above and beyond as our technological partner. Excellent communication, great energy and talent to manifest the potential of world class ideas.",
+                    name: "DR. Mary Venus Joseph",
+                    role: "ICSW",
+                    initial: "M"
+                },
+                {
+                    text: "To those who consider RlabZ — we at The Luke are pleased, delighted and completely satisfied with the very professional service provided by the company.",
+                    name: "Mr. Stebin Sebastian",
+                    role: "The Luke Event Management",
+                    initial: "S"
                 }
-            } else {
-                client_form_textEl.textContent = entry.text.slice(0, ++client_form_charIdx);
-                speed = Math.random() * 14 + 16;
-                if (client_form_charIdx === entry.text.length) {
-                    client_form_deleting = true;
-                    speed = 2600;
-                }
+            ];
+
+            /* ─── Element refs ──────────────────────────────────────────────── */
+            const client_form_textEl = document.getElementById('client_form_text');
+            const client_form_nameEl = document.getElementById('client_form_name');
+            const client_form_roleEl = document.getElementById('client_form_role');
+            const client_form_avatarEl = document.getElementById('client_form_avatar');
+            const client_form_detailsEl = document.getElementById('client_form_details');
+
+            /* ─── Typing state ──────────────────────────────────────────────── */
+            let client_form_idx = 0;
+            let client_form_charIdx = 0;
+            let client_form_deleting = false;
+            let client_form_timer;
+
+            function client_form_setClient(i) {
+                if (client_form_nameEl) client_form_nameEl.textContent = client_form_data[i].name;
+                if (client_form_roleEl) client_form_roleEl.textContent = client_form_data[i].role;
+                if (client_form_avatarEl) client_form_avatarEl.textContent = client_form_data[i].initial;
             }
-            client_form_timer = setTimeout(client_form_type, speed);
-        }
 
-        /* ─── Manual navigation ─────────────────────────────────────────── */
-        function client_form_jumpTo(i) {
-            clearTimeout(client_form_timer);
-            client_form_idx     = ((i % client_form_data.length) + client_form_data.length) % client_form_data.length;
-            client_form_charIdx = 0;
-            client_form_deleting = false;
-            if (client_form_textEl) client_form_textEl.textContent = '';
-            if (client_form_detailsEl) client_form_detailsEl.style.opacity = 0;
-            if (client_form_avatarEl)  client_form_avatarEl.style.opacity  = 0;
-            setTimeout(() => {
-                client_form_setClient(client_form_idx);
-                if (client_form_detailsEl) client_form_detailsEl.style.opacity = 1;
-                if (client_form_avatarEl)  client_form_avatarEl.style.opacity  = 1;
-                client_form_type();
-            }, 280);
-        }
+            function client_form_type() {
+                if (!client_form_textEl) return;
+                const entry = client_form_data[client_form_idx];
+                let speed = 28;
 
-        document.getElementById('client_form_next')?.addEventListener('click', () =>
-            client_form_jumpTo(client_form_idx + 1));
-        document.getElementById('client_form_prev')?.addEventListener('click', () =>
-            client_form_jumpTo(client_form_idx - 1));
+                if (client_form_deleting) {
+                    client_form_textEl.textContent = entry.text.slice(0, --client_form_charIdx);
+                    speed = 10;
+                    if (client_form_charIdx === 0) {
+                        client_form_deleting = false;
+                        client_form_idx = (client_form_idx + 1) % client_form_data.length;
+                        /* fade-swap the client info */
+                        if (client_form_detailsEl) client_form_detailsEl.style.opacity = 0;
+                        if (client_form_avatarEl) client_form_avatarEl.style.opacity = 0;
+                        setTimeout(() => {
+                            client_form_setClient(client_form_idx);
+                            if (client_form_detailsEl) client_form_detailsEl.style.opacity = 1;
+                            if (client_form_avatarEl) client_form_avatarEl.style.opacity = 1;
+                        }, 260);
+                        speed = 320;
+                    }
+                } else {
+                    client_form_textEl.textContent = entry.text.slice(0, ++client_form_charIdx);
+                    speed = Math.random() * 14 + 16;
+                    if (client_form_charIdx === entry.text.length) {
+                        client_form_deleting = true;
+                        speed = 2600;
+                    }
+                }
+                client_form_timer = setTimeout(client_form_type, speed);
+            }
 
-        /* ─── Intersection Observer — section reveal + staggered ─────────── */
-        const client_form_section = document.getElementById('client_form_section');
-        const client_form_float   = document.getElementById('client_form_float');
-        const client_form_logosHdr = document.getElementById('client_form_logos_hdr');
+            /* ─── Manual navigation ─────────────────────────────────────────── */
+            function client_form_jumpTo(i) {
+                clearTimeout(client_form_timer);
+                client_form_idx = ((i % client_form_data.length) + client_form_data.length) % client_form_data.length;
+                client_form_charIdx = 0;
+                client_form_deleting = false;
+                if (client_form_textEl) client_form_textEl.textContent = '';
+                if (client_form_detailsEl) client_form_detailsEl.style.opacity = 0;
+                if (client_form_avatarEl) client_form_avatarEl.style.opacity = 0;
+                setTimeout(() => {
+                    client_form_setClient(client_form_idx);
+                    if (client_form_detailsEl) client_form_detailsEl.style.opacity = 1;
+                    if (client_form_avatarEl) client_form_avatarEl.style.opacity = 1;
+                    client_form_type();
+                }, 280);
+            }
 
-        if ('IntersectionObserver' in window && client_form_section) {
-            const client_form_observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (!entry.isIntersecting) return;
+            document.getElementById('client_form_next')?.addEventListener('click', () =>
+                client_form_jumpTo(client_form_idx + 1));
+            document.getElementById('client_form_prev')?.addEventListener('click', () =>
+                client_form_jumpTo(client_form_idx - 1));
 
-                    /* 1. Reveal section wrapper */
-                    client_form_section.classList.add('client_form_visible');
+            /* ─── Intersection Observer — section reveal + staggered ─────────── */
+            const client_form_section = document.getElementById('client_form_section');
+            const client_form_float = document.getElementById('client_form_float');
+            const client_form_logosHdr = document.getElementById('client_form_logos_hdr');
 
-                    /* 2. Stagger left-side elements with 0.2s increments */
-                    const client_form_staggerEls = client_form_section.querySelectorAll(
-                        '.client_form_heading, .client_form_description, .client_form_cta_btn'
-                    );
-                    client_form_staggerEls.forEach((el, i) => {
-                        setTimeout(() => el.classList.add('client_form_stagger_in'), i * 200);
+            if ('IntersectionObserver' in window && client_form_section) {
+                const client_form_observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+
+                        /* 1. Reveal section wrapper */
+                        client_form_section.classList.add('client_form_visible');
+
+                        /* 2. Stagger left-side elements with 0.2s increments */
+                        const client_form_staggerEls = client_form_section.querySelectorAll(
+                            '.client_form_heading, .client_form_description, .client_form_cta_btn'
+                        );
+                        client_form_staggerEls.forEach((el, i) => {
+                            setTimeout(() => el.classList.add('client_form_stagger_in'), i * 200);
+                        });
+
+                        /* 3. Slide in right panel */
+                        const client_form_rightEl = client_form_section.querySelector('.client_form_right');
+                        if (client_form_rightEl) {
+                            setTimeout(() => client_form_rightEl.classList.add('client_form_stagger_in'), 200);
+                        }
+
+                        /* 4. Pop testimonial card out of phone with delay */
+                        if (client_form_float) {
+                            setTimeout(() => client_form_float.classList.add('client_form_card_revealed'), 550);
+                        }
+
+                        /* 5. Logos header reveal */
+                        if (client_form_logosHdr) {
+                            setTimeout(() => client_form_logosHdr.classList.add('client_form_stagger_in'), 600);
+                        }
+
+                        /* 6. Start typing effect */
+                        client_form_setClient(0);
+                        setTimeout(client_form_type, 900);
+
+                        client_form_observer.unobserve(entry.target);
                     });
+                }, { threshold: 0.15 });
 
-                    /* 3. Slide in right panel */
-                    const client_form_rightEl = client_form_section.querySelector('.client_form_right');
-                    if (client_form_rightEl) {
-                        setTimeout(() => client_form_rightEl.classList.add('client_form_stagger_in'), 200);
-                    }
+                client_form_observer.observe(client_form_section);
+            } else {
+                /* Fallback: show everything immediately */
+                if (client_form_section) client_form_section.classList.add('client_form_visible');
+                document.querySelectorAll('.client_form_heading, .client_form_description, .client_form_cta_btn')
+                    .forEach(el => el.classList.add('client_form_stagger_in'));
+                document.querySelector('.client_form_right')?.classList.add('client_form_stagger_in');
+                if (client_form_float) client_form_float.classList.add('client_form_card_revealed');
+                if (client_form_logosHdr) client_form_logosHdr.classList.add('client_form_stagger_in');
+                client_form_setClient(0);
+                setTimeout(client_form_type, 900);
+            }
 
-                    /* 4. Pop testimonial card out of phone with delay */
-                    if (client_form_float) {
-                        setTimeout(() => client_form_float.classList.add('client_form_card_revealed'), 550);
-                    }
 
-                    /* 5. Logos header reveal */
-                    if (client_form_logosHdr) {
-                        setTimeout(() => client_form_logosHdr.classList.add('client_form_stagger_in'), 600);
-                    }
 
-                    /* 6. Start typing effect */
-                    client_form_setClient(0);
-                    setTimeout(client_form_type, 900);
+            /* ─── Parallax: phone slides up slightly faster than background ───
+               This creates genuine 3D depth — background "washes" down at 1×
+               scroll speed while the phone panel moves up at ~1.4× speed.
+               No JS is needed for the background gradient (pure CSS handles it).
+            ─────────────────────────────────────────────────────────────────── */
+            const client_form_parallaxEl = document.getElementById('client_form_parallax');
+            let client_form_rafId = null;
 
-                    client_form_observer.unobserve(entry.target);
+            function client_form_onScroll() {
+                if (client_form_rafId) return;
+                client_form_rafId = requestAnimationFrame(() => {
+                    client_form_rafId = null;
+                    if (!client_form_parallaxEl || !client_form_section) return;
+                    const rect = client_form_section.getBoundingClientRect();
+                    const viewH = window.innerHeight;
+
+                    if (rect.bottom < 0 || rect.top > viewH) return;
+
+                    /*
+                     * progress: 0 at section entrance, 1 at section exit.
+                     * Phone moves at 70% of the section scroll distance
+                     * (max ±50px), so it drifts upward faster = 3D depth.
+                     */
+                    const progress = (viewH - rect.top) / (viewH + rect.height);
+                    const shiftPx = (progress - 0.5) * -100; /* negative = slide up faster */
+                    client_form_parallaxEl.style.transform = `translateY(${shiftPx}px)`;
                 });
-            }, { threshold: 0.15 });
+            }
 
-            client_form_observer.observe(client_form_section);
-        } else {
-            /* Fallback: show everything immediately */
-            if (client_form_section) client_form_section.classList.add('client_form_visible');
-            document.querySelectorAll('.client_form_heading, .client_form_description, .client_form_cta_btn')
-                .forEach(el => el.classList.add('client_form_stagger_in'));
-            document.querySelector('.client_form_right')?.classList.add('client_form_stagger_in');
-            if (client_form_float) client_form_float.classList.add('client_form_card_revealed');
-            if (client_form_logosHdr) client_form_logosHdr.classList.add('client_form_stagger_in');
-            client_form_setClient(0);
-            setTimeout(client_form_type, 900);
-        }
+            window.addEventListener('scroll', client_form_onScroll, { passive: true });
+            client_form_onScroll(); /* run once on load */
 
-
-
-        /* ─── Parallax: phone slides up slightly faster than background ───
-           This creates genuine 3D depth — background "washes" down at 1×
-           scroll speed while the phone panel moves up at ~1.4× speed.
-           No JS is needed for the background gradient (pure CSS handles it).
-        ─────────────────────────────────────────────────────────────────── */
-        const client_form_parallaxEl = document.getElementById('client_form_parallax');
-        let client_form_rafId = null;
-
-        function client_form_onScroll() {
-            if (client_form_rafId) return;
-            client_form_rafId = requestAnimationFrame(() => {
-                client_form_rafId = null;
-                if (!client_form_parallaxEl || !client_form_section) return;
-                const rect  = client_form_section.getBoundingClientRect();
-                const viewH = window.innerHeight;
-
-                if (rect.bottom < 0 || rect.top > viewH) return;
-
-                /*
-                 * progress: 0 at section entrance, 1 at section exit.
-                 * Phone moves at 70% of the section scroll distance
-                 * (max ±50px), so it drifts upward faster = 3D depth.
-                 */
-                const progress = (viewH - rect.top) / (viewH + rect.height);
-                const shiftPx  = (progress - 0.5) * -100; /* negative = slide up faster */
-                client_form_parallaxEl.style.transform = `translateY(${shiftPx}px)`;
-            });
-        }
-
-        window.addEventListener('scroll', client_form_onScroll, { passive: true });
-        client_form_onScroll(); /* run once on load */
-
-    })();
+        })();
     </script>
     <!-- Clients Section End -->
 
