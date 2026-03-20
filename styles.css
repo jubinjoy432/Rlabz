@@ -7426,14 +7426,15 @@ html.lenis body {
     }
 
     .visual-composition {
-        height: min(90vw, 400px); /* Keeps aspect ratio realistic on phone width */
+        height: min(90vw, 400px);
+        /* Keeps aspect ratio realistic on phone width */
     }
 
     .floating-stat-card {
         top: -4%;
         right: 0;
         padding: 0.6rem 0.8rem;
-        max-width: 180px; 
+        max-width: 180px;
     }
 
     .about-heading {
@@ -7442,9 +7443,10 @@ html.lenis body {
 
     .img-overlap {
         width: 60%;
-        height: 48%; /* Adjust for mobile aspect */
+        height: 48%;
+        /* Adjust for mobile aspect */
     }
-    
+
     .incubation-card {
         padding: 1.2rem;
         gap: 1rem;
@@ -7455,7 +7457,7 @@ html.lenis body {
     .premium-about-section {
         padding: 3.5rem 1.2rem 2rem;
     }
-    
+
     .visual-composition {
         height: min(90vw, 320px);
     }
@@ -7493,11 +7495,11 @@ html.lenis body {
         padding: 1rem;
         gap: 0.8rem;
     }
-    
+
     .incubation-card .card-text h3 {
         font-size: 1.05rem;
     }
-    
+
     .incubation-card .card-text p {
         font-size: 0.85rem;
     }
@@ -7700,4 +7702,10 @@ html.lenis body {
         transform: scale(1.3);
         opacity: 1;
     }
+}
+
+100% {
+    transform: scale(1.3);
+    opacity: 1;
+}
 }
