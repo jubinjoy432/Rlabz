@@ -32,13 +32,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0, 9); // Initial Z depth
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    // Optimize WebGL for mobile devices
+    const isMobile = window.innerWidth < 768;
+    const renderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: !isMobile,
+        powerPreference: "high-performance" 
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Keep pixel ratio at 1.5 to maintain good quality without the 3.0x overhead
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = isMobile ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
 
