@@ -54,6 +54,24 @@ document.addEventListener('DOMContentLoaded', () => {
             updatePill(activeLink);
         });
     }
+
+    // --- Mobile Menu Toggle ---
+    const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+    if (menuToggleBtn && navLinksContainer) {
+        menuToggleBtn.addEventListener('click', () => {
+            menuToggleBtn.classList.toggle('open');
+            navLinksContainer.classList.toggle('open');
+        });
+
+        // Close mobile menu when a link is clicked
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggleBtn.classList.remove('open');
+                navLinksContainer.classList.remove('open');
+            });
+        });
+    }
+
     // --- Entrance Animations ---
     const devices = document.querySelectorAll('.device');
     // Small delay to ensure styles are ready
@@ -63,16 +81,107 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 100);
 
-    // --- Hero Slider Logic ---
+    // --- Hero Slider & Typing Logic ---
     const slides = document.querySelectorAll('.slide');
     const dots = document.querySelectorAll('.slider-dot');
     const visual = document.querySelector('.hero-blue-visual');
     let currentSlide = 0;
 
+    // Typing Effect Setup
+    const heroTitles = document.querySelectorAll('.hero-blue-title');
+    heroTitles.forEach(title => {
+        const originalTextArr = title.innerHTML.split(/<br\s*\/?>/i);
+        title.dataset.line1 = (originalTextArr[0] || '').trim();
+        title.dataset.line2 = originalTextArr.length > 1 ? originalTextArr[1].trim() : '';
+        title.innerHTML = '';
+    });
+
+    let typingTimeout;
+    let heroVisible = false;
+
+    function typeTitle(titleElement) {
+        if (!titleElement) return;
+        clearTimeout(typingTimeout);
+        titleElement.innerHTML = '';
+        const line1 = titleElement.dataset.line1 || '';
+        const line2 = titleElement.dataset.line2 || '';
+        let charIndex1 = 0;
+        let charIndex2 = 0;
+        let currentLine = 1;
+
+        function revealCta() {
+            const slide = titleElement.closest('.slide');
+            if (slide) {
+                const cta = slide.querySelector('.hero-blue-cta');
+                if (cta) cta.classList.add('revealed');
+            }
+        }
+
+        // Hide CTA when typing starts
+        const slide = titleElement.closest('.slide');
+        if (slide) {
+            const cta = slide.querySelector('.hero-blue-cta');
+            if (cta) cta.classList.remove('revealed');
+        }
+
+        function typeWriter() {
+            if (currentLine === 1) {
+                if (charIndex1 < line1.length) {
+                    titleElement.innerHTML = line1.substring(0, charIndex1 + 1) + '<span class="typing-cursor">|</span>';
+                    charIndex1++;
+                    typingTimeout = setTimeout(typeWriter, 90);
+                } else {
+                    if (line2) {
+                        titleElement.innerHTML = line1 + '<br><span class="typing-cursor">|</span>';
+                        currentLine = 2;
+                        typingTimeout = setTimeout(typeWriter, 90);
+                    } else {
+                        titleElement.innerHTML = line1;
+                        revealCta();
+                    }
+                }
+            } else if (currentLine === 2) {
+                if (charIndex2 < line2.length) {
+                    titleElement.innerHTML = line1 + '<br>' + line2.substring(0, charIndex2 + 1) + '<span class="typing-cursor">|</span>';
+                    charIndex2++;
+                    typingTimeout = setTimeout(typeWriter, 90);
+                } else {
+                    titleElement.innerHTML = line1 + '<br>' + line2;
+                    revealCta();
+                }
+            }
+        }
+        typingTimeout = setTimeout(typeWriter, 500); // Small delay before typing starts
+    }
+
+    const heroSection = document.getElementById('hero-blue');
+    if (heroSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !heroVisible) {
+                    heroVisible = true;
+                    // Type the active slide's title
+                    const activeSlide = heroSection.querySelector('.slide.active');
+                    if (activeSlide) {
+                        const title = activeSlide.querySelector('.hero-blue-title');
+                        typeTitle(title);
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+        observer.observe(heroSection);
+    }
+
     function goToSlide(index) {
         // Update Text Slides
         slides.forEach(slide => slide.classList.remove('active'));
-        if (slides[index]) slides[index].classList.add('active');
+        if (slides[index]) {
+            slides[index].classList.add('active');
+            if (heroVisible) {
+                const title = slides[index].querySelector('.hero-blue-title');
+                typeTitle(title);
+            }
+        }
 
         // Update Dots
         dots.forEach(dot => dot.classList.remove('active'));
@@ -531,8 +640,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // 0. Mask Reveal Entrance Animation (Runs once when section enters view)
             const revealTexts = document.querySelectorAll('.reveal-text');
             if (revealTexts.length > 0) {
-                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" }); 
-                gsap.fromTo(revealTexts, 
+                gsap.set(revealTexts, { clearProps: "transform,opacity,visibility" });
+                gsap.fromTo(revealTexts,
                     { y: 100, autoAlpha: 0 },
                     {
                         y: 0,
@@ -615,11 +724,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Query the first slide (which could be the feature-card or the bento-center slide)
                         const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                         if (!cardElement) return;
-                        
+
                         const cardWidth = cardElement.offsetWidth;
                         const gap = 20; // Matches CSS 1.25rem gap
                         const index = Math.round(scrollLeft / (cardWidth + gap));
-                        
+
                         dots.forEach((dot, i) => {
                             dot.classList.toggle('active', i === index);
                         });
@@ -650,7 +759,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         dot.addEventListener('click', () => {
                             const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
                             if (!cardElement) return;
-                            
+
                             const cardWidth = cardElement.offsetWidth;
                             const gap = 20;
                             mobileSliderWrapper.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
