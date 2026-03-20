@@ -3759,12 +3759,15 @@ footer {
     .hero-blue-section {
         padding: 4rem 1.5rem 3rem;
     }
+
     .hero-blue-container {
         gap: 2rem;
     }
+
     .hero-blue-visual {
         height: 320px;
     }
+
     .hero-blue-title {
         font-size: 2.2rem;
     }
@@ -3774,20 +3777,25 @@ footer {
     .hero-blue-section {
         padding: 3.5rem 1rem 2rem;
     }
+
     .hero-blue-container {
         gap: 1rem;
     }
+
     .hero-blue-visual {
         height: 280px;
     }
+
     .hero-blue-title {
         font-size: 1.7rem;
         margin-bottom: 0.5rem;
     }
+
     .hero-blue-desc {
         margin-bottom: 1rem;
         font-size: 0.95rem;
     }
+
     .hero-white-container {
         padding: 1.25rem 1rem;
         margin-top: 0;
@@ -3797,24 +3805,32 @@ footer {
 /* S23 Specific Extreme Mobile Tuning */
 @media (max-width: 380px) {
     .hero-blue-section {
-        padding: 0.25rem 1rem 1.5rem; /* Pulled rigidly up against header */
+        padding: 0.25rem 1rem 1.5rem;
+        /* Pulled rigidly up against header */
     }
+
     .hero-blue-container {
         gap: 0.25rem;
     }
+
     .hero-blue-visual {
-        height: 250px; /* Keep robot structurally contained securely */
+        height: 250px;
+        /* Keep robot structurally contained securely */
     }
+
     .hero-blue-title {
         font-size: 1.45rem;
         margin-bottom: 0.25rem;
     }
+
     .hero-blue-desc {
         font-size: 0.85rem;
         margin-bottom: 0.5rem;
     }
+
     .hero-white-container {
-        padding: 0.75rem 1rem; /* Conserve internal height */
+        padding: 0.75rem 1rem;
+        /* Conserve internal height */
     }
 }
 
@@ -6265,6 +6281,7 @@ html.lenis body {
         padding-top: 20px;
         padding-bottom: 20px;
     }
+
     #our-works-swiper .swiper-slide {
         width: clamp(200px, 72vw, 260px);
         height: clamp(280px, 56vw, 340px);
@@ -6643,19 +6660,24 @@ html.lenis body {
 .mobile-feature-slider {
     display: contents;
 }
+
 .feature-slider-dots {
     display: none;
 }
 
 @media (max-width: 992px) {
+
     /* Release restrictive geometric bounds on entire container to prevent component slaughter */
     #what-we-do {
         height: auto;
-        min-height: 100svh; /* Restore full viewport coverage to prevent canvas collapse void */
+        min-height: 100svh;
+        /* Restore full viewport coverage to prevent canvas collapse void */
         max-height: none;
         overflow: hidden;
-        padding: 5rem 1rem 5rem; /* Symmetric padding to frame the centered slider */
-        align-items: center; /* Suspend the swiper in the middle */
+        padding: 5rem 1rem 5rem;
+        /* Symmetric padding to frame the centered slider */
+        align-items: center;
+        /* Suspend the swiper in the middle */
         justify-content: center;
     }
 
@@ -6670,22 +6692,24 @@ html.lenis body {
     .mobile-feature-slider {
         display: flex;
         overflow-x: auto;
-        overflow-y: hidden; /* Prevent internal vertical scroll from stealing GSAP pin drag events */
+        overflow-y: hidden;
+        /* Prevent internal vertical scroll from stealing GSAP pin drag events */
         scroll-snap-type: x mandatory;
-        gap: 7.5%; /* Scaled precisely to the inverse card centering ratio to ensure next-slides render invisibly at exactly 100% bounds */
+        gap: 7.5%;
+        /* Scaled precisely to the inverse card centering ratio to ensure next-slides render invisibly at exactly 100% bounds */
         padding-bottom: 2rem;
         scrollbar-width: none;
         -ms-overflow-style: none;
         align-items: stretch;
         scroll-behavior: smooth;
     }
-    
+
     .mobile-feature-slider::-webkit-scrollbar {
         display: none;
     }
 
-    .mobile-feature-slider > .feature-card,
-    .mobile-feature-slider > .feature-card-slide {
+    .mobile-feature-slider>.feature-card,
+    .mobile-feature-slider>.feature-card-slide {
         scroll-snap-align: center;
         flex: 0 0 85%;
         /* Stripped max/min bounds so 85% fluid math perfectly centers the card via 7.5% margins natively on all devices */
@@ -6693,7 +6717,7 @@ html.lenis body {
         grid-row: auto !important;
     }
 
-    .mobile-feature-slider > .feature-card-slide {
+    .mobile-feature-slider>.feature-card-slide {
         /* For the slide-card specifically (the title block) */
         display: flex;
         flex-direction: column;
@@ -6702,7 +6726,8 @@ html.lenis body {
     }
 
     .bento-center {
-        min-height: 250px; /* Minimal height to act as a proper card slide */
+        min-height: 250px;
+        /* Minimal height to act as a proper card slide */
         grid-column: auto !important;
         grid-row: auto !important;
         padding: 1rem;
@@ -6710,26 +6735,29 @@ html.lenis body {
 
     /* Force the long multi-word title to mathematically fit inside the mobile card */
     .bento-center .center-bento-title {
-        font-size: clamp(1.4rem, 8vw, 2.0rem) !important; /* Optimized to maximum safe width for 13-char line */
+        font-size: clamp(1.4rem, 8vw, 2.0rem) !important;
+        /* Optimized to maximum safe width for 13-char line */
         text-align: center !important;
         width: 100%;
         margin: 0 auto;
         line-height: 1.25;
-        letter-spacing: -0.5px !important; /* Slight tracking squeeze to allow larger base font */
+        letter-spacing: -0.5px !important;
+        /* Slight tracking squeeze to allow larger base font */
     }
 
     /* Destroy the animation boundary slice to prevent optical left-shift overflow bugs natively */
     .bento-center .reveal-mask {
         overflow: visible !important;
-        display: block; /* guarantee sentences drop evenly without inline collision */
+        display: block;
+        /* guarantee sentences drop evenly without inline collision */
     }
 
     /* Auto-center the boundary slides natively in the swiper interface */
-    .mobile-feature-slider > .feature-card-slide {
+    .mobile-feature-slider>.feature-card-slide {
         margin-left: 7.5%;
     }
-    
-    .mobile-feature-slider > .feature-card:last-child {
+
+    .mobile-feature-slider>.feature-card:last-child {
         margin-right: 7.5%;
     }
 
@@ -6757,7 +6785,8 @@ html.lenis body {
     }
 
     .feature-dot.active {
-        background: #310b65; /* Match mockup dark purple */
+        background: #310b65;
+        /* Match mockup dark purple */
         width: 20px;
         border-radius: 4px;
     }
@@ -6790,8 +6819,15 @@ html.lenis body {
     }
 
     @keyframes swipeButtonPulse {
-        0%, 100% { transform: translateX(0); }
-        50% { transform: translateX(5px); }
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(5px);
+        }
     }
 }
 
