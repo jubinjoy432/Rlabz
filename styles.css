@@ -5601,6 +5601,11 @@ html.lenis body {
     z-index: 1;
 }
 
+#our-works {
+    position: relative;
+    z-index: 1;
+}
+
 /* Fix for blue line glitch on hero title */
 /* =========================================
    PREMIUM FOOTER STYLES

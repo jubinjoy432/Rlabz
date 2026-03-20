@@ -32,20 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0, 9); // Initial Z depth
 
-    // Optimize WebGL for mobile devices
-    const isMobile = window.innerWidth < 768;
+    // Optimize WebGL dynamically
+    const isMobileSize = window.innerWidth < 768;
+    
+    // Check hardware capability: 6+ logical cores is typical for flagship phones
+    const logicalCores = navigator.hardwareConcurrency || 4;
+    const isHighTierMobile = isMobileSize && logicalCores >= 6;
+
+    // NEVER use antialias on mobile, even flagship, because the high pixel ratio handles smoothing
+    // and MSAA buffers at 2x resolution cause memory crashes (silent WebGL failure/disappearing robot)
     const renderer = new THREE.WebGLRenderer({ 
         alpha: true, 
-        antialias: !isMobile,
+        antialias: !isMobileSize,
         powerPreference: "high-performance" 
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    // Keep pixel ratio at 1.5 to maintain good quality without the 3.0x overhead
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    
+    // High-end mobiles get up to 2.0 pixel ratio, standard gets 1.5, desktop uses native or 1.5
+    const maxPixelRatio = isHighTierMobile ? 2.0 : 1.5;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = isMobile ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = isMobileSize ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
 
