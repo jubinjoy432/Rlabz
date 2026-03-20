@@ -90,10 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Typing Effect Setup
     const heroTitles = document.querySelectorAll('.hero-blue-title');
     heroTitles.forEach(title => {
-        const originalTextArr = title.innerHTML.split(/<br\s*\/?>/i);
-        title.dataset.line1 = (originalTextArr[0] || '').trim();
-        title.dataset.line2 = originalTextArr.length > 1 ? originalTextArr[1].trim() : '';
-        title.innerHTML = '';
+        const typeTarget = title.querySelector('.typing-word');
+        if (typeTarget) {
+            title.dataset.typeWord = typeTarget.innerHTML.trim();
+            typeTarget.innerHTML = '';
+        }
     });
 
     let typingTimeout;
@@ -102,12 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function typeTitle(titleElement) {
         if (!titleElement) return;
         clearTimeout(typingTimeout);
-        titleElement.innerHTML = '';
-        const line1 = titleElement.dataset.line1 || '';
-        const line2 = titleElement.dataset.line2 || '';
-        let charIndex1 = 0;
-        let charIndex2 = 0;
-        let currentLine = 1;
+
+        const typeTarget = titleElement.querySelector('.typing-word');
+        if (!typeTarget) return;
+
+        const wordToType = titleElement.dataset.typeWord || '';
+        typeTarget.innerHTML = '';
+        let charIndex = 0;
 
         function revealCta() {
             const slide = titleElement.closest('.slide');
@@ -125,33 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function typeWriter() {
-            if (currentLine === 1) {
-                if (charIndex1 < line1.length) {
-                    titleElement.innerHTML = line1.substring(0, charIndex1 + 1) + '<span class="typing-cursor">|</span>';
-                    charIndex1++;
-                    typingTimeout = setTimeout(typeWriter, 90);
-                } else {
-                    if (line2) {
-                        titleElement.innerHTML = line1 + '<br><span class="typing-cursor">|</span>';
-                        currentLine = 2;
-                        typingTimeout = setTimeout(typeWriter, 90);
-                    } else {
-                        titleElement.innerHTML = line1;
-                        revealCta();
-                    }
-                }
-            } else if (currentLine === 2) {
-                if (charIndex2 < line2.length) {
-                    titleElement.innerHTML = line1 + '<br>' + line2.substring(0, charIndex2 + 1) + '<span class="typing-cursor">|</span>';
-                    charIndex2++;
-                    typingTimeout = setTimeout(typeWriter, 90);
-                } else {
-                    titleElement.innerHTML = line1 + '<br>' + line2;
-                    revealCta();
-                }
+            if (charIndex < wordToType.length) {
+                typeTarget.innerHTML = wordToType.substring(0, charIndex + 1) + '<span class="typing-cursor">|</span>';
+                charIndex++;
+                typingTimeout = setTimeout(typeWriter, 900);
+            } else {
+                typeTarget.innerHTML = wordToType;
+                setTimeout(revealCta, 400); // delay after typing finishes before button appears
             }
         }
-        typingTimeout = setTimeout(typeWriter, 500); // Small delay before typing starts
+        typingTimeout = setTimeout(typeWriter, 1500); // 1.5s delay before typing starts
     }
 
     const heroSection = document.getElementById('hero-blue');
