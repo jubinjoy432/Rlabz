@@ -897,7 +897,7 @@
             padding-left: 20px;
             padding-right: 20px;
             /* Exact match to the section */
-            background: #0b172a;
+            background: #010421;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
 
@@ -943,24 +943,26 @@
 
         .client_form_marquee_track {
             display: flex;
+            flex-direction: row;
+            gap: 40px;
+            padding-right: 40px;
             width: max-content;
-            animation: client_form_marquee_scroll 30s linear infinite;
+            animation: client_form_scroll 90s linear infinite;
         }
 
         .client_form_marquee_outer:hover .client_form_marquee_track {
             animation-play-state: paused;
         }
 
-        /* Each cloned group lines up end-to-end. 3 groups → translate -33.333% */
-        @keyframes client_form_marquee_scroll {
+        @keyframes client_form_scroll {
             from { transform: translateX(0); }
-            to   { transform: translateX(-33.333333%); }
+            to   { transform: translateX(-50%); }
         }
 
         .client_form_logo_group {
             display: flex;
-            gap: 24px;
-            padding-right: 24px; /* gap between groups */
+            flex-direction: row;
+            gap: 40px;
         }
 
         .client_form_logo_item {
@@ -1200,8 +1202,61 @@
 
             <div class="client_form_marquee_outer">
                 <div class="client_form_marquee_track" id="client_form_marquee_track">
-                    <!-- Original group — JS will clone this 2× for 3 groups total (33.33% scroll) -->
-                    <div class="client_form_logo_group" id="client_form_logo_group_orig">
+                    <!-- Group 1 -->
+                    <div class="client_form_logo_group">
+                        <!-- Copy 1 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 2 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 3 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 4 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                    </div>
+                    <!-- Group 2 -->
+                    <div class="client_form_logo_group">
+                        <!-- Copy 1 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 2 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 3 -->
+                        <div class="client_form_logo_item">The Luke</div>
+                        <div class="client_form_logo_item">Arkon</div>
+                        <div class="client_form_logo_item">
+                            <i class="fa-solid fa-lightbulb"></i> InnoBiz
+                        </div>
+                        <div class="client_form_logo_item">TechCorp</div>
+                        <!-- Copy 4 -->
                         <div class="client_form_logo_item">The Luke</div>
                         <div class="client_form_logo_item">Arkon</div>
                         <div class="client_form_logo_item">
@@ -1372,18 +1427,7 @@
             setTimeout(client_form_type, 900);
         }
 
-        /* ─── Marquee: clone logo group twice → 3 identical groups ────────
-           CSS animation: translateX(-33.333333%) = exactly 1 group width
-           ─────────────────────────────────────────────────────────────── */
-        const client_form_track = document.getElementById('client_form_marquee_track');
-        const client_form_origGroup = document.getElementById('client_form_logo_group_orig');
-        if (client_form_track && client_form_origGroup) {
-            for (let i = 0; i < 2; i++) {
-                const clone = client_form_origGroup.cloneNode(true);
-                clone.removeAttribute('id'); /* avoid duplicate IDs */
-                client_form_track.appendChild(clone);
-            }
-        }
+
 
         /* ─── Parallax: phone slides up slightly faster than background ───
            This creates genuine 3D depth — background "washes" down at 1×
