@@ -967,17 +967,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Solutions cards are appearing — robot rises from below
                         const riseStart = 0.3;
                         const riseEnd = 0.7;
-                        const riseProgress = Math.min(1, (progress2 - riseStart) / (riseEnd - riseStart));
+                        // Protect against NaN
+                        const riseProgress = Math.min(1, Math.max(0, (progress2 - riseStart) / (riseEnd - riseStart)));
                         const riseEase = 1 - Math.pow(1 - riseProgress, 3);
 
-                        const belowScreenY = -6;
+                        const belowScreenY = -10;
                         currentPos.x = cAnchorX;
                         currentPos.y = belowScreenY + (cAnchorY - belowScreenY) * riseEase + bentoWorldOffset;
                         currentScale = cScaleAnchor + (cScaleAnchor * 0.2) * (1 - riseEase);
                     } else if (progress2 > 0.01) {
                         // Pinned section started but cards haven't reached rise point — hide
                         currentPos.x = cAnchorX;
-                        currentPos.y = -6 + bentoWorldOffset;
+                        currentPos.y = -10 + bentoWorldOffset;
                         currentScale = cScaleAnchor;
                     } else {
                         // Hero section — robot scrolls 1:1 with the page via GSAP Proxy
@@ -986,7 +987,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentScale = cScaleHero;
                         
                         // Hide it if it scrolls fundamentally out of the world bounds
-                        // viewHeight is roughly 12-16, so 15 is a safe upper bound
                         if (currentPos.y > 15 || currentPos.y < -15) {
                             currentPos.y = -20; 
                         }

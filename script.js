@@ -18,6 +18,12 @@ if (typeof Lenis !== 'undefined') {
 
     gsap.ticker.lagSmoothing(0);
 
+    // Forces scroll onto the main thread on mobile to eliminate compositor divergence 
+    // and prevents URL bar height jumping which destroys 100vh canvas alignment
+    if (window.innerWidth <= 992) {
+        ScrollTrigger.normalizeScroll(true);
+    }
+
     // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
