@@ -785,28 +785,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Resize Handling
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        // Debounce resize to handle mobile address bar hiding without causing jitter
-        resizeTimer = setTimeout(() => {
-            vw = window.innerWidth;
-            vh = window.innerHeight;
-            camera.aspect = vw / vh;
-            camera.updateProjectionMatrix();
-            renderer.setSize(vw, vh);
-        }, 150);
-    });
-
-    let scrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
-        scrollY = window.scrollY;
-    });
-
     // Stable Viewport Caching for Mobile Jitter Fix
     let vw = window.innerWidth;
-    let vh = window.innerHeight;
+    let vh = Math.max(window.innerHeight, 1);
+    let scrollY = window.scrollY;
+
+    function invalidateRobotMobileCache() {
+        window._robotMobileCached = false;
+        window._robotWorldUnitsPerPixel = null;
+        window._robotMobileCachedScrollY = null;
+        window._robotMobileCachedHeroX = null;
+        window._robotMobileCachedHeroY = null;
+        window._robotMobileCachedScaleHero = null;
+        window._robotMobileCachedAnchorX = null;
+        window._robotMobileCachedAnchorY = null;
+    }
+
+    function syncViewportMetrics() {
+        vw = window.innerWidth;
+        vh = Math.max(window.innerHeight, 1);
+        camera.aspect = vw / vh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(vw, vh);
+        invalidateRobotMobileCache();
+    }
+
+    // Resize Handling
+    let resizeTimer;
+    const queueViewportSync = () => {
+        clearTimeout(resizeTimer);
+        // Debounce mobile browser chrome changes so the robot re-caches once per settled viewport update.
+        resizeTimer = setTimeout(syncViewportMetrics, 180);
+    };
+
+    window.addEventListener('resize', queueViewportSync);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', queueViewportSync);
+    }
+
+    window.addEventListener('orientationchange', () => {
+        clearTimeout(resizeTimer);
+        syncViewportMetrics();
+    });
+
+    window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+    }, { passive: true });
 
     // Helper: Map DOM (pixels) to World (3D units) at a given depth
     function getZPosition(depth) {
