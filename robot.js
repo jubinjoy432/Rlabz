@@ -32,13 +32,29 @@ document.addEventListener('DOMContentLoaded', () => {
     const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 100);
     camera.position.set(0, 0, 9); // Initial Z depth
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    // Optimize WebGL dynamically
+    const isMobileSize = window.innerWidth < 768;
+    
+    // Check hardware capability: 6+ logical cores is typical for flagship phones
+    const logicalCores = navigator.hardwareConcurrency || 4;
+    const isHighTierMobile = isMobileSize && logicalCores >= 6;
+
+    // NEVER use antialias on mobile, even flagship, because the high pixel ratio handles smoothing
+    // and MSAA buffers at 2x resolution cause memory crashes (silent WebGL failure/disappearing robot)
+    const renderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: !isMobileSize,
+        powerPreference: "high-performance" 
+    });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    
+    // High-end mobiles get up to 2.0 pixel ratio, standard gets 1.5, desktop uses native or 1.5
+    const maxPixelRatio = isHighTierMobile ? 2.0 : 1.5;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = isMobileSize ? THREE.BasicShadowMap : THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
 
@@ -728,7 +744,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let targetArmRotZ = -0.1; // Default idle
 
     const cards = document.querySelectorAll('.feature-card');
-    
+
     // Global event listener for explicitly forcing a prop (used by mobile swiper)
     window.addEventListener('robot-show-prop', (e) => {
         const title = e.detail.title;
@@ -770,15 +786,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Resize Handling
+    let resizeTimer;
     window.addEventListener('resize', () => {
-        // Ignore height-only resizes (mobile address bar) to prevent massive jitter
-        if (Math.abs(window.innerWidth - vw) > 50) {
+        clearTimeout(resizeTimer);
+        // Debounce resize to handle mobile address bar hiding without causing jitter
+        resizeTimer = setTimeout(() => {
             vw = window.innerWidth;
             vh = window.innerHeight;
             camera.aspect = vw / vh;
             camera.updateProjectionMatrix();
             renderer.setSize(vw, vh);
-        }
+        }, 150);
     });
 
     let scrollY = window.scrollY;
@@ -857,7 +875,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (heroVisual && targetHeading) {
                 const bentoSection = document.getElementById('what-we-do');
                 let targetAnchor = document.querySelector('#robot-target-anchor');
-                
+
                 // Hijack the anchor trajectory on mobile to push the robot safely to the bottom of the screen
                 if (window.innerWidth <= 992) {
                     const mobileAnchor = document.querySelector('#robot-target-anchor-mobile');
@@ -877,19 +895,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     bottom: vh * 0.98
                 };
 
-                // Phase 1 Progress: Scroll from Hero to Bento
-                let progress1 = 0;
-                if (rBento.top > 0) {
-                    progress1 = 1 - Math.min(1, rBento.top / vh);
-                } else {
-                    progress1 = 1;
-                }
-                const ease1 = 1 - Math.pow(1 - progress1, 3);
-
-                // Phase 2 Progress: Driven by GSAP from script.js
-                const progress2 = window.bentoScrollProgress || 0;
-                const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
-
                 const depth0 = 0;
                 const posHero = mapDomToWorld(rHero, depth0, 'center');
                 const posCenter = mapDomToWorld(rCenter, depth0, 'center');
@@ -901,23 +906,71 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Drastically shrink the robot on mobile so it doesn't occlude the slider
                 const scaleAnchor = window.innerWidth <= 992 ? 0.35 : (targetAnchor ? 0.38 : 0.32);
 
-                // Compute Base Phase 1 Output
-                currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;
-                currentPos.y = posHero.y + (posCenter.y - posHero.y) * ease1;
-                currentScale = scaleHero + (scaleCenter - scaleHero) * ease1;
+                if (window.innerWidth <= 992) {
+                    // === MOBILE: No scroll-linked movement ===
+                    // Robot stays at a FIXED world position during hero (not tracking the scrolling DOM),
+                    // then smoothly rises from BELOW the screen when solutions section is pinned.
+                    const progress2 = window.bentoScrollProgress || 0;
 
-                // Compute Overlay Phase 2 Output
-                if (progress2 > 0) {
-                    const centerAdjustedY = posCenter.y + 0.15;
-                    currentPos.x = posCenter.x + (posAnchor.x - posCenter.x) * ease2;
-                    currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
-                    currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
+                    if (progress2 <= 0.01) {
+                        // Solutions section not yet reached — robot stays at fixed hero position
+                        // Use posHero only from the initial visible state (center of hero visual)
+                        // Since hero scrolls away, we use a fixed world-space coordinate instead
+                        currentPos.x = 0; // Center of screen
+                        currentPos.y = posHero.y; // This is fine while hero is still visible
+                        
+                        // But clamp so robot doesn't fly off when hero scrolls away
+                        if (rHero.bottom < 0) {
+                            // Hero has scrolled completely off — hide robot by keeping it offscreen below
+                            currentPos.y = -6;
+                        }
+                        currentScale = scaleHero;
+                    } else {
+                        // Solutions section is active — robot rises from below screen to anchor
+                        const riseProgress = Math.min(1, progress2 / 0.5); // Complete rise within first 50% of bento scroll
+                        const riseEase = 1 - Math.pow(1 - riseProgress, 3); // Cubic ease-out
+
+                        // Start position: well below the visible viewport in world space
+                        const belowScreenY = -6;
+                        currentPos.x = posAnchor.x; // Anchor X (centered)
+                        currentPos.y = belowScreenY + (posAnchor.y - belowScreenY) * riseEase;
+                        currentScale = scaleAnchor + (scaleAnchor * 0.2) * (1 - riseEase);
+                    }
+                } else {
+                    // === DESKTOP: Original scroll-linked behavior (unchanged) ===
+                    // Phase 1 Progress: Scroll from Hero to Bento
+                    let progress1 = 0;
+                    if (rBento.top > 0) {
+                        progress1 = 1 - Math.min(1, rBento.top / vh);
+                    } else {
+                        progress1 = 1;
+                    }
+                    const ease1 = 1 - Math.pow(1 - progress1, 3);
+
+                    // Phase 2 Progress: Driven by GSAP from script.js
+                    const progress2 = window.bentoScrollProgress || 0;
+                    const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
+
+                    // Compute Base Phase 1 Output
+                    currentPos.x = posHero.x + (posCenter.x - posHero.x) * ease1;
+                    currentPos.y = posHero.y + (posCenter.y - posHero.y) * ease1;
+                    currentScale = scaleHero + (scaleCenter - scaleHero) * ease1;
+
+                    // Compute Overlay Phase 2 Output
+                    if (progress2 > 0) {
+                        const centerAdjustedY = posCenter.y + 0.15;
+                        currentPos.x = posCenter.x + (posAnchor.x - posCenter.x) * ease2;
+                        currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
+                        currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
+                    }
                 }
 
                 currentPos.z = depth0;
                 container.style.opacity = '1';
 
                 if (shadow) {
+                    const progress2 = window.bentoScrollProgress || 0;
+                    const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
                     shadow.material.opacity = 0.2 * (1 - ease2);
                 }
             }

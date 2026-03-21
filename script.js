@@ -466,7 +466,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        let _sk = false;
         function animate() {
+            if (window.innerWidth < 768) { _sk = !_sk; if (_sk) { requestAnimationFrame(animate); return; } }
             ctx.clearRect(0, 0, width, height);
 
             if (activeCardIndex !== -1) {
@@ -653,6 +655,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     scrub: 1,         // Smooth scrubbing
                     onUpdate: (self) => {
                         window.bentoScrollProgress = self.progress; // Critically powers Robot.js
+                        
+                        // If user scrolls backwards (up) towards the initial state, force horizontal slider to reset
+                        if (self.progress < 0.1 && window.innerWidth <= 992) {
+                            const mSlider = document.querySelector('.mobile-feature-slider');
+                            if (mSlider && mSlider.scrollLeft > 0) {
+                                mSlider.scrollTo({ left: 0, behavior: 'instant' });
+                                if (window.lastActiveRobotProp !== null) {
+                                    window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
+                                    window.lastActiveRobotProp = null;
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -751,6 +765,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         });
                     });
                 }
+
+                // --- Reset Slider When Scrolled Out of View ---
+                // This ensures the robot drops the prop and the text is visible if the user scrolls deeply away
+                const resetObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) {
+                            // Instantly snap slider back to the start (Slide 0 / Center Title)
+                            mobileSliderWrapper.scrollTo({ left: 0, behavior: 'instant' });
+                            
+                            // Forcibly clear the robot's prop immediately
+                            if (window.lastActiveRobotProp !== null) {
+                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
+                                window.lastActiveRobotProp = null;
+                            }
+                        }
+                    });
+                }, { threshold: 0 });
+                resetObserver.observe(mobileSliderWrapper);
             }
         }
 
@@ -1437,8 +1469,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastScrollY = window.scrollY;
     let ticking = false;
 
+    let _th_hero = 0;
     function updateParallax() {
+        ticking = false;
         if (!heroSection) return;
+        if (window.innerWidth < 768) { _th_hero++; if (_th_hero % 3 !== 0) return; }
 
         const scrollY = window.scrollY;
         const sectionHeight = heroSection.offsetHeight;
@@ -1473,8 +1508,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.setProperty('--parallax-x', `${cardMove}px`);
             });
         }
-
-        ticking = false;
     }
 
     window.addEventListener('scroll', () => {
@@ -1715,7 +1748,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    let _sk2 = false;
     function animate(time) {
+        if (window.innerWidth < 768) { _sk2 = !_sk2; if (_sk2) { requestAnimationFrame(animate); return; } }
         ctx.clearRect(0, 0, width, height);
 
         const cols = gridPoints.length;
@@ -2160,7 +2195,9 @@ document.addEventListener('DOMContentLoaded', () => {
         transition: 'none'
     });
 
+    let _th_ow = 0;
     function onParallaxScroll() {
+        if (window.innerWidth < 768) { _th_ow++; if (_th_ow % 3 !== 0) return; }
         const wwdRect = whatWeDo.getBoundingClientRect();
         const owRect = ourWorks.getBoundingClientRect();
 
@@ -2197,16 +2234,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let ticking = false;
 
+        let _th_head = 0;
         function applyHeadingParallax() {
             if (!ticking) {
                 requestAnimationFrame(() => {
+                    ticking = false;
+                    if (window.innerWidth < 768) { _th_head++; if (_th_head % 3 !== 0) return; }
                     const rect = heading.getBoundingClientRect();
                     const viewportMid = window.innerHeight / 2;
                     const fromCenter = rect.top + rect.height / 2 - viewportMid;
                     const translateY = fromCenter * 0.08;
                     heading.style.transform = `translateY(${translateY}px)`;
                     heading.style.willChange = 'transform';
-                    ticking = false;
                 });
                 ticking = true;
             }
