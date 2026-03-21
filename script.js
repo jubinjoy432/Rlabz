@@ -1,3 +1,40 @@
+// --- Initialize Lenis Smooth Scrolling ---
+if (typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard easing
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        smoothTouch: false, // Don't interfere with native touch momentum unless necessary
+        touchMultiplier: 2,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            if (href === '#') {
+                lenis.scrollTo(0);
+            } else {
+                const target = document.querySelector(href);
+                if (target) {
+                    lenis.scrollTo(target);
+                }
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Sliding Pill Navbar Animation ---
     const navLinksContainer = document.querySelector('.nav-links-container');
