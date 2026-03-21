@@ -706,7 +706,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: "top top", // Trigger when section hits top of viewport
                     end: "+=150%",     // Pin for 1.5x viewport height of scrolling
                     pin: true,        // Screen lock for both!
-                    pinType: "transform", // Use transform-based pinning to avoid overflow:hidden wrapper
                     scrub: 1,         // Smooth scrubbing
                     onUpdate: (self) => {
                         window.bentoScrollProgress = self.progress; // Critically powers Robot.js
@@ -722,13 +721,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     window.lastActiveRobotProp = null;
                                 }
                             }
-                        }
-                    },
-                    onRefresh: () => {
-                        // GSAP pin-spacer sets overflow:hidden — remove it so mobile horizontal scroll works
-                        const spacer = bentoSection.parentElement;
-                        if (spacer && spacer.classList.contains('pin-spacer')) {
-                            spacer.style.overflow = 'visible';
                         }
                     }
                 }
