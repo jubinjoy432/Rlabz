@@ -921,14 +921,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
 
-                        window._robotMobileCachedHeroX = posHero.x;
+                        // Force perfect horizontal center to prevent perspective drift
+                        window._robotMobileCachedHeroX = 0;
                         window._robotMobileCachedHeroY = posHero.y;
                         window._robotMobileCachedScaleHero = responsiveScale;
 
                         // Compute anchor position from viewport math (bottom 15% of screen, centered)
                         const anchorRect = { left: vw / 2, top: vh * 0.85, width: 0, height: 0, right: vw / 2, bottom: vh * 0.85 };
                         const posAnchor = mapDomToWorld(anchorRect, depth0, 'center');
-                        window._robotMobileCachedAnchorX = posAnchor.x;
+                        window._robotMobileCachedAnchorX = 0; // Force perfect center
                         window._robotMobileCachedAnchorY = posAnchor.y;
 
                         window._robotMobileCached = true;

@@ -6,7 +6,7 @@ if (typeof Lenis !== 'undefined') {
         direction: 'vertical',
         gestureDirection: 'vertical',
         smooth: true,
-        smoothTouch: false, // Don't interfere with native touch momentum unless necessary
+        smoothTouch: true, // Hijack touch to sync GSAP and canvas exactly with scroll
         touchMultiplier: 2,
     });
 
