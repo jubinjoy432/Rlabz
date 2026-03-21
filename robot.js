@@ -947,8 +947,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     const unitsPerPixel = window._robotWorldUnitsPerPixel;
 
                     const progress2 = window.bentoScrollProgress || 0;
-                    const deltaScroll = scrollY - cInitialScroll;
-                    const worldOffset = deltaScroll * unitsPerPixel;
+                    const progress1 = window.heroScrollProgress || 0;
+                    
+                    // The height of the view mapped to 100vh is simply viewHeight (which is derived from camera FOV at Z=0)
+                    const { height: viewHeight } = getZPosition(0);
+                    const worldOffset = progress1 * viewHeight;
 
                     // Detect actual screen position of the section to handle unpinning
                     const rBento = bentoSection.getBoundingClientRect();

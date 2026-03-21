@@ -609,6 +609,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
         gsap.registerPlugin(ScrollTrigger);
 
+        // --- Proxy for Mobile WebGL Sync ---
+        // Emits a perfectly synced 0-to-1 float for the Hero section's scroll
+        ScrollTrigger.create({
+            trigger: '#hero-blue',
+            start: 'top top',
+            end: 'bottom top',
+            onUpdate: (self) => {
+                window.heroScrollProgress = self.progress;
+            }
+        });
+
         const bentoSection = document.getElementById('what-we-do');
         const bentoGrid = document.querySelector('.feature-bento-grid');
         const centerDefault = document.querySelector('.bento-center-default');
