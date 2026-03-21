@@ -54,6 +54,24 @@ document.addEventListener('DOMContentLoaded', () => {
             updatePill(activeLink);
         });
     }
+
+    // --- Mobile Menu Toggle ---
+    const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+    if (menuToggleBtn && navLinksContainer) {
+        menuToggleBtn.addEventListener('click', () => {
+            menuToggleBtn.classList.toggle('open');
+            navLinksContainer.classList.toggle('open');
+        });
+
+        // Close mobile menu when a link is clicked
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggleBtn.classList.remove('open');
+                navLinksContainer.classList.remove('open');
+            });
+        });
+    }
+
     // --- Entrance Animations ---
     const devices = document.querySelectorAll('.device');
     // Small delay to ensure styles are ready
@@ -63,16 +81,92 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 100);
 
-    // --- Hero Slider Logic ---
+    // --- Hero Slider & Typing Logic ---
     const slides = document.querySelectorAll('.slide');
     const dots = document.querySelectorAll('.slider-dot');
     const visual = document.querySelector('.hero-blue-visual');
     let currentSlide = 0;
 
+    // Typing Effect Setup
+    const heroTitles = document.querySelectorAll('.hero-blue-title');
+    heroTitles.forEach(title => {
+        const typeTarget = title.querySelector('.typing-word');
+        if (typeTarget) {
+            title.dataset.typeWord = typeTarget.innerHTML.trim();
+            typeTarget.innerHTML = '';
+        }
+    });
+
+    let typingTimeout;
+    let heroVisible = false;
+
+    function typeTitle(titleElement) {
+        if (!titleElement) return;
+        clearTimeout(typingTimeout);
+
+        const typeTarget = titleElement.querySelector('.typing-word');
+        if (!typeTarget) return;
+
+        const wordToType = titleElement.dataset.typeWord || '';
+        typeTarget.innerHTML = '';
+        let charIndex = 0;
+
+        function revealCta() {
+            const slide = titleElement.closest('.slide');
+            if (slide) {
+                const cta = slide.querySelector('.hero-blue-cta');
+                if (cta) cta.classList.add('revealed');
+            }
+        }
+
+        // Hide CTA when typing starts
+        const slide = titleElement.closest('.slide');
+        if (slide) {
+            const cta = slide.querySelector('.hero-blue-cta');
+            if (cta) cta.classList.remove('revealed');
+        }
+
+        function typeWriter() {
+            if (charIndex < wordToType.length) {
+                typeTarget.innerHTML = wordToType.substring(0, charIndex + 1) + '<span class="typing-cursor">|</span>';
+                charIndex++;
+                typingTimeout = setTimeout(typeWriter, 900);
+            } else {
+                typeTarget.innerHTML = wordToType;
+                setTimeout(revealCta, 400); // delay after typing finishes before button appears
+            }
+        }
+        typingTimeout = setTimeout(typeWriter, 1500); // 1.5s delay before typing starts
+    }
+
+    const heroSection = document.getElementById('hero-blue');
+    if (heroSection) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !heroVisible) {
+                    heroVisible = true;
+                    // Type the active slide's title
+                    const activeSlide = heroSection.querySelector('.slide.active');
+                    if (activeSlide) {
+                        const title = activeSlide.querySelector('.hero-blue-title');
+                        typeTitle(title);
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+        observer.observe(heroSection);
+    }
+
     function goToSlide(index) {
         // Update Text Slides
         slides.forEach(slide => slide.classList.remove('active'));
-        if (slides[index]) slides[index].classList.add('active');
+        if (slides[index]) {
+            slides[index].classList.add('active');
+            if (heroVisible) {
+                const title = slides[index].querySelector('.hero-blue-title');
+                typeTitle(title);
+            }
+        }
 
         // Update Dots
         dots.forEach(dot => dot.classList.remove('active'));
