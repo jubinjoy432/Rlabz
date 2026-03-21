@@ -925,7 +925,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         // Force perfect horizontal center, and place it at mathematically reliable height above text
                         window._robotMobileCachedHeroX = 0;
-                        window._robotMobileCachedHeroY = viewHeight * 0.10; // Safely below navbar, above text
+                        window._robotMobileCachedHeroY = viewHeight * 0.15; // Sit inside card's upper white area
                         window._robotMobileCachedScaleHero = responsiveScale;
 
                         // Compute anchor position from viewport math (bottom 15% of screen, centered)

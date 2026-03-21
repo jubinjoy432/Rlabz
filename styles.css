@@ -1307,9 +1307,7 @@ h2 {
 
 @media (max-width: 768px) {
     .hero-blue-visual {
-        height: 350px;
-        perspective: none;
-        /* Disable 3D perspective to flatten */
+        display: none;
     }
 
     .showcase-stage {
@@ -1413,34 +1411,26 @@ h2 {
 /* Responsiveness */
 @media (max-width: 992px) {
     .hero-blue-section {
-        align-items: flex-start;
-        padding-top: 4rem;
-        height: auto;
-        min-height: auto;
-        padding-bottom: 4rem;
+        align-items: center;
+        height: 100svh;
+        min-height: 100svh;
+        padding: 2rem;
     }
 
     .hero-blue-container {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 3rem;
+        gap: 0;
     }
 
-    .hero-blue-content {
-        align-items: center;
-    }
-
-    .hero-blue-desc {
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .hero-blue-title {
-        font-size: 2.5rem;
-    }
-
+    /* Robot sits above via position:fixed — collapse the empty placeholder */
     .hero-blue-visual {
-        height: 400px;
+        display: none;
+    }
+
+    /* Offset text downward so robot (top of card) doesn't hide title */
+    .hero-text-slider {
+        padding-top: 240px;
     }
 
     .hero-cards-wrapper {
@@ -1476,6 +1466,27 @@ h2 {
         transform: scale(0.75);
         margin-left: -20px;
         /* Center alignment compensation if needed */
+    }
+}
+
+/* Very narrow phones (Galaxy Fold folded, etc.) */
+@media (max-width: 380px) {
+    .hero-text-slider {
+        padding-top: 155px;
+    }
+
+    .hero-blue-title {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+
+    .hero-blue-desc {
+        font-size: 0.9rem;
+    }
+
+    .hero-blue-cta {
+        padding: 0.75rem 1.75rem;
+        font-size: 0.9rem;
     }
 }
 
