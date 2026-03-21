@@ -977,14 +977,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentPos.y = -6 + bentoWorldOffset;
                         currentScale = cScaleAnchor;
                     } else {
-                        // Hero section — robot scrolls 1:1 with the page (mathematical offset)
+                        // Hero section — robot scrolls 1:1 with the page via GSAP Proxy
                         currentPos.x = cHeroX;
                         currentPos.y = cHeroY + worldOffset;
                         currentScale = cScaleHero;
                         
-                        // Hide it if it scrolls too far off top or bottom
-                        if (currentPos.y > 7 || currentPos.y < -7) {
-                            currentPos.y = -10; 
+                        // Hide it if it scrolls fundamentally out of the world bounds
+                        // viewHeight is roughly 12-16, so 15 is a safe upper bound
+                        if (currentPos.y > 15 || currentPos.y < -15) {
+                            currentPos.y = -20; 
                         }
                     }
 
@@ -1060,8 +1061,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!smoothedPos) {
                     smoothedPos = currentPos.clone();
                 } else {
-                    // Soft LERP on mobile completely masks any compositor 1-frame jitter
-                    const lerpFactor = window.innerWidth <= 992 ? 0.15 : 1.0; 
+                    // GSAP is perfectly smooth on its own; LERP is no longer needed and causes overlap
+                    const lerpFactor = 1.0; 
                     
                     // Bypass LERP for large jumps (teleporting between sections) to prevent "flashing" across screen
                     if (smoothedPos.distanceTo(currentPos) > 3.0) {
