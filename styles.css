@@ -26,7 +26,6 @@
 }
 
 html {
-    scroll-behavior: smooth;
     overflow-x: hidden;
     overflow-x: clip;
     max-width: 100%;
@@ -7819,7 +7818,6 @@ html.lenis body {
     }
 
     /* Provide solid background fallbacks for transparent elements since blur is removed */
-    .premium-nav.scrolled,
     .nav-links-container,
     .glass-badge,
     .project-modal-content,

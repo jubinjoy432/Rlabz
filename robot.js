@@ -785,28 +785,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Resize Handling
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        // Debounce resize to handle mobile address bar hiding without causing jitter
-        resizeTimer = setTimeout(() => {
-            vw = window.innerWidth;
-            vh = window.innerHeight;
-            camera.aspect = vw / vh;
-            camera.updateProjectionMatrix();
-            renderer.setSize(vw, vh);
-        }, 150);
-    });
-
-    let scrollY = window.scrollY;
-    window.addEventListener('scroll', () => {
-        scrollY = window.scrollY;
-    });
-
     // Stable Viewport Caching for Mobile Jitter Fix
     let vw = window.innerWidth;
-    let vh = window.innerHeight;
+    let vh = Math.max(window.innerHeight, 1);
+    let scrollY = window.scrollY;
+
+    function invalidateRobotMobileCache() {
+        window._robotMobileCached = false;
+        window._robotWorldUnitsPerPixel = null;
+        window._robotMobileCachedScrollY = null;
+        window._robotMobileCachedHeroX = null;
+        window._robotMobileCachedHeroY = null;
+        window._robotMobileCachedScaleHero = null;
+        window._robotMobileCachedAnchorX = null;
+        window._robotMobileCachedAnchorY = null;
+    }
+
+    function syncViewportMetrics() {
+        vw = window.innerWidth;
+        vh = Math.max(window.innerHeight, 1);
+        camera.aspect = vw / vh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(vw, vh);
+        invalidateRobotMobileCache();
+    }
+
+    // Resize Handling
+    let resizeTimer;
+    const queueViewportSync = () => {
+        clearTimeout(resizeTimer);
+        // Debounce mobile browser chrome changes so the robot re-caches once per settled viewport update.
+        resizeTimer = setTimeout(syncViewportMetrics, 180);
+    };
+
+    window.addEventListener('resize', queueViewportSync);
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', queueViewportSync);
+    }
+
+    window.addEventListener('orientationchange', () => {
+        clearTimeout(resizeTimer);
+        syncViewportMetrics();
+    });
+
+    window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+    }, { passive: true });
 
     // Helper: Map DOM (pixels) to World (3D units) at a given depth
     function getZPosition(depth) {
@@ -882,62 +906,114 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (mobileAnchor) targetAnchor = mobileAnchor;
                 }
 
-                const rHero = heroVisual.getBoundingClientRect();
-                const rBento = bentoSection.getBoundingClientRect();
-                const targetElement = targetAnchor ? targetAnchor : targetHeading;
-                const rAnchor = targetElement.getBoundingClientRect();
-
-                const rCenter = {
-                    left: vw / 2,
-                    top: vh * 0.98,
-                    width: 0, height: 0,
-                    right: vw / 2,
-                    bottom: vh * 0.98
-                };
-
-                const depth0 = 0;
-                const posHero = mapDomToWorld(rHero, depth0, 'center');
-                const posCenter = mapDomToWorld(rCenter, depth0, 'center');
-                const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
-
-                let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
-                const scaleHero = responsiveScale;
-                const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
-                // Drastically shrink the robot on mobile so it doesn't occlude the slider
-                const scaleAnchor = window.innerWidth <= 992 ? 0.35 : (targetAnchor ? 0.38 : 0.32);
-
                 if (window.innerWidth <= 992) {
-                    // === MOBILE: No scroll-linked movement ===
-                    // Robot stays at a FIXED world position during hero (not tracking the scrolling DOM),
-                    // then smoothly rises from BELOW the screen when solutions section is pinned.
+                    // === MOBILE: Fully cached, zero per-frame DOM reads ===
+                    if (!window._robotMobileCached) {
+                        const rHero = heroVisual.getBoundingClientRect();
+                        const depth0 = 0;
+                        const posHero = mapDomToWorld(rHero, depth0, 'center');
+
+                        // Calculate world units per pixel for jitter-free scroll offset
+                        // viewHeight is the total world units visible top-to-bottom at depth0
+                        const { height: viewHeight } = getZPosition(depth0);
+                        window._robotWorldUnitsPerPixel = viewHeight / vh;
+                        window._robotMobileCachedScrollY = scrollY;
+
+                        let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
+
+                        // Force perfect horizontal center to prevent perspective drift
+                        window._robotMobileCachedHeroX = 0;
+                        window._robotMobileCachedHeroY = posHero.y;
+                        window._robotMobileCachedScaleHero = responsiveScale;
+
+                        // Compute anchor position from viewport math (bottom 15% of screen, centered)
+                        const anchorRect = { left: vw / 2, top: vh * 0.85, width: 0, height: 0, right: vw / 2, bottom: vh * 0.85 };
+                        const posAnchor = mapDomToWorld(anchorRect, depth0, 'center');
+                        window._robotMobileCachedAnchorX = 0; // Force perfect center
+                        window._robotMobileCachedAnchorY = posAnchor.y;
+
+                        window._robotMobileCached = true;
+                    }
+
+                    const cHeroX = window._robotMobileCachedHeroX;
+                    const cHeroY = window._robotMobileCachedHeroY;
+                    const cAnchorX = window._robotMobileCachedAnchorX;
+                    const cAnchorY = window._robotMobileCachedAnchorY;
+                    const cScaleHero = window._robotMobileCachedScaleHero;
+                    const cScaleAnchor = 0.35;
+                    const cInitialScroll = window._robotMobileCachedScrollY;
+                    const unitsPerPixel = window._robotWorldUnitsPerPixel;
+
                     const progress2 = window.bentoScrollProgress || 0;
+                    const deltaScroll = scrollY - cInitialScroll;
+                    const worldOffset = deltaScroll * unitsPerPixel;
 
-                    if (progress2 <= 0.01) {
-                        // Solutions section not yet reached — robot stays at fixed hero position
-                        // Use posHero only from the initial visible state (center of hero visual)
-                        // Since hero scrolls away, we use a fixed world-space coordinate instead
-                        currentPos.x = 0; // Center of screen
-                        currentPos.y = posHero.y; // This is fine while hero is still visible
-                        
-                        // But clamp so robot doesn't fly off when hero scrolls away
-                        if (rHero.bottom < 0) {
-                            // Hero has scrolled completely off — hide robot by keeping it offscreen below
-                            currentPos.y = -6;
-                        }
-                        currentScale = scaleHero;
-                    } else {
-                        // Solutions section is active — robot rises from below screen to anchor
-                        const riseProgress = Math.min(1, progress2 / 0.5); // Complete rise within first 50% of bento scroll
-                        const riseEase = 1 - Math.pow(1 - riseProgress, 3); // Cubic ease-out
+                    // Detect actual screen position of the section to handle unpinning
+                    const rBento = bentoSection.getBoundingClientRect();
+                    // Force offset to 0 while pinned to prevent jitter — only apply when scrolling away/towards
+                    const isPinned = progress2 > 0.01 && progress2 < 0.99;
+                    const stableBentoTop = isPinned ? 0 : rBento.top;
+                    const bentoWorldOffset = -stableBentoTop * unitsPerPixel;
 
-                        // Start position: well below the visible viewport in world space
+                    if (progress2 >= 0.3) {
+                        // Solutions cards are appearing — robot rises from below
+                        const riseStart = 0.3;
+                        const riseEnd = 0.7;
+                        const riseProgress = Math.min(1, (progress2 - riseStart) / (riseEnd - riseStart));
+                        const riseEase = 1 - Math.pow(1 - riseProgress, 3);
+
                         const belowScreenY = -6;
-                        currentPos.x = posAnchor.x; // Anchor X (centered)
-                        currentPos.y = belowScreenY + (posAnchor.y - belowScreenY) * riseEase;
-                        currentScale = scaleAnchor + (scaleAnchor * 0.2) * (1 - riseEase);
+                        currentPos.x = cAnchorX;
+                        currentPos.y = belowScreenY + (cAnchorY - belowScreenY) * riseEase + bentoWorldOffset;
+                        currentScale = cScaleAnchor + (cScaleAnchor * 0.2) * (1 - riseEase);
+                    } else if (progress2 > 0.01) {
+                        // Pinned section started but cards haven't reached rise point — hide
+                        currentPos.x = cAnchorX;
+                        currentPos.y = -6 + bentoWorldOffset;
+                        currentScale = cScaleAnchor;
+                    } else {
+                        // Hero section — robot scrolls 1:1 with the page (mathematical offset)
+                        currentPos.x = cHeroX;
+                        currentPos.y = cHeroY + worldOffset;
+                        currentScale = cScaleHero;
+                        
+                        // Hide it if it scrolls too far off top or bottom
+                        if (currentPos.y > 7 || currentPos.y < -7) {
+                            currentPos.y = -10; 
+                        }
+                    }
+
+                    currentPos.z = 0;
+                    container.style.opacity = '1';
+                    if (shadow) {
+                        const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
+                        shadow.material.opacity = 0.2 * (1 - ease2);
                     }
                 } else {
                     // === DESKTOP: Original scroll-linked behavior (unchanged) ===
+                    const rHero = heroVisual.getBoundingClientRect();
+                    const rBento = bentoSection.getBoundingClientRect();
+                    const targetElement = targetAnchor ? targetAnchor : targetHeading;
+                    const rAnchor = targetElement.getBoundingClientRect();
+
+                    const rCenter = {
+                        left: vw / 2,
+                        top: vh * 0.98,
+                        width: 0, height: 0,
+                        right: vw / 2,
+                        bottom: vh * 0.98
+                    };
+
+                    const depth0 = 0;
+                    const posHero = mapDomToWorld(rHero, depth0, 'center');
+                    const posCenter = mapDomToWorld(rCenter, depth0, 'center');
+                    const posAnchor = mapDomToWorld(rAnchor, depth0, 'center');
+
+                    let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
+                    const scaleHero = responsiveScale;
+                    const scaleCenter = window.innerWidth <= 768 ? responsiveScale * 1.1 : 0.85;
+                    const scaleAnchor = targetAnchor ? 0.38 : 0.32;
+
                     // Phase 1 Progress: Scroll from Hero to Bento
                     let progress1 = 0;
                     if (rBento.top > 0) {
@@ -963,15 +1039,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentPos.y = centerAdjustedY + (posAnchor.y - centerAdjustedY) * ease2;
                         currentScale = scaleCenter + (scaleAnchor - scaleCenter) * ease2;
                     }
-                }
 
-                currentPos.z = depth0;
-                container.style.opacity = '1';
-
-                if (shadow) {
-                    const progress2 = window.bentoScrollProgress || 0;
-                    const ease2 = progress2 < 0.5 ? 2 * progress2 * progress2 : 1 - Math.pow(-2 * progress2 + 2, 2) / 2;
-                    shadow.material.opacity = 0.2 * (1 - ease2);
+                    currentPos.z = depth0;
+                    container.style.opacity = '1';
+                    if (shadow) {
+                        shadow.material.opacity = 0.2 * (1 - ease2);
+                    }
                 }
             }
 

@@ -1,3 +1,40 @@
+// --- Initialize Lenis Smooth Scrolling ---
+if (typeof Lenis !== 'undefined') {
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // standard easing
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        smoothTouch: true, // Hijack touch to sync GSAP and canvas exactly with scroll
+        touchMultiplier: 2,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            if (href === '#') {
+                lenis.scrollTo(0);
+            } else {
+                const target = document.querySelector(href);
+                if (target) {
+                    lenis.scrollTo(target);
+                }
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Sliding Pill Navbar Animation ---
     const navLinksContainer = document.querySelector('.nav-links-container');
@@ -1857,6 +1894,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // === Lenis Smooth Scroll Init ===
 document.addEventListener('DOMContentLoaded', () => {
+    if (typeof Lenis === 'undefined') return;
+
     const lenis = new Lenis({
         duration: 1.5,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -1869,18 +1908,37 @@ document.addEventListener('DOMContentLoaded', () => {
         wheelMultiplier: 1.2,
     });
 
+    if (typeof ScrollTrigger !== 'undefined') {
+        lenis.on('scroll', () => ScrollTrigger.update());
+    }
+
     // Smooth scroll for anchor links via Lenis
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const target = this.getAttribute('href');
-            if (target && target !== '#') {
-                e.preventDefault();
-                lenis.scrollTo(target);
-            }
+            if (!target || target === '#') return;
+
+            const targetElement = document.querySelector(target);
+            if (!targetElement) return;
+
+            e.preventDefault();
+
+            const nav = document.querySelector('.premium-nav');
+            const navOffset = nav ? nav.offsetHeight + 12 : 0;
+            lenis.scrollTo(targetElement, { offset: -navOffset });
         });
     });
 
-    // Sync Lenis scroll with RequestAnimationFrame
+    // Sync Lenis with GSAP so pinned sections and custom scroll stay on the same frame.
+    if (typeof gsap !== 'undefined') {
+        gsap.ticker.add((time) => {
+            lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+        return;
+    }
+
+    // Fallback when GSAP is unavailable.
     function raf(time) {
         lenis.raf(time);
         requestAnimationFrame(raf);
