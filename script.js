@@ -706,12 +706,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     start: "top top", // Trigger when section hits top of viewport
                     end: "+=150%",     // Pin for 1.5x viewport height of scrolling
                     pin: true,        // Screen lock for both!
+                    pinType: "transform", // Use transform-based pinning to avoid overflow:hidden wrapper
                     scrub: 1,         // Smooth scrubbing
                     onUpdate: (self) => {
                         window.bentoScrollProgress = self.progress; // Critically powers Robot.js
-                        
-                        // If user scrolls backwards (up) towards the initial state, force horizontal slider to reset
-                        if (self.progress < 0.1 && window.innerWidth <= 992) {
+                    },
+                    onLeaveBack: () => {
+                        // If user scrolls backwards (up) out of the section, force horizontal slider to reset
+                        if (window.innerWidth <= 992) {
                             const mSlider = document.querySelector('.mobile-feature-slider');
                             if (mSlider && mSlider.scrollLeft > 0) {
                                 mSlider.scrollTo({ left: 0, behavior: 'instant' });
@@ -720,6 +722,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                     window.lastActiveRobotProp = null;
                                 }
                             }
+                        }
+                    },
+                    onRefresh: () => {
+                        // GSAP pin-spacer sets overflow:hidden — remove it so mobile horizontal scroll works
+                        const spacer = bentoSection.parentElement;
+                        if (spacer && spacer.classList.contains('pin-spacer')) {
+                            spacer.style.overflow = 'visible';
                         }
                     }
                 }
@@ -818,6 +827,123 @@ document.addEventListener('DOMContentLoaded', () => {
                             mobileSliderWrapper.scrollTo({ left: index * (cardWidth + gap), behavior: 'smooth' });
                         });
                     });
+
+                    // Make arrow clickable
+                    if (swipeArrow) {
+                        swipeArrow.addEventListener('click', () => {
+                            const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
+                            if (!cardElement) return;
+
+                            const cardWidth = cardElement.offsetWidth;
+                            const gap = 20;
+                            mobileSliderWrapper.scrollTo({ left: 1 * (cardWidth + gap), behavior: 'smooth' });
+                        });
+                    }
+                }
+
+                // --- Manual Touch Swipe Handler ---
+                // Native scroll is blocked by GSAP/Lenis intercepting touch events.
+                // This manually drives horizontal scrolling via touchstart/move/end.
+                if (window.innerWidth <= 992) {
+                    let touchStartX = 0;
+                    let touchStartY = 0;
+                    let touchStartScrollLeft = 0;
+                    let touchStartTime = 0;
+                    let lastMoveX = 0;
+                    let lastMoveTime = 0;
+                    let isHorizontalSwipe = null; // null = undecided, true/false once determined
+                    let isSwiping = false;
+
+                    // Disable CSS snap during manual drag to prevent fighting
+                    function disableSnap() {
+                        mobileSliderWrapper.style.scrollSnapType = 'none';
+                        mobileSliderWrapper.style.scrollBehavior = 'auto';
+                    }
+
+                    function enableSnapAndSlide(targetLeft) {
+                        mobileSliderWrapper.style.scrollBehavior = 'smooth';
+                        mobileSliderWrapper.scrollTo({ left: targetLeft, behavior: 'smooth' });
+                        // Re-enable snap after the smooth scroll finishes
+                        setTimeout(() => {
+                            mobileSliderWrapper.style.scrollSnapType = 'x mandatory';
+                        }, 400);
+                    }
+
+                    mobileSliderWrapper.addEventListener('touchstart', (e) => {
+                        touchStartX = e.touches[0].clientX;
+                        touchStartY = e.touches[0].clientY;
+                        touchStartScrollLeft = mobileSliderWrapper.scrollLeft;
+                        touchStartTime = Date.now();
+                        lastMoveX = touchStartX;
+                        lastMoveTime = touchStartTime;
+                        isHorizontalSwipe = null;
+                        isSwiping = false;
+                    }, { passive: true });
+
+                    mobileSliderWrapper.addEventListener('touchmove', (e) => {
+                        const currentX = e.touches[0].clientX;
+                        const currentY = e.touches[0].clientY;
+                        const dx = currentX - touchStartX;
+                        const dy = currentY - touchStartY;
+
+                        // Determine swipe direction with a low threshold (4px)
+                        if (isHorizontalSwipe === null && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+                            isHorizontalSwipe = Math.abs(dx) >= Math.abs(dy);
+                            if (isHorizontalSwipe) {
+                                disableSnap();
+                            }
+                        }
+
+                        if (isHorizontalSwipe) {
+                            // Prevent vertical scroll (GSAP scrub) from firing
+                            e.preventDefault();
+                            e.stopPropagation();
+                            isSwiping = true;
+                            // Track velocity
+                            lastMoveX = currentX;
+                            lastMoveTime = Date.now();
+                            // 1:1 finger tracking
+                            mobileSliderWrapper.scrollLeft = touchStartScrollLeft - dx;
+                        }
+                    }, { passive: false }); // passive: false required for preventDefault
+
+                    mobileSliderWrapper.addEventListener('touchend', (e) => {
+                        if (isSwiping) {
+                            const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
+                            if (cardElement) {
+                                const cardWidth = cardElement.offsetWidth;
+                                const gap = parseFloat(getComputedStyle(mobileSliderWrapper).gap) || 20;
+                                const snapUnit = cardWidth + gap;
+
+                                // Calculate velocity (px/ms)
+                                const endTime = Date.now();
+                                const dt = endTime - lastMoveTime || 1;
+                                const totalDx = e.changedTouches[0].clientX - touchStartX;
+                                const velocity = Math.abs(totalDx) / (endTime - touchStartTime || 1);
+
+                                // Determine current card index before swipe
+                                const startIndex = Math.round(touchStartScrollLeft / snapUnit);
+                                let targetIndex;
+
+                                if (velocity > 0.3 || Math.abs(totalDx) > cardWidth * 0.25) {
+                                    // Fast flick or dragged more than 25% of card width → advance
+                                    targetIndex = totalDx < 0 ? startIndex + 1 : startIndex - 1;
+                                } else {
+                                    // Small/slow drag → snap back to current
+                                    targetIndex = startIndex;
+                                }
+
+                                // Clamp within bounds
+                                const allSlides = mobileSliderWrapper.querySelectorAll('.feature-card-slide, .feature-card');
+                                const maxIndex = allSlides.length - 1;
+                                targetIndex = Math.max(0, Math.min(targetIndex, maxIndex));
+
+                                enableSnapAndSlide(targetIndex * snapUnit);
+                            }
+                        }
+                        isHorizontalSwipe = null;
+                        isSwiping = false;
+                    }, { passive: true });
                 }
 
                 // --- Reset Slider When Scrolled Out of View ---
