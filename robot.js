@@ -887,6 +887,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 2000);
     }, 1000); // Wait 1s for robot to appear deeply
 
+    let smoothedPos = null;
+
     function animate() {
         try {
             requestAnimationFrame(animate);
@@ -1052,7 +1054,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const bobOffset = Math.sin(time * 1.2) * 0.06;
 
             if (isFinite(currentPos.x) && isFinite(currentPos.y) && isFinite(currentPos.z)) {
-                robot.position.set(currentPos.x, currentPos.y + bobOffset, currentPos.z);
+                if (!smoothedPos) {
+                    smoothedPos = currentPos.clone();
+                } else {
+                    // Soft LERP on mobile completely masks any compositor 1-frame jitter
+                    const lerpFactor = window.innerWidth <= 992 ? 0.15 : 1.0; 
+                    
+                    // Bypass LERP for large jumps (teleporting between sections) to prevent "flashing" across screen
+                    if (smoothedPos.distanceTo(currentPos) > 3.0) {
+                        smoothedPos.copy(currentPos);
+                    } else {
+                        smoothedPos.lerp(currentPos, lerpFactor);
+                    }
+                }
+                
+                robot.position.set(smoothedPos.x, smoothedPos.y + bobOffset, smoothedPos.z);
                 robot.scale.set(currentScale, currentScale, currentScale);
             } else {
                 robot.position.set(0, -1 + bobOffset, 0);
