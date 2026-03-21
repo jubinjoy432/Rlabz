@@ -923,9 +923,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         let responsiveScale = window.innerWidth <= 380 ? 0.40 : (window.innerWidth <= 480 ? 0.45 : (window.innerWidth <= 768 ? 0.55 : (window.innerWidth <= 992 ? 0.70 : 0.82)));
 
-                        // Force perfect horizontal center to prevent perspective drift
+                        // Force perfect horizontal center, and place it at mathematically reliable height above text
                         window._robotMobileCachedHeroX = 0;
-                        window._robotMobileCachedHeroY = posHero.y;
+                        window._robotMobileCachedHeroY = viewHeight * 0.10; // Safely below navbar, above text
                         window._robotMobileCachedScaleHero = responsiveScale;
 
                         // Compute anchor position from viewport math (bottom 15% of screen, centered)
@@ -949,9 +949,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     const progress2 = window.bentoScrollProgress || 0;
                     const progress1 = window.heroScrollProgress || 0;
                     
-                    // The height of the view mapped to 100vh is simply viewHeight (which is derived from camera FOV at Z=0)
+                    // The height of the view mapped to 100vh is simply viewHeight
                     const { height: viewHeight } = getZPosition(0);
-                    const worldOffset = progress1 * viewHeight;
+                    
+                    // Incorporate negative scrollY to perfectly stick the robot to the iOS/Android "rubber-band" bounce
+                    const overscrollBounce = scrollY < 0 ? (scrollY * unitsPerPixel) : 0;
+                    const worldOffset = (progress1 * viewHeight) + overscrollBounce;
 
                     // Detect actual screen position of the section to handle unpinning
                     const rBento = bentoSection.getBoundingClientRect();
