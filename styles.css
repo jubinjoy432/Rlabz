@@ -502,9 +502,13 @@ h2 {
 /* Subtitle */
 .subtitle {
     font-size: 1.1rem;
-    color: #475569;
+    color: #c6cfdd;
     /* Slate 600 */
     margin-bottom: 1.5rem;
+}
+
+#our-works .subtitle {
+    color: #ffffff;
 }
 
 .divider {
@@ -3643,7 +3647,7 @@ h2 {
 }
 
 #our-works .subtitle {
-    color: #64748b;
+    color: #dfe4eb;
 }
 
 /* Wide CTA Banner (Contact Section) */
