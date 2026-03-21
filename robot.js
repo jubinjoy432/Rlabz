@@ -34,20 +34,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Optimize WebGL dynamically
     const isMobileSize = window.innerWidth < 768;
-    
+
     // Check hardware capability: 6+ logical cores is typical for flagship phones
     const logicalCores = navigator.hardwareConcurrency || 4;
     const isHighTierMobile = isMobileSize && logicalCores >= 6;
 
     // NEVER use antialias on mobile, even flagship, because the high pixel ratio handles smoothing
     // and MSAA buffers at 2x resolution cause memory crashes (silent WebGL failure/disappearing robot)
-    const renderer = new THREE.WebGLRenderer({ 
-        alpha: true, 
+    const renderer = new THREE.WebGLRenderer({
+        alpha: true,
         antialias: !isMobileSize,
-        powerPreference: "high-performance" 
+        powerPreference: "high-performance"
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    
+
     // High-end mobiles get up to 2.0 pixel ratio, standard gets 1.5, desktop uses native or 1.5
     const maxPixelRatio = isHighTierMobile ? 2.0 : 1.5;
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxPixelRatio));
@@ -948,10 +948,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const progress2 = window.bentoScrollProgress || 0;
                     const progress1 = window.heroScrollProgress || 0;
-                    
+
                     // The height of the view mapped to 100vh is simply viewHeight
                     const { height: viewHeight } = getZPosition(0);
-                    
+
                     // Incorporate negative scrollY to perfectly stick the robot to the iOS/Android "rubber-band" bounce
                     const overscrollBounce = scrollY < 0 ? (scrollY * unitsPerPixel) : 0;
                     const worldOffset = (progress1 * viewHeight) + overscrollBounce;
@@ -985,10 +985,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentPos.x = cHeroX;
                         currentPos.y = cHeroY + worldOffset;
                         currentScale = cScaleHero;
-                        
+
                         // Hide it if it scrolls fundamentally out of the world bounds
                         if (currentPos.y > 15 || currentPos.y < -15) {
-                            currentPos.y = -20; 
+                            currentPos.y = -20;
                         }
                     }
 
@@ -1065,8 +1065,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     smoothedPos = currentPos.clone();
                 } else {
                     // GSAP is perfectly smooth on its own; LERP is no longer needed and causes overlap
-                    const lerpFactor = 1.0; 
-                    
+                    const lerpFactor = 1.0;
+
                     // Bypass LERP for large jumps (teleporting between sections) to prevent "flashing" across screen
                     if (smoothedPos.distanceTo(currentPos) > 3.0) {
                         smoothedPos.copy(currentPos);
@@ -1074,7 +1074,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         smoothedPos.lerp(currentPos, lerpFactor);
                     }
                 }
-                
+
                 robot.position.set(smoothedPos.x, smoothedPos.y + bobOffset, smoothedPos.z);
                 robot.scale.set(currentScale, currentScale, currentScale);
             } else {

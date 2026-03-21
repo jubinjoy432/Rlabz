@@ -6,7 +6,7 @@ if (typeof Lenis !== 'undefined') {
         direction: 'vertical',
         gestureDirection: 'vertical',
         smooth: true,
-        smoothTouch: true, // Hijack touch to sync GSAP and canvas exactly with scroll
+        smoothTouch: false, // Turned off to prevent conflict with normalizeScroll
         touchMultiplier: 2,
     });
 
@@ -18,10 +18,16 @@ if (typeof Lenis !== 'undefined') {
 
     gsap.ticker.lagSmoothing(0);
 
+    let isMobileLenisKilled = false;
+
     // Forces scroll onto the main thread on mobile to eliminate compositor divergence 
     // and prevents URL bar height jumping which destroys 100vh canvas alignment
     if (window.innerWidth <= 992) {
         ScrollTrigger.normalizeScroll(true);
+        // Completely destroy Lenis loop on mobile because it creates event-loop 
+        // feedback vibrations when fighting GSAP's normalizeScroll
+        lenis.destroy();
+        isMobileLenisKilled = true;
     }
 
     // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
@@ -29,12 +35,26 @@ if (typeof Lenis !== 'undefined') {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const href = this.getAttribute('href');
-            if (href === '#') {
-                lenis.scrollTo(0);
+            
+            if (isMobileLenisKilled) {
+                // Fallback to native smooth scrolling for anchor links on mobile
+                if (href === '#') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        const top = target.getBoundingClientRect().top + window.scrollY;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                    }
+                }
             } else {
-                const target = document.querySelector(href);
-                if (target) {
-                    lenis.scrollTo(target);
+                if (href === '#') {
+                    lenis.scrollTo(0);
+                } else {
+                    const target = document.querySelector(href);
+                    if (target) {
+                        lenis.scrollTo(target);
+                    }
                 }
             }
         });
@@ -945,7 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!entry.isIntersecting) {
                             // Instantly snap slider back to the start (Slide 0 / Center Title)
                             mobileSliderWrapper.scrollTo({ left: 0, behavior: 'instant' });
-                            
+
                             // Forcibly clear the robot's prop immediately
                             if (window.lastActiveRobotProp !== null) {
                                 window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
