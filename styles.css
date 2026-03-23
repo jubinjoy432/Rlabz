@@ -7895,3 +7895,145 @@ html.lenis body {
         background: rgba(0, 11, 36, 0.98) !important;
     }
 }
+
+/* Robot Popup */
+#robot-popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    transform: translate(20px, -50%);
+    z-index: 100 !important;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    will-change: left, top, opacity, transform;
+}
+
+#robot-popup.visible {
+    opacity: 1;
+}
+
+.popup-bubble {
+    background-color: #ffffff;
+    color: var(--primary-blue);
+    padding: 14px 24px;
+    border-radius: 18px 18px 18px 4px;
+    border: 1px solid rgba(11, 83, 148, 0.5);
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(11, 83, 148, 0.25);
+    position: relative;
+    font-size: 15px;
+    white-space: nowrap;
+    animation: floatPopup 3s ease-in-out infinite;
+    letter-spacing: 0.5px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    transition: background-color 0.15s ease, color 0.15s ease, border-radius 0.15s ease, padding 0.15s ease, border-color 0.15s ease;
+}
+
+/* Gradient morphing layer */
+.popup-bubble::before {
+    content: '';
+    position: absolute;
+    inset: -1px; /* Cover border */
+    background: #d6aa31; /* Same yellow as discover more button */
+    border-radius: inherit;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.15s ease;
+}
+
+/* New CSS Element-based arrow to support seamless dark borders */
+.popup-arrow {
+    position: absolute;
+    bottom: 16px;
+    left: -7px;
+    width: 14px;
+    height: 14px;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(11, 83, 148, 0.5);
+    border-left: 1px solid rgba(11, 83, 148, 0.5);
+    transform: rotate(45deg);
+    border-bottom-left-radius: 2px;
+    z-index: 2;
+    transition: opacity 0.15s ease;
+}
+
+/* Fixed fully docked class */
+#robot-popup.fixed-sidebar-btn {
+    position: fixed;
+    right: 0 !important;
+    left: auto !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    pointer-events: auto;
+    z-index: 9999 !important;
+    cursor: pointer;
+}
+
+#robot-popup.fixed-sidebar-btn .popup-bubble {
+    background-color: transparent;
+    border-color: transparent; /* Smoothly fade border away */
+    color: white;
+    border-radius: 20px 0 0 20px;
+    padding: 14px 24px; /* Matches exact padding of standard bubble to prevent left-edge jitter */
+}
+
+#robot-popup.fixed-sidebar-btn .popup-bubble::before {
+    opacity: 1;
+}
+
+#robot-popup.fixed-sidebar-btn .popup-arrow {
+    opacity: 0;
+}
+
+#robot-popup.fixed-sidebar-btn:hover {
+    transform: translateY(-50%) scale(1.03) !important;
+    transform-origin: right center;
+    transition: transform 0.2s ease;
+}
+
+.desktop-text {
+    display: inline;
+}
+.mobile-text {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .desktop-text {
+        display: none;
+    }
+    .mobile-text {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+.popup-close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: 2px;
+    transition: background 0.2s ease;
+}
+
+.popup-close-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+@keyframes floatPopup {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}

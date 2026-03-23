@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // --- Robot Popup Setup ---
+    let popupState = 'hidden';
+    const popup = document.createElement('div');
+    popup.id = 'robot-popup';
+    container.appendChild(popup);
+
     console.log("ROBOT: Container found. Initializing scene...");
 
     // --- Scroll Animation Setup ---
@@ -1190,6 +1196,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             renderer.render(scene, camera);
+
+            // Update Popup Position
+            if (popupState === 'tracking' && popup) {
+                const rPos = robot.position.clone();
+                rPos.x += 1.2; // Right side of the robot
+                rPos.y += 0.5; // Rough head level
+                rPos.project(camera);
+                
+                let px = (rPos.x * 0.5 + 0.5) * window.innerWidth;
+                const py = -(rPos.y * 0.5 - 0.5) * window.innerHeight;
+                
+                // Clamp padding 250px so it doesn't overflow white container
+                const maxPx = window.innerWidth - 250;
+                if (px > maxPx) px = maxPx;
+
+                if (Math.abs(rPos.z) > 0.99) {
+                    popup.style.opacity = '0';
+                } else {
+                    popup.style.opacity = '1';
+                    popup.style.left = `${px}px`;
+                    popup.style.top = `${py}px`;
+                }
+            }
         } catch (err) {
             console.error("CRASH IN ANIMATE LOOP:", err);
             // Render it to screen so the user can see exactly what broke
@@ -1213,6 +1242,86 @@ document.addEventListener('DOMContentLoaded', () => {
         if (typeof window.hideRLabzPreloader === 'function') {
             window.hideRLabzPreloader();
         }
+
+        // Delay popup until screen loaded
+        setTimeout(() => {
+            if (popupState === 'hidden' && popup) {
+                popupState = 'tracking';
+                popup.innerHTML = `
+                    <div class="popup-bubble">
+                        <div class="popup-arrow"></div>
+                        <span class="desktop-text typing-target"></span>
+                        <span class="mobile-text"><span class="typing-target-mobile"></span> <button class="popup-close-btn" style="opacity: 0"><i class="fas fa-times"></i></button></span>
+                    </div>
+                `;
+                popup.classList.add('visible');
+
+                const closeBtn = popup.querySelector('.popup-close-btn');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        popup.style.display = 'none';
+                    });
+                }
+
+                // Typing effect
+                let charInd = 0;
+                const targetText = "Internships open";
+                const targetTextMobile = "Internship open";
+
+                function typeBubble() {
+                    if (popupState !== 'tracking') return;
+                    const desktopEl = popup.querySelector('.typing-target');
+                    const mobileEl = popup.querySelector('.typing-target-mobile');
+                    
+                    if (desktopEl && charInd < targetText.length) {
+                        desktopEl.innerHTML += targetText.charAt(charInd);
+                    }
+                    if (mobileEl && charInd < targetTextMobile.length) {
+                        mobileEl.innerHTML += targetTextMobile.charAt(charInd);
+                    }
+                    
+                    charInd++;
+                    if (charInd < Math.max(targetText.length, targetTextMobile.length)) {
+                        setTimeout(typeBubble, 60);
+                    } else {
+                        if (closeBtn) closeBtn.style.opacity = '1';
+                    }
+                }
+                
+                // Start typing shortly after appearing
+                setTimeout(typeBubble, 300);
+
+                // Wait 5 seconds, then glide to sidebar strictly as a comment box
+                setTimeout(() => {
+                    if (popupState === 'tracking' && popup) {
+                        popupState = 'transitioning';
+                        popup.style.opacity = '1'; // Ensure visible
+                        
+                        // Small delay ensures bounds read
+                        setTimeout(() => {
+                            const exactWidth = popup.getBoundingClientRect().width;
+                            const targetLeft = window.innerWidth - exactWidth - 20;
+
+                            gsap.to(popup, {
+                                left: targetLeft,
+                                top: window.innerHeight / 2,
+                                duration: 0.6, // Fast glide
+                                ease: "power2.inOut",
+                                onComplete: () => {
+                                    // Convert to button ONLY on reaching the side
+                                    popupState = 'fixed';
+                                    popup.classList.add('fixed-sidebar-btn');
+                                    popup.style.left = '';
+                                    popup.style.top = '';
+                                    popup.style.transform = '';
+                                }
+                            });
+                        }, 50);
+                    }
+                }, 5000);
+            }
+        }, 1500);
     } catch (e) {
         console.error("ROBOT: Animation failed to start:", e);
 
