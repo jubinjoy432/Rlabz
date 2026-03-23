@@ -1200,16 +1200,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // Update Popup Position
             if (popupState === 'tracking' && popup) {
                 const rPos = robot.position.clone();
-                rPos.x += 1.2; // Right side of the robot
-                rPos.y += 0.5; // Rough head level
+                const isMobile = window.innerWidth < 768;
+                
+                if (isMobile) {
+                    rPos.x += 0.65; // Right edge of head / over the ear
+                    rPos.y += 1.0; // Lower down (around neck/lower head)
+                } else {
+                    rPos.x += 1.2; // Right side of the robot
+                    rPos.y += 0.5; // Roughly chest level
+                }
+                
                 rPos.project(camera);
                 
                 let px = (rPos.x * 0.5 + 0.5) * window.innerWidth;
-                const py = -(rPos.y * 0.5 - 0.5) * window.innerHeight;
+                let py = -(rPos.y * 0.5 - 0.5) * window.innerHeight;
                 
-                // Clamp padding 250px so it doesn't overflow white container
-                const maxPx = window.innerWidth - 250;
-                if (px > maxPx) px = maxPx;
+                if (isMobile) {
+                    popup.style.transform = 'translate(0, -50%)'; // Anchor to left
+                    const bubbleW = popup.getBoundingClientRect().width || 110;
+                    
+                    // Clamp padding so it doesn't overflow right edge entirely
+                    const maxPx = window.innerWidth - bubbleW - 10;
+                    if (px > maxPx) px = maxPx;
+                    
+                    // Ensure it clears the 80px mobile header
+                    if (py < 90) py = 90;
+                } else {
+                    popup.style.transform = '';
+                    // Clamp padding so it doesn't overflow white container (desktop only)
+                    const maxPx = window.innerWidth - 250;
+                    if (px > maxPx) px = maxPx;
+                }
 
                 if (Math.abs(rPos.z) > 0.99) {
                     popup.style.opacity = '0';
@@ -1250,24 +1271,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 popup.innerHTML = `
                     <div class="popup-bubble">
                         <div class="popup-arrow"></div>
-                        <span class="desktop-text typing-target"></span>
-                        <span class="mobile-text"><span class="typing-target-mobile"></span> <button class="popup-close-btn" style="opacity: 0"><i class="fas fa-times"></i></button></span>
+                        <span class="desktop-text">
+                            <span class="typing-target"></span>
+                            <button class="popup-close-btn desktop-close-btn" style="display: none; background: rgba(255,255,255,0.2); border: none; color: white; opacity: 0.9; font-size: 0.8rem; cursor: pointer; padding: 0; width: 22px; height: 22px; margin-left: 12px; border-radius: 50%; justify-content: center; align-items: center;"><i class="fas fa-times"></i></button>
+                        </span>
+                        <span class="mobile-text">
+                            <span class="typing-target-mobile"></span>
+                            <span class="banner-actions" style="display: flex; opacity: 0; width: 0; overflow: hidden; align-items: center; gap: 10px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
+                                <a href="" target="_blank" class="banner-btn" style="white-space: nowrap; background: white; color: #d6aa31; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; text-decoration: none; font-weight: bold;">Know More &rarr;</a>
+                                <button class="popup-close-btn" style="background: none; border: none; color: white; opacity: 0.9; font-size: 1.2rem; cursor: pointer; padding: 0;"><i class="fas fa-times"></i></button>
+                            </span>
+                        </span>
                     </div>
                 `;
                 popup.classList.add('visible');
 
-                const closeBtn = popup.querySelector('.popup-close-btn');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', (e) => {
+                const popupCloseBtns = popup.querySelectorAll('.popup-close-btn');
+                popupCloseBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        popup.style.display = 'none';
+                        popup.style.setProperty('display', 'none', 'important');
                     });
-                }
+                });
 
                 // Typing effect
                 let charInd = 0;
-                const targetText = "Internships open";
-                const targetTextMobile = "Internship open";
+                const targetText = "Internships Open";
+                const targetTextMobile = "Internships Open";
 
                 function typeBubble() {
                     if (popupState !== 'tracking') return;
@@ -1284,8 +1314,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     charInd++;
                     if (charInd < Math.max(targetText.length, targetTextMobile.length)) {
                         setTimeout(typeBubble, 60);
-                    } else {
-                        if (closeBtn) closeBtn.style.opacity = '1';
                     }
                 }
                 
@@ -1301,11 +1329,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Small delay ensures bounds read
                         setTimeout(() => {
                             const exactWidth = popup.getBoundingClientRect().width;
-                            const targetLeft = window.innerWidth - exactWidth - 20;
+                            const isMobile = window.innerWidth < 768;
+                            
+                            const targetLeft = isMobile ? (window.innerWidth - exactWidth) / 2 : window.innerWidth - exactWidth - 20;
+                            const targetTop = isMobile ? window.innerHeight - popup.getBoundingClientRect().height - 10 : window.innerHeight / 2;
 
                             gsap.to(popup, {
                                 left: targetLeft,
-                                top: window.innerHeight / 2,
+                                top: targetTop,
                                 duration: 0.6, // Fast glide
                                 ease: "power2.inOut",
                                 onComplete: () => {
@@ -1315,11 +1346,22 @@ document.addEventListener('DOMContentLoaded', () => {
                                     popup.style.left = '';
                                     popup.style.top = '';
                                     popup.style.transform = '';
+                                    
+                                    if (isMobile) {
+                                        const actions = popup.querySelector('.banner-actions');
+                                        if (actions) {
+                                            actions.style.opacity = '1';
+                                            actions.style.width = '145px';
+                                        }
+                                    } else {
+                                        const pcClose = popup.querySelector('.desktop-close-btn');
+                                        if (pcClose) pcClose.style.display = 'flex';
+                                    }
                                 }
                             });
                         }, 50);
                     }
-                }, 5000);
+                }, 4000);
             }
         }, 1500);
     } catch (e) {
