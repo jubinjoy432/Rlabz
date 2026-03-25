@@ -2313,6 +2313,21 @@ document.addEventListener('DOMContentLoaded', () => {
         cancelAnimationFrame(animationFrameId);
         card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
     }
+
+    // Pause autoplay on card hover
+    const allCards = document.querySelectorAll('#our-works-swiper .card');
+    allCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            if (worksSwiper.autoplay && worksSwiper.autoplay.running) {
+                worksSwiper.autoplay.stop();
+            }
+        });
+        card.addEventListener('mouseleave', () => {
+            if (worksSwiper.autoplay && !worksSwiper.autoplay.running) {
+                worksSwiper.autoplay.start();
+            }
+        });
+    });
 });
 
 // Modal Interaction Logic for Our Works Section
