@@ -2104,230 +2104,144 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* =========================================
-   OUR WORKS SLIDER LOGIC - SWIPER 3D
+   OUR WORKS TIMELINE LOGIC
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const swiperWrapper = document.getElementById('our-works-wrapper');
-    if (!swiperWrapper) return;
+    const timelineShell = document.getElementById('our-works-timeline');
+    const timelineTrack = document.getElementById('our-works-timeline-track');
+    if (!timelineShell || !timelineTrack) return;
 
-    // Inject cards
-    const allProjectIds = Object.keys(projects);
+    const iconMap = {
+        1: "fa-heartbeat",     // Arkon Medical
+        2: "fa-music",         // Splendore
+        3: "fa-theater-masks", // Euphoria
+        4: "fa-calendar-alt",  // Fest Buddy
+        5: "fa-users",         // Campus Connect
+        6: "fa-mobile-alt",    // Cocobies
+        7: "fa-globe",         // ReX
+        8: "fa-chalkboard-teacher", // CTRM
+        9: "fa-hands-helping", // OutREACH
+        10: "fa-glass-cheers"  // The Luke
+    };
 
-    allProjectIds.forEach((id) => {
-        const p = projects[id];
+    const projectEntries = Object.entries(projects);
 
-        // Format Date to Year
-        const year = p.date ? p.date.split(' ').pop() : 'N/A';
+    projectEntries.forEach(([id, project], index) => {
+        const year = project.date ? project.date.split(' ').pop() : 'N/A';
+        const iconClass = iconMap[id] || 'fa-laptop-code';
 
-        // Format Primary Tech/Category
-        const primaryTech = p.tech && p.tech.length > 0 ? p.tech[0] : 'Project';
+        const item = document.createElement('article');
+        item.className = `works-timeline-item ${index % 2 === 0 ? 'works-timeline-item--top' : 'works-timeline-item--bottom'}`;
+        item.style.setProperty('--timeline-delay', `${index * 100}ms`);
+        item.innerHTML = `
+            <div class="works-timeline-marker" aria-hidden="true">
+                <span class="works-timeline-year">${year}</span>
+                <span class="works-timeline-dot"></span>
+            </div>
 
-        // Check Highlight (Using ID for mock rating)
-        const isHighlight = parseInt(id) <= 3;
-
-        // Generate Tech Stack Badges
-        const techBadges = p.tech ? p.tech.map(t => `<span class="glass-badge">${t}</span>`).join('') : '';
-
-        // Temporary mapping of project IDs to FontAwesome icons (can be moved to data later)
-        const iconMap = {
-            1: "fa-heartbeat",     // Arkon Medical
-            2: "fa-music",         // Splendore
-            3: "fa-theater-masks", // Euphoria
-            4: "fa-calendar-alt",  // Fest Buddy
-            5: "fa-users",         // Campus Connect
-            6: "fa-mobile-alt",    // Cocobies
-            7: "fa-globe",         // ReX
-            8: "fa-chalkboard-teacher", // CTRM
-            9: "fa-hands-helping", // OutREACH
-            10: "fa-glass-cheers"  // The Luke
-        };
-        const iconClass = iconMap[id] || "fa-laptop-code";
-
-        // Slide wrapping card
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
-
-        slide.innerHTML = `
-            <div class="card"
+            <div class="works-timeline-card"
+                 role="button"
+                 tabindex="0"
                  data-id="${id}"
-                 data-title="${p.title}"
-                 data-desc="${p.desc}"
-                 data-client="${p.client}"
+                 data-title="${project.title}"
+                 data-desc="${project.desc}"
+                 data-client="${project.client}"
                  data-year="${year}"
-                 data-tech='${JSON.stringify(p.tech || [])}'
-                 data-link="${p.link}"
+                 data-tech='${JSON.stringify(project.tech || [])}'
+                 data-link="${project.link}"
                  data-icon="${iconClass}">
-                <div class="badge-container">
-                    <span class="glass-badge">${primaryTech}</span>
-                </div>
-                
-                <div class="works-card-content">
-                    <div style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
+                <div class="works-timeline-card-top">
+                    <span class="works-timeline-kicker">
                         <i class="fas ${iconClass}"></i>
-                    </div>
-                    <h3 class="works-card-title">${p.title}</h3>
-                    <p class="works-card-desc">${p.desc}</p>
+                    </span>
                 </div>
-                
-                <div class="card-meta-tags">
-                    <span>${year}</span>
-                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${techBadges}</div>
-                    <span style="margin-top:4px;">Client: ${p.client}</span>
+
+                <h3 class="works-timeline-title">${project.title}</h3>
+                <p class="works-timeline-desc">${project.desc}</p>
+
+                <div class="works-timeline-meta">
+                    <span class="works-timeline-client">Client: ${project.client}</span>
                 </div>
             </div>
         `;
-        swiperWrapper.appendChild(slide);
+
+        const card = item.querySelector('.works-timeline-card');
+        const openCard = () => {
+            if (card && typeof openProjectModal === 'function') {
+                openProjectModal(card);
+            }
+        };
+
+        card.addEventListener('click', openCard);
+        card.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openCard();
+            }
+        });
+
+        timelineTrack.appendChild(item);
     });
 
-    // Custom Visibility Logic
-    function updateSlideStyles(swiperInstance) {
-        const slides = swiperInstance.slides;
-        const activeIndex = swiperInstance.activeIndex;
+    const timelineItems = Array.from(timelineTrack.querySelectorAll('.works-timeline-item'));
+    if (!timelineItems.length) return;
 
-        slides.forEach((slide, index) => {
-            const distance = Math.abs(index - activeIndex);
+    let activeIndex = 0;
 
-            // Default reset
-            slide.style.opacity = '1';
-            slide.style.zIndex = '1';
-            slide.style.pointerEvents = 'auto';
-            slide.style.visibility = 'visible';
+    function setActiveItem(index) {
+        timelineItems.forEach((item, itemIndex) => {
+            item.classList.toggle('is-focused', itemIndex === index);
+        });
 
-            if (distance === 0) {
-                slide.style.opacity = '1';
-                slide.style.zIndex = '10';
-            } else if (distance === 1) {
-                slide.style.opacity = '0.85';
-                slide.style.zIndex = '8';
-            } else {
-                slide.style.opacity = '0';
-                slide.style.pointerEvents = 'none';
-                slide.style.visibility = 'hidden';
-            }
+        const targetItem = timelineItems[index];
+        if (!targetItem) return;
+
+        const targetLeft = targetItem.offsetLeft - (timelineShell.clientWidth - targetItem.offsetWidth) / 2;
+        timelineShell.scrollTo({
+            left: Math.max(0, targetLeft),
+            behavior: 'smooth'
         });
     }
 
-    // Initialize Swiper
-    const worksSwiper = new Swiper('#our-works-swiper', {
-        effect: 'coverflow',
-        speed: 800, // Smoother transition
-        grabCursor: false,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-        },
-        keyboard: {
-            enabled: true,
-        },
-        mousewheel: {
-            forceToAxis: true,
-        },
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 40,
-            depth: 120,
-            modifier: 1,
-            slideShadows: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        on: {
-            init: function () {
-                updateSlideStyles(this);
-            },
-            slideChange: function () {
-                updateSlideStyles(this);
-            },
-            progress: function () {
-                updateSlideStyles(this);
-            },
-            setTransition: function (speed) {
-                this.slides.forEach(slide => {
-                    slide.style.transitionDuration = `${speed}ms`;
-                });
-            },
-            click: function (swiper, event) {
-                const clickedSlide = swiper.clickedSlide;
-                if (!clickedSlide) return;
-
-                if (clickedSlide.classList.contains('swiper-slide-active')) {
-                    const card = clickedSlide.querySelector('.card');
-                    if (card && typeof openProjectModal === 'function') {
-                        openProjectModal(card);
-                    }
+    const revealItems = () => {
+        timelineShell.classList.add('is-animated');
+        const itemObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
                 }
-            }
-        }
-    });
-
-    // Parallax Mouse Effect (3D Tilt) on Active Card
-    let animationFrameId;
-
-    document.getElementById('our-works-swiper').addEventListener('mousemove', (e) => {
-        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
-        if (!activeSlide) return;
-
-        const rect = activeSlide.getBoundingClientRect();
-
-        // Check if mouse is within the active card bounds perfectly
-        if (
-            e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top && e.clientY <= rect.bottom
-        ) {
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            const mouseX = e.clientX - centerX;
-            const mouseY = e.clientY - centerY;
-
-            const rotateX = (mouseY / (rect.height / 2)) * -15; // Max 15deg
-            const rotateY = (mouseX / (rect.width / 2)) * 15;
-
-            animationFrameId = requestAnimationFrame(() => {
-                activeSlide.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
             });
-        } else {
-            // Mouse outside active card, reset
-            resetCardTilt(activeSlide);
-        }
-    });
+        }, {
+            root: timelineShell,
+            threshold: 0.35,
+            rootMargin: '0px -8% 0px -8%'
+        });
 
-    document.getElementById('our-works-swiper').addEventListener('mouseleave', () => {
-        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
-        if (activeSlide) {
-            resetCardTilt(activeSlide);
-        }
-    });
+        timelineItems.forEach((item) => itemObserver.observe(item));
 
-    function resetCardTilt(card) {
-        cancelAnimationFrame(animationFrameId);
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-    }
+        setActiveItem(activeIndex);
 
-    // Pause autoplay on card hover
-    const allCards = document.querySelectorAll('#our-works-swiper .card');
-    allCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            if (worksSwiper.autoplay && worksSwiper.autoplay.running) {
-                worksSwiper.autoplay.stop();
+        const autoAdvance = () => {
+            activeIndex = (activeIndex + 1) % timelineItems.length;
+            setActiveItem(activeIndex);
+        };
+
+        setInterval(autoAdvance, 2600);
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                revealItems();
+                observer.unobserve(entry.target);
             }
         });
-        card.addEventListener('mouseleave', () => {
-            if (worksSwiper.autoplay && !worksSwiper.autoplay.running) {
-                worksSwiper.autoplay.start();
-            }
-        });
+    }, {
+        threshold: 0.15
     });
+
+    sectionObserver.observe(timelineShell);
 });
 
 // Modal Interaction Logic for Our Works Section
@@ -2487,136 +2401,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('DOMContentLoaded', initHeadingParallax);
     } else {
         initHeadingParallax();
-    }
-})();
-
-// =========================================
-// OUR WORKS - CARDS INTRO ANIMATION (on scroll into view)
-// =========================================
-(function () {
-    function initCardsIntro() {
-        const swiperEl = document.getElementById('our-works-swiper');
-        if (!swiperEl) return;
-
-        // Start very hidden: shifted down, faded, blurred and scaled down
-        swiperEl.style.opacity = '0';
-        swiperEl.style.transform = 'translateY(120px) scale(0.88)';
-        swiperEl.style.filter = 'blur(8px)';
-        swiperEl.style.transition = [
-            'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
-            'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
-            'filter 1.0s ease'
-        ].join(', ');
-        swiperEl.style.willChange = 'opacity, transform, filter';
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 80ms delay — makes it feel intentional
-                    setTimeout(() => {
-                        swiperEl.style.opacity = '1';
-                        swiperEl.style.transform = 'translateY(0px) scale(1)';
-                        swiperEl.style.filter = 'blur(0px)';
-                    }, 80);
-                    observer.unobserve(swiperEl);
-                }
-            });
-        }, { threshold: 0.05 }); // Fire when just 5% visible = earlier trigger
-
-        observer.observe(swiperEl);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCardsIntro);
-    } else {
-        initCardsIntro();
-    }
-})();
-
-
-// =========================================
-// OUR WORKS - CARDS SCROLL PARALLAX (slower than heading)
-// =========================================
-(function () {
-    function initCardsParallax() {
-        const swiperEl = document.getElementById('our-works-swiper');
-        if (!swiperEl) return;
-
-        let ticking = false;
-
-        function applyCardsParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = swiperEl.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    // 0.04 = slower than heading (0.08)
-                    const translateY = fromCenter * 0.04;
-                    // Preserve the existing intro transform by using a CSS variable
-                    swiperEl.style.setProperty('--cards-parallax-y', `${translateY}px`);
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        // Merge parallax into the existing transform via a wrapper transform
-        // We apply separately on the inner container to avoid conflicting with intro animation
-        const inner = swiperEl.querySelector('.swiper-wrapper') || swiperEl;
-        if (!inner) return;
-        inner.style.willChange = 'transform';
-
-        function applyInnerParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = swiperEl.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.04;
-                    // Offset the inner wrapper — Swiper keeps its own transform on wrapper
-                    // so we target each visible slide instead to avoid breaking Swiper layout
-                    const activeSlides = swiperEl.querySelectorAll('.swiper-slide-active, .swiper-slide-next, .swiper-slide-prev');
-                    activeSlides.forEach(slide => {
-                        slide.style.marginTop = `${translateY * 0.5}px`;
-                    });
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        // Better approach: use a wrapper div around the swiper for parallax movement
-        let parallaxWrapper = swiperEl.closest('.swiper-parallax-wrapper');
-        if (!parallaxWrapper) {
-            parallaxWrapper = document.createElement('div');
-            parallaxWrapper.className = 'swiper-parallax-wrapper';
-            parallaxWrapper.style.willChange = 'transform';
-            swiperEl.parentNode.insertBefore(parallaxWrapper, swiperEl);
-            parallaxWrapper.appendChild(swiperEl);
-        }
-
-        function applyWrapperParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = parallaxWrapper.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.04;
-                    parallaxWrapper.style.transform = `translateY(${translateY}px)`;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', applyWrapperParallax, { passive: true });
-        applyWrapperParallax();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCardsParallax);
-    } else {
-        initCardsParallax();
     }
 })();
 
