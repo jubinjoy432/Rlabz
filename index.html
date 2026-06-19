@@ -229,44 +229,69 @@
         </div>
     </section>
 
-    <!-- Have You Seen Our Works Section -->
-    <section id="our-works" class="rounded-section"
-        style="background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%) !important;">
-        <!-- New Canvas for Background Animation -->
-        <canvas id="works-canvas"></canvas>
-        <div class="container relative-z">
-            <header class="section-header reveal-on-scroll">
-                <h2 class="section-title">Have You Seen <br><span class="highlight-text" id="highlight-works">Our
-                        Works?</span></h2>
-                <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
+    <!-- =====================================================
+         PROJECTS SECTION — Futuristic Innovation Timeline
+         ===================================================== -->
+    <section id="our-works" class="rounded-section pj-section">
+
+        <div class="container pj-inner">
+
+            <!-- Section header -->
+            <header class="section-header pj-header reveal-on-scroll">
+                <h2 class="section-title pj-title">Have You Seen
+                    <br><span class="highlight-text" id="highlight-works">Our Works?</span>
+                </h2>
+                <p class="subtitle pj-subtitle">An innovation journey through our milestones.</p>
             </header>
 
-            <!-- Timeline Container -->
-            <div class="works-timeline-shell" id="our-works-timeline">
-                <div class="works-timeline-track" id="our-works-timeline-track" aria-label="Our works timeline">
-                    <!-- Timeline entries will be injected via JS -->
+            <!-- ── True Infinite Unified Timeline ── -->
+            <div class="pj-timeline-unified" id="pj-timeline-unified">
+                
+                <!-- Central continuous glowing wave (acts as the core timeline path) -->
+                <div class="pj-wave-track" id="pj-wave-track">
                 </div>
+
+                <!-- Viewport for infinite scrolling -->
+                <div class="pj-clip-wrapper">
+                    <div class="pj-viewport" id="pj-viewport">
+                        <div class="pj-track" id="pj-track">
+                            <!-- Project items with vertical stems and milestone nodes injected by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nav arrows for manual jumping (optional interaction layer) -->
+                <button class="pj-nav pj-nav--prev" id="pj-prev" aria-label="Scroll left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="pj-nav pj-nav--next" id="pj-next" aria-label="Scroll right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div><!-- /.pj-timeline-unified -->
+
+
+        <!-- Project detail modal -->
+        <div class="pj-modal" id="pj-modal" role="dialog" aria-modal="true" aria-labelledby="pj-modal-title">
+            <div class="pj-modal-backdrop" id="pj-modal-backdrop"></div>
+            <div class="pj-modal-box">
+                <button class="pj-modal-close" id="pj-modal-close" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="pj-modal-icon" id="pj-modal-icon"></div>
+                <h3 class="pj-modal-title" id="pj-modal-title"></h3>
+                <p class="pj-modal-desc" id="pj-modal-desc"></p>
+                <div class="pj-modal-meta">
+                    <span><i class="fas fa-user"></i> <span id="pj-modal-client"></span></span>
+                    <span><i class="fas fa-calendar"></i> <span id="pj-modal-year"></span></span>
+                </div>
+                <div class="pj-modal-tech" id="pj-modal-tech"></div>
+                <a class="pj-modal-link" id="pj-modal-link" href="#" target="_blank" rel="noopener">
+                    View Project <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
         </div>
 
-        <!-- Project Details Modal -->
-        <div id="project-modal" class="project-modal-overlay">
-            <div class="project-modal-content">
-                <button id="close-modal-btn" class="close-modal-btn"><i class="fas fa-times"></i></button>
-                <div class="modal-body">
-                    <div id="modal-icon" class="modal-icon"></div>
-                    <h2 id="modal-title" class="modal-title"></h2>
-                    <div id="modal-badges" class="modal-badges"></div>
-                    <p id="modal-desc" class="modal-desc"></p>
-                    <div class="modal-meta">
-                        <p><strong>Year:</strong> <span id="modal-year"></span></p>
-                        <p><strong>Client:</strong> <span id="modal-client"></span></p>
-                    </div>
-                    <a id="modal-link" href="#" target="_blank" class="modal-btn">View Project</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    </section><!-- /#our-works -->
 
 
 

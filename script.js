@@ -606,7 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Canvases
     initParticleCanvas('ambient-canvas', 'what-we-do', '.feature-card');
-    initParticleCanvas('works-canvas', 'our-works', '.project-card');
+    // works-canvas particle system removed — replaced by ambient orb system in the new pj- section
+
 
     // Re-implement the entrance animation observer if needed
     // (Note: The original code used global 'cards' for this, which might have been empty or referring to something else.
@@ -2102,225 +2103,422 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(raf);
 });
 
-
 /* =========================================
-   OUR WORKS TIMELINE LOGIC
+   PROJECTS SECTION — True Infinite Connected Timeline (pj-)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const timelineShell = document.getElementById('our-works-timeline');
-    const timelineTrack = document.getElementById('our-works-timeline-track');
-    if (!timelineShell || !timelineTrack) return;
 
-    const iconMap = {
-        1: "fa-heartbeat",     // Arkon Medical
-        2: "fa-music",         // Splendore
-        3: "fa-theater-masks", // Euphoria
-        4: "fa-calendar-alt",  // Fest Buddy
-        5: "fa-users",         // Campus Connect
-        6: "fa-mobile-alt",    // Cocobies
-        7: "fa-globe",         // ReX
-        8: "fa-chalkboard-teacher", // CTRM
-        9: "fa-hands-helping", // OutREACH
-        10: "fa-glass-cheers"  // The Luke
+    // ── 1. Icon map ──
+    const pjIconMap = {
+        1: "fa-heartbeat",   2: "fa-music",
+        3: "fa-theater-masks", 4: "fa-calendar-alt",
+        5: "fa-users",       6: "fa-mobile-alt",
+        7: "fa-globe",       8: "fa-chalkboard-teacher",
+        9: "fa-hands-helping", 10: "fa-glass-cheers"
     };
+
+    const track    = document.getElementById('pj-track');
+    const viewport = document.getElementById('pj-viewport');
+    const prevBtn  = document.getElementById('pj-prev');
+    const nextBtn  = document.getElementById('pj-next');
+    const section  = document.getElementById('our-works');
+
+    if (!track || !viewport || !section) return;
 
     const projectEntries = Object.entries(projects);
+    const N = projectEntries.length;
 
-    projectEntries.forEach(([id, project], index) => {
-        const year = project.date ? project.date.split(' ').pop() : 'N/A';
-        const iconClass = iconMap[id] || 'fa-laptop-code';
+    // ── 2. Build ONE pj-item per project ──
+    function buildItem(id, proj, altIndex) {
+        const year      = proj.date ? proj.date.split(' ').pop() : '—';
+        const iconClass = pjIconMap[id] || 'fa-laptop-code';
+        const isTop     = altIndex % 2 === 0;
 
-        const item = document.createElement('article');
-        item.className = `works-timeline-item ${index % 2 === 0 ? 'works-timeline-item--top' : 'works-timeline-item--bottom'}`;
-        item.style.setProperty('--timeline-delay', `${index * 100}ms`);
-        item.innerHTML = `
-            <div class="works-timeline-marker" aria-hidden="true">
-                <span class="works-timeline-year">${year}</span>
-                <span class="works-timeline-dot"></span>
+        const item = document.createElement('div');
+        item.className = `pj-item ${isTop ? 'pj-item--top' : 'pj-item--bottom'}`;
+        item.setAttribute('data-orig-idx', altIndex);
+
+        // Year node on the timeline
+        const node = document.createElement('div');
+        node.className = 'pj-node';
+        
+        // Year text label
+        const yearLabel = document.createElement('div');
+        yearLabel.className = 'pj-card-year';
+        yearLabel.textContent = year;
+
+        // Vertical stem
+        const stem = document.createElement('div');
+        stem.className = 'pj-stem';
+
+        // Project card
+        const card = document.createElement('article');
+        card.className = 'pj-card';
+        card.setAttribute('data-id', id);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `View project: ${proj.title}`);
+        card.innerHTML = `
+            <div class="pj-card-img">
+                <img src="${proj.img}" alt="${proj.title}" loading="lazy"
+                     onerror="this.src='images/campuscon-image.png'">
+                <div class="pj-card-badge"><i class="fas ${iconClass}"></i></div>
             </div>
+            <div class="pj-card-body">
+                <h3 class="pj-card-title">${proj.title}</h3>
+                <p class="pj-card-desc">${proj.desc}</p>
+                <span class="pj-card-client"><i class="fas fa-user" style="font-size:0.65rem;margin-right:4px;color:#38bdf8;"></i>${proj.client}</span>
+            </div>`;
 
-            <div class="works-timeline-card"
-                 role="button"
-                 tabindex="0"
-                 data-id="${id}"
-                 data-title="${project.title}"
-                 data-desc="${project.desc}"
-                 data-client="${project.client}"
-                 data-year="${year}"
-                 data-tech='${JSON.stringify(project.tech || [])}'
-                 data-link="${project.link}"
-                 data-icon="${iconClass}">
-                <div class="works-timeline-card-top">
-                    <span class="works-timeline-kicker">
-                        <i class="fas ${iconClass}"></i>
-                    </span>
-                </div>
-
-                <h3 class="works-timeline-title">${project.title}</h3>
-                <p class="works-timeline-desc">${project.desc}</p>
-
-                <div class="works-timeline-meta">
-                    <span class="works-timeline-client">Client: ${project.client}</span>
-                </div>
-            </div>
-        `;
-
-        const card = item.querySelector('.works-timeline-card');
-        const openCard = () => {
-            if (card && typeof openProjectModal === 'function') {
-                openProjectModal(card);
-            }
-        };
-
-        card.addEventListener('click', openCard);
-        card.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                openCard();
-            }
+        // Mouse spotlight effect
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--pj-mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--pj-my', `${e.clientY - r.top}px`);
         });
 
-        timelineTrack.appendChild(item);
-    });
-
-    const timelineItems = Array.from(timelineTrack.querySelectorAll('.works-timeline-item'));
-    if (!timelineItems.length) return;
-
-    let activeIndex = 0;
-
-    function setActiveItem(index) {
-        timelineItems.forEach((item, itemIndex) => {
-            item.classList.toggle('is-focused', itemIndex === index);
+        // Click → modal
+        const openModal = () => pjOpenModal(id, proj, iconClass);
+        card.addEventListener('click', openModal);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
         });
 
-        const targetItem = timelineItems[index];
-        if (!targetItem) return;
-
-        const targetLeft = targetItem.offsetLeft - (timelineShell.clientWidth - targetItem.offsetWidth) / 2;
-        timelineShell.scrollTo({
-            left: Math.max(0, targetLeft),
-            behavior: 'smooth'
-        });
+        item.appendChild(node);
+        item.appendChild(yearLabel);
+        item.appendChild(stem);
+        item.appendChild(card);
+        return item;
     }
 
-    const revealItems = () => {
-        timelineShell.classList.add('is-animated');
-        const itemObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+    // ── 3. Populate track: original + two clones (3× items for seamless loop) ──
+    // We render 3 sets so we can loop: set A (clone-left), set B (original), set C (clone-right)
+    function populateTrack() {
+        track.innerHTML = '';
+        [0, 1, 2].forEach(setIdx => {
+            projectEntries.forEach(([id, proj], i) => {
+                const item = buildItem(id, proj, i);
+                item.setAttribute('data-set', setIdx);
+                track.appendChild(item);
+            });
+        });
+    }
+    populateTrack();
+
+    // ── 4. Measure and position so we start at the MIDDLE set ──
+    let ITEM_W  = 0; // computed after layout
+    let ITEM_GAP = 0;
+    let SET_W   = 0; // width of one full set of N items
+    let offsetX = 0; // current horizontal translation (negative = scroll right)
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let isUserInteracting = false;
+    let userInteractionTimer = null;
+
+    function measure() {
+        const items = track.querySelectorAll('.pj-item');
+        if (!items.length) return;
+        const first = items[0];
+        const second = items[1];
+        if (!second) return;
+        
+        // Use offsetLeft to get scale-invariant distance between items
+        const distance = second.offsetLeft - first.offsetLeft;
+        ITEM_W   = first.offsetWidth;
+        ITEM_GAP = distance - ITEM_W;
+        SET_W = N * distance;
+        
+        // Start positioned at the middle set (set index 1)
+        offsetX = -(SET_W + viewport.clientWidth / 2 - ITEM_W / 2);
+    }
+
+    // Center viewport on the middle project of the middle set
+    function centerOnMiddle() {
+        measure();
+        // offsetX so that the center item of set 1 is in the center of the viewport
+        const midItemIndex = N * 1 + Math.floor(N / 2); // middle set, middle item
+        const vpCenter = viewport.clientWidth / 2;
+        offsetX = -(midItemIndex * (ITEM_W + ITEM_GAP) - vpCenter + ITEM_W / 2);
+        applyTransform(false);
+        updateCenter();
+    }
+
+    function applyTransform(animated) {
+        track.style.transition = animated ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+        track.style.transform  = `translateX(${offsetX}px)`;
+    }
+
+    // ── 5. Infinite loop seam check — jump silently when near edges ──
+    function checkSeam() {
+        // If we've scrolled too far right (toward set 0), jump forward by SET_W
+        if (offsetX > -(SET_W * 0.5)) {
+            offsetX -= SET_W;
+            applyTransform(false);
+        }
+        // If we've scrolled too far left (toward set 2), jump back by SET_W
+        if (offsetX < -(SET_W * 2.5)) {
+            offsetX += SET_W;
+            applyTransform(false);
+        }
+    }
+
+    // ── 6. Center detection — which item is closest to viewport center ──
+    function updateCenter() {
+        const allItems = Array.from(track.querySelectorAll('.pj-item'));
+        const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        let bestItem   = null;
+        let bestDist   = Infinity;
+
+        allItems.forEach(item => {
+            const r    = item.getBoundingClientRect();
+            const itemCenter = r.left + r.width / 2;
+            const dist = Math.abs(itemCenter - vpCenter);
+            if (dist < bestDist) { bestDist = dist; bestItem = item; }
+        });
+
+        allItems.forEach(item => {
+            item.classList.remove('is-center');
+            const card = item.querySelector('.pj-card');
+            if (card) card.classList.remove('is-dim');
+        });
+
+        if (bestItem) {
+            bestItem.classList.add('is-center');
+            // Dim cards that are far from center
+            allItems.forEach(item => {
+                if (item !== bestItem) {
+                    const r = item.getBoundingClientRect();
+                    const itemCenter = r.left + r.width / 2;
+                    const dist = Math.abs(itemCenter - vpCenter);
+                    const card = item.querySelector('.pj-card');
+                    if (card && dist > ITEM_W * 1.5) card.classList.add('is-dim');
                 }
             });
-        }, {
-            root: timelineShell,
-            threshold: 0.35,
-            rootMargin: '0px -8% 0px -8%'
+        }
+    }
+
+    // ── 7. Auto-scroll RAF loop ──
+    const AUTO_SPEED = 0.4; // px per frame (smooth slow crawl)
+    let rafId = null;
+    let lastTime = 0;
+
+    function autoScrollLoop(time) {
+        if (!isUserInteracting) {
+            const delta = time - lastTime;
+            // Cap delta to avoid huge jumps on tab-resume
+            const step  = Math.min(delta, 50) * AUTO_SPEED * 0.06;
+            offsetX -= step;
+            applyTransform(false);
+            checkSeam();
+            updateCenter();
+        }
+        lastTime = time;
+        rafId = requestAnimationFrame(autoScrollLoop);
+    }
+
+    // ── 8. Manual navigation (prev/next buttons snap to previous/next original item) ──
+    function snapToNearest(direction) {
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+
+        // Find item currently closest to center
+        const allItems = Array.from(track.querySelectorAll('.pj-item'));
+        const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        let bestItem   = null;
+        let bestDist   = Infinity;
+
+        allItems.forEach(item => {
+            const r    = item.getBoundingClientRect();
+            const ic   = r.left + r.width / 2;
+            const dist = Math.abs(ic - vpCenter);
+            if (dist < bestDist) { bestDist = dist; bestItem = item; }
         });
 
-        timelineItems.forEach((item) => itemObserver.observe(item));
+        if (!bestItem) { isUserInteracting = false; return; }
 
-        setActiveItem(activeIndex);
+        const siblings = allItems;
+        const cursorIndex = siblings.indexOf(bestItem);
+        const targetIndex = Math.max(0, Math.min(siblings.length - 1, cursorIndex + direction));
+        const targetItem  = siblings[targetIndex];
 
-        const autoAdvance = () => {
-            activeIndex = (activeIndex + 1) % timelineItems.length;
-            setActiveItem(activeIndex);
-        };
+        if (targetItem) {
+            const r = targetItem.getBoundingClientRect();
+            const ic = r.left + r.width / 2;
+            const delta = ic - vpCenter;
+            offsetX -= delta;
+            applyTransform(true);
+            checkSeam();
+            updateCenter();
+        }
 
-        setInterval(autoAdvance, 2600);
-    };
+        userInteractionTimer = setTimeout(() => { isUserInteracting = false; }, 2500);
+    }
 
-    const sectionObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                revealItems();
-                observer.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.15
+    if (prevBtn) prevBtn.addEventListener('click', () => snapToNearest(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => snapToNearest(1));
+
+    // Keyboard nav
+    section.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft')  snapToNearest(-1);
+        if (e.key === 'ArrowRight') snapToNearest(1);
     });
 
-    sectionObserver.observe(timelineShell);
+    // ── 9. Drag / touch interaction ──
+    function onDragStart(clientX) {
+        isDragging = true;
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+        dragStartX = clientX;
+        dragStartOffset = offsetX;
+        track.style.cursor = 'grabbing';
+        cancelAnimationFrame(rafId);
+    }
+
+    function onDragMove(clientX) {
+        if (!isDragging) return;
+        const dx = clientX - dragStartX;
+        offsetX = dragStartOffset + dx;
+        applyTransform(false);
+        checkSeam();
+        updateCenter();
+    }
+
+    function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.cursor = 'grab';
+        // Restart auto scroll after delay
+        userInteractionTimer = setTimeout(() => {
+            isUserInteracting = false;
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(autoScrollLoop);
+        }, 2500);
+    }
+
+    // Mouse drag
+    viewport.addEventListener('mousedown', (e) => { e.preventDefault(); onDragStart(e.clientX); });
+    window.addEventListener('mousemove', (e) => { if (isDragging) onDragMove(e.clientX); });
+    window.addEventListener('mouseup', onDragEnd);
+
+    // Touch drag
+    viewport.addEventListener('touchstart', (e) => { onDragStart(e.touches[0].clientX); }, { passive: true });
+    viewport.addEventListener('touchmove', (e) => { onDragMove(e.touches[0].clientX); }, { passive: true });
+    viewport.addEventListener('touchend', onDragEnd, { passive: true });
+
+    // ── 10. Pause auto-scroll on section hover ──
+    section.addEventListener('mouseenter', () => {
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+    });
+    section.addEventListener('mouseleave', () => {
+        if (!isDragging) {
+            userInteractionTimer = setTimeout(() => {
+                isUserInteracting = false;
+            }, 500);
+        }
+    });
+
+    // (Orb logic removed for cleaner timeline look)
+
+    // ── 13. GSAP header reveal ──
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.fromTo('.pj-header',
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+              scrollTrigger: { trigger: '#our-works', start: 'top 75%', once: true } }
+        );
+        gsap.fromTo('.pj-timeline-unified',
+            { opacity: 0 },
+            { opacity: 1, duration: 1, ease: 'power2.out',
+              scrollTrigger: { trigger: '#our-works', start: 'top 70%', once: true } }
+        );
+    }
+
+    // ── 14. Initialize: measure → position → start RAF ──
+    // Wait for fonts/images to settle then boot
+    function boot() {
+        centerOnMiddle();
+        track.style.cursor = 'grab';
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(autoScrollLoop);
+    }
+
+    // Defer until section is in/near viewport (IntersectionObserver for performance)
+    const bootObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            bootObserver.disconnect();
+            requestAnimationFrame(() => requestAnimationFrame(boot));
+        }
+    }, { rootMargin: '200px' });
+    bootObserver.observe(section);
+
+    window.addEventListener('resize', () => {
+        cancelAnimationFrame(rafId);
+        setTimeout(() => {
+            populateTrack();
+            centerOnMiddle();
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(autoScrollLoop);
+        }, 150);
+    });
 });
 
-// Modal Interaction Logic for Our Works Section
-function openProjectModal(cardElement) {
-    if (!cardElement) return;
-
-    const modal = document.getElementById('project-modal');
+// ── Modal open/close ──
+function pjOpenModal(id, proj, iconClass) {
+    const modal    = document.getElementById('pj-modal');
     if (!modal) return;
 
-    // Extract data from clicked card
-    const title = cardElement.getAttribute('data-title');
-    const desc = cardElement.getAttribute('data-desc');
-    const client = cardElement.getAttribute('data-client');
-    const year = cardElement.getAttribute('data-year');
-    const link = cardElement.getAttribute('data-link');
-    const iconClass = cardElement.getAttribute('data-icon');
-    let tech = [];
-    try { tech = JSON.parse(cardElement.getAttribute('data-tech')); } catch (e) { }
+    document.getElementById('pj-modal-icon').innerHTML  = `<i class="fas ${iconClass || 'fa-laptop-code'}"></i>`;
+    document.getElementById('pj-modal-title').textContent  = proj.title  || '';
+    document.getElementById('pj-modal-desc').textContent   = proj.desc   || '';
+    document.getElementById('pj-modal-client').textContent = proj.client || '';
+    document.getElementById('pj-modal-year').textContent   = proj.date   || '';
 
-    // Populate modal
-    document.getElementById('modal-title').textContent = title || '';
-    document.getElementById('modal-desc').textContent = desc || '';
-    document.getElementById('modal-client').textContent = client || '';
-    document.getElementById('modal-year').textContent = year || '';
-    document.getElementById('modal-icon').innerHTML = '<i class="fas ' + (iconClass || 'fa-laptop-code') + '"></i>';
+    // Tech badges
+    const techWrap = document.getElementById('pj-modal-tech');
+    techWrap.innerHTML = '';
+    (proj.tech || []).forEach(t => {
+        const b = document.createElement('span');
+        b.className   = 'pj-tech-badge';
+        b.textContent = t;
+        techWrap.appendChild(b);
+    });
 
-    const linkEl = document.getElementById('modal-link');
-    if (link && link !== "#" && linkEl) {
-        linkEl.href = link;
-        linkEl.style.display = 'block';
-    } else if (linkEl) {
+    // Link
+    const linkEl = document.getElementById('pj-modal-link');
+    if (proj.link && proj.link !== '#') {
+        linkEl.href  = proj.link;
+        linkEl.style.display = 'inline-flex';
+    } else {
         linkEl.style.display = 'none';
     }
 
-    // Populate tech badges
-    const badgesContainer = document.getElementById('modal-badges');
-    if (badgesContainer) {
-        badgesContainer.innerHTML = '';
-        tech.forEach(t => {
-            const badge = document.createElement('span');
-            badge.className = 'glass-badge';
-            badge.textContent = t;
-            badgesContainer.appendChild(badge);
-        });
-    }
-
-    // Show modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('project-modal');
-    const closeBtn = document.getElementById('close-modal-btn');
+    const modal     = document.getElementById('pj-modal');
+    const closeBtn  = document.getElementById('pj-modal-close');
+    const backdrop  = document.getElementById('pj-modal-backdrop');
 
-    if (modal && closeBtn) {
-        // Close on button click
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restore scrolling
-        });
-
-        // Close on click outside modal content
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
+    function pjCloseModal() {
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
     }
+
+    if (closeBtn)  closeBtn.addEventListener('click',  pjCloseModal);
+    if (backdrop)  backdrop.addEventListener('click',  pjCloseModal);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) pjCloseModal();
+    });
 });
+
+
 
 // =========================================
 // OUR WORKS SECTION - PARALLAX SCROLL EFFECT
