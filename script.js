@@ -2769,3 +2769,253 @@ document.addEventListener('DOMContentLoaded', () => {
         );
     }
 });
+
+// --- Elfsight Horizontal Carousel Timeline ---
+document.addEventListener('DOMContentLoaded', () => {
+    const sliderViewport = document.getElementById('es-slider-viewport');
+    const sliderTrack = document.getElementById('es-slider-track');
+    const cards = document.querySelectorAll('.es-card');
+    const dots = document.querySelectorAll('.es-dot-item');
+    const prevBtn = document.getElementById('es-nav-prev');
+    const nextBtn = document.getElementById('es-nav-next');
+    
+    if (!sliderViewport || !sliderTrack || cards.length === 0) return;
+
+    let currentIndex = 0;
+    const totalCards = cards.length;
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID;
+    let autoPlayInterval;
+
+    function getCardWidth() {
+        return cards[0].getBoundingClientRect().width;
+    }
+
+    function updateTimeline() {
+        const cardWidth = getCardWidth();
+        currentTranslate = currentIndex * -cardWidth;
+        prevTranslate = currentTranslate;
+        
+        sliderTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+        sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            if (index === currentIndex) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        if (currentIndex < totalCards - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // Loop back
+        }
+        updateTimeline();
+    }
+
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = totalCards - 1; // Loop to end
+        }
+        updateTimeline();
+    }
+
+    // Auto Play
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoPlay() {
+        clearInterval(autoPlayInterval);
+    }
+
+    // Event Listeners for Buttons
+    if (nextBtn) nextBtn.addEventListener('click', () => {
+        nextSlide();
+        stopAutoPlay();
+        startAutoPlay(); // Reset timer
+    });
+    
+    if (prevBtn) prevBtn.addEventListener('click', () => {
+        prevSlide();
+        stopAutoPlay();
+        startAutoPlay(); // Reset timer
+    });
+
+    // Event Listeners for Dots
+    dots.forEach(dot => {
+        dot.addEventListener('click', () => {
+            currentIndex = parseInt(dot.getAttribute('data-index'));
+            updateTimeline();
+            stopAutoPlay();
+            startAutoPlay();
+        });
+    });
+
+    // Drag / Swipe functionality
+    function touchStart(event) {
+        isDragging = true;
+        startX = getPositionX(event);
+        animationID = requestAnimationFrame(animation);
+        sliderTrack.style.transition = 'none'; // Disable transition while dragging
+        stopAutoPlay();
+    }
+
+    function touchEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        const cardWidth = getCardWidth();
+        const movedBy = currentTranslate - prevTranslate;
+        
+        // Snap to next/prev if moved enough
+        if (movedBy < -100 && currentIndex < totalCards - 1) currentIndex += 1;
+        if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
+        
+        updateTimeline();
+        startAutoPlay();
+    }
+
+    function touchMove(event) {
+        if (isDragging) {
+            const currentPosition = getPositionX(event);
+            currentTranslate = prevTranslate + currentPosition - startX;
+        }
+    }
+
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+
+    function animation() {
+        sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+        if (isDragging) requestAnimationFrame(animation);
+    }
+
+    // Touch events
+    sliderViewport.addEventListener('touchstart', touchStart);
+    sliderViewport.addEventListener('touchend', touchEnd);
+    sliderViewport.addEventListener('touchmove', touchMove);
+
+    // Mouse events
+    sliderViewport.addEventListener('mousedown', touchStart);
+    sliderViewport.addEventListener('mouseup', touchEnd);
+    sliderViewport.addEventListener('mouseleave', touchEnd);
+    sliderViewport.addEventListener('mousemove', touchMove);
+
+    // Handle Window Resize
+    window.addEventListener('resize', () => {
+        updateTimeline();
+    });
+
+    // Initialize
+    updateTimeline();
+    startAutoPlay();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elfsight Modal Logic ---
+    const modal = document.getElementById('es-modal');
+    const modalBackdrop = document.getElementById('es-modal-backdrop');
+    const modalClose = document.getElementById('es-modal-close');
+    const modalTitle = document.getElementById('es-modal-title');
+    const modalDesc = document.getElementById('es-modal-desc');
+    const modalYear = document.getElementById('es-modal-year');
+    const modalTech = document.getElementById('es-modal-tech');
+    const modalIcon = document.getElementById('es-modal-icon');
+    
+    const projectData = {
+        'euphoria': {
+            title: 'Launch of Euphoria',
+            year: '2019',
+            desc: 'Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience. We set a new standard for college festivals with cutting edge technology integration.',
+            icon: '<i class="fa-solid fa-rocket"></i>',
+            tech: ['Event Management', 'TechFest', 'Innovation']
+        },
+        'campuscon': {
+            title: 'CampusCon Initiative',
+            year: '2020',
+            desc: 'A major step towards integrating advanced campus networking solutions and fostering digital education. This initiative paved the way for seamless communication across departments.',
+            icon: '<i class="fa-solid fa-network-wired"></i>',
+            tech: ['Networking', 'Education', 'Infrastructure']
+        },
+        'ctrm': {
+            title: 'CTRM Deployment',
+            year: '2021',
+            desc: 'Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity. This unified system replaced dozens of legacy tools.',
+            icon: '<i class="fa-solid fa-server"></i>',
+            tech: ['Enterprise Software', 'Management', 'System Integration']
+        },
+        'fesbud': {
+            title: 'Fesbud Platform',
+            year: '2023',
+            desc: 'A budget management and financial tracking system designed specifically for our complex ecosystem. It allows real-time tracking of expenses and resource allocation.',
+            icon: '<i class="fa-solid fa-wallet"></i>',
+            tech: ['FinTech', 'Budgeting', 'Analytics']
+        },
+        'arkon': {
+            title: 'Arkon Expansion',
+            year: '2025',
+            desc: 'Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization. Arkon provides a scalable foundation for future AI projects.',
+            icon: '<i class="fa-solid fa-microchip"></i>',
+            tech: ['AI', 'Cloud Native', 'Modernization']
+        }
+    };
+
+    const learnMoreBtns = document.querySelectorAll('.es-learn-more');
+    
+    function openModal(projectId) {
+        if (!modal || !projectData[projectId]) return;
+        
+        const data = projectData[projectId];
+        
+        modalTitle.textContent = data.title;
+        modalDesc.textContent = data.desc;
+        modalYear.textContent = data.year;
+        modalIcon.innerHTML = data.icon;
+        
+        // Populate tech badges
+        modalTech.innerHTML = '';
+        if (data.tech && data.tech.length) {
+            data.tech.forEach(t => {
+                const badge = document.createElement('span');
+                badge.className = 'es-tech-badge';
+                badge.textContent = t;
+                modalTech.appendChild(badge);
+            });
+        }
+        
+        modal.classList.add('is-open');
+    }
+
+    function closeModal() {
+        if (modal) modal.classList.remove('is-open');
+    }
+
+    learnMoreBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const projectId = btn.getAttribute('data-project');
+            openModal(projectId);
+        });
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+});

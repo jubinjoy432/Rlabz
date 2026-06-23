@@ -230,67 +230,168 @@
     </section>
 
     <!-- =====================================================
-         PROJECTS SECTION — Futuristic Innovation Timeline
+         PROJECTS SECTION — Elfsight Horizontal Carousel Timeline
          ===================================================== -->
-    <section id="our-works" class="rounded-section pj-section">
-
-        <div class="container pj-inner">
-
+    <section id="our-works" class="elfsight-timeline-section">
+        <div class="container">
             <!-- Section header -->
-            <header class="section-header pj-header reveal-on-scroll">
-                <h2 class="section-title pj-title">Have You Seen
-                    <br><span class="highlight-text" id="highlight-works">Our Works?</span>
-                </h2>
-                <p class="subtitle pj-subtitle">An innovation journey through our milestones.</p>
+            <header class="section-header reveal-on-scroll es-section-header-row">
+                <h2 class="section-title">Our Projects</h2>
+                <a href="projects.html" class="es-view-more-btn" aria-label="View all projects">
+                    View More <i class="fas fa-arrow-right"></i>
+                </a>
             </header>
 
-            <!-- ── True Infinite Unified Timeline ── -->
-            <div class="pj-timeline-unified" id="pj-timeline-unified">
-                
-                <!-- Central continuous glowing wave (acts as the core timeline path) -->
-                <div class="pj-wave-track" id="pj-wave-track">
+            <div class="es-timeline-wrapper">
+                <!-- Top Slider Viewport -->
+                <div class="es-slider-viewport" id="es-slider-viewport">
+                    <div class="es-slider-track" id="es-slider-track">
+                        <!-- Card 1 -->
+                        <div class="es-card">
+                            <div class="es-card-content">
+                                <div class="es-card-year">2019</div>
+                                <h3 class="es-card-title">Launch of Euphoria</h3>
+                                <p class="es-card-desc">Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience.</p>
+                                <div class="es-card-actions">
+                                    <button class="es-btn es-btn-primary es-learn-more" data-project="euphoria">Learn More</button>
+                                </div>
+                            </div>
+                            <div class="es-card-visual">
+                                <img src="images/euphoria-2019.webp" alt="Euphoria 2019">
+                            </div>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="es-card">
+                            <div class="es-card-content">
+                                <div class="es-card-year">2020</div>
+                                <h3 class="es-card-title">CampusCon Initiative</h3>
+                                <p class="es-card-desc">A major step towards integrating advanced campus networking solutions and fostering digital education.</p>
+                                <div class="es-card-actions">
+                                    <button class="es-btn es-btn-primary es-learn-more" data-project="campuscon">Learn More</button>
+                                </div>
+                            </div>
+                            <div class="es-card-visual">
+                                <img src="images/campuscon-image.webp" alt="CampusCon Initiative">
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="es-card">
+                            <div class="es-card-content">
+                                <div class="es-card-year">2021</div>
+                                <h3 class="es-card-title">CTRM Deployment</h3>
+                                <p class="es-card-desc">Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity.</p>
+                                <div class="es-card-actions">
+                                    <button class="es-btn es-btn-primary es-learn-more" data-project="ctrm">Learn More</button>
+                                </div>
+                            </div>
+                            <div class="es-card-visual">
+                                <img src="images/ctrm-image.webp" alt="CTRM Deployment">
+                            </div>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="es-card">
+                            <div class="es-card-content">
+                                <div class="es-card-year">2023</div>
+                                <h3 class="es-card-title">Fesbud Platform</h3>
+                                <p class="es-card-desc">A budget management and financial tracking system designed specifically for our complex ecosystem.</p>
+                                <div class="es-card-actions">
+                                    <button class="es-btn es-btn-primary es-learn-more" data-project="fesbud">Learn More</button>
+                                </div>
+                            </div>
+                            <div class="es-card-visual">
+                                <img src="images/fesbud-image.webp" alt="Fesbud Platform">
+                            </div>
+                        </div>
+
+                        <!-- Card 5 -->
+                        <div class="es-card">
+                            <div class="es-card-content">
+                                <div class="es-card-year">2025</div>
+                                <h3 class="es-card-title">Arkon Expansion</h3>
+                                <p class="es-card-desc">Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization.</p>
+                                <div class="es-card-actions">
+                                    <button class="es-btn es-btn-primary es-learn-more" data-project="arkon">Learn More</button>
+                                </div>
+                            </div>
+                            <div class="es-card-visual">
+                                <img src="images/arkon-img.webp" alt="Arkon Expansion">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Arrows -->
+                    <button class="es-nav-btn es-nav-prev" id="es-nav-prev" aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="es-nav-btn es-nav-next" id="es-nav-next" aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
 
-                <!-- Viewport for infinite scrolling -->
-                <div class="pj-clip-wrapper">
-                    <div class="pj-viewport" id="pj-viewport">
-                        <div class="pj-track" id="pj-track">
-                            <!-- Project items with vertical stems and milestone nodes injected by JS -->
+                <!-- Bottom Timeline Navigation -->
+                <div class="es-timeline-nav">
+                    <div class="es-timeline-line"></div>
+                    <div class="es-timeline-dots" id="es-timeline-dots">
+                        <!-- Dots generated by JS to keep DRY, but we can hardcode for stability if needed. Let's hardcode for perfect styling sync -->
+                        <div class="es-dot-item active" data-index="0">
+                            <div class="es-dot"></div>
+                            <div class="es-dot-label">
+                                <div class="es-dot-year">2019</div>
+                                <div class="es-dot-title">Launch of Euphoria</div>
+                            </div>
+                        </div>
+                        <div class="es-dot-item" data-index="1">
+                            <div class="es-dot"></div>
+                            <div class="es-dot-label">
+                                <div class="es-dot-year">2020</div>
+                                <div class="es-dot-title">CampusCon Initiative</div>
+                            </div>
+                        </div>
+                        <div class="es-dot-item" data-index="2">
+                            <div class="es-dot"></div>
+                            <div class="es-dot-label">
+                                <div class="es-dot-year">2021</div>
+                                <div class="es-dot-title">CTRM Deployment</div>
+                            </div>
+                        </div>
+                        <div class="es-dot-item" data-index="3">
+                            <div class="es-dot"></div>
+                            <div class="es-dot-label">
+                                <div class="es-dot-year">2023</div>
+                                <div class="es-dot-title">Fesbud Platform</div>
+                            </div>
+                        </div>
+                        <div class="es-dot-item" data-index="4">
+                            <div class="es-dot"></div>
+                            <div class="es-dot-label">
+                                <div class="es-dot-year">2025</div>
+                                <div class="es-dot-title">Arkon Expansion</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Nav arrows for manual jumping (optional interaction layer) -->
-                <button class="pj-nav pj-nav--prev" id="pj-prev" aria-label="Scroll left">
-                    <i class="fas fa-chevron-left"></i>
-                </button>
-                <button class="pj-nav pj-nav--next" id="pj-next" aria-label="Scroll right">
-                    <i class="fas fa-chevron-right"></i>
-                </button>
-            </div><!-- /.pj-timeline-unified -->
-
-
+            </div>
+        </div>
         <!-- Project detail modal -->
-        <div class="pj-modal" id="pj-modal" role="dialog" aria-modal="true" aria-labelledby="pj-modal-title">
-            <div class="pj-modal-backdrop" id="pj-modal-backdrop"></div>
-            <div class="pj-modal-box">
-                <button class="pj-modal-close" id="pj-modal-close" aria-label="Close">
+        <div class="es-modal" id="es-modal" role="dialog" aria-modal="true" aria-labelledby="es-modal-title">
+            <div class="es-modal-backdrop" id="es-modal-backdrop"></div>
+            <div class="es-modal-box">
+                <button class="es-modal-close" id="es-modal-close" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
-                <div class="pj-modal-icon" id="pj-modal-icon"></div>
-                <h3 class="pj-modal-title" id="pj-modal-title"></h3>
-                <p class="pj-modal-desc" id="pj-modal-desc"></p>
-                <div class="pj-modal-meta">
-                    <span><i class="fas fa-user"></i> <span id="pj-modal-client"></span></span>
-                    <span><i class="fas fa-calendar"></i> <span id="pj-modal-year"></span></span>
-                </div>
-                <div class="pj-modal-tech" id="pj-modal-tech"></div>
-                <a class="pj-modal-link" id="pj-modal-link" href="#" target="_blank" rel="noopener">
-                    View Project <i class="fas fa-arrow-right"></i>
+                <div class="es-modal-icon" id="es-modal-icon"></div>
+                <div class="es-modal-year" id="es-modal-year"></div>
+                <h3 class="es-modal-title" id="es-modal-title"></h3>
+                <p class="es-modal-desc" id="es-modal-desc"></p>
+                <div class="es-modal-tech" id="es-modal-tech"></div>
+                <a class="es-modal-link es-btn es-btn-primary" id="es-modal-link" href="#" target="_blank" rel="noopener">
+                    View Full Project <i class="fas fa-arrow-right"></i>
                 </a>
             </div>
         </div>
-
     </section><!-- /#our-works -->
 
 
