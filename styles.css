@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     --bg-color: #f8faff;
     /* Light/White Background */
     --text-color: #1e293b;
@@ -8496,14 +8496,14 @@ html.lenis body {
 
 .elfsight-timeline-section {
     position: relative;
-    padding: 6rem 0 8rem;
+    padding: 4rem 0 4rem;
     background: radial-gradient(ellipse at 50% 0%, #0b4a8a 0%, #022c5e 55%, #010f2e 100%) !important;
     overflow: hidden;
 }
 
 .elfsight-timeline-section .section-header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .elfsight-timeline-section .section-title {
@@ -8513,7 +8513,7 @@ html.lenis body {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     background: none !important;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     letter-spacing: -1px;
 }
 
@@ -8525,7 +8525,7 @@ html.lenis body {
     padding: 0 1rem;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 /* ---- Slider Viewport ---- */
@@ -8837,18 +8837,37 @@ html.lenis body {
     transform: rotate(90deg);
 }
 
-.es-modal-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: rgba(11,83,148,0.1);
-    color: var(--primary-blue, #0b5394);
+/* ---- Team Members Container in Modal ---- */
+.es-modal-team {
     display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 1.6rem;
+}
+
+.es-team-member {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(11,83,148,0.2);
+    gap: 6px;
+    text-align: center;
+}
+
+.es-team-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #bae6fd;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.es-team-name {
+    font-size: 0.75rem;
+    color: #475569;
+    font-weight: 600;
+    max-width: 60px;
+    line-height: 1.2;
 }
 
 .es-modal-year {
@@ -8886,7 +8905,7 @@ html.lenis body {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
-    margin-bottom: 1.6rem;
+    margin-bottom: 0; /* Changed since button is removed below it */
 }
 
 .es-tech-badge {
@@ -8897,28 +8916,6 @@ html.lenis body {
     font-size: 0.78rem;
     font-weight: 600;
     color: var(--primary-blue, #0b5394);
-}
-
-.es-modal-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.75rem 1.8rem;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #0b5394, #2563eb);
-    color: #fff !important;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 6px 18px rgba(11,83,148,0.35);
-}
-
-.es-modal-link:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 26px rgba(11,83,148,0.5);
-    color: #fff;
-    text-decoration: none;
 }
 
 /* ---- Responsive ---- */
@@ -8952,22 +8949,26 @@ html.lenis body {
     .elfsight-timeline-section .section-title { font-size: 2.2rem; }
 }
 
-/* ---- Section Header Row (title left, View More right) ---- */
+/* ---- Section Header Row (title centered, View More right) ---- */
 .es-section-header-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
-    text-align: left;
-    margin-bottom: 3rem;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 2rem;
+    width: 100%;
 }
 
 .es-section-header-row .section-title {
-    margin-right: auto;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .es-view-more-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -8996,7 +8997,7 @@ html.lenis body {
     border-color: rgba(14, 165, 233, 0.5);
     color: #ffffff;
     text-decoration: none;
-    transform: translateY(-2px);
+    transform: translateY(calc(-50% - 2px));
     box-shadow: 0 6px 20px rgba(14, 165, 233, 0.2);
 }
 
@@ -9006,11 +9007,17 @@ html.lenis body {
 
 @media (max-width: 600px) {
     .es-section-header-row {
-        flex-direction: row;
-        align-items: flex-start;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
     }
     .es-view-more-btn {
+        position: static;
+        transform: none;
         padding: 0.55rem 1.1rem;
         font-size: 0.82rem;
+    }
+    .es-view-more-btn:hover {
+        transform: translateY(-2px);
     }
 }

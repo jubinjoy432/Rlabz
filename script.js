@@ -2933,42 +2933,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalDesc = document.getElementById('es-modal-desc');
     const modalYear = document.getElementById('es-modal-year');
     const modalTech = document.getElementById('es-modal-tech');
-    const modalIcon = document.getElementById('es-modal-icon');
+    const modalTeam = document.getElementById('es-modal-team');
     
+    // We keep static data for preview purposes until the fetch API is fully integrated
     const projectData = {
         'euphoria': {
             title: 'Launch of Euphoria',
             year: '2019',
             desc: 'Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience. We set a new standard for college festivals with cutting edge technology integration.',
-            icon: '<i class="fa-solid fa-rocket"></i>',
+            team: [{name: 'Alice S.', photo: 'images/rz-logo.webp'}, {name: 'Bob J.', photo: 'images/rz-logo.webp'}],
             tech: ['Event Management', 'TechFest', 'Innovation']
         },
         'campuscon': {
             title: 'CampusCon Initiative',
             year: '2020',
             desc: 'A major step towards integrating advanced campus networking solutions and fostering digital education. This initiative paved the way for seamless communication across departments.',
-            icon: '<i class="fa-solid fa-network-wired"></i>',
+            team: [{name: 'Charlie D.', photo: 'images/rz-logo.webp'}],
             tech: ['Networking', 'Education', 'Infrastructure']
         },
         'ctrm': {
             title: 'CTRM Deployment',
             year: '2021',
             desc: 'Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity. This unified system replaced dozens of legacy tools.',
-            icon: '<i class="fa-solid fa-server"></i>',
+            team: [{name: 'Diana P.', photo: 'images/rz-logo.webp'}],
             tech: ['Enterprise Software', 'Management', 'System Integration']
         },
         'fesbud': {
             title: 'Fesbud Platform',
             year: '2023',
             desc: 'A budget management and financial tracking system designed specifically for our complex ecosystem. It allows real-time tracking of expenses and resource allocation.',
-            icon: '<i class="fa-solid fa-wallet"></i>',
+            team: [{name: 'Evan R.', photo: 'images/rz-logo.webp'}, {name: 'Fiona M.', photo: 'images/rz-logo.webp'}],
             tech: ['FinTech', 'Budgeting', 'Analytics']
         },
         'arkon': {
             title: 'Arkon Expansion',
             year: '2025',
             desc: 'Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization. Arkon provides a scalable foundation for future AI projects.',
-            icon: '<i class="fa-solid fa-microchip"></i>',
+            team: [{name: 'George H.', photo: 'images/rz-logo.webp'}],
             tech: ['AI', 'Cloud Native', 'Modernization']
         }
     };
@@ -2983,17 +2984,34 @@ document.addEventListener('DOMContentLoaded', () => {
         modalTitle.textContent = data.title;
         modalDesc.textContent = data.desc;
         modalYear.textContent = data.year;
-        modalIcon.innerHTML = data.icon;
+        
+        // Populate Team Members
+        if (modalTeam) {
+            modalTeam.innerHTML = '';
+            if (data.team && data.team.length) {
+                data.team.forEach(member => {
+                    const memberDiv = document.createElement('div');
+                    memberDiv.className = 'es-team-member';
+                    memberDiv.innerHTML = `
+                        <img src="${member.photo}" alt="${member.name}" class="es-team-photo" onerror="this.src='images/rz-logo.webp'">
+                        <span class="es-team-name">${member.name}</span>
+                    `;
+                    modalTeam.appendChild(memberDiv);
+                });
+            }
+        }
         
         // Populate tech badges
-        modalTech.innerHTML = '';
-        if (data.tech && data.tech.length) {
-            data.tech.forEach(t => {
-                const badge = document.createElement('span');
-                badge.className = 'es-tech-badge';
-                badge.textContent = t;
-                modalTech.appendChild(badge);
-            });
+        if (modalTech) {
+            modalTech.innerHTML = '';
+            if (data.tech && data.tech.length) {
+                data.tech.forEach(t => {
+                    const badge = document.createElement('span');
+                    badge.className = 'es-tech-badge';
+                    badge.textContent = t;
+                    modalTech.appendChild(badge);
+                });
+            }
         }
         
         modal.classList.add('is-open');
