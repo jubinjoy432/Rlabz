@@ -2520,87 +2520,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// =========================================
-// OUR WORKS SECTION - PARALLAX SCROLL EFFECT
-// =========================================
-(function () {
-    const ourWorks = document.getElementById('our-works');
-    const whatWeDo = document.getElementById('what-we-do');
-    if (!ourWorks || !whatWeDo) return;
-
-    // Apply initial CSS to create clip-path / translateY reveal
-    Object.assign(ourWorks.style, {
-        position: 'relative',
-        willChange: 'transform',
-        transition: 'none'
-    });
-
-    let _th_ow = 0;
-    function onParallaxScroll() {
-        if (window.innerWidth < 768) { _th_ow++; if (_th_ow % 3 !== 0) return; }
-        const wwdRect = whatWeDo.getBoundingClientRect();
-        const owRect = ourWorks.getBoundingClientRect();
-
-        // How far the previous section has scrolled past the viewport top
-        const scrolled = -wwdRect.top;
-        const sectionHeight = whatWeDo.offsetHeight;
-
-        // Clamp progress 0 → 1 while user scrolls through `what-we-do`
-        const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
-
-        // Parallax: section starts 80px below its natural position and rises to 0
-        const translateY = (1 - progress) * 80;
-
-        // Opacity: fade in from 0.4 → 1
-        const opacity = 0.4 + progress * 0.6;
-
-        // Scale: subtle zoom from 0.97 → 1
-        const scale = 0.97 + progress * 0.03;
-
-        ourWorks.style.transform = `translateY(${translateY}px) scale(${scale})`;
-        ourWorks.style.opacity = opacity;
-    }
-
-    window.addEventListener('scroll', onParallaxScroll, { passive: true });
-    onParallaxScroll(); // Run once on load
-})();
-// =========================================
-// OUR WORKS - HEADING SCROLL PARALLAX (kept)
-// =========================================
-(function () {
-    function initHeadingParallax() {
-        const heading = document.querySelector('#our-works .section-header');
-        if (!heading) return;
-
-        let ticking = false;
-
-        let _th_head = 0;
-        function applyHeadingParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    ticking = false;
-                    if (window.innerWidth < 768) { _th_head++; if (_th_head % 3 !== 0) return; }
-                    const rect = heading.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.08;
-                    heading.style.transform = `translateY(${translateY}px)`;
-                    heading.style.willChange = 'transform';
-                });
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', applyHeadingParallax, { passive: true });
-        applyHeadingParallax();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHeadingParallax);
-    } else {
-        initHeadingParallax();
-    }
-})();
+// NOTE: The old native-scroll parallax handlers for #our-works were removed.
+// They conflicted with GSAP ScrollTrigger pin — once GSAP pinned the section
+// (position: fixed), getBoundingClientRect() on #what-we-do gave wrong values,
+// causing opacity to lock at 0.4 and translateY to shift 80px down.
+// The GSAP entrance animation (scale + glide) handles the reveal instead.
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
@@ -2770,158 +2694,217 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// --- Elfsight Horizontal Carousel Timeline ---
+// --- Custom Curved Horizontal Scrolling Timeline (GSAP + ScrollTrigger) ---
 document.addEventListener('DOMContentLoaded', () => {
-    const sliderViewport = document.getElementById('es-slider-viewport');
-    const sliderTrack = document.getElementById('es-slider-track');
-    const cards = document.querySelectorAll('.es-card');
-    const dots = document.querySelectorAll('.es-dot-item');
-    const prevBtn = document.getElementById('es-nav-prev');
-    const nextBtn = document.getElementById('es-nav-next');
-    
-    if (!sliderViewport || !sliderTrack || cards.length === 0) return;
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    let currentIndex = 0;
-    const totalCards = cards.length;
-    let isDragging = false;
-    let startX = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-    let animationID;
-    let autoPlayInterval;
+    gsap.registerPlugin(ScrollTrigger);
 
-    function getCardWidth() {
-        return cards[0].getBoundingClientRect().width;
+    const pinContainer = document.querySelector('.timeline-pin-container');
+    const scrollContent = document.querySelector('.timeline-scroll-content');
+
+    if (!pinContainer || !scrollContent) return;
+
+    // --- Section Title: scroll-scrubbed glide up ---
+    const worksTitle = document.querySelector('#our-works .section-title');
+    if (worksTitle) {
+        // Start tiny & far below — rocket up energetically as section enters view
+        gsap.fromTo(worksTitle,
+            { opacity: 0, y: 140, scale: 0.35, transformOrigin: 'center bottom' },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                ease: 'power4.out',
+                scrollTrigger: {
+                    trigger: '#our-works',
+                    start: 'top 100%',  // fire as soon as section enters viewport bottom
+                    end:   'top 30%',   // complete quickly — energetic, not slow
+                    scrub: 0.6,         // tight scrub = snappy, physical feel
+                }
+            }
+        );
     }
 
-    function updateTimeline() {
-        const cardWidth = getCardWidth();
-        currentTranslate = currentIndex * -cardWidth;
-        prevTranslate = currentTranslate;
-        
-        sliderTrack.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
-        sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-        
-        // Update dots
-        dots.forEach((dot, index) => {
-            if (index === currentIndex) {
-                dot.classList.add('active');
+    // --- Dark Card Entrance: glide up from slightly below ---
+    gsap.set(pinContainer, { opacity: 0, y: 60 });
+    gsap.to(pinContainer, {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        ease: 'expo.out',
+        delay: 0.15,
+        onComplete: () => gsap.set(pinContainer, { clearProps: 'all' }),
+        scrollTrigger: {
+            trigger: '#our-works',
+            start: 'top 85%',
+            once: true
+        }
+    });
+
+    // Only apply horizontal pinning scroll on desktop (width > 992px)
+    let timelineCtx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 993px)", () => {
+            const containerWidth = pinContainer.offsetWidth;
+            const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
+
+            const cards = gsap.utils.toArray('.timeline-card');
+            const nodes = gsap.utils.toArray('.timeline-node');
+
+            if (totalScrollDistance > 0) {
+                // Screen is narrower than content, enable horizontal scroll
+                const scrollTween = gsap.to(scrollContent, {
+                    x: -totalScrollDistance,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#our-works',
+                        pin: true,
+                        scrub: 1,
+                        start: 'top top',
+                        end: () => `+=${totalScrollDistance + 1000}`,
+                        invalidateOnRefresh: true,
+                        onRefresh: (self) => {
+                            if (self.spacer) {
+                                self.spacer.style.backgroundColor = '#f8fafc';
+                            }
+                        }
+                    }
+                });
+
+                // Card and Node Reveal Animations (container-bound scrollTrigger)
+                cards.forEach((card, index) => {
+                    const node = nodes[index];
+                    const isTop = card.classList.contains('card-top');
+                    const startY = isTop ? -40 : 40;
+
+                    gsap.fromTo(card,
+                        { opacity: 0, y: startY },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            ease: 'power2.out',
+                            scrollTrigger: {
+                                trigger: node,
+                                containerAnimation: scrollTween,
+                                start: 'left 70%',
+                                end: 'left 40%',
+                                scrub: true
+                            }
+                        }
+                    );
+                });
+
+                nodes.forEach((node) => {
+                    gsap.fromTo(node,
+                        { opacity: 0, scale: 0.5 },
+                        {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.8,
+                            ease: 'back.out(1.7)',
+                            scrollTrigger: {
+                                trigger: node,
+                                containerAnimation: scrollTween,
+                                start: 'left 95%',
+                                end: 'left 65%',
+                                scrub: true
+                            }
+                        }
+                    );
+                });
             } else {
-                dot.classList.remove('active');
+                // Screen is wide enough to show all 1500px, no horizontal scroll needed
+                nodes.forEach((node, index) => {
+                    gsap.fromTo(node,
+                        { opacity: 0, scale: 0.5 },
+                        {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.8,
+                            delay: index * 0.1,
+                            ease: 'back.out(1.7)',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 60%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
+
+                cards.forEach((card, index) => {
+                    const isTop = card.classList.contains('card-top');
+                    const startY = isTop ? -40 : 40;
+                    gsap.fromTo(card,
+                        { opacity: 0, y: startY },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            delay: index * 0.1 + 0.3,
+                            ease: 'power2.out',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 60%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
             }
         });
-    }
+        
+        // Mobile fallback (GSAP does not pin or translate horizontally, let CSS handle it)
+        mm.add("(max-width: 992px)", () => {
+            const cards = gsap.utils.toArray('.timeline-card');
+            const nodes = gsap.utils.toArray('.timeline-node');
 
-    function nextSlide() {
-        if (currentIndex < totalCards - 1) {
-            currentIndex++;
-        } else {
-            currentIndex = 0; // Loop back
-        }
-        updateTimeline();
-    }
+            cards.forEach((card, index) => {
+                const node = nodes[index];
+                gsap.fromTo(card,
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: node,
+                            start: 'top 55%',
+                            end: 'top 45%',
+                            scrub: true
+                        }
+                    }
+                );
+            });
 
-    function prevSlide() {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = totalCards - 1; // Loop to end
-        }
-        updateTimeline();
-    }
-
-    // Auto Play
-    function startAutoPlay() {
-        autoPlayInterval = setInterval(nextSlide, 5000);
-    }
-
-    function stopAutoPlay() {
-        clearInterval(autoPlayInterval);
-    }
-
-    // Event Listeners for Buttons
-    if (nextBtn) nextBtn.addEventListener('click', () => {
-        nextSlide();
-        stopAutoPlay();
-        startAutoPlay(); // Reset timer
-    });
-    
-    if (prevBtn) prevBtn.addEventListener('click', () => {
-        prevSlide();
-        stopAutoPlay();
-        startAutoPlay(); // Reset timer
-    });
-
-    // Event Listeners for Dots
-    dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-            currentIndex = parseInt(dot.getAttribute('data-index'));
-            updateTimeline();
-            stopAutoPlay();
-            startAutoPlay();
+            nodes.forEach((node) => {
+                gsap.fromTo(node,
+                    { opacity: 0, scale: 0.6 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.6,
+                        ease: 'back.out(1.5)',
+                        scrollTrigger: {
+                            trigger: node,
+                            start: 'top 85%',
+                            end: 'top 65%',
+                            scrub: true
+                        }
+                    }
+                );
+            });
         });
     });
 
-    // Drag / Swipe functionality
-    function touchStart(event) {
-        isDragging = true;
-        startX = getPositionX(event);
-        animationID = requestAnimationFrame(animation);
-        sliderTrack.style.transition = 'none'; // Disable transition while dragging
-        stopAutoPlay();
-    }
-
-    function touchEnd() {
-        if (!isDragging) return;
-        isDragging = false;
-        cancelAnimationFrame(animationID);
-        
-        const cardWidth = getCardWidth();
-        const movedBy = currentTranslate - prevTranslate;
-        
-        // Snap to next/prev if moved enough
-        if (movedBy < -100 && currentIndex < totalCards - 1) currentIndex += 1;
-        if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
-        
-        updateTimeline();
-        startAutoPlay();
-    }
-
-    function touchMove(event) {
-        if (isDragging) {
-            const currentPosition = getPositionX(event);
-            currentTranslate = prevTranslate + currentPosition - startX;
-        }
-    }
-
-    function getPositionX(event) {
-        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-    }
-
-    function animation() {
-        sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
-        if (isDragging) requestAnimationFrame(animation);
-    }
-
-    // Touch events
-    sliderViewport.addEventListener('touchstart', touchStart);
-    sliderViewport.addEventListener('touchend', touchEnd);
-    sliderViewport.addEventListener('touchmove', touchMove);
-
-    // Mouse events
-    sliderViewport.addEventListener('mousedown', touchStart);
-    sliderViewport.addEventListener('mouseup', touchEnd);
-    sliderViewport.addEventListener('mouseleave', touchEnd);
-    sliderViewport.addEventListener('mousemove', touchMove);
-
-    // Handle Window Resize
-    window.addEventListener('resize', () => {
-        updateTimeline();
+    // Cleanup on window unload
+    window.addEventListener('unload', () => {
+        timelineCtx.revert();
     });
-
-    // Initialize
-    updateTimeline();
-    startAutoPlay();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -2974,7 +2957,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const learnMoreBtns = document.querySelectorAll('.es-learn-more');
+    // Event delegation is used below instead of static selection
     
     function openModal(projectId) {
         if (!modal || !projectData[projectId]) return;
@@ -3021,12 +3004,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modal) modal.classList.remove('is-open');
     }
 
-    learnMoreBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.es-learn-more');
+        if (btn) {
             e.preventDefault();
             const projectId = btn.getAttribute('data-project');
             openModal(projectId);
-        });
+        }
     });
 
     if (modalClose) modalClose.addEventListener('click', closeModal);
