@@ -242,22 +242,27 @@
             <div class="timeline-scroll-wrapper">
                 <div class="timeline-scroll-content">
                                         <!-- SVG CURVY ROAD PATH LAYER -->
-                    <svg class="timeline-svg-path" viewBox="0 0 6960 520" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="timeline-svg-path" viewBox="0 0 7800 520" xmlns="http://www.w3.org/2000/svg">
                         <defs>
-                            <path id="road-path" d="M 0 250 C 80 250 150 340 240 340 C 350 340 390 160 500 160 C 610 160 650 340 760 340 C 870 340 910 160 1020 160 C 1130 160 1170 340 1280 340 C 1390 340 1430 160 1540 160 C 1650 160 1690 340 1800 340 C 1910 340 1950 160 2060 160 C 2170 160 2210 340 2320 340 C 2430 340 2470 160 2580 160 C 2690 160 2730 340 2840 340 C 2950 340 2990 160 3100 160 C 3210 160 3250 340 3360 340 C 3470 340 3510 160 3620 160 C 3730 160 3770 340 3880 340 C 3990 340 4030 160 4140 160 C 4250 160 4290 340 4400 340 C 4510 340 4550 160 4660 160 C 4770 160 4810 340 4920 340 C 5030 340 5070 160 5180 160 C 5290 160 5330 340 5440 340 C 5550 340 5590 160 5700 160 C 5810 160 5850 340 5960 340 C 6070 340 6110 160 6220 160 C 6330 160 6370 340 6480 340 C 6590 340 6630 160 6740 160 C 6850 160 6900 250 6960 250" />
+                            <path id="road-path" d="M 0 250 C 80 250 150 340 240 340 C 350 340 390 160 500 160 C 610 160 650 340 760 340 C 870 340 910 160 1020 160 C 1130 160 1170 340 1280 340 C 1390 340 1430 160 1540 160 C 1650 160 1690 340 1800 340 C 1910 340 1950 160 2060 160 C 2170 160 2210 340 2320 340 C 2430 340 2470 160 2580 160 C 2690 160 2730 340 2840 340 C 2950 340 2990 160 3100 160 C 3210 160 3250 340 3360 340 C 3470 340 3510 160 3620 160 C 3730 160 3770 340 3880 340 C 3990 340 4030 160 4140 160 C 4250 160 4290 340 4400 340 C 4510 340 4550 160 4660 160 C 4770 160 4810 340 4920 340 C 5030 340 5070 160 5180 160 C 5290 160 5330 340 5440 340 C 5550 340 5590 160 5700 160 C 5810 160 5850 340 5960 340 C 6070 340 6110 160 6220 160 C 6330 160 6370 340 6480 340 C 6590 340 6630 160 6740 160 C 6850 160 6900 250 6960 250 L 7800 250" />
+                            <mask id="road-mask" maskUnits="userSpaceOnUse" x="-500" y="-500" width="8800" height="1500">
+                                <use href="#road-path" fill="none" stroke="white" stroke-width="150" id="road-mask-path" />
+                            </mask>
                         </defs>
                         
-                        <!-- Simple Drop Shadow Layer (No complex SVG filters) -->
-                        <use href="#road-path" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="64" style="transform: translateY(6px);" />
-                        
-                        <!-- Outer White Border -->
-                        <use href="#road-path" fill="none" stroke="#ffffff" stroke-width="64" />
-                        
-                        <!-- Inner Dark Asphalt -->
-                        <use href="#road-path" fill="none" stroke="#2c313c" stroke-width="56" />
+                        <g mask="url(#road-mask)">
+                            <!-- Simple Drop Shadow Layer (No complex SVG filters) -->
+                            <use href="#road-path" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="64" style="transform: translateY(6px);" />
+                            
+                            <!-- Outer White Border -->
+                            <use href="#road-path" fill="none" stroke="#ffffff" stroke-width="64" />
+                            
+                            <!-- Inner Dark Asphalt -->
+                            <use href="#road-path" fill="none" stroke="#2c313c" stroke-width="56" />
 
-                        <!-- Center White Dashed Line -->
-                        <use href="#road-path" fill="none" stroke="#ffffff" stroke-width="4" stroke-dasharray="15, 20" />
+                            <!-- Center White Dashed Line -->
+                            <use href="#road-path" fill="none" stroke="#ffffff" stroke-width="4" stroke-dasharray="15, 20" />
+                        </g>
                     </svg>
 
                     <!-- ==================== TIMELINE NODES ==================== -->

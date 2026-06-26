@@ -8530,7 +8530,7 @@ html.lenis body {
 
 .timeline-scroll-content {
     position: relative;
-    width: 6960px;
+    width: 7800px;
     height: 520px;
     display: flex;
     align-items: center;
@@ -8542,7 +8542,7 @@ html.lenis body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 6960px;
+    width: 7800px;
     height: 520px;
     overflow: visible;
     pointer-events: none;

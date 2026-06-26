@@ -2773,47 +2773,115 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // Card and Node Reveal Animations (container-bound scrollTrigger)
+                // --- Dynamic Road Drawing Animation ---
+                const maskPath = document.querySelector('#road-mask-path');
+                if (maskPath) {
+                    const pathEl = document.querySelector('#road-path');
+                    const pathLen = pathEl.getTotalLength();
+                    maskPath.style.strokeDasharray = pathLen;
+                    
+                    // Ratio to estimate physical horizontal pixels to arc length
+                    const ratio = pathLen / 7800;
+                    // The tip of the road will lead the viewport by 85% of screen width
+                    const initialDrawLen = (containerWidth * 0.85) * ratio;
+
+                    // Tween 1: Draw the initial road segment as the section enters vertically
+                    gsap.fromTo(maskPath,
+                        { strokeDashoffset: pathLen },
+                        {
+                            strokeDashoffset: pathLen - initialDrawLen,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 80%',
+                                end: 'top top',
+                                scrub: 1
+                            }
+                        }
+                    );
+
+                    // Tween 2: Draw the rest of the road as the section scrolls horizontally
+                    gsap.fromTo(maskPath,
+                        { strokeDashoffset: pathLen - initialDrawLen },
+                        {
+                            strokeDashoffset: 0,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top top',
+                                end: () => `+=${totalScrollDistance + 1000}`,
+                                scrub: 1
+                            }
+                        }
+                    );
+                }
+
+                // --- Node and Card Reveal tied to Road Drawing ---
                 cards.forEach((card, index) => {
                     const node = nodes[index];
                     const isTop = card.classList.contains('card-top');
                     const startY = isTop ? -40 : 40;
+                    const nodeLeft = parseFloat(node.style.left || 0);
 
-                    gsap.fromTo(card,
-                        { opacity: 0, y: startY },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1,
-                            ease: 'power2.out',
-                            scrollTrigger: {
-                                trigger: node,
-                                containerAnimation: scrollTween,
-                                start: 'left 70%',
-                                end: 'left 40%',
-                                scrub: true
+                    if (nodeLeft < containerWidth * 0.85) {
+                        // Node is in the initial viewport: Reveal during vertical entrance
+                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 0.85)) * 80;
+                        
+                        // Node pops in
+                        gsap.fromTo(node,
+                            { opacity: 0, scale: 0.5 },
+                            {
+                                opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)',
+                                scrollTrigger: {
+                                    trigger: '#our-works',
+                                    start: `top ${triggerPercent + 5}%`, // slightly after road passes
+                                    toggleActions: 'play none none reverse'
+                                }
                             }
-                        }
-                    );
-                });
-
-                nodes.forEach((node) => {
-                    gsap.fromTo(node,
-                        { opacity: 0, scale: 0.5 },
-                        {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.8,
-                            ease: 'back.out(1.7)',
-                            scrollTrigger: {
-                                trigger: node,
-                                containerAnimation: scrollTween,
-                                start: 'left 95%',
-                                end: 'left 65%',
-                                scrub: true
+                        );
+                        // Card slides in
+                        gsap.fromTo(card,
+                            { opacity: 0, y: startY },
+                            {
+                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: '#our-works',
+                                    start: `top ${triggerPercent}%`,
+                                    end: `top ${triggerPercent - 10}%`,
+                                    scrub: true
+                                }
                             }
-                        }
-                    );
+                        );
+                    } else {
+                        // Node is outside initial viewport: Reveal during horizontal scroll
+                        // Node pops in when it crosses the 85% mark (right as the road tip hits it)
+                        gsap.fromTo(node,
+                            { opacity: 0, scale: 0.5 },
+                            {
+                                opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)',
+                                scrollTrigger: {
+                                    trigger: node,
+                                    containerAnimation: scrollTween,
+                                    start: 'left 85%', 
+                                    toggleActions: 'play none none reverse'
+                                }
+                            }
+                        );
+                        // Card slides in shortly after
+                        gsap.fromTo(card,
+                            { opacity: 0, y: startY },
+                            {
+                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: node,
+                                    containerAnimation: scrollTween,
+                                    start: 'left 80%',
+                                    end: 'left 55%',
+                                    scrub: true
+                                }
+                            }
+                        );
+                    }
                 });
             } else {
                 // Screen is wide enough to show all 1500px, no horizontal scroll needed
