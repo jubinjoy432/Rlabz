@@ -8672,6 +8672,7 @@ html.lenis body {
     color: rgba(255, 255, 255, 0.45);
     letter-spacing: 1.5px;
     margin-bottom: 0.3rem;
+    padding-right: 40px;
 }
 
 .card-title {
@@ -8683,6 +8684,7 @@ html.lenis body {
     margin-bottom: 0.25rem;
     background: none !important;
     line-height: 1.25;
+    padding-right: 40px;
 }
 
 .card-desc {
@@ -8692,9 +8694,42 @@ html.lenis body {
     margin-bottom: 0.5rem;
 }
 
-/* Card Actions */
 .card-actions {
-    display: flex;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.timeline-arrow-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.timeline-arrow-link:hover {
+    background: var(--primary-color, #2563eb);
+    border-color: var(--primary-color, #2563eb);
+    transform: translateX(4px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    color: #fff;
+}
+
+.timeline-arrow-link i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.timeline-arrow-link:hover i {
+    transform: translateX(2px);
 }
 
 /* Borders & Shadow Themes */
