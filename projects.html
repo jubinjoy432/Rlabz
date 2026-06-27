@@ -4,20 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Projects - RLabz</title>
+    <title>Project Repository - RLabz</title>
+    <meta name="description" content="Explore the complete portfolio of projects developed under RLabz — web applications, mobile apps, and platforms built by students and faculty.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
-        onload="this.media='all'">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-
+    <link rel="stylesheet" href="projects-page.css">
 </head>
 
 <body>
@@ -52,29 +50,100 @@
         </div>
     </nav>
 
-    <!-- Projects Section -->
-    <section class="elfsight-timeline-section" style="min-height: 100vh; padding-top: 150px;">
-        <div class="container">
-            <header class="section-header">
-                <h1 class="section-title" style="font-size: 3.5rem;">All Projects</h1>
-                <p style="color: rgba(255,255,255,0.7); font-size: 1.2rem; text-align: center; max-width: 600px; margin: 0 auto 3rem;">
-                    Discover our extensive portfolio of projects completed under RLabz.
-                </p>
-            </header>
+    <!-- Projects Page Content -->
+    <div class="projects-page-wrapper">
 
-            <div class="es-timeline-wrapper">
-                <!-- Placeholder for future database-driven content -->
-                <div style="background: rgba(2, 12, 42, 0.3); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 4rem; text-align: center;">
-                    <i class="fa-solid fa-database" style="font-size: 3rem; color: #7dd3fc; margin-bottom: 1.5rem;"></i>
-                    <h3 style="color: white; font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; margin-bottom: 1rem;">Dynamic Project Gallery</h3>
-                    <p style="color: rgba(255,255,255,0.6); margin-bottom: 2rem;">This section will be populated dynamically from our database in the future.</p>
-                    <a href="index.html#our-works" class="es-btn es-btn-primary"><i class="fa-solid fa-arrow-left"></i> Back to Main Site</a>
+        <!-- Page Hero -->
+        <section class="projects-hero">
+            <div class="projects-hero-badge">
+                <i class="fa-solid fa-folder-open"></i>
+                Project Repository
+            </div>
+            <h1>Explore Our <span>Projects</span></h1>
+            <p class="projects-hero-subtitle">
+                Discover the complete portfolio of innovative projects built under RLabz —
+                from web platforms and mobile apps to enterprise solutions.
+            </p>
+        </section>
+
+        <!-- Search & Filters -->
+        <div class="projects-filter-bar">
+            <div class="projects-search-row">
+                <div class="projects-search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="projectsSearchInput" class="projects-search-input"
+                        placeholder="Search by project title, student name, technology, or year...">
+                    <button id="projectsSearchClear" class="projects-search-clear" aria-label="Clear search">&times;</button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Script references -->
+            <div class="projects-filter-row">
+                <span class="filter-label">Filter by</span>
+
+                <!-- Year Filter -->
+                <div class="filter-dropdown">
+                    <button class="filter-dropdown-btn" type="button">
+                        <i class="fa-regular fa-calendar"></i> Year <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-menu" id="yearFilterMenu"></div>
+                </div>
+
+                <!-- Technology Filter -->
+                <div class="filter-dropdown">
+                    <button class="filter-dropdown-btn" type="button">
+                        <i class="fa-solid fa-code"></i> Technology <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-menu" id="techFilterMenu"></div>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="filter-dropdown">
+                    <button class="filter-dropdown-btn" type="button">
+                        <i class="fa-solid fa-layer-group"></i> Category <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-menu" id="categoryFilterMenu"></div>
+                </div>
+
+                <!-- Status Filter -->
+                <div class="filter-dropdown">
+                    <button class="filter-dropdown-btn" type="button">
+                        <i class="fa-solid fa-circle-check"></i> Status <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="filter-dropdown-menu" id="statusFilterMenu"></div>
+                </div>
+            </div>
+
+            <!-- Active Filters -->
+            <div class="active-filters" id="activeFiltersContainer"></div>
+        </div>
+
+        <!-- Results Info -->
+        <div class="projects-results-info">
+            <div class="projects-count" id="projectsResultsCount"></div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projectsGrid"></div>
+
+        <!-- Load More -->
+        <div class="projects-load-more-wrapper">
+            <button class="projects-load-more-btn" id="projectsLoadMore" type="button">
+                Load More Projects <i class="fa-solid fa-chevron-down"></i>
+            </button>
+        </div>
+
+        <!-- Back to Home -->
+        <div class="projects-back-home">
+            <a href="index.html" class="projects-back-link">
+                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Data & Scripts -->
+    <script src="projects-data.js"></script>
+    <script src="projects-page.js"></script>
     <script src="script.js"></script>
 </body>
 

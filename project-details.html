@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details — RLabz</title>
+    <meta name="description" content="Detailed view of a project developed under RLabz — including description, team, technologies, and gallery.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@300;500;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="project-details.css">
+</head>
+
+<body>
+    <!-- Premium Floating Navbar -->
+    <nav class="premium-nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">
+                <span class="brand-icon">
+                    <img src="images/rz-logo.webp" alt="RLabz Logo" class="logo-image">
+                </span>
+                <span class="brand-text"><span class="brand-green">R</span><span class="brand-blue">LabZ</span></span>
+            </a>
+            <div class="nav-links-container">
+                <span class="sliding-pill"></span>
+                <a href="index.html#hero-blue" class="nav-link">Home</a>
+                <a href="index.html#what-we-do" class="nav-link">Solutions</a>
+                <a href="projects.html" class="nav-link active">Projects</a>
+                <a href="index.html#client_form_section" class="nav-link">Clients</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="index.html#contactSection" class="nav-contact-btn">
+                    Contact Us <span class="nav-dot"></span>
+                </a>
+                <button class="menu-toggle-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 9H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M4 15H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="pd-page-wrapper" id="pdContentArea">
+
+        <!-- Hero Section -->
+        <section class="pd-hero">
+            <div class="pd-hero-banner" id="pdHeroBanner">
+                <img src="images/rz-logo.webp" alt="Project Banner">
+                <div class="pd-hero-overlay">
+                    <div class="pd-hero-meta" id="pdHeroMeta"></div>
+                    <h1 class="pd-hero-title" id="pdHeroTitle">Loading...</h1>
+                    <p class="pd-hero-tagline" id="pdHeroTagline"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Bar -->
+        <nav class="pd-nav-bar">
+            <div class="pd-nav-left">
+                <a href="projects.html" class="pd-nav-btn">
+                    <i class="fa-solid fa-grid-2"></i> All Projects
+                </a>
+            </div>
+            <div class="pd-nav-right">
+                <a href="#" class="pd-nav-btn disabled" id="pdPrevBtn">
+                    <i class="fa-solid fa-arrow-left"></i> Previous
+                </a>
+                <a href="#" class="pd-nav-btn disabled" id="pdNextBtn">
+                    Next <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Content Grid -->
+        <div class="pd-content">
+
+            <!-- Main Column -->
+            <div class="pd-main">
+
+                <!-- Overview Card -->
+                <div class="pd-card">
+                    <div class="pd-card-header blue">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <h3>Project Overview</h3>
+                    </div>
+                    <div class="pd-overview-content" id="pdOverview"></div>
+                </div>
+
+                <!-- Screenshots Card -->
+                <div class="pd-card" id="pdScreenshotsCard">
+                    <div class="pd-card-header purple">
+                        <i class="fa-solid fa-images"></i>
+                        <h3>Screenshots</h3>
+                    </div>
+                    <div class="pd-screenshots-grid" id="pdScreenshotsGrid"></div>
+                </div>
+
+                <!-- Features Card -->
+                <div class="pd-card" id="pdFeaturesCard">
+                    <div class="pd-card-header green">
+                        <i class="fa-solid fa-list-check"></i>
+                        <h3>Key Features</h3>
+                    </div>
+                    <div class="pd-features-grid" id="pdFeaturesGrid"></div>
+                </div>
+
+                <!-- Team Card -->
+                <div class="pd-card" id="pdTeamCard">
+                    <div class="pd-card-header amber">
+                        <i class="fa-solid fa-users"></i>
+                        <h3>Student Team</h3>
+                    </div>
+                    <div class="pd-team-grid" id="pdTeamGrid"></div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="pd-sidebar">
+
+                <!-- Technologies Card -->
+                <div class="pd-card">
+                    <div class="pd-card-header teal">
+                        <i class="fa-solid fa-microchip"></i>
+                        <h3>Technologies</h3>
+                    </div>
+                    <div class="pd-tech-grid" id="pdTechGrid"></div>
+                </div>
+
+                <!-- Project Information Card -->
+                <div class="pd-card">
+                    <div class="pd-card-header blue">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <h3>Project Information</h3>
+                    </div>
+                    <div class="pd-info-table" id="pdInfoTable"></div>
+                </div>
+
+                <!-- Faculty Card -->
+                <div class="pd-card" id="pdFacultyCard">
+                    <div class="pd-card-header rose">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <h3>Faculty Advisor</h3>
+                    </div>
+                    <div id="pdFacultyContent"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <nav class="pd-footer-nav">
+            <div class="pd-footer-nav-group">
+                <a href="#" class="pd-nav-btn disabled" id="pdFooterPrev">
+                    <i class="fa-solid fa-arrow-left"></i> Previous
+                </a>
+            </div>
+            <div class="pd-footer-nav-group">
+                <a href="projects.html" class="pd-nav-btn">
+                    <i class="fa-solid fa-grid-2"></i> All Projects
+                </a>
+            </div>
+            <div class="pd-footer-nav-group">
+                <a href="#" class="pd-nav-btn disabled" id="pdFooterNext">
+                    Next <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </nav>
+
+    </div>
+
+    <!-- Lightbox -->
+    <div class="pd-lightbox" id="pdLightbox">
+        <button class="pd-lightbox-close" id="pdLightboxClose" aria-label="Close lightbox">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <button class="pd-lightbox-prev" id="pdLightboxPrev" aria-label="Previous image">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <img class="pd-lightbox-img" id="pdLightboxImg" src="" alt="Screenshot">
+        <button class="pd-lightbox-next" id="pdLightboxNext" aria-label="Next image">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+        <div class="pd-lightbox-counter" id="pdLightboxCounter"></div>
+    </div>
+
+    <!-- Data & Scripts -->
+    <script src="projects-data.js"></script>
+    <script src="project-details.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

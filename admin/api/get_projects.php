@@ -1,38 +1,61 @@
 <?php
-// API endpoint to fetch projects as JSON
+session_start();
 header('Content-Type: application/json');
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
+}
+
 require_once 'db.php';
 
 try {
-    $stmt = $pdo->query("SELECT * FROM projects ORDER BY year ASC, id ASC");
-    $projects = $stmt->fetchAll();
-    
-    // Fetch all members to easily attach them
-    $stmtMembers = $pdo->query("SELECT * FROM project_members");
-    $allMembers = $stmtMembers->fetchAll();
-    
-    // Group members by project_id
+    // 1. Get all projects
+    $stmt = $pdo->query("SELECT * FROM projects ORDER BY year DESC, id DESC");
+    $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // 2. Get all members
+    $stmtMembers = $pdo->query("SELECT * FROM project_members ORDER BY project_id, id");
+    $members = $stmtMembers->fetchAll(PDO::FETCH_ASSOC);
+
+    // 3. Get all screenshots
+    $stmtScreenshots = $pdo->query("SELECT * FROM project_screenshots ORDER BY project_id, sort_order");
+    $screenshots = $stmtScreenshots->fetchAll(PDO::FETCH_ASSOC);
+
+    // 4. Organize members and screenshots by project ID
     $membersByProject = [];
-    foreach ($allMembers as $m) {
-        $membersByProject[$m['project_id']][] = [
-            'name' => $m['name'],
-            'photo' => $m['photo_path']
-        ];
+    foreach ($members as $m) {
+        $membersByProject[$m['project_id']][] = $m;
     }
 
-    // Convert tech_stack string to array and attach members
+    $screenshotsByProject = [];
+    foreach ($screenshots as $s) {
+        $screenshotsByProject[$s['project_id']][] = $s;
+    }
+
+    // 5. Attach members and screenshots to their projects, parse JSON arrays
     foreach ($projects as &$p) {
+        $p_id = $p['id'];
+        $p['team'] = $membersByProject[$p_id] ?? [];
+        $p['screenshots'] = $screenshotsByProject[$p_id] ?? [];
+        
+        // Ensure arrays are proper format
         if (!empty($p['tech_stack'])) {
             $p['tech'] = array_map('trim', explode(',', $p['tech_stack']));
         } else {
             $p['tech'] = [];
         }
-        $p['team'] = $membersByProject[$p['id']] ?? [];
+
+        if (!empty($p['key_features'])) {
+            $p['features'] = array_map('trim', explode(',', $p['key_features']));
+        } else {
+            $p['features'] = [];
+        }
     }
-    
-    echo json_encode(['success' => true, 'data' => $projects]);
+
+    echo json_encode($projects);
+
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);
 }
 ?>

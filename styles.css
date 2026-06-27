@@ -9360,3 +9360,56 @@ html.lenis body {
 }
 
 
+/* =====================================================
+   VIEW ALL PROJECTS CTA BUTTON (Homepage Timeline)
+   ===================================================== */
+.timeline-view-all-cta {
+    display: flex;
+    justify-content: center;
+    padding: 2.5rem 0 1rem;
+}
+
+.view-all-projects-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(139, 92, 246, 0.15));
+    border: 1.5px solid rgba(14, 165, 233, 0.35);
+    border-radius: 60px;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    letter-spacing: 0.3px;
+}
+
+.view-all-projects-btn:hover {
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.3), rgba(139, 92, 246, 0.3));
+    border-color: rgba(14, 165, 233, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -8px rgba(14, 165, 233, 0.25);
+}
+
+.view-all-projects-btn i {
+    transition: transform 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.view-all-projects-btn:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .timeline-view-all-cta {
+        padding: 2rem 1rem 0.5rem;
+    }
+    .view-all-projects-btn {
+        padding: 0.85rem 2rem;
+        font-size: 0.95rem;
+    }
+}
