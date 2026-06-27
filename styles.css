@@ -8496,11 +8496,14 @@ html.lenis body {
 }
 
 .horizontal-timeline-section .section-title {
-    font-family: var(--font-heading, \'Space Grotesk\', sans-serif);
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
     font-size: 2.9rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
     letter-spacing: -0.5px;
+    color: #0B3B70;
+    -webkit-text-fill-color: #0B3B70;
+    background: none;
 }
 
 /* ---- GSAP Pin Container ---- */
