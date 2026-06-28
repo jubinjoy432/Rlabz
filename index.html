@@ -234,8 +234,11 @@
          ===================================================== -->
     <section id="our-works" class="horizontal-timeline-section">
         <!-- Section header -->
-        <header class="section-header reveal-on-scroll es-section-header-row">
-            <h2 class="section-title">Our Projects</h2>
+        <header class="section-header reveal-on-scroll es-section-header-row" style="display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto 3rem; padding: 0 5%;">
+            <h2 class="section-title" style="margin-bottom: 0;">Our Projects</h2>
+            <a href="projects.html" class="view-all-projects-btn" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">
+                View All <i class="fa-solid fa-arrow-right"></i>
+            </a>
         </header>
         <!-- GSAP Pin Container -->
         <div class="timeline-pin-container">
@@ -557,13 +560,10 @@
                 </div>
             </div>
         </div>
-        <!-- View All Projects CTA -->
-        <div class="timeline-view-all-cta">
-            <a href="projects.html" class="view-all-projects-btn">
-                View All Projects <i class="fa-solid fa-arrow-right"></i>
-            </a>
-        </div>
-        <!-- Project detail modal -->
+        <!-- Removed View All Projects CTA from bottom -->
+    </section>
+
+    <!-- Project detail modal -->
         <div class="es-modal" id="es-modal" role="dialog" aria-modal="true" aria-labelledby="es-modal-title">
             <div class="es-modal-backdrop" id="es-modal-backdrop"></div>
             <div class="es-modal-box">

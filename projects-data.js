@@ -5,7 +5,7 @@
  * with dynamic API calls to admin/api/get_projects.php
  */
 
-let RLABZ_PROJECTS = [];
+window.RLABZ_PROJECTS = [];
 let projectsLoadedPromise = null;
 
 function fetchProjects() {
@@ -15,12 +15,12 @@ function fetchProjects() {
         .then(response => response.json())
         .then(data => {
             if(data && !data.error) {
-                RLABZ_PROJECTS = data;
+                window.RLABZ_PROJECTS = data;
             } else {
                 console.error('API Error:', data.error);
             }
             window.dispatchEvent(new Event('projectsLoaded'));
-            return RLABZ_PROJECTS;
+            return window.RLABZ_PROJECTS;
         })
         .catch(err => {
             console.error('Error loading projects from DB:', err);
@@ -35,7 +35,7 @@ fetchProjects();
 
 // Helper: Get all unique years
 function getProjectYears() {
-    const years = [...new Set(RLABZ_PROJECTS.map(p => p.year))];
+    const years = [...new Set(window.RLABZ_PROJECTS.map(p => p.year))];
     return years.sort((a, b) => {
         if (a === 'N/A') return -1;
         if (b === 'N/A') return 1;
@@ -46,31 +46,31 @@ function getProjectYears() {
 // Helper: Get all unique technologies
 function getProjectTechnologies() {
     const techs = new Set();
-    RLABZ_PROJECTS.forEach(p => p.tech.forEach(t => techs.add(t)));
+    window.RLABZ_PROJECTS.forEach(p => p.tech.forEach(t => techs.add(t)));
     return [...techs].sort();
 }
 
 // Helper: Get all unique categories
 function getProjectCategories() {
-    return [...new Set(RLABZ_PROJECTS.map(p => p.category))].sort();
+    return [...new Set(window.RLABZ_PROJECTS.map(p => p.category))].sort();
 }
 
 // Helper: Get all unique statuses
 function getProjectStatuses() {
-    return [...new Set(RLABZ_PROJECTS.map(p => p.status))].sort();
+    return [...new Set(window.RLABZ_PROJECTS.map(p => p.status))].sort();
 }
 
 // Helper: Find project by ID
 function getProjectById(id) {
-    return RLABZ_PROJECTS.find(p => p.id === id) || null;
+    return window.RLABZ_PROJECTS.find(p => p.id === id) || null;
 }
 
 // Helper: Get adjacent projects for prev/next navigation
 function getAdjacentProjects(id) {
-    const index = RLABZ_PROJECTS.findIndex(p => p.id === id);
+    const index = window.RLABZ_PROJECTS.findIndex(p => p.id === id);
     if (index === -1) return { prev: null, next: null };
     return {
-        prev: index > 0 ? RLABZ_PROJECTS[index - 1] : null,
-        next: index < RLABZ_PROJECTS.length - 1 ? RLABZ_PROJECTS[index + 1] : null
+        prev: index > 0 ? window.RLABZ_PROJECTS[index - 1] : null,
+        next: index < window.RLABZ_PROJECTS.length - 1 ? window.RLABZ_PROJECTS[index + 1] : null
     };
 }

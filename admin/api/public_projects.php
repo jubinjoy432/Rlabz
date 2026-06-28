@@ -21,7 +21,11 @@ try {
     // 4. Organize members and screenshots by project ID
     $membersByProject = [];
     foreach ($members as $m) {
-        $membersByProject[$m['project_id']][] = $m['name']; // Simplify for frontend compatibility
+        $membersByProject[$m['project_id']][] = [
+            'name' => $m['name'],
+            'role' => $m['role'],
+            'photo' => $m['photo_path']
+        ];
     }
 
     $screenshotsByProject = [];
