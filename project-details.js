@@ -6,7 +6,18 @@
 (function () {
     'use strict';
 
-    document.addEventListener('DOMContentLoaded', init);
+    // Initialize when data is ready
+    let initialized = false;
+    window.addEventListener('projectsLoaded', () => {
+        if (!initialized) {
+            initialized = true;
+            init();
+        }
+    });
+    if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !initialized) {
+        initialized = true;
+        init();
+    }
 
     function init() {
         const params = new URLSearchParams(window.location.search);

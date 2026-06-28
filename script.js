@@ -2695,7 +2695,102 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Custom Curved Horizontal Scrolling Timeline (GSAP + ScrollTrigger) ---
-document.addEventListener('DOMContentLoaded', () => {
+let timelineInitialized = false;
+window.addEventListener('projectsLoaded', () => {
+    if (timelineInitialized) return;
+    timelineInitialized = true;
+    buildDynamicTimeline();
+    initCurvedTimeline();
+});
+if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitialized) {
+    timelineInitialized = true;
+    buildDynamicTimeline();
+    initCurvedTimeline();
+}
+
+function buildDynamicTimeline() {
+    const scrollContent = document.querySelector('.timeline-scroll-content');
+    if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
+    
+    // Remove existing nodes and cards
+    const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
+    existing.forEach(el => el.remove());
+
+    const projects = window.RLABZ_PROJECTS;
+    
+    // Base X offset
+    let currentX = 240; 
+    let isBottom = true;
+
+    projects.forEach((proj, idx) => {
+        const top = isBottom ? 340 : 160;
+        const theme = isBottom ? 'teal' : 'purple';
+        
+        // Node
+        const node = document.createElement('div');
+        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} ${theme}-theme`;
+        node.style.left = `${currentX}px`;
+        node.style.top = `${top}px`;
+        node.innerHTML = `<div class="node-inner">${proj.year || 'N/A'}</div>`;
+        scrollContent.appendChild(node);
+        
+        // Card
+        const cardTop = isBottom ? 270 : 10;
+        const card = document.createElement('div');
+        card.className = `timeline-card card-${isBottom ? 'bottom' : 'top'} ${theme}-border`;
+        card.style.left = `${currentX + 165}px`;
+        card.style.top = `${cardTop}px`;
+        card.setAttribute('data-node', idx);
+        
+        card.innerHTML = `
+            <div class="card-year">${proj.year || 'N/A'}</div>
+            <h3 class="card-title">${proj.title}</h3>
+            <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
+            <div class="card-actions"><a href="project-details.html?id=${proj.id}" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+        `;
+        scrollContent.appendChild(card);
+        
+        currentX += 260;
+        isBottom = !isBottom;
+    });
+
+    // Update SVG Path
+    const svg = scrollContent.querySelector('svg.timeline-svg-path');
+    if (svg) {
+        const endX = currentX - 260; 
+        const newWidth = endX + 800; // Extra padding
+        svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
+        
+        // Generate the curvy path
+        let d = "M 0 250 C 80 250 150 340 240 340";
+        let curX = 240;
+        let atBottom = true;
+        
+        for (let i = 0; i < projects.length - 1; i++) {
+            if (atBottom) {
+                // curve to top
+                d += ` C ${curX + 110} 340 ${curX + 150} 160 ${curX + 260} 160`;
+            } else {
+                // curve to bottom
+                d += ` C ${curX + 110} 160 ${curX + 150} 340 ${curX + 260} 340`;
+            }
+            curX += 260;
+            atBottom = !atBottom;
+        }
+        
+        // Final line
+        let endY = atBottom ? 340 : 160;
+        d += ` C ${curX + 110} ${endY} ${curX + 160} 250 ${curX + 220} 250 L ${newWidth} 250`;
+        
+        const path1 = svg.querySelector('#road-path');
+        if (path1) path1.setAttribute('d', d);
+        
+        const mask = svg.querySelector('#road-mask');
+        if (mask) mask.setAttribute('width', newWidth + 1000);
+    }
+}
+
+function initCurvedTimeline() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
     gsap.registerPlugin(ScrollTrigger);
@@ -2973,7 +3068,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('unload', () => {
         timelineCtx.revert();
     });
-});
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elfsight Modal Logic ---

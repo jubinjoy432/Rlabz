@@ -12,8 +12,6 @@ try {
     // Set default fetch mode to associative array
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 } catch(PDOException $e) {
-    // TEMPORARY BYPASS: Instead of dying, just set $pdo to null so UI can preview
-    // die("Connection failed: " . $e->getMessage());
-    $pdo = null;
+    die("Connection failed: " . $e->getMessage());
 }
 ?>
