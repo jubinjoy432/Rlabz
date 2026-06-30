@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
         onload="this.media='all'">
     <link rel="stylesheet" href="styles.css">
+    <link rel='stylesheet' href='timeline-styles.css'>
 
 </head>
 
@@ -229,10 +230,10 @@
         </div>
     </section>
 
-    <!-- Have You Seen Our Works Section -->
+    <!-- Have You Seen Our Works Section - Animated Vertical Timeline -->
     <section id="our-works" class="rounded-section"
         style="background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%) !important;">
-        <!-- New Canvas for Background Animation -->
+        <!-- Canvas for Background Animation -->
         <canvas id="works-canvas"></canvas>
         <div class="container relative-z">
             <header class="section-header reveal-on-scroll">
@@ -241,19 +242,10 @@
                 <p class="subtitle">Explore our portfolio of cutting-edge projects.</p>
             </header>
 
-            <!-- Swiper Container -->
-            <div class="swiper" id="our-works-swiper">
-                <div class="swiper-wrapper" id="our-works-wrapper">
-                    <!-- Slides will be injected via JS -->
-                </div>
-
-                <!-- Navigation -->
-                <div class="swiper-button-prev glass-nav"></div>
-                <div class="swiper-button-next glass-nav"></div>
+            <!-- Vertical Timeline Container -->
+            <div id="timeline-container" class="timeline-container">
+                <!-- Timeline will be injected via JS -->
             </div>
-            <!-- Pagination outside of cards but inside container -->
-            <!-- Pagination outside of cards but inside container -->
-            <div class="swiper-pagination custom-pagination"></div>
         </div>
 
         <!-- Project Details Modal -->
