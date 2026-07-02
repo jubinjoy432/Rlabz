@@ -2735,7 +2735,12 @@ function buildDynamicTimeline() {
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    const projects = window.RLABZ_PROJECTS;
+    // Sort projects by year ascending (old to new)
+    const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
+        if (a.year === 'N/A' || !a.year) return -1;
+        if (b.year === 'N/A' || !b.year) return 1;
+        return parseInt(a.year) - parseInt(b.year);
+    });
     
     // Base X offset
     let currentX = 240; 
