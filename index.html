@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>What We Do - RLabz</title>
+    <title>RLabz</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -16,7 +16,7 @@
         media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
         onload="this.media='all'">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 
 </head>
 
@@ -36,7 +36,7 @@
                 <div class="spinner-ring ring-2"></div>
                 <div class="spinner-ring ring-3"></div>
                 <!-- Centered logo -->
-                <img src="images/rz-logo.webp" alt="RLabz Logo" class="spinner-logo">
+                <img src="assets/images/rz-logo.webp" alt="RLabz Logo" class="spinner-logo">
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
         <div class="nav-content">
             <a href="#" class="nav-logo">
                 <span class="brand-icon">
-                    <img src="images/rz-logo.webp" alt="RLabz Logo" class="logo-image">
+                    <img src="assets/images/rz-logo.webp" alt="RLabz Logo" class="logo-image">
                 </span>
                 <span class="brand-text"><span class="brand-green">R</span><span class="brand-blue">LabZ</span></span>
             </a>
@@ -236,7 +236,7 @@
         <!-- Section header -->
         <header class="section-header reveal-on-scroll es-section-header-row" style="position: relative; display: flex; justify-content: center; align-items: center; max-width: 1400px; margin: 0 auto 3rem; padding: 0 5%;">
             <h2 class="section-title" style="margin-bottom: 0;">Our Projects</h2>
-            <a href="projects.html" class="view-all-projects-btn" style="position: absolute; right: 5%; padding: 0.6rem 1.5rem; font-size: 0.9rem;">
+            <a href="public/projects.html" class="view-all-projects-btn" style="position: absolute; right: 5%; padding: 0.6rem 1.5rem; font-size: 0.9rem;">
                 View All <i class="fa-solid fa-arrow-right"></i>
             </a>
         </header>
@@ -248,12 +248,12 @@
                     <svg class="timeline-svg-path" viewBox="0 0 7800 520" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <path id="road-path" d="M 0 250 C 80 250 150 340 240 340 C 350 340 390 160 500 160 C 610 160 650 340 760 340 C 870 340 910 160 1020 160 C 1130 160 1170 340 1280 340 C 1390 340 1430 160 1540 160 C 1650 160 1690 340 1800 340 C 1910 340 1950 160 2060 160 C 2170 160 2210 340 2320 340 C 2430 340 2470 160 2580 160 C 2690 160 2730 340 2840 340 C 2950 340 2990 160 3100 160 C 3210 160 3250 340 3360 340 C 3470 340 3510 160 3620 160 C 3730 160 3770 340 3880 340 C 3990 340 4030 160 4140 160 C 4250 160 4290 340 4400 340 C 4510 340 4550 160 4660 160 C 4770 160 4810 340 4920 340 C 5030 340 5070 160 5180 160 C 5290 160 5330 340 5440 340 C 5550 340 5590 160 5700 160 C 5810 160 5850 340 5960 340 C 6070 340 6110 160 6220 160 C 6330 160 6370 340 6480 340 C 6590 340 6630 160 6740 160 C 6850 160 6900 250 6960 250 L 7800 250" />
-                            <mask id="road-mask" maskUnits="userSpaceOnUse" x="-500" y="-500" width="8800" height="1500">
-                                <use href="#road-path" fill="none" stroke="white" stroke-width="150" id="road-mask-path" />
-                            </mask>
+                            <clipPath id="road-mask">
+                                <rect id="road-mask-path" x="0" y="-500" width="0" height="1500" />
+                            </clipPath>
                         </defs>
                         
-                        <g mask="url(#road-mask)">
+                        <g clip-path="url(#road-mask)">
                             <!-- Simple Drop Shadow Layer (No complex SVG filters) -->
                             <use href="#road-path" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="64" style="transform: translateY(6px);" />
                             
@@ -380,182 +380,182 @@
                         <div class="card-year">N/A</div>
                         <h3 class="card-title">ReX</h3>
                         <p class="card-desc">Comprehensive web platform developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3, and JavaScript.</p>
-                        <div class="card-actions"><a href="project-details.html?id=rex" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=rex" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 1 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 405px; top: 270px;" data-node="1">
                         <div class="card-year">2013</div>
                         <h3 class="card-title">Cocobies</h3>
                         <p class="card-desc">Innovative Android application developed for the RCSS MCA Department.</p>
-                        <div class="card-actions"><a href="project-details.html?id=cocobies" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=cocobies" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 2 -->
                     <div class="timeline-card card-top teal-border" style="left: 665px; top: 10px;" data-node="2">
                         <div class="card-year">2017</div>
                         <h3 class="card-title">Campus Connect</h3>
                         <p class="card-desc">Comprehensive web platform built with Python, Django, HTML5, CSS3, and JavaScript. Connects students, faculty, and administration.</p>
-                        <div class="card-actions"><a href="project-details.html?id=campus-connect-2017" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=campus-connect-2017" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 3 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 925px; top: 270px;" data-node="3">
                         <div class="card-year">2017</div>
                         <h3 class="card-title">CTRM System</h3>
                         <p class="card-desc">Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3.</p>
-                        <div class="card-actions"><a href="project-details.html?id=ctrm" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=ctrm" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 4 -->
                     <div class="timeline-card card-top teal-border" style="left: 1185px; top: 10px;" data-node="4">
                         <div class="card-year">2017</div>
                         <h3 class="card-title">The Luke</h3>
                         <p class="card-desc">Professional event management website built with HTML5, CSS3, and JavaScript for The Luke Event Management company.</p>
-                        <div class="card-actions"><a href="project-details.html?id=theluke" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=theluke" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 5 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 1445px; top: 270px;" data-node="5">
                         <div class="card-year">2017</div>
                         <h3 class="card-title">Arkon Medical Systems</h3>
                         <p class="card-desc">Healthcare equipment platform built with HTML5, CSS3, JavaScript, and PHP offering comprehensive medical equipment systems.</p>
-                        <div class="card-actions"><a href="project-details.html?id=arkon-2017" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=arkon-2017" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 6 -->
                     <div class="timeline-card card-top teal-border" style="left: 1705px; top: 10px;" data-node="6">
                         <div class="card-year">2017</div>
                         <h3 class="card-title">Euphoria 2k17</h3>
                         <p class="card-desc">Cultural festival website built with HTML5, CSS3, JavaScript, and PHP for the RCSS MCA Department.</p>
-                        <div class="card-actions"><a href="project-details.html?id=euphoria-2k17" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=euphoria-2k17" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 7 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 1965px; top: 270px;" data-node="7">
                         <div class="card-year">2019</div>
                         <h3 class="card-title">RAJAGIRI OutREACH</h3>
                         <p class="card-desc">Web platform built with PHP, HTML5, CSS3, and JavaScript. Community outreach and social engagement platform for Rajagiri.</p>
-                        <div class="card-actions"><a href="project-details.html?id=outreach" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=outreach" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 8 -->
                     <div class="timeline-card card-top teal-border" style="left: 2225px; top: 10px;" data-node="8">
                         <div class="card-year">2019</div>
                         <h3 class="card-title">Splendore</h3>
                         <p class="card-desc">Website built with HTML5, CSS3, and JavaScript for the Rajagiri College of Social Sciences cultural festival.</p>
-                        <div class="card-actions"><a href="project-details.html?id=splendore-2019" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=splendore-2019" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 9 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 2485px; top: 270px;" data-node="9">
                         <div class="card-year">2020</div>
                         <h3 class="card-title">Fest Buddy</h3>
                         <p class="card-desc">Android application for managing college festivals and events developed for client Impress Project.</p>
-                        <div class="card-actions"><a href="project-details.html?id=fest-buddy" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=fest-buddy" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 10 -->
                     <div class="timeline-card card-top teal-border" style="left: 2745px; top: 10px;" data-node="10">
                         <div class="card-year">2024</div>
                         <h3 class="card-title">Euphoria Website</h3>
                         <p class="card-desc">Deployed Web Application. Official website developed for Euphoria event management and announcements.</p>
-                        <div class="card-actions"><a href="project-details.html?id=euphoria-2024" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=euphoria-2024" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 11 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 3005px; top: 270px;" data-node="11">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">Conference Website</h3>
                         <p class="card-desc">Deployed Web Application. Conference management portal supporting registrations, abstract submissions, and schedules.</p>
-                        <div class="card-actions"><a href="project-details.html?id=conference" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=conference" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 12 -->
                     <div class="timeline-card card-top teal-border" style="left: 3265px; top: 10px;" data-node="12">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">Splendore Website</h3>
                         <p class="card-desc">Deployed Web Application developed for Splendore by the Students Team under RLabZ.</p>
-                        <div class="card-actions"><a href="project-details.html?id=splendore-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=splendore-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 13 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 3525px; top: 270px;" data-node="13">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">Arkon Medical Systems</h3>
                         <p class="card-desc">Deployed Web Application. Medical equipment platform with product catalog and order management.</p>
-                        <div class="card-actions"><a href="project-details.html?id=arkon-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=arkon-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 14 -->
                     <div class="timeline-card card-top teal-border" style="left: 3785px; top: 10px;" data-node="14">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">DYUTI Content Mgmt</h3>
                         <p class="card-desc">Deployed Web Application. Content management system handled by RLabZ.</p>
-                        <div class="card-actions"><a href="project-details.html?id=dyuti" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=dyuti" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 15 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 4045px; top: 270px;" data-node="15">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">Sparc Mobile App</h3>
                         <p class="card-desc">Deployed Mobile Application developed for student and campus utility services.</p>
-                        <div class="card-actions"><a href="project-details.html?id=sparc" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=sparc" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 16 -->
                     <div class="timeline-card card-top teal-border" style="left: 4305px; top: 10px;" data-node="16">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">STUBA Platform</h3>
                         <p class="card-desc">Deployed Web Application. Student association management platform with communication and event modules.</p>
-                        <div class="card-actions"><a href="project-details.html?id=stuba" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=stuba" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 17 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 4565px; top: 270px;" data-node="17">
                         <div class="card-year">2025</div>
                         <h3 class="card-title">Campus Connect</h3>
                         <p class="card-desc">Deployed Web Application. Campus communication and collaboration platform for students and faculty.</p>
-                        <div class="card-actions"><a href="project-details.html?id=campus-connect-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=campus-connect-2025" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 18 -->
                     <div class="timeline-card card-top teal-border" style="left: 4825px; top: 10px;" data-node="18">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Sahrdaya Counselling</h3>
                         <p class="card-desc">Deployed Web Application. Secure counselling management platform with confidential records, role-based access.</p>
-                        <div class="card-actions"><a href="project-details.html?id=sahrdaya" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=sahrdaya" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 19 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 5085px; top: 270px;" data-node="19">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">RLabZ Website Revamp</h3>
                         <p class="card-desc">In Development. Official RLabZ website redesign with modern UI and improved project showcase features.</p>
-                        <div class="card-actions"><a href="project-details.html?id=rlabz-revamp" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=rlabz-revamp" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 20 -->
                     <div class="timeline-card card-top teal-border" style="left: 5345px; top: 10px;" data-node="20">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Mentoring App</h3>
                         <p class="card-desc">In Development Web Application. Mentorship platform connecting students with faculty mentors and progress tracking.</p>
-                        <div class="card-actions"><a href="project-details.html?id=mentoring" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=mentoring" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 21 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 5605px; top: 270px;" data-node="21">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Facility Booking App</h3>
                         <p class="card-desc">In Development Web Application. Online platform for booking campus facilities and managing schedules.</p>
-                        <div class="card-actions"><a href="project-details.html?id=booking" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=booking" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 22 -->
                     <div class="timeline-card card-top teal-border" style="left: 5865px; top: 10px;" data-node="22">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Blood Donation App</h3>
                         <p class="card-desc">In Development Mobile Application. Blood donor management system with donor registration and request tracking.</p>
-                        <div class="card-actions"><a href="project-details.html?id=blood" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=blood" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 23 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 6125px; top: 270px;" data-node="23">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Placement Analytics</h3>
                         <p class="card-desc">In Development Analytics Platform. Placement analytics dashboard with statistics, reports, and recruitment insights.</p>
-                        <div class="card-actions"><a href="project-details.html?id=placement" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=placement" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 24 -->
                     <div class="timeline-card card-top teal-border" style="left: 6385px; top: 10px;" data-node="24">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">ColabSphere</h3>
                         <p class="card-desc">In Development Web Application. Collaborative workspace and project management platform developed under RLabZ.</p>
-                        <div class="card-actions"><a href="project-details.html?id=colabsphere" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=colabsphere" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                     <!-- Card 25 -->
                     <div class="timeline-card card-bottom purple-border" style="left: 6645px; top: 270px;" data-node="25">
                         <div class="card-year">2026</div>
                         <h3 class="card-title">Project of Exam Cell</h3>
                         <p class="card-desc">In Development Web Application. Examination cell platform handled by RLabZ students.</p>
-                        <div class="card-actions"><a href="project-details.html?id=examcell" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+                        <div class="card-actions"><a href="public/project-details.html?id=examcell" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
                     </div>
                 </div>
             </div>
@@ -597,14 +597,14 @@
                     <div class="visual-composition">
                         <!-- Main Hero Image -->
                         <div class="img-hero reveal-scale">
-                            <img src="images/Team-meeting.webp" loading="lazy" width="800" height="600"
+                            <img src="assets/images/Team-meeting.webp" loading="lazy" width="800" height="600"
                                 alt="Collaborative workspace at RLabz">
                             <div class="img-glow"></div>
                         </div>
 
                         <!-- Secondary Overlapping Image -->
                         <div class="img-overlap reveal-slide-right">
-                            <img src="images/Incubation-center.webp" loading="lazy" width="800" height="600"
+                            <img src="assets/images/Incubation-center.webp" loading="lazy" width="800" height="600"
                                 alt="Mentorship at RLabz">
                         </div>
 
@@ -1955,7 +1955,7 @@
     <div class="scroll-progress" id="scrollProgress"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-    <script src="robot.js"></script>
+    <script src="assets/js/robot.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const heroSection = document.querySelector('.hero-blue-section');
@@ -2202,7 +2202,7 @@
     <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 
     <!-- Main Script -->
-    <script src="script.js"></script>
+    <script src="assets/js/script.js"></script>
 
 
 

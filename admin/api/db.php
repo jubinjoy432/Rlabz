@@ -3,7 +3,7 @@
 $host = 'localhost';
 $dbname = 'rlabz_db'; // Change this to your actual database name
 $username = 'root';    // Change this to your database username
-$password = '';        // Change this to your database password
+$password = 'rossacs2325@';        // Change this to your database password
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

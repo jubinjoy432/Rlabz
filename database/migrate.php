@@ -1,7 +1,7 @@
-<?php
-require_once 'admin/api/db.php';
+﻿<?php
+require_once '../admin/api/db.php';
 
-$json = file_get_contents('projects_dump.json');
+$json = file_get_contents('../dev/projects_dump.json');
 $projects = json_decode($json, true);
 
 // PDF Overrides
@@ -143,3 +143,4 @@ try {
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RLabz Projects Data
  * Comprehensive project repository data for the frontend.
  * When the database is fully connected, this file can be replaced
@@ -11,7 +11,7 @@ let projectsLoadedPromise = null;
 function fetchProjects() {
     if (projectsLoadedPromise) return projectsLoadedPromise;
 
-    projectsLoadedPromise = fetch('admin/api/public_projects.php')
+    projectsLoadedPromise = fetch('../../admin/api/public_projects.php')
         .then(response => response.json())
         .then(data => {
             if(data && !data.error) {
@@ -74,3 +74,4 @@ function getAdjacentProjects(id) {
         next: index < window.RLABZ_PROJECTS.length - 1 ? window.RLABZ_PROJECTS[index + 1] : null
     };
 }
+

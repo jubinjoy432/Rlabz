@@ -2708,6 +2708,25 @@ if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitia
     initCurvedTimeline();
 }
 
+// Fallback for static timeline (e.g. index.html) where projectsLoaded won't fire
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
+            timelineInitialized = true;
+            initCurvedTimeline();
+        }
+    }, 100);
+});
+// In case DOM is already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(() => {
+        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
+            timelineInitialized = true;
+            initCurvedTimeline();
+        }
+    }, 100);
+}
+
 function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
@@ -2849,42 +2868,47 @@ function initCurvedTimeline() {
             const nodes = gsap.utils.toArray('.timeline-node');
 
             if (totalScrollDistance > 0) {
-                // Screen is narrower than content, enable horizontal scroll
-                const scrollTween = gsap.to(scrollContent, {
-                    x: -totalScrollDistance,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '#our-works',
-                        pin: true,
-                        scrub: 1,
-                        start: 'top top',
-                        end: () => `+=${totalScrollDistance + 1000}`,
-                        invalidateOnRefresh: true,
-                        onRefresh: (self) => {
-                            if (self.spacer) {
-                                self.spacer.style.backgroundColor = '#f8fafc';
-                            }
+                // Enable horizontal scroll via mouse wheel when hovered
+                let targetScroll = pinContainer.scrollLeft;
+                
+                pinContainer.addEventListener('scroll', () => {
+                    if (!gsap.isTweening(pinContainer)) {
+                        targetScroll = pinContainer.scrollLeft;
+                    }
+                }, { passive: true });
+
+                pinContainer.addEventListener('wheel', (evt) => {
+                    if (evt.deltaY !== 0) {
+                        const delta = evt.deltaY;
+                        const atStart = targetScroll <= 0 && delta < 0;
+                        const atEnd = targetScroll >= totalScrollDistance && delta > 0;
+                        
+                        if (!atStart && !atEnd) {
+                            evt.preventDefault();
+                            targetScroll += delta * 1.5;
+                            targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
+                            
+                            gsap.to(pinContainer, {
+                                scrollLeft: targetScroll,
+                                duration: 0.6,
+                                ease: "power2.out",
+                                overwrite: "auto"
+                            });
                         }
                     }
-                });
+                }, { passive: false });
 
                 // --- Dynamic Road Drawing Animation ---
                 const maskPath = document.querySelector('#road-mask-path');
                 if (maskPath) {
-                    const pathEl = document.querySelector('#road-path');
-                    const pathLen = pathEl.getTotalLength();
-                    maskPath.style.strokeDasharray = pathLen;
-                    
-                    // Ratio to estimate physical horizontal pixels to arc length
-                    const ratio = pathLen / 7800;
-                    // The tip of the road will lead the viewport by 85% of screen width
-                    const initialDrawLen = (containerWidth * 0.85) * ratio;
+                    // Draw the initial road segment past the visible viewport so it doesn't look abruptly cut off
+                    const initialDrawWidth = containerWidth * 1.2;
 
                     // Tween 1: Draw the initial road segment as the section enters vertically
                     gsap.fromTo(maskPath,
-                        { strokeDashoffset: pathLen },
+                        { attr: { width: 0 } },
                         {
-                            strokeDashoffset: pathLen - initialDrawLen,
+                            attr: { width: initialDrawWidth },
                             ease: 'none',
                             scrollTrigger: {
                                 trigger: '#our-works',
@@ -2897,14 +2921,16 @@ function initCurvedTimeline() {
 
                     // Tween 2: Draw the rest of the road as the section scrolls horizontally
                     gsap.fromTo(maskPath,
-                        { strokeDashoffset: pathLen - initialDrawLen },
+                        { attr: { width: initialDrawWidth } },
                         {
-                            strokeDashoffset: 0,
+                            attr: { width: 7800 },
                             ease: 'none',
                             scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top top',
-                                end: () => `+=${totalScrollDistance + 1000}`,
+                                trigger: scrollContent,
+                                scroller: pinContainer,
+                                horizontal: true,
+                                start: 'left left',
+                                end: () => `+=${totalScrollDistance}`,
                                 scrub: 1
                             }
                         }
@@ -2918,9 +2944,9 @@ function initCurvedTimeline() {
                     const startY = isTop ? -40 : 40;
                     const nodeLeft = parseFloat(node.style.left || 0);
 
-                    if (nodeLeft < containerWidth * 0.85) {
+                    if (nodeLeft < containerWidth * 1.2) {
                         // Node is in the initial viewport: Reveal during vertical entrance
-                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 0.85)) * 80;
+                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 1.2)) * 80;
                         
                         // Node pops in
                         gsap.fromTo(node,
@@ -2956,7 +2982,8 @@ function initCurvedTimeline() {
                                 opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)',
                                 scrollTrigger: {
                                     trigger: node,
-                                    containerAnimation: scrollTween,
+                                    scroller: pinContainer,
+                                    horizontal: true,
                                     start: 'left 85%', 
                                     toggleActions: 'play none none reverse'
                                 }
@@ -2969,7 +2996,8 @@ function initCurvedTimeline() {
                                 opacity: 1, y: 0, duration: 1, ease: 'power2.out',
                                 scrollTrigger: {
                                     trigger: node,
-                                    containerAnimation: scrollTween,
+                                    scroller: pinContainer,
+                                    horizontal: true,
                                     start: 'left 80%',
                                     end: 'left 55%',
                                     scrub: true

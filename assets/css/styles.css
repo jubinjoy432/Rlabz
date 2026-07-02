@@ -8515,11 +8515,18 @@ html.lenis body {
     height: 520px;
     display: flex;
     align-items: center;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     background: #1f2229;
     border-radius: 28px;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Hide scrollbar */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+}
+.timeline-pin-container::-webkit-scrollbar {
+    display: none;
 }
 
 .timeline-scroll-wrapper {
@@ -8537,7 +8544,6 @@ html.lenis body {
     height: 520px;
     display: flex;
     align-items: center;
-    will-change: transform;
 }
 
 /* ---- SVG Path Layer ---- */
