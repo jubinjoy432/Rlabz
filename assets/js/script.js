@@ -2740,32 +2740,39 @@ function buildDynamicTimeline() {
     // Base X offset
     let currentX = 240; 
     let isBottom = true;
+    const colors = ['#00e5ff', '#2962ff', '#651fff', '#d500f9', '#ff1744'];
 
     projects.forEach((proj, idx) => {
         const top = isBottom ? 340 : 160;
-        const theme = isBottom ? 'teal' : 'purple';
+        const color = colors[idx % colors.length];
         
         // Node
         const node = document.createElement('div');
-        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} ${theme}-theme`;
+        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
         node.style.left = `${currentX}px`;
         node.style.top = `${top}px`;
-        node.innerHTML = `<div class="node-inner">${proj.year || 'N/A'}</div>`;
+        node.style.setProperty('--node-color', color);
+        node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
         scrollContent.appendChild(node);
         
         // Card
-        const cardTop = isBottom ? 270 : 10;
+        const cardLeft = currentX - 100; // Center the 220px card
         const card = document.createElement('div');
-        card.className = `timeline-card card-${isBottom ? 'bottom' : 'top'} ${theme}-border`;
-        card.style.left = `${currentX + 165}px`;
-        card.style.top = `${cardTop}px`;
+        card.className = `timeline-card clean-card card-${isBottom ? 'bottom' : 'top'}`;
+        card.style.left = `${cardLeft}px`;
+        if (isBottom) {
+            card.style.top = `420px`;
+        } else {
+            card.style.bottom = `440px`; // 520 - 80 = 440px from bottom (bottom edge at 80px from top)
+        }
         card.setAttribute('data-node', idx);
         
+        const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
         card.innerHTML = `
-            <div class="card-year">${proj.year || 'N/A'}</div>
-            <h3 class="card-title">${proj.title}</h3>
-            <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
-            <div class="card-actions"><a href="project-details.html?id=${proj.id}" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+            <a href="${basePath}project-details.html?id=${proj.id}" class="clean-card-link">
+                <h3 class="card-title">${proj.title}</h3>
+                <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
+            </a>
         `;
         scrollContent.appendChild(card);
         
@@ -2778,7 +2785,9 @@ function buildDynamicTimeline() {
     if (svg) {
         const endX = currentX - 260; 
         const newWidth = endX + 800; // Extra padding
+        scrollContent.style.width = `${newWidth}px`;
         svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
+        svg.style.width = `${newWidth}px`;
         
         // Generate the curvy path
         let d = "M 0 250 C 80 250 150 340 240 340";
@@ -2803,9 +2812,6 @@ function buildDynamicTimeline() {
         
         const path1 = svg.querySelector('#road-path');
         if (path1) path1.setAttribute('d', d);
-        
-        const mask = svg.querySelector('#road-mask');
-        if (mask) mask.setAttribute('width', newWidth + 1000);
     }
 }
 
@@ -2906,9 +2912,9 @@ function initCurvedTimeline() {
 
                     // Tween 1: Draw the initial road segment as the section enters vertically
                     gsap.fromTo(maskPath,
-                        { attr: { width: 0 } },
+                        { width: 0 },
                         {
-                            attr: { width: initialDrawWidth },
+                            width: initialDrawWidth,
                             ease: 'none',
                             scrollTrigger: {
                                 trigger: '#our-works',
@@ -2921,9 +2927,9 @@ function initCurvedTimeline() {
 
                     // Tween 2: Draw the rest of the road as the section scrolls horizontally
                     gsap.fromTo(maskPath,
-                        { attr: { width: initialDrawWidth } },
+                        { width: initialDrawWidth },
                         {
-                            attr: { width: 7800 },
+                            width: scrollContent.scrollWidth,
                             ease: 'none',
                             scrollTrigger: {
                                 trigger: scrollContent,

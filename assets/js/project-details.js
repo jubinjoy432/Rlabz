@@ -248,10 +248,10 @@
         }
 
         grid.innerHTML = project.team.map(member => {
-            const photo = member.photo || 'images/rz-logo.webp';
+            const photoHtml = member.photo ? `<img src="${member.photo}" alt="${member.name}" class="pd-team-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
             return `
                 <div class="pd-team-card">
-                    <img src="${photo}" alt="${member.name}" class="pd-team-avatar" loading="lazy" onerror="this.src='images/rz-logo.webp'">
+                    ${photoHtml}
                     <div class="pd-team-name">${member.name}</div>
                     ${member.role ? `<div class="pd-team-role">${member.role}</div>` : ''}
                     ${member.regNo ? `<div class="pd-team-reg">${member.regNo}</div>` : ''}
@@ -271,11 +271,11 @@
         }
 
         const f = project.faculty;
-        const photo = f.photo || 'images/rz-logo.webp';
+        const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
 
         container.innerHTML = `
             <div class="pd-faculty-card">
-                <img src="${photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.src='images/rz-logo.webp'">
+                ${photoHtml}
                 <div class="pd-faculty-info">
                     <h4>${f.name}</h4>
                     ${f.designation ? `<div class="pd-faculty-designation">${f.designation}</div>` : ''}
