@@ -9,6 +9,7 @@ $managePath = $isRootAdmin ? 'pages/manage_projects.php' : 'manage_projects.php'
 $addPath = $isRootAdmin ? 'pages/add_project.php' : 'add_project.php';
 $sitePath = $isRootAdmin ? '../index.html' : '../../index.html';
 $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
+$usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,8 +33,7 @@ $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
     <aside class="admin-sidebar" id="adminSidebar">
         <a href="<?php echo $homePath; ?>" class="sidebar-logo">
             <div class="sidebar-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="sidebar-logo-text">RLabz Admin</div>
-            <span class="sidebar-logo-badge">PRO</span>
+            <div class="sidebar-logo-text">RLabz</div>
         </a>
 
         <nav class="sidebar-nav">
@@ -48,6 +48,11 @@ $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
             </a>
             <a href="<?php echo $addPath; ?>" class="sidebar-link <?php echo $currentPage == 'add_project.php' ? 'active' : ''; ?>">
                 <i class="fa-solid fa-plus-circle"></i> Add New Project
+            </a>
+            
+            <div class="sidebar-section-label">Admin</div>
+            <a href="<?php echo $usersPath; ?>" class="sidebar-link <?php echo $currentPage == 'users.php' ? 'active' : ''; ?>">
+                <i class="fa-solid fa-users-cog"></i> User Management
             </a>
             
             <div class="sidebar-divider"></div>
