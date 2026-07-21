@@ -109,6 +109,20 @@
     border: 1px solid rgba(14, 165, 233, 0.18);
 }
 
+.pd-meta-demo {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.pd-meta-demo:hover {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34d399;
+}
+
 .pd-hero-title {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 2.8rem;

@@ -107,6 +107,9 @@
             if (project.category) {
                 badges += `<span class="pd-meta-badge pd-meta-dept"><i class="fa-solid fa-layer-group"></i> ${project.category}</span>`;
             }
+            if (project.demoLink) {
+                badges += `<a href="${project.demoLink}" target="_blank" class="pd-meta-badge pd-meta-demo" title="Visit the live demo or site"><i class="fa-solid fa-external-link-alt"></i> Visit Site</a>`;
+            }
             meta.innerHTML = badges;
         }
     }

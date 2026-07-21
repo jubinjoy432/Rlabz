@@ -189,6 +189,25 @@ require_once 'includes/layout_header.php';
             <?php endif; ?>
         </div>
 
+        <div class="form-group">
+            <label>Additional Screenshots (Upload to append new ones)</label>
+            <input type="file" name="screenshots[]" accept="image/*" multiple>
+            <span class="form-help">Select multiple images to add to the existing screenshots.</span>
+            <?php
+            // Fetch existing screenshots to show them
+            $stmtSnaps = $pdo->prepare("SELECT * FROM project_screenshots WHERE project_id = ? ORDER BY sort_order, id");
+            $stmtSnaps->execute([$id]);
+            $snaps = $stmtSnaps->fetchAll(PDO::FETCH_ASSOC);
+            if(count($snaps) > 0) {
+                echo '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">';
+                foreach($snaps as $snap) {
+                    echo '<img src="../' . htmlspecialchars($snap['image_path']) . '" style="height:60px; width:auto; border-radius:5px; border:1px solid #334155;" title="Existing Screenshot">';
+                }
+                echo '</div>';
+            }
+            ?>
+        </div>
+
         <div class="form-section-title"><i class="fa-solid fa-link"></i> Links</div>
         <div class="form-row">
             <div class="form-group">

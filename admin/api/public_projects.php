@@ -51,7 +51,7 @@ try {
             'expectedOutcome' => $p['expected_outcome'],
             'tech' => !empty($p['tech_stack']) ? array_map('trim', explode(',', $p['tech_stack'])) : [],
             'keyFeatures' => !empty($p['key_features']) ? array_map('trim', explode(',', $p['key_features'])) : [],
-            'thumbnail' => $p['thumbnail_path'],
+            'thumbnail' => !empty($p['thumbnail_path']) ? $p['thumbnail_path'] : $p['image_path'],
             'screenshots' => $screenshotsByProject[$p_id] ?? [],
             'team' => $membersByProject[$p_id] ?? [],
             'faculty' => [

@@ -243,11 +243,14 @@
         const extraTechCount = project.tech.length - 4;
         const techExtra = extraTechCount > 0 ? `<span class="pg-card-tag">+${extraTechCount}</span>` : '';
 
+        const isSubfolder = window.location.pathname.includes('/public/');
+        const imgPrefix = isSubfolder ? '../assets/' : 'assets/';
+
         // Team avatars
         let teamHTML = '';
         if (project.team && project.team.length > 0) {
             const avatars = project.team.slice(0, 3).map(m =>
-                `<img src="${m.photo || 'images/rz-logo.webp'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='images/rz-logo.webp'">`
+                `<img src="${m.photo || imgPrefix + 'images/rz-logo.webp'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='${imgPrefix}images/rz-logo.webp'">`
             ).join('');
             const teamCountText = project.team.length > 3 ? `+${project.team.length - 3} more` : `${project.team.length} member${project.team.length > 1 ? 's' : ''}`;
             teamHTML = `
@@ -262,7 +265,7 @@
 
         card.innerHTML = `
             <div class="pg-card-image">
-                <img src="${project.thumbnail}" alt="${project.title}" loading="lazy" onerror="this.src='images/rz-logo.webp'">
+                <img src="${project.thumbnail}" alt="${project.title}" loading="lazy" onerror="this.src='${imgPrefix}images/rz-logo.webp'">
                 <span class="pg-card-year-badge">${project.year}</span>
                 <span class="pg-card-status-badge ${statusClass}">${project.status}</span>
             </div>
