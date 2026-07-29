@@ -233,6 +233,10 @@
         const card = document.createElement('article');
         card.className = 'project-gallery-card';
         card.style.animationDelay = `${index * 0.06}s`;
+        card.style.cursor = 'pointer';
+        card.onclick = () => {
+            window.location.href = `project-details.html?id=${project.id}`;
+        };
 
         const statusClass = project.status === 'Deployed' ? 'status-deployed' :
             project.status === 'In Development' ? 'status-in-development' : 'status-completed';
@@ -247,7 +251,7 @@
         let teamHTML = '';
         if (project.team && project.team.length > 0) {
             const avatars = project.team.slice(0, 3).map(m =>
-                `<img src="${m.photo || 'images/rz-logo.webp'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='images/rz-logo.webp'">`
+                `<img src="${m.photo || '../assets/images/rz-logo.webp'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='../assets/images/rz-logo.webp'">`
             ).join('');
             const teamCountText = project.team.length > 3 ? `+${project.team.length - 3} more` : `${project.team.length} member${project.team.length > 1 ? 's' : ''}`;
             teamHTML = `
@@ -262,7 +266,7 @@
 
         card.innerHTML = `
             <div class="pg-card-image">
-                <img src="${project.thumbnail}" alt="${project.title}" loading="lazy" onerror="this.src='images/rz-logo.webp'">
+                <img src="${project.thumbnail}" alt="${project.title}" loading="lazy" onerror="this.src='../assets/images/rz-logo.webp'">
                 <span class="pg-card-year-badge">${project.year}</span>
                 <span class="pg-card-status-badge ${statusClass}">${project.status}</span>
             </div>
@@ -272,9 +276,9 @@
                 <div class="pg-card-tags">${techTags}${techExtra}</div>
                 <div class="pg-card-footer">
                     ${teamHTML}
-                    <a href="project-details.html?id=${project.id}" class="pg-card-view-btn">
+                    <span class="pg-card-view-btn">
                         View <i class="fa-solid fa-arrow-right"></i>
-                    </a>
+                    </span>
                 </div>
             </div>
         `;

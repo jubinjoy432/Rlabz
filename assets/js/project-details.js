@@ -86,9 +86,9 @@
         if (banner) {
             const img = banner.querySelector('img');
             if (img) {
-                img.src = project.thumbnail || 'images/rz-logo.webp';
+                img.src = project.thumbnail || '../assets/images/rz-logo.webp';
                 img.alt = project.title;
-                img.onerror = function () { this.src = 'images/rz-logo.webp'; };
+                img.onerror = function () { this.src = '../assets/images/rz-logo.webp'; };
             }
         }
 
@@ -174,7 +174,7 @@
 
         grid.innerHTML = screenshots.map((src, i) =>
             `<div class="pd-screenshot-item" data-index="${i}">
-                <img src="${src}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.src='images/rz-logo.webp'">
+                <img src="${src}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.src='../assets/images/rz-logo.webp'">
             </div>`
         ).join('');
     }
@@ -220,7 +220,10 @@
         if (project.year) rows.push({ label: 'Academic Year', value: project.year });
         if (project.batch) rows.push({ label: 'Batch', value: project.batch });
         if (project.department) rows.push({ label: 'Department', value: project.department });
-        if (project.faculty && project.faculty.name) rows.push({ label: 'Guide', value: project.faculty.name });
+        if (project.faculty && project.faculty.length > 0) {
+            const facultyNames = project.faculty.map(f => f.name).join(', ');
+            rows.push({ label: 'Guide', value: facultyNames });
+        }
         if (project.projectType) rows.push({ label: 'Project Type', value: project.projectType });
         if (project.category) rows.push({ label: 'Category', value: project.category });
         if (project.duration) rows.push({ label: 'Duration', value: project.duration });
@@ -228,6 +231,12 @@
         if (project.client) rows.push({ label: 'Client', value: project.client });
         if (project.githubLink) rows.push({ label: 'Repository', value: `<a href="${project.githubLink}" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>` });
         if (project.demoLink && project.demoLink !== '#') rows.push({ label: 'Demo Link', value: `<a href="${project.demoLink}" target="_blank" rel="noopener"><i class="fa-solid fa-external-link-alt"></i> Visit</a>` });
+        
+        if (project.ssl && project.ssl.domain_url) {
+            let sslText = `<a href="${project.ssl.domain_url}" target="_blank" rel="noopener" style="color:#10b981;"><i class="fa-solid fa-lock"></i> Secured</a>`;
+            if (project.ssl.provider) sslText += ` by ${project.ssl.provider}`;
+            rows.push({ label: 'SSL Certificate', value: sslText });
+        }
 
         table.innerHTML = rows.map(r =>
             `<div class="pd-info-row">
@@ -249,10 +258,18 @@
 
         grid.innerHTML = project.team.map(member => {
             const photoHtml = member.photo ? `<img src="${member.photo}" alt="${member.name}" class="pd-team-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+            let liUrl = member.linkedin;
+            if (liUrl && !/^https?:\/\//i.test(liUrl)) {
+                liUrl = 'https://' + liUrl;
+            }
+            const linkedinHtml = liUrl ? `<a href="${liUrl}" target="_blank" rel="noopener" class="pd-team-linkedin" style="color: #0077b5; font-size: 1.1rem; margin-left: 0.3rem;"><i class="fa-brands fa-linkedin"></i></a>` : '';
             return `
                 <div class="pd-team-card">
                     ${photoHtml}
-                    <div class="pd-team-name">${member.name}</div>
+                    <div class="pd-team-name" style="display:flex; justify-content:center; align-items:center;">
+                        ${member.name}
+                        ${linkedinHtml}
+                    </div>
                     ${member.role ? `<div class="pd-team-role">${member.role}</div>` : ''}
                     ${member.regNo ? `<div class="pd-team-reg">${member.regNo}</div>` : ''}
                 </div>
@@ -265,24 +282,28 @@
         const container = document.getElementById('pdFacultyContent');
         if (!card || !container) return;
 
-        if (!project.faculty || !project.faculty.name) {
+        if (!project.faculty || project.faculty.length === 0) {
             card.style.display = 'none';
             return;
         }
 
-        const f = project.faculty;
-        const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+        container.style.display = 'grid';
+        container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+        container.style.gap = '1.5rem';
 
-        container.innerHTML = `
-            <div class="pd-faculty-card">
-                ${photoHtml}
-                <div class="pd-faculty-info">
-                    <h4>${f.name}</h4>
-                    ${f.designation ? `<div class="pd-faculty-designation">${f.designation}</div>` : ''}
-                    <span class="pd-faculty-label"><i class="fa-solid fa-user-tie"></i> Faculty In-Charge</span>
+        container.innerHTML = project.faculty.map(f => {
+            const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+            return `
+                <div class="pd-faculty-card">
+                    ${photoHtml}
+                    <div class="pd-faculty-info">
+                        <h4>${f.name}</h4>
+                        ${f.designation ? `<div class="pd-faculty-designation">${f.designation}</div>` : ''}
+                        <span class="pd-faculty-label"><i class="fa-solid fa-user-tie"></i> Faculty In-Charge</span>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }).join('');
     }
 
     function renderFooterNav(project) {

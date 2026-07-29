@@ -29,8 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $project_type = trim($_POST['project_type'] ?? 'Academic');
     $status = trim($_POST['status'] ?? 'Completed');
     $duration = trim($_POST['duration'] ?? '');
-    $faculty_name = trim($_POST['faculty_name'] ?? '');
-    $faculty_designation = trim($_POST['faculty_designation'] ?? '');
     $github_link = trim($_POST['github_link'] ?? '');
     $demo_link = trim($_POST['demo_link'] ?? '');
     
@@ -85,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             slug = ?, title = ?, year = ?, short_description = ?, description = ?, 
             objectives = ?, problem_statement = ?, expected_outcome = ?, tech_stack = ?, 
             key_features = ?, department = ?, batch = ?, category = ?, project_type = ?, 
-            status = ?, duration = ?, faculty_name = ?, faculty_designation = ?, 
+            status = ?, duration = ?, 
             github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?
             WHERE id = ?");
         
@@ -93,26 +91,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $slug, $title, $year, $short_description, $description,
             $objectives, $problem_statement, $expected_outcome, $tech_stack,
             $key_features, $department, $batch, $category, $project_type,
-            $status, $duration, $faculty_name, $faculty_designation,
+            $status, $duration,
             $github_link, $demo_link, $image_path, $thumbnail_path, $poster_path,
             $id
         ]);
 
-        // Process team members (simple comma separated string replacement)
-        if (isset($_POST['team_members_str'])) {
-            $members_str = $_POST['team_members_str'];
-            $names = array_filter(array_map('trim', explode(',', $members_str)));
+        // Process team members (Dynamic rows)
+        if (isset($_POST['member_names']) && is_array($_POST['member_names'])) {
+            $member_names = $_POST['member_names'];
+            $member_roles = $_POST['member_roles'] ?? [];
+            $member_linkedin = $_POST['member_linkedin'] ?? [];
+            $existing_photos = $_POST['existing_photos'] ?? [];
+            $member_photos = $_FILES['member_photos'] ?? null;
             
             // Delete old members
             $delStmt = $pdo->prepare("DELETE FROM project_members WHERE project_id = ?");
             $delStmt->execute([$id]);
 
-            if (!empty($names)) {
-                $memStmt = $pdo->prepare("INSERT INTO project_members (project_id, name, role, photo_path) VALUES (?, ?, 'Member', '')");
-                foreach ($names as $name) {
-                    $memStmt->execute([$id, $name]);
+            $memStmt = $pdo->prepare("INSERT INTO project_members (project_id, name, role, photo_path, linkedin_link) VALUES (?, ?, ?, ?, ?)");
+            
+            foreach ($member_names as $index => $m_name) {
+                $m_name = trim($m_name);
+                if (empty($m_name)) continue;
+
+                $m_role = trim($member_roles[$index] ?? '');
+                $m_linkedin = trim($member_linkedin[$index] ?? '');
+                $m_photo_path = trim($existing_photos[$index] ?? '');
+
+                if (isset($member_photos['name'][$index]) && $member_photos['error'][$index] === UPLOAD_ERR_OK) {
+                    $m_ext = strtolower(pathinfo($member_photos['name'][$index], PATHINFO_EXTENSION));
+                    if (in_array($m_ext, $allowed)) {
+                        $m_filename = uniqid('member_') . '.' . $m_ext;
+                        if (move_uploaded_file($member_photos['tmp_name'][$index], $uploadDir . $m_filename)) {
+                            $m_photo_path = 'uploads/' . $m_filename;
+                        }
+                    }
                 }
+                
+                $memStmt->execute([$id, $m_name, $m_role, $m_photo_path, $m_linkedin]);
             }
+        }
+
+        // Process faculty members (Dynamic rows)
+        if (isset($_POST['faculty_names']) && is_array($_POST['faculty_names'])) {
+            $faculty_names = $_POST['faculty_names'];
+            $faculty_designations = $_POST['faculty_designations'] ?? [];
+            $existing_faculty_photos = $_POST['existing_faculty_photos'] ?? [];
+            $faculty_photos = $_FILES['faculty_photos'] ?? null;
+            
+            // Delete old faculty
+            $delFacStmt = $pdo->prepare("DELETE FROM project_faculty WHERE project_id = ?");
+            $delFacStmt->execute([$id]);
+
+            $facStmt = $pdo->prepare("INSERT INTO project_faculty (project_id, name, designation, photo_path) VALUES (?, ?, ?, ?)");
+            
+            foreach ($faculty_names as $index => $f_name) {
+                $f_name = trim($f_name);
+                if (empty($f_name)) continue;
+
+                $f_designation = trim($faculty_designations[$index] ?? '');
+                $f_photo_path = trim($existing_faculty_photos[$index] ?? '');
+
+                if (isset($faculty_photos['name'][$index]) && $faculty_photos['error'][$index] === UPLOAD_ERR_OK) {
+                    $f_ext = strtolower(pathinfo($faculty_photos['name'][$index], PATHINFO_EXTENSION));
+                    if (in_array($f_ext, $allowed)) {
+                        $f_filename = uniqid('faculty_') . '.' . $f_ext;
+                        if (move_uploaded_file($faculty_photos['tmp_name'][$index], $uploadDir . $f_filename)) {
+                            $f_photo_path = 'uploads/' . $f_filename;
+                        }
+                    }
+                }
+                
+                $facStmt->execute([$id, $f_name, $f_designation, $f_photo_path]);
+            }
+        }
+
+        // --- Handle SSL Details ---
+        $ssl_domain = isset($_POST['ssl_domain']) ? trim($_POST['ssl_domain']) : '';
+        $pdo->prepare("DELETE FROM project_ssl_certs WHERE project_id = ?")->execute([$id]);
+        if (!empty($ssl_domain)) {
+            $ssl_provider = isset($_POST['ssl_provider']) ? trim($_POST['ssl_provider']) : '';
+            $ssl_issue_date = !empty($_POST['ssl_issue_date']) ? $_POST['ssl_issue_date'] : null;
+            $ssl_expiry_date = !empty($_POST['ssl_expiry_date']) ? $_POST['ssl_expiry_date'] : null;
+            $stmtSsl = $pdo->prepare("INSERT INTO project_ssl_certs (project_id, domain_url, provider, issue_date, expiry_date) VALUES (?, ?, ?, ?, ?)");
+            $stmtSsl->execute([$id, $ssl_domain, $ssl_provider, $ssl_issue_date, $ssl_expiry_date]);
         }
 
         $pdo->commit();

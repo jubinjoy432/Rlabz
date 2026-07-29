@@ -1,4 +1,4 @@
-﻿/**
+/**
  * RLabz Projects Data
  * Comprehensive project repository data for the frontend.
  * When the database is fully connected, this file can be replaced
@@ -11,10 +11,28 @@ let projectsLoadedPromise = null;
 function fetchProjects() {
     if (projectsLoadedPromise) return projectsLoadedPromise;
 
-    projectsLoadedPromise = fetch('../../admin/api/public_projects.php')
+    projectsLoadedPromise = fetch('/admin/api/public_projects.php')
         .then(response => response.json())
         .then(data => {
             if(data && !data.error) {
+                // Fix image paths to be relative to public/ directory
+                data.forEach(p => {
+                    if (p.thumbnail && !p.thumbnail.startsWith('http') && !p.thumbnail.startsWith('../')) p.thumbnail = '../' + p.thumbnail;
+                    if (p.poster && !p.poster.startsWith('http') && !p.poster.startsWith('../')) p.poster = '../' + p.poster;
+                    if (p.screenshots) {
+                        p.screenshots = p.screenshots.map(s => (s && !s.startsWith('http') && !s.startsWith('../')) ? '../' + s : s);
+                    }
+                    if (p.team) {
+                        p.team.forEach(m => {
+                            if (m.photo && !m.photo.startsWith('http') && !m.photo.startsWith('../')) m.photo = '../' + m.photo;
+                        });
+                    }
+                    if (p.faculty && Array.isArray(p.faculty)) {
+                        p.faculty.forEach(f => {
+                            if (f.photo && !f.photo.startsWith('http') && !f.photo.startsWith('../')) f.photo = '../' + f.photo;
+                        });
+                    }
+                });
                 window.RLABZ_PROJECTS = data;
             } else {
                 console.error('API Error:', data.error);

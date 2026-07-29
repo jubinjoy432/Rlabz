@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `admin_users` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(50) NOT NULL UNIQUE,
     `password_hash` VARCHAR(255) NOT NULL,
+    `role` VARCHAR(50) DEFAULT 'admin',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -38,9 +39,6 @@ CREATE TABLE IF NOT EXISTS `projects` (
     `thumbnail_path` VARCHAR(255) DEFAULT '',
     `department` VARCHAR(100) DEFAULT 'MCA',
     `batch` VARCHAR(20) DEFAULT '',
-    `faculty_name` VARCHAR(100) DEFAULT '',
-    `faculty_designation` VARCHAR(100) DEFAULT '',
-    `faculty_photo` VARCHAR(255) DEFAULT '',
     `category` VARCHAR(50) DEFAULT 'Web Application',
     `project_type` VARCHAR(50) DEFAULT 'Academic',
     `duration` VARCHAR(50) DEFAULT '',
@@ -60,6 +58,18 @@ CREATE TABLE IF NOT EXISTS `project_members` (
     `photo_path` VARCHAR(255) NOT NULL,
     `role` VARCHAR(50) DEFAULT '',
     `register_number` VARCHAR(20) DEFAULT '',
+    `linkedin_link` VARCHAR(255) DEFAULT '',
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 3.5 Table for Project Faculty (New)
+CREATE TABLE IF NOT EXISTS `project_faculty` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `project_id` INT(11) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
+    `designation` VARCHAR(100) DEFAULT '',
+    `photo_path` VARCHAR(255) DEFAULT '',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -99,3 +109,16 @@ CREATE TABLE IF NOT EXISTS `project_screenshots` (
 -- ALTER TABLE `projects` ADD COLUMN `poster_path` VARCHAR(255) DEFAULT '' AFTER `demo_link`;
 -- ALTER TABLE `project_members` ADD COLUMN `role` VARCHAR(50) DEFAULT '' AFTER `photo_path`;
 -- ALTER TABLE `project_members` ADD COLUMN `register_number` VARCHAR(20) DEFAULT '' AFTER `role`;
+
+-- 5. Table for SSL Certificates (New Module)
+CREATE TABLE IF NOT EXISTS `project_ssl_certs` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `project_id` INT(11) NOT NULL,
+    `domain_url` VARCHAR(255) NOT NULL,
+    `provider` VARCHAR(100) DEFAULT '',
+    `issue_date` DATE DEFAULT NULL,
+    `expiry_date` DATE DEFAULT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

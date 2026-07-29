@@ -2758,6 +2758,25 @@ function buildDynamicTimeline() {
         node.style.top = `${top}px`;
         node.style.setProperty('--node-color', color);
         node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
+        
+        // Connecting Line
+        const line = document.createElement('div');
+        line.style.position = 'absolute';
+        line.style.width = '2px';
+        line.style.left = '50%';
+        line.style.transform = 'translateX(-50%)';
+        line.style.backgroundColor = color;
+        line.style.opacity = '0.5';
+        line.style.zIndex = '-1';
+        if (isBottom) {
+            line.style.top = '100%';
+            line.style.height = '60px';
+        } else {
+            line.style.bottom = '100%';
+            line.style.height = '60px';
+        }
+        node.appendChild(line);
+        
         scrollContent.appendChild(node);
         
         // Card

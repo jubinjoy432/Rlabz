@@ -154,20 +154,16 @@ require_once '../includes/layout_header.php';
         <!-- Faculty -->
         <div class="form-section-title"><i class="fa-solid fa-user-tie"></i> Faculty Information</div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="faculty_name">Faculty Name</label>
-                <input type="text" id="faculty_name" name="faculty_name" placeholder="e.g. Prof. Jubin Joy">
-            </div>
-            <div class="form-group">
-                <label for="faculty_designation">Designation</label>
-                <input type="text" id="faculty_designation" name="faculty_designation" placeholder="e.g. Assistant Professor">
-            </div>
-        </div>
-
         <div class="form-group">
-            <label for="faculty_photo">Faculty Photo</label>
-            <input type="file" id="faculty_photo" name="faculty_photo" accept="image/*">
+            <div class="faculty-members-container" id="faculty-members-container">
+                <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+                    <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
+                    <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+                    <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
+                    <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <button type="button" class="btn-add" onclick="addFacultyRow()" style="margin-top:0.5rem;"><i class="fas fa-plus"></i> Add Faculty</button>
         </div>
 
         <!-- Team Members -->
@@ -175,10 +171,11 @@ require_once '../includes/layout_header.php';
         
         <div class="form-group">
             <div class="team-members-container" id="team-members-container">
-                <div class="team-member-row">
-                    <input type="text" name="member_names[]" placeholder="Student Name" style="padding:0.6rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#e2e8f0; font-family:inherit;">
-                    <input type="text" name="member_roles[]" placeholder="Role (optional)" style="padding:0.6rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#e2e8f0; font-family:inherit;">
-                    <input type="file" name="member_photos[]" accept="image/*" style="font-size:0.8rem; color:#94a3b8;">
+                <div class="team-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+                    <input type="text" name="member_names[]" placeholder="Student Name" style="flex: 1;">
+                    <input type="text" name="member_roles[]" placeholder="Role (optional)" style="flex: 1;">
+                    <input type="text" name="member_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1.5;">
+                    <input type="file" name="member_photos[]" accept="image/*" style="flex: 1;">
                     <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             </div>
@@ -219,6 +216,29 @@ require_once '../includes/layout_header.php';
             </div>
         </div>
 
+        <!-- SSL Certificate Module -->
+        <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Details (Optional)</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="ssl_domain">Domain URL</label>
+                <input type="url" id="ssl_domain" name="ssl_domain" placeholder="https://example.com">
+            </div>
+            <div class="form-group">
+                <label for="ssl_provider">Provider</label>
+                <input type="text" id="ssl_provider" name="ssl_provider" placeholder="Let's Encrypt">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="ssl_issue_date">Issue Date</label>
+                <input type="date" id="ssl_issue_date" name="ssl_issue_date">
+            </div>
+            <div class="form-group">
+                <label for="ssl_expiry_date">Expiry Date</label>
+                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date">
+            </div>
+        </div>
+
         <button type="submit" class="btn-submit full-width"><i class="fa-solid fa-rocket"></i> Add Project</button>
     </form>
 </div>
@@ -230,9 +250,10 @@ require_once '../includes/layout_header.php';
         const row = document.createElement('div');
         row.className = 'team-member-row';
         row.innerHTML = `
-            <input type="text" name="member_names[]" placeholder="Student Name" style="padding:0.6rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#e2e8f0; font-family:inherit;">
-            <input type="text" name="member_roles[]" placeholder="Role (optional)" style="padding:0.6rem; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:8px; color:#e2e8f0; font-family:inherit;">
-            <input type="file" name="member_photos[]" accept="image/*" style="font-size:0.8rem; color:#94a3b8;">
+            <input type="text" name="member_names[]" placeholder="Student Name" style="flex: 1;">
+            <input type="text" name="member_roles[]" placeholder="Role (optional)" style="flex: 1;">
+            <input type="text" name="member_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1.5;">
+            <input type="file" name="member_photos[]" accept="image/*" style="flex: 1;">
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(row);
@@ -308,6 +329,22 @@ require_once '../includes/layout_header.php';
         slugInput.addEventListener('input', () => {
             slugInput.dataset.manual = '1';
         });
+    }
+    // ---- Faculty Member Rows ----
+    function addFacultyRow() {
+        const container = document.getElementById('faculty-members-container');
+        const row = document.createElement('div');
+        row.className = 'faculty-member-row';
+        row.style.display = 'flex';
+        row.style.gap = '0.5rem';
+        row.style.marginBottom = '0.5rem';
+        row.innerHTML = `
+            <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
+            <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+            <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
+            <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(row);
     }
 </script>
 

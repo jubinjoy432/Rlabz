@@ -10,6 +10,7 @@ $addPath = $isRootAdmin ? 'pages/add_project.php' : 'add_project.php';
 $sitePath = $isRootAdmin ? '../index.html' : '../../index.html';
 $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
 $usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
+$sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +23,7 @@ $usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="<?php echo $cssPath; ?>">
 </head>
 <body>
@@ -48,6 +50,9 @@ $usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
             </a>
             <a href="<?php echo $addPath; ?>" class="sidebar-link <?php echo $currentPage == 'add_project.php' ? 'active' : ''; ?>">
                 <i class="fa-solid fa-plus-circle"></i> Add New Project
+            </a>
+            <a href="<?php echo $sslPath; ?>" class="sidebar-link <?php echo $currentPage == 'ssl_certificates.php' ? 'active' : ''; ?>">
+                <i class="fa-solid fa-shield-halved"></i> SSL Certificates
             </a>
             
             <div class="sidebar-section-label">Admin</div>

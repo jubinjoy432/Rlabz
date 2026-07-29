@@ -48,6 +48,15 @@ if ($pdo) {
         $stmtRecent = $pdo->query("SELECT id, title, slug, status, year, image_path, category FROM projects ORDER BY id DESC LIMIT 5");
         $recentProjects = $stmtRecent->fetchAll();
 
+        // Expiring SSL Certificates
+        $stmtExpiring = $pdo->query("SELECT p.title, s.domain_url, s.expiry_date, DATEDIFF(s.expiry_date, CURDATE()) as days_left 
+                                     FROM project_ssl_certs s 
+                                     JOIN projects p ON s.project_id = p.id 
+                                     WHERE s.expiry_date IS NOT NULL 
+                                     AND s.expiry_date >= CURDATE() AND s.expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) 
+                                     ORDER BY s.expiry_date ASC");
+        $expiringSsl = $stmtExpiring->fetchAll();
+
     } catch (PDOException $e) {
         $error = "Failed to load stats: " . $e->getMessage();
     }
@@ -127,6 +136,35 @@ require_once '../includes/layout_header.php';
         </div>
     </div>
 </div>
+
+<!-- Expiring SSL -->
+<?php if (!empty($expiringSsl)): ?>
+<div class="card" style="border: 1px solid #ef4444;">
+    <h2 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Expiring SSL Certificates (Next 30 Days)</h2>
+    <div style="overflow-x:auto;">
+        <table class="recent-table">
+            <thead>
+                <tr>
+                    <th>Project</th>
+                    <th>Domain</th>
+                    <th>Expiry Date</th>
+                    <th>Days Left</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($expiringSsl as $ssl): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($ssl['title']); ?></td>
+                    <td><a href="<?php echo htmlspecialchars($ssl['domain_url']); ?>" target="_blank" style="color:#38bdf8;"><?php echo htmlspecialchars($ssl['domain_url']); ?></a></td>
+                    <td><?php echo htmlspecialchars($ssl['expiry_date']); ?></td>
+                    <td><span class="badge" style="background:#7f1d1d; color:#fca5a5;"><?php echo htmlspecialchars($ssl['days_left']); ?> Days</span></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- Recent Projects -->
 <div class="card">
