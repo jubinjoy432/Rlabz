@@ -2,3 +2,21 @@ php -S localhost:8000
 
 
 http://localhost:8000/
+
+
+Main Page:
+
+http://localhost:8000/
+Admin Pages:
+
+Login: http://localhost:8000/admin/login.php
+Dashboard: http://localhost:8000/admin/dashboard.php
+Edit Project: http://localhost:8000/admin/edit_project.php
+Public Pages:
+
+Projects List: http://localhost:8000/public/projects.html
+Project Details: http://localhost:8000/public/project-details.html
+What We Do Section (if applicable):
+
+http://localhost:8000/WhatWeDo/
+You can open these directly in your browser as long as your php -S localhost:8000 command is still running.

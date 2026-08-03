@@ -14,7 +14,6 @@ $completedProjects = 0;
 $deployedProjects = 0;
 $inDevProjects = 0;
 $totalMembers = 0;
-$totalScreenshots = 0;
 $recentProjects = [];
 
 $chartDataStatus = ['Completed' => 0, 'Deployed' => 0, 'In Development' => 0];
@@ -40,9 +39,6 @@ if ($pdo) {
 
         $stmtMembers = $pdo->query("SELECT COUNT(*) FROM project_members");
         $totalMembers = $stmtMembers->fetchColumn();
-
-        $stmtScreenshots = $pdo->query("SELECT COUNT(*) FROM project_screenshots");
-        $totalScreenshots = $stmtScreenshots->fetchColumn();
 
         // Recent 5
         $stmtRecent = $pdo->query("SELECT id, title, slug, status, year, image_path, category FROM projects ORDER BY id DESC LIMIT 5");
@@ -114,11 +110,7 @@ require_once '../includes/layout_header.php';
         <div class="stat-card-value"><?php echo $totalMembers; ?></div>
         <div class="stat-card-label">Team Members</div>
     </div>
-    <div class="stat-card stat-rose">
-        <div class="stat-card-icon"><i class="fa-solid fa-images"></i></div>
-        <div class="stat-card-value"><?php echo $totalScreenshots; ?></div>
-        <div class="stat-card-label">Media Assets</div>
-    </div>
+
 </div>
 
 <!-- Charts Row -->
