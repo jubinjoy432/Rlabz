@@ -30,6 +30,14 @@ php -S localhost:8000
 ```
 Then open your browser and navigate to `http://localhost:8000`.
 
+### 4. Admin Access
+To manage projects and other content, you can access the admin dashboard:
+- **URL**: `http://localhost:8000/admin/` (or navigate to `/admin/` on your server)
+- **Default Username**: `admin`
+- **Default Password**: `admin123`
+
+*(Note: It is highly recommended to change this default password after your first login for security purposes.)*
+
 ### Folder Structure Overview
 - `admin/` - Admin dashboard and API endpoints
 - `assets/` - Static assets (CSS, JS, images)
