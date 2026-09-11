@@ -1,0 +1,36 @@
+# Project Structure and Technical Report
+
+## 1. Code Structure
+
+The project is structured into frontend and backend components.
+
+### Root Directory (Frontend)
+- **HTML Files:** `index.html`, `projects.html`, `project-details.html` (Main user-facing pages)
+- **CSS Files:** `styles.css`, `projects-page.css`, `project-details.css` (Styling for the respective pages)
+- **JS Files:** `script.js`, `projects-page.js`, `project-details.js`, `projects-data.js`, `robot.js` (Frontend interactivity and data handling)
+- **Assets:** `images/` and `uploads/` for static and user-uploaded media.
+- **Database Schema:** `schema.sql` (Contains the SQL script to create the required tables).
+
+### Admin Directory (Backend)
+- **Pages:** `admin/dashboard.php`, `admin/login.php` (Admin interface for managing the system)
+- **API Endpoints (`admin/api/`):** 
+  - `db.php`: Handles database connection.
+  - `login_action.php`, `logout.php`: Manages authentication.
+  - `add_project.php`, `edit_project.php`, `delete_project.php`, `get_projects.php`: CRUD operations for projects.
+
+## 2. Theme Colors Used
+The project utilizes a modern CSS variables approach for consistent theming. The primary color palette extracted from `styles.css` includes:
+
+- **Background Color:** `#f8faff` (Light/White Background)
+- **Text Color:** `#1e293b` (Dark Blue-Gray Text)
+- **Primary Blue:** `#0b5394` (Brand Color)
+- **Secondary Blue:** `#e0f2fe` (Light Blue Accent)
+- **Accent Cyan:** `#0b5394` (Recycled Primary)
+- **Glass Background:** `#ffffff` (White for frosted glass effect)
+- **Glass Border:** `rgba(11, 83, 148, 0.1)` (Transparent blue for borders)
+
+## 3. Technologies Used
+- **Frontend:** HTML5, CSS3 (with CSS variables and modern flexbox/grid), Vanilla JavaScript (No heavy frameworks).
+- **Backend:** PHP (Handles form submissions, authentication, and API endpoints).
+- **Database:** MySQL (Connected via PHP Data Objects - PDO).
+- **Architecture:** Client-Server model with a REST-like API approach for admin project management.

@@ -1,0 +1,1139 @@
+[
+  {
+    "id": "rex",
+    "title": "ReX",
+    "year": "N/A",
+    "shortDescription": "Comprehensive web platform developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3, and JavaScript.",
+    "fullDescription": "ReX is a comprehensive web platform developed for Rajagiri College of Social Sciences. The platform serves as a centralized hub for college activities, resources, and communication, streamlining various administrative and academic processes.",
+    "objectives": "To create a centralized web platform that unifies college operations, improves communication between departments, and provides easy access to academic resources for students and faculty.",
+    "problemStatement": "Rajagiri College lacked a unified digital platform, resulting in fragmented communication and difficulty accessing important college resources and information.",
+    "keyFeatures": [
+      "User Authentication",
+      "Resource Management",
+      "Department Portal",
+      "Notice Board",
+      "Event Calendar",
+      "Document Repository"
+    ],
+    "expectedOutcome": "A fully functional web platform that serves as the digital backbone of college operations.",
+    "tech": [
+      "PHP",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/rex-image.webp",
+    "screenshots": [
+      "images/rex-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "",
+    "status": "Completed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "cocobies",
+    "title": "Cocobies",
+    "year": "2013",
+    "shortDescription": "Innovative Android application developed for the RCSS MCA Department, showcasing mobile development capabilities.",
+    "fullDescription": "Cocobies is an innovative Android application developed as part of the MCA Department's mobile development initiative. The app demonstrates the department's early commitment to mobile technology and native Android development.",
+    "objectives": "To develop a functional Android application that showcases the mobile development skills of MCA students and serves as a practical learning project.",
+    "problemStatement": "The department needed a hands-on mobile development project to demonstrate practical skills in Android application development.",
+    "keyFeatures": [
+      "Native Android UI",
+      "Data Management",
+      "User Interface Design",
+      "Mobile Optimization"
+    ],
+    "expectedOutcome": "A fully functional Android application demonstrating mobile development proficiency.",
+    "tech": [
+      "Android",
+      "Java"
+    ],
+    "thumbnail": "images/cocobi-image.webp",
+    "screenshots": [
+      "images/cocobi-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2011-2013",
+    "category": "Mobile Application",
+    "projectType": "Academic",
+    "duration": "6 months",
+    "status": "Completed",
+    "client": "RCSS MCA Dept.",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "campus-connect-2017",
+    "title": "Campus Connect",
+    "year": "2017",
+    "shortDescription": "Comprehensive web platform built with Python, Django, HTML5, CSS3, and JavaScript connecting students, faculty, and administration.",
+    "fullDescription": "Campus Connect is a comprehensive web platform designed to bridge the communication gap between students, faculty, and administration at Rajagiri College. Built with modern Python Django framework, it provides a seamless digital experience for all campus stakeholders.",
+    "objectives": "To build a unified campus communication platform that facilitates seamless interaction between students, faculty, and administrators.",
+    "problemStatement": "Campus communication was fragmented across multiple channels, making it difficult for students and faculty to stay updated on academic and administrative matters.",
+    "keyFeatures": [
+      "Student Portal",
+      "Faculty Dashboard",
+      "Admin Panel",
+      "Notification System",
+      "Academic Calendar",
+      "Resource Sharing"
+    ],
+    "expectedOutcome": "A unified platform improving campus communication efficiency by connecting all stakeholders.",
+    "tech": [
+      "Python",
+      "Django",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/campuscon-image.webp",
+    "screenshots": [
+      "images/campuscon-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2015-2017",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "8 months",
+    "status": "Completed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "http://xxsreexx.pythonanywhere.com",
+    "poster": ""
+  },
+  {
+    "id": "ctrm",
+    "title": "CTRM System",
+    "year": "2017",
+    "shortDescription": "Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3.",
+    "fullDescription": "The CTRM (Comprehensive Teaching Resource Management) system is a specialized platform designed to streamline the management of teaching resources across departments. It enables faculty to organize, share, and access teaching materials efficiently.",
+    "objectives": "To develop a centralized teaching resource management system that improves accessibility and organization of academic materials.",
+    "problemStatement": "Faculty members lacked a centralized system for managing and sharing teaching resources, leading to duplication of effort and inconsistent access to materials.",
+    "keyFeatures": [
+      "Resource Upload & Management",
+      "Department-wise Organization",
+      "Search & Filter",
+      "Access Control",
+      "Resource Sharing",
+      "Usage Analytics"
+    ],
+    "expectedOutcome": "An organized, accessible teaching resource repository improving academic resource management.",
+    "tech": [
+      "PHP",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "MySQL"
+    ],
+    "thumbnail": "images/ctrm-image.webp",
+    "screenshots": [
+      "images/ctrm-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2015-2017",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "6 months",
+    "status": "Completed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "theluke",
+    "title": "The Luke",
+    "year": "2017",
+    "shortDescription": "Professional event management website built with HTML5, CSS3, and JavaScript for The Luke Event Management company.",
+    "fullDescription": "The Luke is a professional event management website designed and developed for The Luke Event Management company. The website showcases the company's services, portfolio of events, and provides an elegant platform for client inquiries and bookings.",
+    "objectives": "To create a visually stunning and functional website that effectively showcases event management services and attracts potential clients.",
+    "problemStatement": "The Luke Event Management needed a professional online presence to showcase their portfolio and attract new clients in the competitive event management industry.",
+    "keyFeatures": [
+      "Portfolio Showcase",
+      "Service Catalog",
+      "Contact Form",
+      "Event Gallery",
+      "Responsive Design",
+      "SEO Optimized"
+    ],
+    "expectedOutcome": "A professional website that effectively represents the brand and generates client inquiries.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/luke-image.webp",
+    "screenshots": [
+      "images/luke-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2015-2017",
+    "category": "Web Application",
+    "projectType": "Client",
+    "duration": "3 months",
+    "status": "Deployed",
+    "client": "The Luke Event Management",
+    "githubLink": "",
+    "demoLink": "http://www.theluke.in",
+    "poster": ""
+  },
+  {
+    "id": "arkon-2017",
+    "title": "Arkon Medical Systems",
+    "year": "2017",
+    "shortDescription": "Healthcare equipment platform built with HTML5, CSS3, JavaScript, and PHP offering comprehensive medical equipment systems.",
+    "fullDescription": "Arkon Medical Systems is a healthcare equipment platform that provides comprehensive information about medical equipment and systems. The website serves as a digital catalog and information hub for healthcare professionals seeking reliable medical equipment solutions.",
+    "objectives": "To develop an informative and professional web platform for a medical equipment company that showcases products and services effectively.",
+    "problemStatement": "Arkon Medical Systems needed a digital presence to showcase their wide range of medical equipment and reach healthcare professionals across regions.",
+    "keyFeatures": [
+      "Product Catalog",
+      "Equipment Details",
+      "Service Information",
+      "Contact System",
+      "Responsive Layout",
+      "Product Search"
+    ],
+    "expectedOutcome": "A professional healthcare platform improving product visibility and client engagement.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP"
+    ],
+    "thumbnail": "images/arkon-img.webp",
+    "screenshots": [
+      "images/arkon-img.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2015-2017",
+    "category": "Web Application",
+    "projectType": "Client",
+    "duration": "4 months",
+    "status": "Deployed",
+    "client": "Arkon Medical Systems",
+    "githubLink": "",
+    "demoLink": "http://www.arkonmedicalsystems.in",
+    "poster": ""
+  },
+  {
+    "id": "euphoria-2k17",
+    "title": "Euphoria 2k17",
+    "year": "2017",
+    "shortDescription": "Cultural festival website built with HTML5, CSS3, JavaScript, and PHP for the RCSS MCA Department.",
+    "fullDescription": "Euphoria 2k17 is the official website developed for the annual cultural festival organized by the MCA Department of Rajagiri College of Social Sciences. The website serves as the digital hub for event registrations, schedules, and information.",
+    "objectives": "To create an engaging and functional festival website that handles event registrations and provides comprehensive festival information.",
+    "problemStatement": "The MCA department's cultural festival needed an attractive and functional website for event promotion, registration management, and information dissemination.",
+    "keyFeatures": [
+      "Event Registration",
+      "Schedule Display",
+      "Event Galleries",
+      "Dynamic Content",
+      "Mobile Responsive",
+      "Real-time Updates"
+    ],
+    "expectedOutcome": "A vibrant festival website driving registrations and providing seamless event information.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP"
+    ],
+    "thumbnail": "images/euphoria-2019.webp",
+    "screenshots": [
+      "images/euphoria-2019.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2015-2017",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "2 months",
+    "status": "Completed",
+    "client": "RCSS MCA Dept.",
+    "githubLink": "",
+    "demoLink": "http://euphoria.rlabz.in",
+    "poster": ""
+  },
+  {
+    "id": "outreach",
+    "title": "RAJAGIRI OutREACH",
+    "year": "2019",
+    "shortDescription": "Web platform built with PHP, HTML5, CSS3, and JavaScript for community outreach and social engagement.",
+    "fullDescription": "RAJAGIRI OutREACH is a community outreach and social engagement platform developed for Rajagiri College. The platform facilitates community service activities, volunteer management, and social impact tracking.",
+    "objectives": "To build a digital platform that streamlines community outreach activities and tracks social impact effectively.",
+    "problemStatement": "Managing community outreach programs and tracking volunteer activities across the institution was challenging without a centralized digital platform.",
+    "keyFeatures": [
+      "Volunteer Management",
+      "Activity Tracking",
+      "Impact Reports",
+      "Event Coordination",
+      "Community Portal",
+      "Photo Gallery"
+    ],
+    "expectedOutcome": "A comprehensive outreach management platform improving community engagement efficiency.",
+    "tech": [
+      "PHP",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/outreach-image.webp",
+    "screenshots": [
+      "images/outreach-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2017-2019",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "6 months",
+    "status": "Completed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "splendore-2019",
+    "title": "Splendore",
+    "year": "2019",
+    "shortDescription": "Website built with HTML5, CSS3, and JavaScript for the Rajagiri College of Social Sciences cultural festival.",
+    "fullDescription": "Splendore is the official website for the Rajagiri College of Social Sciences cultural festival. The website provides a visually rich platform for event information, registration, and showcasing the vibrant cultural activities of the college.",
+    "objectives": "To design and develop an attractive cultural festival website that captures the spirit of the event and facilitates participant engagement.",
+    "problemStatement": "The college cultural festival needed an engaging digital platform to promote events, manage registrations, and create excitement among students.",
+    "keyFeatures": [
+      "Event Listings",
+      "Online Registration",
+      "Photo Galleries",
+      "Schedule Timeline",
+      "Social Media Integration",
+      "Countdown Timer"
+    ],
+    "expectedOutcome": "An engaging festival website increasing event participation and digital reach.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/splendore-2019.webp",
+    "screenshots": [
+      "images/splendore-2019.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2017-2019",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "2 months",
+    "status": "Completed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "http://www.splendorercss.in",
+    "poster": ""
+  },
+  {
+    "id": "fest-buddy",
+    "title": "Fest Buddy",
+    "year": "2020",
+    "shortDescription": "Android application for managing college festivals and events developed for client Impress Project.",
+    "fullDescription": "Fest Buddy is an Android application designed for managing college festivals and events. The app provides a comprehensive solution for event organizers and attendees, enabling seamless event management, scheduling, and participation tracking.",
+    "objectives": "To create a mobile-first event management solution that simplifies college festival organization and improves attendee experience.",
+    "problemStatement": "College festival management relied heavily on manual processes, making it difficult to coordinate events, track registrations, and communicate with participants in real-time.",
+    "keyFeatures": [
+      "Event Schedule",
+      "Push Notifications",
+      "Registration System",
+      "Venue Maps",
+      "Live Updates",
+      "Participant Profiles"
+    ],
+    "expectedOutcome": "A mobile application streamlining festival management and improving attendee engagement.",
+    "tech": [
+      "Android",
+      "Java",
+      "Firebase"
+    ],
+    "thumbnail": "images/fesbud-image.webp",
+    "screenshots": [
+      "images/fesbud-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2018-2020",
+    "category": "Mobile Application",
+    "projectType": "Client",
+    "duration": "6 months",
+    "status": "Completed",
+    "client": "Impress Project",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "euphoria-2024",
+    "title": "Euphoria Website",
+    "year": "2024",
+    "shortDescription": "Deployed web application. Official website developed for Euphoria event management and announcements.",
+    "fullDescription": "The Euphoria 2024 Website is a modern, deployed web application serving as the official digital platform for the Euphoria event. It features dynamic content management, event scheduling, and an immersive user experience designed to captivate and inform attendees.",
+    "objectives": "To build a modern, feature-rich event website with dynamic content capabilities and an exceptional user experience.",
+    "problemStatement": "The Euphoria event needed a modern, dynamic website that could handle registrations, display schedules, and create an immersive digital experience for participants.",
+    "keyFeatures": [
+      "Dynamic Content",
+      "Event Registration",
+      "Schedule Management",
+      "Gallery Section",
+      "Responsive Design",
+      "Admin Panel"
+    ],
+    "expectedOutcome": "A production-grade event website with dynamic content management and seamless user experience.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP",
+      "MySQL"
+    ],
+    "thumbnail": "images/euphoria-2019.webp",
+    "screenshots": [
+      "images/euphoria-2019.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2022-2024",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "3 months",
+    "status": "Deployed",
+    "client": "RCSS MCA Dept.",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "conference",
+    "title": "Conference Website",
+    "year": "2025",
+    "shortDescription": "Deployed web application. Conference management portal supporting registrations, abstract submissions, and schedules.",
+    "fullDescription": "The Conference Website is a comprehensive conference management portal built to support academic conferences at Rajagiri College. It provides end-to-end management of conference activities including paper submissions, registrations, schedule management, and speaker profiles.",
+    "objectives": "To create a professional conference management platform that handles the complete lifecycle of academic conferences digitally.",
+    "problemStatement": "Academic conferences required a dedicated digital platform to manage paper submissions, registrations, scheduling, and communication with participants effectively.",
+    "keyFeatures": [
+      "Abstract Submission",
+      "Registration Portal",
+      "Schedule Builder",
+      "Speaker Profiles",
+      "Payment Integration",
+      "Certificate Generation"
+    ],
+    "expectedOutcome": "A complete conference management system streamlining all aspects of academic conference organization.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "4 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "splendore-2025",
+    "title": "Splendore Website",
+    "year": "2025",
+    "shortDescription": "Deployed web application developed for Splendore by the Students Team under RLabZ.",
+    "fullDescription": "Splendore 2025 is the latest iteration of the cultural festival website, built by the student team under RLabZ. It features a modern design, dynamic content management, and enhanced user interaction capabilities.",
+    "objectives": "To redesign and modernize the Splendore cultural festival website with enhanced features and a contemporary design.",
+    "problemStatement": "The previous festival website needed a complete overhaul to match modern web standards and provide better engagement features.",
+    "keyFeatures": [
+      "Modern UI Design",
+      "Event Registration",
+      "Live Updates",
+      "Photo Gallery",
+      "Social Sharing",
+      "Mobile First Design"
+    ],
+    "expectedOutcome": "A visually stunning, modern festival website built by students showcasing their development skills.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP",
+      "MySQL"
+    ],
+    "thumbnail": "images/splendore-2019.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "2 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "arkon-2025",
+    "title": "Arkon Medical Systems",
+    "year": "2025",
+    "shortDescription": "Deployed web application. Medical equipment platform with product catalog and order management.",
+    "fullDescription": "The 2025 version of Arkon Medical Systems is a comprehensive revamp of the healthcare equipment platform. It features an advanced product catalog, order management system, and improved user interface for healthcare professionals.",
+    "objectives": "To modernize and expand the Arkon Medical Systems platform with enhanced e-commerce capabilities and improved product presentation.",
+    "problemStatement": "The existing Arkon platform needed modernization with better product management, ordering capabilities, and a contemporary design.",
+    "keyFeatures": [
+      "Product Catalog",
+      "Order Management",
+      "Admin Dashboard",
+      "Search & Filter",
+      "Responsive Design",
+      "Inquiry System"
+    ],
+    "expectedOutcome": "A modern healthcare equipment platform with full e-commerce capabilities.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/arkon-img.webp",
+    "screenshots": [
+      "images/arkon-img.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Client",
+    "duration": "5 months",
+    "status": "Deployed",
+    "client": "Arkon Medical Systems",
+    "githubLink": "",
+    "demoLink": "http://www.arkonmedicalsystems.in",
+    "poster": ""
+  },
+  {
+    "id": "dyuti",
+    "title": "DYUTI Content Mgmt",
+    "year": "2025",
+    "shortDescription": "Deployed web application. Content management system handled by RLabZ for streamlined content operations.",
+    "fullDescription": "DYUTI is a content management system developed and maintained by RLabZ. The platform enables efficient content creation, management, and distribution across the institution, providing a centralized hub for all digital content needs.",
+    "objectives": "To develop a robust content management system that simplifies content creation and distribution across the institution.",
+    "problemStatement": "The institution needed a custom CMS tailored to their specific content management workflows and requirements.",
+    "keyFeatures": [
+      "Content Editor",
+      "Media Library",
+      "User Roles",
+      "Publishing Workflow",
+      "SEO Tools",
+      "Analytics Dashboard"
+    ],
+    "expectedOutcome": "A custom CMS streamlining institutional content management and distribution.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "6 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "sparc",
+    "title": "Sparc Mobile App",
+    "year": "2025",
+    "shortDescription": "Deployed mobile application developed for student and campus utility services.",
+    "fullDescription": "Sparc is a mobile application designed to provide essential campus utility services to students. The app integrates various campus services into a single mobile platform, making campus life more convenient and accessible.",
+    "objectives": "To create a unified mobile platform that provides students with easy access to essential campus services and utilities.",
+    "problemStatement": "Students had to navigate multiple platforms and physical offices for various campus services, leading to inefficiency and frustration.",
+    "keyFeatures": [
+      "Campus Services",
+      "Notifications",
+      "Student Profile",
+      "Service Requests",
+      "Event Updates",
+      "Campus Map"
+    ],
+    "expectedOutcome": "A comprehensive campus utility app improving student convenience and service accessibility.",
+    "tech": [
+      "Flutter",
+      "Dart",
+      "Firebase",
+      "REST API"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Mobile Application",
+    "projectType": "Academic",
+    "duration": "8 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "stuba",
+    "title": "STUBA Platform",
+    "year": "2025",
+    "shortDescription": "Deployed web application. Student association management platform with communication and event modules.",
+    "fullDescription": "STUBA is a student association management platform that facilitates communication, event management, and organizational activities for student bodies. The platform provides tools for association leaders to manage their organizations effectively.",
+    "objectives": "To develop a comprehensive platform for student associations to manage their activities, communications, and events digitally.",
+    "problemStatement": "Student associations lacked a dedicated digital platform for managing their organizational activities, events, and communications.",
+    "keyFeatures": [
+      "Association Dashboard",
+      "Event Management",
+      "Member Directory",
+      "Communication Tools",
+      "Budget Tracking",
+      "Report Generation"
+    ],
+    "expectedOutcome": "A unified student association management platform improving organizational efficiency.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "6 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "campus-connect-2025",
+    "title": "Campus Connect",
+    "year": "2025",
+    "shortDescription": "Deployed web application. Campus communication and collaboration platform for students and faculty.",
+    "fullDescription": "Campus Connect 2025 is an evolved version of the original campus communication platform. It features modern architecture, real-time communication capabilities, and enhanced collaboration tools for the entire campus community.",
+    "objectives": "To rebuild and modernize the campus communication platform with real-time features and improved collaboration capabilities.",
+    "problemStatement": "The original Campus Connect platform needed modernization to support real-time communication and advanced collaboration features.",
+    "keyFeatures": [
+      "Real-time Chat",
+      "Discussion Forums",
+      "File Sharing",
+      "Announcement System",
+      "Academic Calendar",
+      "Role-based Access"
+    ],
+    "expectedOutcome": "A modern campus communication platform with real-time collaboration features.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "WebSockets"
+    ],
+    "thumbnail": "images/campuscon-image.webp",
+    "screenshots": [
+      "images/campuscon-image.webp"
+    ],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2023-2025",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "8 months",
+    "status": "Deployed",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "sahrdaya",
+    "title": "Sahrdaya Counselling",
+    "year": "2026",
+    "shortDescription": "Deployed web application. Secure counselling management platform with confidential records and role-based access.",
+    "fullDescription": "Sahrdaya Counselling is a secure web-based counselling management platform designed to handle confidential student counselling records. It features role-based access control, encrypted data storage, and comprehensive case management tools.",
+    "objectives": "To build a secure, HIPAA-compliant counselling management platform that protects student confidentiality while enabling effective counselling services.",
+    "problemStatement": "Student counselling services lacked a secure digital platform for managing confidential records, scheduling sessions, and tracking student well-being.",
+    "keyFeatures": [
+      "Secure Authentication",
+      "Encrypted Records",
+      "Session Scheduling",
+      "Case Management",
+      "Progress Tracking",
+      "Report Generation"
+    ],
+    "expectedOutcome": "A secure counselling platform ensuring confidentiality while improving counselling service delivery.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Client",
+    "duration": "6 months",
+    "status": "Deployed",
+    "client": "Sahrdaya College",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "rlabz-revamp",
+    "title": "RLabZ Website Revamp",
+    "year": "2026",
+    "shortDescription": "In Development. Official RLabZ website redesign with modern UI and improved project showcase features.",
+    "fullDescription": "The RLabZ Website Revamp is a comprehensive redesign of the official RLabZ website, featuring a modern UI, improved project showcase system, interactive timeline, and enhanced user experience across all devices.",
+    "objectives": "To redesign the RLabZ website with a modern, premium aesthetic and enhanced project showcase capabilities.",
+    "problemStatement": "The existing RLabZ website needed a complete overhaul to match current web standards and effectively showcase the growing portfolio of projects.",
+    "keyFeatures": [
+      "Modern UI/UX",
+      "Interactive Timeline",
+      "Project Repository",
+      "Responsive Design",
+      "Smooth Animations",
+      "Admin Dashboard"
+    ],
+    "expectedOutcome": "A premium, modern website that effectively showcases RLabZ's portfolio and capabilities.",
+    "tech": [
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "PHP",
+      "MySQL",
+      "GSAP"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Internal",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "RLabZ",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "mentoring",
+    "title": "Mentoring App",
+    "year": "2026",
+    "shortDescription": "In Development. Mentorship platform connecting students with faculty mentors and progress tracking.",
+    "fullDescription": "The Mentoring App is a web application designed to facilitate structured mentorship programs by connecting students with faculty mentors. It provides tools for tracking mentoring sessions, student progress, and generating comprehensive reports.",
+    "objectives": "To create a digital mentoring platform that structures and tracks faculty-student mentorship programs effectively.",
+    "problemStatement": "Faculty mentoring of students was largely informal and untracked, making it difficult to ensure consistent mentoring quality and measure student progress.",
+    "keyFeatures": [
+      "Mentor-Mentee Matching",
+      "Session Scheduling",
+      "Progress Tracking",
+      "Meeting Notes",
+      "Goal Setting",
+      "Performance Reports"
+    ],
+    "expectedOutcome": "A structured mentoring platform improving mentorship quality and tracking.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "booking",
+    "title": "Facility Booking App",
+    "year": "2026",
+    "shortDescription": "In Development. Online platform for booking campus facilities and managing schedules.",
+    "fullDescription": "The Facility Booking App is an online platform that allows students and faculty to book campus facilities such as seminar halls, labs, conference rooms, and sports facilities. It provides real-time availability checking and automated approval workflows.",
+    "objectives": "To develop an efficient facility booking system that eliminates scheduling conflicts and streamlines the reservation process.",
+    "problemStatement": "Campus facility booking was managed manually, leading to scheduling conflicts, double bookings, and underutilization of resources.",
+    "keyFeatures": [
+      "Real-time Availability",
+      "Online Booking",
+      "Approval Workflow",
+      "Calendar View",
+      "Usage Reports",
+      "Notification System"
+    ],
+    "expectedOutcome": "An automated booking system eliminating scheduling conflicts and improving facility utilization.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "blood",
+    "title": "Blood Donation App",
+    "year": "2026",
+    "shortDescription": "In Development. Blood donor management system with donor registration and request tracking.",
+    "fullDescription": "The Blood Donation App is a mobile application that manages blood donation activities, including donor registration, blood request tracking, and donation camp organization. It connects blood donors with recipients efficiently.",
+    "objectives": "To create a mobile platform that simplifies blood donation management and connects donors with recipients quickly during emergencies.",
+    "problemStatement": "Finding compatible blood donors during emergencies was time-consuming and unreliable, especially within the campus community.",
+    "keyFeatures": [
+      "Donor Registration",
+      "Blood Type Search",
+      "Request System",
+      "Donation History",
+      "Camp Notifications",
+      "Emergency Alerts"
+    ],
+    "expectedOutcome": "A blood donation management app ensuring quick donor-recipient matching during emergencies.",
+    "tech": [
+      "Flutter",
+      "Dart",
+      "Firebase",
+      "REST API"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Mobile Application",
+    "projectType": "Academic",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "placement",
+    "title": "Placement Analytics",
+    "year": "2026",
+    "shortDescription": "In Development. Placement analytics dashboard with statistics, reports, and recruitment insights.",
+    "fullDescription": "Placement Analytics is a comprehensive dashboard that provides detailed placement statistics, recruitment insights, and analytical reports. It helps the placement cell track placement trends, company relationships, and student placement outcomes.",
+    "objectives": "To build an analytics platform that provides actionable insights into placement trends and helps improve placement outcomes.",
+    "problemStatement": "The placement cell lacked a data-driven approach to analyzing placement trends, company engagement, and student placement outcomes over time.",
+    "keyFeatures": [
+      "Analytics Dashboard",
+      "Placement Statistics",
+      "Company Tracking",
+      "Student Profiles",
+      "Trend Analysis",
+      "Export Reports"
+    ],
+    "expectedOutcome": "A data-driven placement analytics platform improving placement strategies and outcomes.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Chart.js"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "colabsphere",
+    "title": "ColabSphere",
+    "year": "2026",
+    "shortDescription": "In Development. Collaborative workspace and project management platform developed under RLabZ.",
+    "fullDescription": "ColabSphere is a collaborative workspace and project management platform designed to facilitate team collaboration within RLabZ. It provides tools for project planning, task management, code sharing, and real-time communication.",
+    "objectives": "To create an all-in-one collaboration platform that streamlines project management and team communication within RLabZ.",
+    "problemStatement": "RLabZ teams used multiple disconnected tools for project management, communication, and file sharing, leading to fragmented workflows.",
+    "keyFeatures": [
+      "Project Boards",
+      "Task Management",
+      "Real-time Chat",
+      "File Sharing",
+      "Timeline View",
+      "Team Analytics"
+    ],
+    "expectedOutcome": "A unified collaboration platform improving team productivity and project management.",
+    "tech": [
+      "React",
+      "Node.js",
+      "MongoDB",
+      "Socket.io",
+      "Express.js"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Internal",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "RLabZ",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  },
+  {
+    "id": "examcell",
+    "title": "Project of Exam Cell",
+    "year": "2026",
+    "shortDescription": "In Development. Examination cell platform handled by RLabZ students for exam management.",
+    "fullDescription": "The Exam Cell Project is a comprehensive examination management platform developed by RLabZ students. It handles exam scheduling, hall allocation, result management, and provides tools for the examination cell to manage their operations efficiently.",
+    "objectives": "To build a complete examination management system that automates and streamlines all exam cell operations.",
+    "problemStatement": "The examination cell relied on manual processes for scheduling exams, allocating halls, and managing results, leading to inefficiency and errors.",
+    "keyFeatures": [
+      "Exam Scheduling",
+      "Hall Allocation",
+      "Result Management",
+      "Student Records",
+      "Report Generation",
+      "Admin Dashboard"
+    ],
+    "expectedOutcome": "An automated exam management system reducing manual work and improving accuracy.",
+    "tech": [
+      "PHP",
+      "MySQL",
+      "HTML5",
+      "CSS3",
+      "JavaScript",
+      "Bootstrap"
+    ],
+    "thumbnail": "images/rz-logo.webp",
+    "screenshots": [],
+    "team": [],
+    "faculty": {
+      "name": "Prof. Jubin Joy",
+      "designation": "Assistant Professor",
+      "photo": ""
+    },
+    "department": "MCA",
+    "batch": "2024-2026",
+    "category": "Web Application",
+    "projectType": "Academic",
+    "duration": "Ongoing",
+    "status": "In Development",
+    "client": "Rajagiri College of Social Sciences",
+    "githubLink": "",
+    "demoLink": "",
+    "poster": ""
+  }
+]

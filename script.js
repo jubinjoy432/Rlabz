@@ -606,7 +606,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Canvases
     initParticleCanvas('ambient-canvas', 'what-we-do', '.feature-card');
-    initParticleCanvas('works-canvas', 'our-works', '.project-card');
+    // works-canvas particle system removed — replaced by ambient orb system in the new pj- section
+
 
     // Re-implement the entrance animation observer if needed
     // (Note: The original code used global 'cards' for this, which might have been empty or referring to something else.
@@ -2102,523 +2103,428 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(raf);
 });
 
-
 /* =========================================
-   OUR WORKS SLIDER LOGIC - SWIPER 3D
+   PROJECTS SECTION — True Infinite Connected Timeline (pj-)
    ========================================= */
 document.addEventListener('DOMContentLoaded', () => {
-    const swiperWrapper = document.getElementById('our-works-wrapper');
-    if (!swiperWrapper) return;
 
-    // Inject cards
-    const allProjectIds = Object.keys(projects);
+    // ── 1. Icon map ──
+    const pjIconMap = {
+        1: "fa-heartbeat",   2: "fa-music",
+        3: "fa-theater-masks", 4: "fa-calendar-alt",
+        5: "fa-users",       6: "fa-mobile-alt",
+        7: "fa-globe",       8: "fa-chalkboard-teacher",
+        9: "fa-hands-helping", 10: "fa-glass-cheers"
+    };
 
-    allProjectIds.forEach((id) => {
-        const p = projects[id];
+    const track    = document.getElementById('pj-track');
+    const viewport = document.getElementById('pj-viewport');
+    const prevBtn  = document.getElementById('pj-prev');
+    const nextBtn  = document.getElementById('pj-next');
+    const section  = document.getElementById('our-works');
 
-        // Format Date to Year
-        const year = p.date ? p.date.split(' ').pop() : 'N/A';
+    if (!track || !viewport || !section) return;
 
-        // Format Primary Tech/Category
-        const primaryTech = p.tech && p.tech.length > 0 ? p.tech[0] : 'Project';
+    const projectEntries = Object.entries(projects);
+    const N = projectEntries.length;
 
-        // Check Highlight (Using ID for mock rating)
-        const isHighlight = parseInt(id) <= 3;
+    // ── 2. Build ONE pj-item per project ──
+    function buildItem(id, proj, altIndex) {
+        const year      = proj.date ? proj.date.split(' ').pop() : '—';
+        const iconClass = pjIconMap[id] || 'fa-laptop-code';
+        const isTop     = altIndex % 2 === 0;
 
-        // Generate Tech Stack Badges
-        const techBadges = p.tech ? p.tech.map(t => `<span class="glass-badge">${t}</span>`).join('') : '';
+        const item = document.createElement('div');
+        item.className = `pj-item ${isTop ? 'pj-item--top' : 'pj-item--bottom'}`;
+        item.setAttribute('data-orig-idx', altIndex);
 
-        // Temporary mapping of project IDs to FontAwesome icons (can be moved to data later)
-        const iconMap = {
-            1: "fa-heartbeat",     // Arkon Medical
-            2: "fa-music",         // Splendore
-            3: "fa-theater-masks", // Euphoria
-            4: "fa-calendar-alt",  // Fest Buddy
-            5: "fa-users",         // Campus Connect
-            6: "fa-mobile-alt",    // Cocobies
-            7: "fa-globe",         // ReX
-            8: "fa-chalkboard-teacher", // CTRM
-            9: "fa-hands-helping", // OutREACH
-            10: "fa-glass-cheers"  // The Luke
-        };
-        const iconClass = iconMap[id] || "fa-laptop-code";
+        // Year node on the timeline
+        const node = document.createElement('div');
+        node.className = 'pj-node';
+        
+        // Year text label
+        const yearLabel = document.createElement('div');
+        yearLabel.className = 'pj-card-year';
+        yearLabel.textContent = year;
 
-        // Slide wrapping card
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
+        // Vertical stem
+        const stem = document.createElement('div');
+        stem.className = 'pj-stem';
 
-        slide.innerHTML = `
-            <div class="card"
-                 data-id="${id}"
-                 data-title="${p.title}"
-                 data-desc="${p.desc}"
-                 data-client="${p.client}"
-                 data-year="${year}"
-                 data-tech='${JSON.stringify(p.tech || [])}'
-                 data-link="${p.link}"
-                 data-icon="${iconClass}">
-                <div class="badge-container">
-                    <span class="glass-badge">${primaryTech}</span>
-                </div>
-                
-                <div class="works-card-content">
-                    <div style="font-size: 2rem; color: var(--primary-blue); margin-bottom: 0.5rem;">
-                        <i class="fas ${iconClass}"></i>
-                    </div>
-                    <h3 class="works-card-title">${p.title}</h3>
-                    <p class="works-card-desc">${p.desc}</p>
-                </div>
-                
-                <div class="card-meta-tags">
-                    <span>${year}</span>
-                    <div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${techBadges}</div>
-                    <span style="margin-top:4px;">Client: ${p.client}</span>
-                </div>
+        // Project card
+        const card = document.createElement('article');
+        card.className = 'pj-card';
+        card.setAttribute('data-id', id);
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `View project: ${proj.title}`);
+        card.innerHTML = `
+            <div class="pj-card-img">
+                <img src="${proj.img}" alt="${proj.title}" loading="lazy"
+                     onerror="this.src='images/campuscon-image.png'">
+                <div class="pj-card-badge"><i class="fas ${iconClass}"></i></div>
             </div>
-        `;
-        swiperWrapper.appendChild(slide);
-    });
+            <div class="pj-card-body">
+                <h3 class="pj-card-title">${proj.title}</h3>
+                <p class="pj-card-desc">${proj.desc}</p>
+                <span class="pj-card-client"><i class="fas fa-user" style="font-size:0.65rem;margin-right:4px;color:#38bdf8;"></i>${proj.client}</span>
+            </div>`;
 
-    // Custom Visibility Logic
-    function updateSlideStyles(swiperInstance) {
-        const slides = swiperInstance.slides;
-        const activeIndex = swiperInstance.activeIndex;
-
-        slides.forEach((slide, index) => {
-            const distance = Math.abs(index - activeIndex);
-
-            // Default reset
-            slide.style.opacity = '1';
-            slide.style.zIndex = '1';
-            slide.style.pointerEvents = 'auto';
-            slide.style.visibility = 'visible';
-
-            if (distance === 0) {
-                slide.style.opacity = '1';
-                slide.style.zIndex = '10';
-            } else if (distance === 1) {
-                slide.style.opacity = '0.85';
-                slide.style.zIndex = '8';
-            } else {
-                slide.style.opacity = '0';
-                slide.style.pointerEvents = 'none';
-                slide.style.visibility = 'hidden';
-            }
+        // Mouse spotlight effect
+        card.addEventListener('mousemove', (e) => {
+            const r = card.getBoundingClientRect();
+            card.style.setProperty('--pj-mx', `${e.clientX - r.left}px`);
+            card.style.setProperty('--pj-my', `${e.clientY - r.top}px`);
         });
+
+        // Click → modal
+        const openModal = () => pjOpenModal(id, proj, iconClass);
+        card.addEventListener('click', openModal);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(); }
+        });
+
+        item.appendChild(node);
+        item.appendChild(yearLabel);
+        item.appendChild(stem);
+        item.appendChild(card);
+        return item;
     }
 
-    // Initialize Swiper
-    const worksSwiper = new Swiper('#our-works-swiper', {
-        effect: 'coverflow',
-        speed: 800, // Smoother transition
-        grabCursor: false,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        loop: true,
-        autoplay: {
-            delay: 3000,
-            disableOnInteraction: false,
-            pauseOnMouseEnter: true,
-        },
-        keyboard: {
-            enabled: true,
-        },
-        mousewheel: {
-            forceToAxis: true,
-        },
-        coverflowEffect: {
-            rotate: 50,
-            stretch: 40,
-            depth: 120,
-            modifier: 1,
-            slideShadows: false,
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        on: {
-            init: function () {
-                updateSlideStyles(this);
-            },
-            slideChange: function () {
-                updateSlideStyles(this);
-            },
-            progress: function () {
-                updateSlideStyles(this);
-            },
-            setTransition: function (speed) {
-                this.slides.forEach(slide => {
-                    slide.style.transitionDuration = `${speed}ms`;
-                });
-            },
-            click: function (swiper, event) {
-                const clickedSlide = swiper.clickedSlide;
-                if (!clickedSlide) return;
-
-                if (clickedSlide.classList.contains('swiper-slide-active')) {
-                    const card = clickedSlide.querySelector('.card');
-                    if (card && typeof openProjectModal === 'function') {
-                        openProjectModal(card);
-                    }
-                }
-            }
-        }
-    });
-
-    // Parallax Mouse Effect (3D Tilt) on Active Card
-    let animationFrameId;
-
-    document.getElementById('our-works-swiper').addEventListener('mousemove', (e) => {
-        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
-        if (!activeSlide) return;
-
-        const rect = activeSlide.getBoundingClientRect();
-
-        // Check if mouse is within the active card bounds perfectly
-        if (
-            e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top && e.clientY <= rect.bottom
-        ) {
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-
-            const mouseX = e.clientX - centerX;
-            const mouseY = e.clientY - centerY;
-
-            const rotateX = (mouseY / (rect.height / 2)) * -15; // Max 15deg
-            const rotateY = (mouseX / (rect.width / 2)) * 15;
-
-            animationFrameId = requestAnimationFrame(() => {
-                activeSlide.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+    // ── 3. Populate track: original + two clones (3× items for seamless loop) ──
+    // We render 3 sets so we can loop: set A (clone-left), set B (original), set C (clone-right)
+    function populateTrack() {
+        track.innerHTML = '';
+        [0, 1, 2].forEach(setIdx => {
+            projectEntries.forEach(([id, proj], i) => {
+                const item = buildItem(id, proj, i);
+                item.setAttribute('data-set', setIdx);
+                track.appendChild(item);
             });
-        } else {
-            // Mouse outside active card, reset
-            resetCardTilt(activeSlide);
-        }
-    });
+        });
+    }
+    populateTrack();
 
-    document.getElementById('our-works-swiper').addEventListener('mouseleave', () => {
-        const activeSlide = document.querySelector('#our-works-swiper .swiper-slide-active .card');
-        if (activeSlide) {
-            resetCardTilt(activeSlide);
-        }
-    });
+    // ── 4. Measure and position so we start at the MIDDLE set ──
+    let ITEM_W  = 0; // computed after layout
+    let ITEM_GAP = 0;
+    let SET_W   = 0; // width of one full set of N items
+    let offsetX = 0; // current horizontal translation (negative = scroll right)
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let isUserInteracting = false;
+    let userInteractionTimer = null;
 
-    function resetCardTilt(card) {
-        cancelAnimationFrame(animationFrameId);
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+    function measure() {
+        const items = track.querySelectorAll('.pj-item');
+        if (!items.length) return;
+        const first = items[0];
+        const second = items[1];
+        if (!second) return;
+        
+        // Use offsetLeft to get scale-invariant distance between items
+        const distance = second.offsetLeft - first.offsetLeft;
+        ITEM_W   = first.offsetWidth;
+        ITEM_GAP = distance - ITEM_W;
+        SET_W = N * distance;
+        
+        // Start positioned at the middle set (set index 1)
+        offsetX = -(SET_W + viewport.clientWidth / 2 - ITEM_W / 2);
     }
 
-    // Pause autoplay on card hover
-    const allCards = document.querySelectorAll('#our-works-swiper .card');
-    allCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            if (worksSwiper.autoplay && worksSwiper.autoplay.running) {
-                worksSwiper.autoplay.stop();
-            }
+    // Center viewport on the middle project of the middle set
+    function centerOnMiddle() {
+        measure();
+        // offsetX so that the center item of set 1 is in the center of the viewport
+        const midItemIndex = N * 1 + Math.floor(N / 2); // middle set, middle item
+        const vpCenter = viewport.clientWidth / 2;
+        offsetX = -(midItemIndex * (ITEM_W + ITEM_GAP) - vpCenter + ITEM_W / 2);
+        applyTransform(false);
+        updateCenter();
+    }
+
+    function applyTransform(animated) {
+        track.style.transition = animated ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
+        track.style.transform  = `translateX(${offsetX}px)`;
+    }
+
+    // ── 5. Infinite loop seam check — jump silently when near edges ──
+    function checkSeam() {
+        // If we've scrolled too far right (toward set 0), jump forward by SET_W
+        if (offsetX > -(SET_W * 0.5)) {
+            offsetX -= SET_W;
+            applyTransform(false);
+        }
+        // If we've scrolled too far left (toward set 2), jump back by SET_W
+        if (offsetX < -(SET_W * 2.5)) {
+            offsetX += SET_W;
+            applyTransform(false);
+        }
+    }
+
+    // ── 6. Center detection — which item is closest to viewport center ──
+    function updateCenter() {
+        const allItems = Array.from(track.querySelectorAll('.pj-item'));
+        const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        let bestItem   = null;
+        let bestDist   = Infinity;
+
+        allItems.forEach(item => {
+            const r    = item.getBoundingClientRect();
+            const itemCenter = r.left + r.width / 2;
+            const dist = Math.abs(itemCenter - vpCenter);
+            if (dist < bestDist) { bestDist = dist; bestItem = item; }
         });
-        card.addEventListener('mouseleave', () => {
-            if (worksSwiper.autoplay && !worksSwiper.autoplay.running) {
-                worksSwiper.autoplay.start();
-            }
+
+        allItems.forEach(item => {
+            item.classList.remove('is-center');
+            const card = item.querySelector('.pj-card');
+            if (card) card.classList.remove('is-dim');
         });
+
+        if (bestItem) {
+            bestItem.classList.add('is-center');
+            // Dim cards that are far from center
+            allItems.forEach(item => {
+                if (item !== bestItem) {
+                    const r = item.getBoundingClientRect();
+                    const itemCenter = r.left + r.width / 2;
+                    const dist = Math.abs(itemCenter - vpCenter);
+                    const card = item.querySelector('.pj-card');
+                    if (card && dist > ITEM_W * 1.5) card.classList.add('is-dim');
+                }
+            });
+        }
+    }
+
+    // ── 7. Auto-scroll RAF loop ──
+    const AUTO_SPEED = 0.4; // px per frame (smooth slow crawl)
+    let rafId = null;
+    let lastTime = 0;
+
+    function autoScrollLoop(time) {
+        if (!isUserInteracting) {
+            const delta = time - lastTime;
+            // Cap delta to avoid huge jumps on tab-resume
+            const step  = Math.min(delta, 50) * AUTO_SPEED * 0.06;
+            offsetX -= step;
+            applyTransform(false);
+            checkSeam();
+            updateCenter();
+        }
+        lastTime = time;
+        rafId = requestAnimationFrame(autoScrollLoop);
+    }
+
+    // ── 8. Manual navigation (prev/next buttons snap to previous/next original item) ──
+    function snapToNearest(direction) {
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+
+        // Find item currently closest to center
+        const allItems = Array.from(track.querySelectorAll('.pj-item'));
+        const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
+        let bestItem   = null;
+        let bestDist   = Infinity;
+
+        allItems.forEach(item => {
+            const r    = item.getBoundingClientRect();
+            const ic   = r.left + r.width / 2;
+            const dist = Math.abs(ic - vpCenter);
+            if (dist < bestDist) { bestDist = dist; bestItem = item; }
+        });
+
+        if (!bestItem) { isUserInteracting = false; return; }
+
+        const siblings = allItems;
+        const cursorIndex = siblings.indexOf(bestItem);
+        const targetIndex = Math.max(0, Math.min(siblings.length - 1, cursorIndex + direction));
+        const targetItem  = siblings[targetIndex];
+
+        if (targetItem) {
+            const r = targetItem.getBoundingClientRect();
+            const ic = r.left + r.width / 2;
+            const delta = ic - vpCenter;
+            offsetX -= delta;
+            applyTransform(true);
+            checkSeam();
+            updateCenter();
+        }
+
+        userInteractionTimer = setTimeout(() => { isUserInteracting = false; }, 2500);
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => snapToNearest(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => snapToNearest(1));
+
+    // Keyboard nav
+    section.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft')  snapToNearest(-1);
+        if (e.key === 'ArrowRight') snapToNearest(1);
+    });
+
+    // ── 9. Drag / touch interaction ──
+    function onDragStart(clientX) {
+        isDragging = true;
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+        dragStartX = clientX;
+        dragStartOffset = offsetX;
+        track.style.cursor = 'grabbing';
+        cancelAnimationFrame(rafId);
+    }
+
+    function onDragMove(clientX) {
+        if (!isDragging) return;
+        const dx = clientX - dragStartX;
+        offsetX = dragStartOffset + dx;
+        applyTransform(false);
+        checkSeam();
+        updateCenter();
+    }
+
+    function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        track.style.cursor = 'grab';
+        // Restart auto scroll after delay
+        userInteractionTimer = setTimeout(() => {
+            isUserInteracting = false;
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(autoScrollLoop);
+        }, 2500);
+    }
+
+    // Mouse drag
+    viewport.addEventListener('mousedown', (e) => { e.preventDefault(); onDragStart(e.clientX); });
+    window.addEventListener('mousemove', (e) => { if (isDragging) onDragMove(e.clientX); });
+    window.addEventListener('mouseup', onDragEnd);
+
+    // Touch drag
+    viewport.addEventListener('touchstart', (e) => { onDragStart(e.touches[0].clientX); }, { passive: true });
+    viewport.addEventListener('touchmove', (e) => { onDragMove(e.touches[0].clientX); }, { passive: true });
+    viewport.addEventListener('touchend', onDragEnd, { passive: true });
+
+    // ── 10. Pause auto-scroll on section hover ──
+    section.addEventListener('mouseenter', () => {
+        isUserInteracting = true;
+        clearTimeout(userInteractionTimer);
+    });
+    section.addEventListener('mouseleave', () => {
+        if (!isDragging) {
+            userInteractionTimer = setTimeout(() => {
+                isUserInteracting = false;
+            }, 500);
+        }
+    });
+
+    // (Orb logic removed for cleaner timeline look)
+
+    // ── 13. GSAP header reveal ──
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.fromTo('.pj-header',
+            { y: 40, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+              scrollTrigger: { trigger: '#our-works', start: 'top 75%', once: true } }
+        );
+        gsap.fromTo('.pj-timeline-unified',
+            { opacity: 0 },
+            { opacity: 1, duration: 1, ease: 'power2.out',
+              scrollTrigger: { trigger: '#our-works', start: 'top 70%', once: true } }
+        );
+    }
+
+    // ── 14. Initialize: measure → position → start RAF ──
+    // Wait for fonts/images to settle then boot
+    function boot() {
+        centerOnMiddle();
+        track.style.cursor = 'grab';
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(autoScrollLoop);
+    }
+
+    // Defer until section is in/near viewport (IntersectionObserver for performance)
+    const bootObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+            bootObserver.disconnect();
+            requestAnimationFrame(() => requestAnimationFrame(boot));
+        }
+    }, { rootMargin: '200px' });
+    bootObserver.observe(section);
+
+    window.addEventListener('resize', () => {
+        cancelAnimationFrame(rafId);
+        setTimeout(() => {
+            populateTrack();
+            centerOnMiddle();
+            lastTime = performance.now();
+            rafId = requestAnimationFrame(autoScrollLoop);
+        }, 150);
     });
 });
 
-// Modal Interaction Logic for Our Works Section
-function openProjectModal(cardElement) {
-    if (!cardElement) return;
-
-    const modal = document.getElementById('project-modal');
+// ── Modal open/close ──
+function pjOpenModal(id, proj, iconClass) {
+    const modal    = document.getElementById('pj-modal');
     if (!modal) return;
 
-    // Extract data from clicked card
-    const title = cardElement.getAttribute('data-title');
-    const desc = cardElement.getAttribute('data-desc');
-    const client = cardElement.getAttribute('data-client');
-    const year = cardElement.getAttribute('data-year');
-    const link = cardElement.getAttribute('data-link');
-    const iconClass = cardElement.getAttribute('data-icon');
-    let tech = [];
-    try { tech = JSON.parse(cardElement.getAttribute('data-tech')); } catch (e) { }
+    document.getElementById('pj-modal-icon').innerHTML  = `<i class="fas ${iconClass || 'fa-laptop-code'}"></i>`;
+    document.getElementById('pj-modal-title').textContent  = proj.title  || '';
+    document.getElementById('pj-modal-desc').textContent   = proj.desc   || '';
+    document.getElementById('pj-modal-client').textContent = proj.client || '';
+    document.getElementById('pj-modal-year').textContent   = proj.date   || '';
 
-    // Populate modal
-    document.getElementById('modal-title').textContent = title || '';
-    document.getElementById('modal-desc').textContent = desc || '';
-    document.getElementById('modal-client').textContent = client || '';
-    document.getElementById('modal-year').textContent = year || '';
-    document.getElementById('modal-icon').innerHTML = '<i class="fas ' + (iconClass || 'fa-laptop-code') + '"></i>';
+    // Tech badges
+    const techWrap = document.getElementById('pj-modal-tech');
+    techWrap.innerHTML = '';
+    (proj.tech || []).forEach(t => {
+        const b = document.createElement('span');
+        b.className   = 'pj-tech-badge';
+        b.textContent = t;
+        techWrap.appendChild(b);
+    });
 
-    const linkEl = document.getElementById('modal-link');
-    if (link && link !== "#" && linkEl) {
-        linkEl.href = link;
-        linkEl.style.display = 'block';
-    } else if (linkEl) {
+    // Link
+    const linkEl = document.getElementById('pj-modal-link');
+    if (proj.link && proj.link !== '#') {
+        linkEl.href  = proj.link;
+        linkEl.style.display = 'inline-flex';
+    } else {
         linkEl.style.display = 'none';
     }
 
-    // Populate tech badges
-    const badgesContainer = document.getElementById('modal-badges');
-    if (badgesContainer) {
-        badgesContainer.innerHTML = '';
-        tech.forEach(t => {
-            const badge = document.createElement('span');
-            badge.className = 'glass-badge';
-            badge.textContent = t;
-            badgesContainer.appendChild(badge);
-        });
-    }
-
-    // Show modal
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal = document.getElementById('project-modal');
-    const closeBtn = document.getElementById('close-modal-btn');
+    const modal     = document.getElementById('pj-modal');
+    const closeBtn  = document.getElementById('pj-modal-close');
+    const backdrop  = document.getElementById('pj-modal-backdrop');
 
-    if (modal && closeBtn) {
-        // Close on button click
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto'; // Restore scrolling
-        });
-
-        // Close on click outside modal content
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Close on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
+    function pjCloseModal() {
+        if (!modal) return;
+        modal.classList.remove('is-open');
+        document.body.style.overflow = '';
     }
+
+    if (closeBtn)  closeBtn.addEventListener('click',  pjCloseModal);
+    if (backdrop)  backdrop.addEventListener('click',  pjCloseModal);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) pjCloseModal();
+    });
 });
 
-// =========================================
-// OUR WORKS SECTION - PARALLAX SCROLL EFFECT
-// =========================================
-(function () {
-    const ourWorks = document.getElementById('our-works');
-    const whatWeDo = document.getElementById('what-we-do');
-    if (!ourWorks || !whatWeDo) return;
-
-    // Apply initial CSS to create clip-path / translateY reveal
-    Object.assign(ourWorks.style, {
-        position: 'relative',
-        willChange: 'transform',
-        transition: 'none'
-    });
-
-    let _th_ow = 0;
-    function onParallaxScroll() {
-        if (window.innerWidth < 768) { _th_ow++; if (_th_ow % 3 !== 0) return; }
-        const wwdRect = whatWeDo.getBoundingClientRect();
-        const owRect = ourWorks.getBoundingClientRect();
-
-        // How far the previous section has scrolled past the viewport top
-        const scrolled = -wwdRect.top;
-        const sectionHeight = whatWeDo.offsetHeight;
-
-        // Clamp progress 0 → 1 while user scrolls through `what-we-do`
-        const progress = Math.max(0, Math.min(1, scrolled / sectionHeight));
-
-        // Parallax: section starts 80px below its natural position and rises to 0
-        const translateY = (1 - progress) * 80;
-
-        // Opacity: fade in from 0.4 → 1
-        const opacity = 0.4 + progress * 0.6;
-
-        // Scale: subtle zoom from 0.97 → 1
-        const scale = 0.97 + progress * 0.03;
-
-        ourWorks.style.transform = `translateY(${translateY}px) scale(${scale})`;
-        ourWorks.style.opacity = opacity;
-    }
-
-    window.addEventListener('scroll', onParallaxScroll, { passive: true });
-    onParallaxScroll(); // Run once on load
-})();
-// =========================================
-// OUR WORKS - HEADING SCROLL PARALLAX (kept)
-// =========================================
-(function () {
-    function initHeadingParallax() {
-        const heading = document.querySelector('#our-works .section-header');
-        if (!heading) return;
-
-        let ticking = false;
-
-        let _th_head = 0;
-        function applyHeadingParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    ticking = false;
-                    if (window.innerWidth < 768) { _th_head++; if (_th_head % 3 !== 0) return; }
-                    const rect = heading.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.08;
-                    heading.style.transform = `translateY(${translateY}px)`;
-                    heading.style.willChange = 'transform';
-                });
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', applyHeadingParallax, { passive: true });
-        applyHeadingParallax();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHeadingParallax);
-    } else {
-        initHeadingParallax();
-    }
-})();
-
-// =========================================
-// OUR WORKS - CARDS INTRO ANIMATION (on scroll into view)
-// =========================================
-(function () {
-    function initCardsIntro() {
-        const swiperEl = document.getElementById('our-works-swiper');
-        if (!swiperEl) return;
-
-        // Start very hidden: shifted down, faded, blurred and scaled down
-        swiperEl.style.opacity = '0';
-        swiperEl.style.transform = 'translateY(120px) scale(0.88)';
-        swiperEl.style.filter = 'blur(8px)';
-        swiperEl.style.transition = [
-            'opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
-            'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
-            'filter 1.0s ease'
-        ].join(', ');
-        swiperEl.style.willChange = 'opacity, transform, filter';
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // 80ms delay — makes it feel intentional
-                    setTimeout(() => {
-                        swiperEl.style.opacity = '1';
-                        swiperEl.style.transform = 'translateY(0px) scale(1)';
-                        swiperEl.style.filter = 'blur(0px)';
-                    }, 80);
-                    observer.unobserve(swiperEl);
-                }
-            });
-        }, { threshold: 0.05 }); // Fire when just 5% visible = earlier trigger
-
-        observer.observe(swiperEl);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCardsIntro);
-    } else {
-        initCardsIntro();
-    }
-})();
 
 
-// =========================================
-// OUR WORKS - CARDS SCROLL PARALLAX (slower than heading)
-// =========================================
-(function () {
-    function initCardsParallax() {
-        const swiperEl = document.getElementById('our-works-swiper');
-        if (!swiperEl) return;
-
-        let ticking = false;
-
-        function applyCardsParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = swiperEl.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    // 0.04 = slower than heading (0.08)
-                    const translateY = fromCenter * 0.04;
-                    // Preserve the existing intro transform by using a CSS variable
-                    swiperEl.style.setProperty('--cards-parallax-y', `${translateY}px`);
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        // Merge parallax into the existing transform via a wrapper transform
-        // We apply separately on the inner container to avoid conflicting with intro animation
-        const inner = swiperEl.querySelector('.swiper-wrapper') || swiperEl;
-        if (!inner) return;
-        inner.style.willChange = 'transform';
-
-        function applyInnerParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = swiperEl.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.04;
-                    // Offset the inner wrapper — Swiper keeps its own transform on wrapper
-                    // so we target each visible slide instead to avoid breaking Swiper layout
-                    const activeSlides = swiperEl.querySelectorAll('.swiper-slide-active, .swiper-slide-next, .swiper-slide-prev');
-                    activeSlides.forEach(slide => {
-                        slide.style.marginTop = `${translateY * 0.5}px`;
-                    });
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        // Better approach: use a wrapper div around the swiper for parallax movement
-        let parallaxWrapper = swiperEl.closest('.swiper-parallax-wrapper');
-        if (!parallaxWrapper) {
-            parallaxWrapper = document.createElement('div');
-            parallaxWrapper.className = 'swiper-parallax-wrapper';
-            parallaxWrapper.style.willChange = 'transform';
-            swiperEl.parentNode.insertBefore(parallaxWrapper, swiperEl);
-            parallaxWrapper.appendChild(swiperEl);
-        }
-
-        function applyWrapperParallax() {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const rect = parallaxWrapper.getBoundingClientRect();
-                    const viewportMid = window.innerHeight / 2;
-                    const fromCenter = rect.top + rect.height / 2 - viewportMid;
-                    const translateY = fromCenter * 0.04;
-                    parallaxWrapper.style.transform = `translateY(${translateY}px)`;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }
-
-        window.addEventListener('scroll', applyWrapperParallax, { passive: true });
-        applyWrapperParallax();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCardsParallax);
-    } else {
-        initCardsParallax();
-    }
-})();
+// NOTE: The old native-scroll parallax handlers for #our-works were removed.
+// They conflicted with GSAP ScrollTrigger pin — once GSAP pinned the section
+// (position: fixed), getBoundingClientRect() on #what-we-do gave wrong values,
+// causing opacity to lock at 0.4 and translateY to shift 80px down.
+// The GSAP entrance animation (scale + glide) handles the reveal instead.
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
@@ -2786,4 +2692,495 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         );
     }
+});
+
+// --- Custom Curved Horizontal Scrolling Timeline (GSAP + ScrollTrigger) ---
+let timelineInitialized = false;
+window.addEventListener('projectsLoaded', () => {
+    if (timelineInitialized) return;
+    timelineInitialized = true;
+    buildDynamicTimeline();
+    initCurvedTimeline();
+});
+if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitialized) {
+    timelineInitialized = true;
+    buildDynamicTimeline();
+    initCurvedTimeline();
+}
+
+function buildDynamicTimeline() {
+    const scrollContent = document.querySelector('.timeline-scroll-content');
+    if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
+    
+    // Remove existing nodes and cards
+    const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
+    existing.forEach(el => el.remove());
+
+    const projects = window.RLABZ_PROJECTS;
+    
+    // Base X offset
+    let currentX = 240; 
+    let isBottom = true;
+
+    projects.forEach((proj, idx) => {
+        const top = isBottom ? 340 : 160;
+        const theme = isBottom ? 'teal' : 'purple';
+        
+        // Node
+        const node = document.createElement('div');
+        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} ${theme}-theme`;
+        node.style.left = `${currentX}px`;
+        node.style.top = `${top}px`;
+        node.innerHTML = `<div class="node-inner">${proj.year || 'N/A'}</div>`;
+        scrollContent.appendChild(node);
+        
+        // Card
+        const cardTop = isBottom ? 270 : 10;
+        const card = document.createElement('div');
+        card.className = `timeline-card card-${isBottom ? 'bottom' : 'top'} ${theme}-border`;
+        card.style.left = `${currentX + 165}px`;
+        card.style.top = `${cardTop}px`;
+        card.setAttribute('data-node', idx);
+        
+        card.innerHTML = `
+            <div class="card-year">${proj.year || 'N/A'}</div>
+            <h3 class="card-title">${proj.title}</h3>
+            <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
+            <div class="card-actions"><a href="project-details.html?id=${proj.id}" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+        `;
+        scrollContent.appendChild(card);
+        
+        currentX += 260;
+        isBottom = !isBottom;
+    });
+
+    // Update SVG Path
+    const svg = scrollContent.querySelector('svg.timeline-svg-path');
+    if (svg) {
+        const endX = currentX - 260; 
+        const newWidth = endX + 800; // Extra padding
+        svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
+        
+        // Generate the curvy path
+        let d = "M 0 250 C 80 250 150 340 240 340";
+        let curX = 240;
+        let atBottom = true;
+        
+        for (let i = 0; i < projects.length - 1; i++) {
+            if (atBottom) {
+                // curve to top
+                d += ` C ${curX + 110} 340 ${curX + 150} 160 ${curX + 260} 160`;
+            } else {
+                // curve to bottom
+                d += ` C ${curX + 110} 160 ${curX + 150} 340 ${curX + 260} 340`;
+            }
+            curX += 260;
+            atBottom = !atBottom;
+        }
+        
+        // Final line
+        let endY = atBottom ? 340 : 160;
+        d += ` C ${curX + 110} ${endY} ${curX + 160} 250 ${curX + 220} 250 L ${newWidth} 250`;
+        
+        const path1 = svg.querySelector('#road-path');
+        if (path1) path1.setAttribute('d', d);
+        
+        const mask = svg.querySelector('#road-mask');
+        if (mask) mask.setAttribute('width', newWidth + 1000);
+    }
+}
+
+function initCurvedTimeline() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const pinContainer = document.querySelector('.timeline-pin-container');
+    const scrollContent = document.querySelector('.timeline-scroll-content');
+
+    if (!pinContainer || !scrollContent) return;
+
+    // --- Section Title: scroll-scrubbed glide up ---
+    const worksTitle = document.querySelector('#our-works .section-title');
+    if (worksTitle) {
+        // Start tiny & far below — rocket up energetically as section enters view
+        gsap.fromTo(worksTitle,
+            { opacity: 0, y: 140, scale: 0.35, transformOrigin: 'center bottom' },
+            {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                ease: 'power4.out',
+                scrollTrigger: {
+                    trigger: '#our-works',
+                    start: 'top 100%',  // fire as soon as section enters viewport bottom
+                    end:   'top 30%',   // complete quickly — energetic, not slow
+                    scrub: 0.6,         // tight scrub = snappy, physical feel
+                }
+            }
+        );
+    }
+
+    // --- Dark Card Entrance: glide up from slightly below ---
+    gsap.set(pinContainer, { opacity: 0, y: 60 });
+    gsap.to(pinContainer, {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        ease: 'expo.out',
+        delay: 0.15,
+        onComplete: () => gsap.set(pinContainer, { clearProps: 'all' }),
+        scrollTrigger: {
+            trigger: '#our-works',
+            start: 'top 85%',
+            once: true
+        }
+    });
+
+    // Only apply horizontal pinning scroll on desktop (width > 992px)
+    let timelineCtx = gsap.context(() => {
+        const mm = gsap.matchMedia();
+
+        mm.add("(min-width: 993px)", () => {
+            const containerWidth = pinContainer.offsetWidth;
+            const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
+
+            const cards = gsap.utils.toArray('.timeline-card');
+            const nodes = gsap.utils.toArray('.timeline-node');
+
+            if (totalScrollDistance > 0) {
+                // Screen is narrower than content, enable horizontal scroll
+                const scrollTween = gsap.to(scrollContent, {
+                    x: -totalScrollDistance,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: '#our-works',
+                        pin: true,
+                        scrub: 1,
+                        start: 'top top',
+                        end: () => `+=${totalScrollDistance + 1000}`,
+                        invalidateOnRefresh: true,
+                        onRefresh: (self) => {
+                            if (self.spacer) {
+                                self.spacer.style.backgroundColor = '#f8fafc';
+                            }
+                        }
+                    }
+                });
+
+                // --- Dynamic Road Drawing Animation ---
+                const maskPath = document.querySelector('#road-mask-path');
+                if (maskPath) {
+                    const pathEl = document.querySelector('#road-path');
+                    const pathLen = pathEl.getTotalLength();
+                    maskPath.style.strokeDasharray = pathLen;
+                    
+                    // Ratio to estimate physical horizontal pixels to arc length
+                    const ratio = pathLen / 7800;
+                    // The tip of the road will lead the viewport by 85% of screen width
+                    const initialDrawLen = (containerWidth * 0.85) * ratio;
+
+                    // Tween 1: Draw the initial road segment as the section enters vertically
+                    gsap.fromTo(maskPath,
+                        { strokeDashoffset: pathLen },
+                        {
+                            strokeDashoffset: pathLen - initialDrawLen,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 80%',
+                                end: 'top top',
+                                scrub: 1
+                            }
+                        }
+                    );
+
+                    // Tween 2: Draw the rest of the road as the section scrolls horizontally
+                    gsap.fromTo(maskPath,
+                        { strokeDashoffset: pathLen - initialDrawLen },
+                        {
+                            strokeDashoffset: 0,
+                            ease: 'none',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top top',
+                                end: () => `+=${totalScrollDistance + 1000}`,
+                                scrub: 1
+                            }
+                        }
+                    );
+                }
+
+                // --- Node and Card Reveal tied to Road Drawing ---
+                cards.forEach((card, index) => {
+                    const node = nodes[index];
+                    const isTop = card.classList.contains('card-top');
+                    const startY = isTop ? -40 : 40;
+                    const nodeLeft = parseFloat(node.style.left || 0);
+
+                    if (nodeLeft < containerWidth * 0.85) {
+                        // Node is in the initial viewport: Reveal during vertical entrance
+                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 0.85)) * 80;
+                        
+                        // Node pops in
+                        gsap.fromTo(node,
+                            { opacity: 0, scale: 0.5 },
+                            {
+                                opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)',
+                                scrollTrigger: {
+                                    trigger: '#our-works',
+                                    start: `top ${triggerPercent + 5}%`, // slightly after road passes
+                                    toggleActions: 'play none none reverse'
+                                }
+                            }
+                        );
+                        // Card slides in
+                        gsap.fromTo(card,
+                            { opacity: 0, y: startY },
+                            {
+                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: '#our-works',
+                                    start: `top ${triggerPercent}%`,
+                                    end: `top ${triggerPercent - 10}%`,
+                                    scrub: true
+                                }
+                            }
+                        );
+                    } else {
+                        // Node is outside initial viewport: Reveal during horizontal scroll
+                        // Node pops in when it crosses the 85% mark (right as the road tip hits it)
+                        gsap.fromTo(node,
+                            { opacity: 0, scale: 0.5 },
+                            {
+                                opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)',
+                                scrollTrigger: {
+                                    trigger: node,
+                                    containerAnimation: scrollTween,
+                                    start: 'left 85%', 
+                                    toggleActions: 'play none none reverse'
+                                }
+                            }
+                        );
+                        // Card slides in shortly after
+                        gsap.fromTo(card,
+                            { opacity: 0, y: startY },
+                            {
+                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                scrollTrigger: {
+                                    trigger: node,
+                                    containerAnimation: scrollTween,
+                                    start: 'left 80%',
+                                    end: 'left 55%',
+                                    scrub: true
+                                }
+                            }
+                        );
+                    }
+                });
+            } else {
+                // Screen is wide enough to show all 1500px, no horizontal scroll needed
+                nodes.forEach((node, index) => {
+                    gsap.fromTo(node,
+                        { opacity: 0, scale: 0.5 },
+                        {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.8,
+                            delay: index * 0.1,
+                            ease: 'back.out(1.7)',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 60%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
+
+                cards.forEach((card, index) => {
+                    const isTop = card.classList.contains('card-top');
+                    const startY = isTop ? -40 : 40;
+                    gsap.fromTo(card,
+                        { opacity: 0, y: startY },
+                        {
+                            opacity: 1,
+                            y: 0,
+                            duration: 1,
+                            delay: index * 0.1 + 0.3,
+                            ease: 'power2.out',
+                            scrollTrigger: {
+                                trigger: '#our-works',
+                                start: 'top 60%',
+                                toggleActions: 'play none none reverse'
+                            }
+                        }
+                    );
+                });
+            }
+        });
+        
+        // Mobile fallback (GSAP does not pin or translate horizontally, let CSS handle it)
+        mm.add("(max-width: 992px)", () => {
+            const cards = gsap.utils.toArray('.timeline-card');
+            const nodes = gsap.utils.toArray('.timeline-node');
+
+            cards.forEach((card, index) => {
+                const node = nodes[index];
+                gsap.fromTo(card,
+                    { opacity: 0, y: 40 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: node,
+                            start: 'top 55%',
+                            end: 'top 45%',
+                            scrub: true
+                        }
+                    }
+                );
+            });
+
+            nodes.forEach((node) => {
+                gsap.fromTo(node,
+                    { opacity: 0, scale: 0.6 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.6,
+                        ease: 'back.out(1.5)',
+                        scrollTrigger: {
+                            trigger: node,
+                            start: 'top 85%',
+                            end: 'top 65%',
+                            scrub: true
+                        }
+                    }
+                );
+            });
+        });
+    });
+
+    // Cleanup on window unload
+    window.addEventListener('unload', () => {
+        timelineCtx.revert();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elfsight Modal Logic ---
+    const modal = document.getElementById('es-modal');
+    const modalBackdrop = document.getElementById('es-modal-backdrop');
+    const modalClose = document.getElementById('es-modal-close');
+    const modalTitle = document.getElementById('es-modal-title');
+    const modalDesc = document.getElementById('es-modal-desc');
+    const modalYear = document.getElementById('es-modal-year');
+    const modalTech = document.getElementById('es-modal-tech');
+    const modalTeam = document.getElementById('es-modal-team');
+    
+    // We keep static data for preview purposes until the fetch API is fully integrated
+    const projectData = {
+        'euphoria': {
+            title: 'Launch of Euphoria',
+            year: '2019',
+            desc: 'Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience. We set a new standard for college festivals with cutting edge technology integration.',
+            team: [{name: 'Alice S.', photo: 'images/rz-logo.webp'}, {name: 'Bob J.', photo: 'images/rz-logo.webp'}],
+            tech: ['Event Management', 'TechFest', 'Innovation']
+        },
+        'campuscon': {
+            title: 'CampusCon Initiative',
+            year: '2020',
+            desc: 'A major step towards integrating advanced campus networking solutions and fostering digital education. This initiative paved the way for seamless communication across departments.',
+            team: [{name: 'Charlie D.', photo: 'images/rz-logo.webp'}],
+            tech: ['Networking', 'Education', 'Infrastructure']
+        },
+        'ctrm': {
+            title: 'CTRM Deployment',
+            year: '2021',
+            desc: 'Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity. This unified system replaced dozens of legacy tools.',
+            team: [{name: 'Diana P.', photo: 'images/rz-logo.webp'}],
+            tech: ['Enterprise Software', 'Management', 'System Integration']
+        },
+        'fesbud': {
+            title: 'Fesbud Platform',
+            year: '2023',
+            desc: 'A budget management and financial tracking system designed specifically for our complex ecosystem. It allows real-time tracking of expenses and resource allocation.',
+            team: [{name: 'Evan R.', photo: 'images/rz-logo.webp'}, {name: 'Fiona M.', photo: 'images/rz-logo.webp'}],
+            tech: ['FinTech', 'Budgeting', 'Analytics']
+        },
+        'arkon': {
+            title: 'Arkon Expansion',
+            year: '2025',
+            desc: 'Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization. Arkon provides a scalable foundation for future AI projects.',
+            team: [{name: 'George H.', photo: 'images/rz-logo.webp'}],
+            tech: ['AI', 'Cloud Native', 'Modernization']
+        }
+    };
+
+    // Event delegation is used below instead of static selection
+    
+    function openModal(projectId) {
+        if (!modal || !projectData[projectId]) return;
+        
+        const data = projectData[projectId];
+        
+        modalTitle.textContent = data.title;
+        modalDesc.textContent = data.desc;
+        modalYear.textContent = data.year;
+        
+        // Populate Team Members
+        if (modalTeam) {
+            modalTeam.innerHTML = '';
+            if (data.team && data.team.length) {
+                data.team.forEach(member => {
+                    const memberDiv = document.createElement('div');
+                    memberDiv.className = 'es-team-member';
+                    memberDiv.innerHTML = `
+                        <img src="${member.photo}" alt="${member.name}" class="es-team-photo" onerror="this.src='images/rz-logo.webp'">
+                        <span class="es-team-name">${member.name}</span>
+                    `;
+                    modalTeam.appendChild(memberDiv);
+                });
+            }
+        }
+        
+        // Populate tech badges
+        if (modalTech) {
+            modalTech.innerHTML = '';
+            if (data.tech && data.tech.length) {
+                data.tech.forEach(t => {
+                    const badge = document.createElement('span');
+                    badge.className = 'es-tech-badge';
+                    badge.textContent = t;
+                    modalTech.appendChild(badge);
+                });
+            }
+        }
+        
+        modal.classList.add('is-open');
+    }
+
+    function closeModal() {
+        if (modal) modal.classList.remove('is-open');
+    }
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.es-learn-more');
+        if (btn) {
+            e.preventDefault();
+            const projectId = btn.getAttribute('data-project');
+            openModal(projectId);
+        }
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
 });
