@@ -8,7 +8,7 @@ require_once 'db.php';
 
 // Check if an ID is provided
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: ../dashboard.php?error=" . urlencode("Project ID not provided for deletion."));
+    header("Location: ../pages/manage_projects.php?error=" . urlencode("Project ID not provided for deletion."));
     exit;
 }
 
@@ -21,7 +21,7 @@ try {
     $project = $stmt->fetch();
 
     if (!$project) {
-        header("Location: ../dashboard.php?error=" . urlencode("Project not found."));
+        header("Location: ../pages/manage_projects.php?error=" . urlencode("Project not found."));
         exit;
     }
 
@@ -74,14 +74,14 @@ try {
     
     $pdo->commit();
 
-    header("Location: ../dashboard.php?success=" . urlencode("Project deleted successfully."));
+    header("Location: ../pages/manage_projects.php?success=" . urlencode("Project deleted successfully."));
     exit;
 
 } catch (PDOException $e) {
     if ($pdo->inTransaction()) {
         $pdo->rollBack();
     }
-    header("Location: ../dashboard.php?error=" . urlencode("Database error: " . $e->getMessage()));
+    header("Location: ../pages/manage_projects.php?error=" . urlencode("Database error: " . $e->getMessage()));
     exit;
 }
 ?>

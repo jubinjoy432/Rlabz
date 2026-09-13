@@ -1,5 +1,5 @@
-<?php
-require_once "admin/api/db.php";
+﻿<?php
+require_once "../admin/api/db.php";
 
 $valid_slugs = ["sahrdaya", "rlabz-revamp", "conference", "splendore-2025", "mentoring", "booking", "blood", "placement", "euphoria-2024", "arkon-2025", "dyuti", "sparc", "stuba", "campus-connect-2025", "colabsphere", "examcell"];
 
@@ -13,7 +13,7 @@ foreach ($all_projects as $p) {
     }
 }
 
-file_put_contents("other_projects.json", json_encode($to_remove, JSON_PRETTY_PRINT));
+file_put_contents("../dev/other_projects.json", json_encode($to_remove, JSON_PRETTY_PRINT));
 echo "Saved " . count($to_remove) . " projects to other_projects.json\n";
 
 foreach ($to_remove as $p) {
@@ -30,3 +30,4 @@ foreach ($to_remove as $p) {
     echo "Deleted project: " . $p["title"] . "\n";
 }
 ?>
+

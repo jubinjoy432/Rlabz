@@ -116,6 +116,28 @@ document.addEventListener('DOMContentLoaded', () => {
             activeLink = document.querySelector('.nav-link.active') || links[0];
             updatePill(activeLink);
         });
+
+        // --- Automatic ScrollSpy ---
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const scrollPos = window.scrollY + 220;
+            sections.forEach(section => {
+                if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
+                    current = '#' + section.getAttribute('id');
+                }
+            });
+            if (current) {
+                links.forEach(link => {
+                    if (link.getAttribute('href') === current) {
+                        if (!link.classList.contains('active')) {
+                            links.forEach(l => l.classList.remove('active'));
+                            link.classList.add('active');
+                        }
+                    }
+                });
+            }
+        }, { passive: true });
     }
 
     // --- Mobile Menu Toggle ---
@@ -2048,60 +2070,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// === Lenis Smooth Scroll Init ===
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof Lenis === 'undefined') return;
 
-    const lenis = new Lenis({
-        duration: 1.5,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        direction: 'vertical',
-        gestureDirection: 'vertical',
-        smooth: true,
-        mouseMultiplier: 1,
-        smoothTouch: false,
-        touchMultiplier: 2,
-        wheelMultiplier: 1.2,
-    });
-
-    if (typeof ScrollTrigger !== 'undefined') {
-        lenis.on('scroll', () => ScrollTrigger.update());
-    }
-
-    // Smooth scroll for anchor links via Lenis
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const target = this.getAttribute('href');
-            if (!target || target === '#') return;
-
-            const targetElement = document.querySelector(target);
-            if (!targetElement) return;
-
-            e.preventDefault();
-
-            const nav = document.querySelector('.premium-nav');
-            const navOffset = nav ? nav.offsetHeight + 12 : 0;
-            lenis.scrollTo(targetElement, { offset: -navOffset });
-        });
-    });
-
-    // Sync Lenis with GSAP so pinned sections and custom scroll stay on the same frame.
-    if (typeof gsap !== 'undefined') {
-        gsap.ticker.add((time) => {
-            lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-        return;
-    }
-
-    // Fallback when GSAP is unavailable.
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-});
 
 /* =========================================
    PROJECTS SECTION — True Infinite Connected Timeline (pj-)
@@ -2708,6 +2677,25 @@ if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitia
     initCurvedTimeline();
 }
 
+// Fallback for static timeline (e.g. index.html) where projectsLoaded won't fire
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
+            timelineInitialized = true;
+            initCurvedTimeline();
+        }
+    }, 100);
+});
+// In case DOM is already loaded
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(() => {
+        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
+            timelineInitialized = true;
+            initCurvedTimeline();
+        }
+    }, 100);
+}
+
 function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
@@ -2716,37 +2704,51 @@ function buildDynamicTimeline() {
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    const projects = window.RLABZ_PROJECTS;
+    // Sort projects by year ascending (old to new)
+    const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
+        if (a.year === 'N/A' || !a.year) return -1;
+        if (b.year === 'N/A' || !b.year) return 1;
+        return parseInt(a.year) - parseInt(b.year);
+    });
     
     // Base X offset
     let currentX = 240; 
     let isBottom = true;
+    const colors = ['#00e5ff', '#2962ff', '#651fff', '#d500f9', '#ff1744'];
 
     projects.forEach((proj, idx) => {
         const top = isBottom ? 340 : 160;
-        const theme = isBottom ? 'teal' : 'purple';
+        const color = colors[idx % colors.length];
         
         // Node
         const node = document.createElement('div');
-        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} ${theme}-theme`;
+        node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
         node.style.left = `${currentX}px`;
         node.style.top = `${top}px`;
-        node.innerHTML = `<div class="node-inner">${proj.year || 'N/A'}</div>`;
+        node.style.setProperty('--node-color', color);
+        node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
         scrollContent.appendChild(node);
         
         // Card
-        const cardTop = isBottom ? 270 : 10;
+        const cardLeft = currentX - 110; // Exactly center the 220px card horizontally at currentX
         const card = document.createElement('div');
-        card.className = `timeline-card card-${isBottom ? 'bottom' : 'top'} ${theme}-border`;
-        card.style.left = `${currentX + 165}px`;
-        card.style.top = `${cardTop}px`;
+        const borderTheme = (idx % 2 === 0) ? 'teal-border' : 'purple-border';
+        card.className = `timeline-card clean-card card-${isBottom ? 'top' : 'bottom'} ${borderTheme}`;
+        card.style.left = `${cardLeft}px`;
+        if (isBottom) {
+            card.style.top = `10px`;
+        } else {
+            card.style.top = `270px`;
+        }
         card.setAttribute('data-node', idx);
         
         card.innerHTML = `
-            <div class="card-year">${proj.year || 'N/A'}</div>
-            <h3 class="card-title">${proj.title}</h3>
-            <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
-            <div class="card-actions"><a href="project-details.html?id=${proj.id}" class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></a></div>
+            <a href="${basePath}project-details.html?id=${proj.id}" class="clean-card-link">
+                <div class="card-year">${proj.year || 'N/A'}</div>
+                <h3 class="card-title">${proj.title}</h3>
+                <p class="card-desc">${proj.shortDescription || proj.desc || ''}</p>
+                <div class="card-actions"><span class="timeline-arrow-link" aria-label="View Project Details"><i class="fa-solid fa-arrow-right"></i></span></div>
+            </a>
         `;
         scrollContent.appendChild(card);
         
@@ -2758,8 +2760,11 @@ function buildDynamicTimeline() {
     const svg = scrollContent.querySelector('svg.timeline-svg-path');
     if (svg) {
         const endX = currentX - 260; 
-        const newWidth = endX + 800; // Extra padding
-        svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
+        const svgWidth = endX + 190; // SVG line ends cleanly at 6930px
+        const contentWidth = endX + 510; // Scroll content width is 7250px so last card scrolls fully into view
+        scrollContent.style.width = `${contentWidth}px`;
+        svg.setAttribute('viewBox', `0 0 ${svgWidth} 520`);
+        svg.style.width = `${svgWidth}px`;
         
         // Generate the curvy path
         let d = "M 0 250 C 80 250 150 340 240 340";
@@ -2778,15 +2783,12 @@ function buildDynamicTimeline() {
             atBottom = !atBottom;
         }
         
-        // Final line
+        // Final line ending smoothly at svgWidth
         let endY = atBottom ? 340 : 160;
-        d += ` C ${curX + 110} ${endY} ${curX + 160} 250 ${curX + 220} 250 L ${newWidth} 250`;
+        d += ` C ${curX + 80} ${endY} ${curX + 130} 250 ${svgWidth} 250`;
         
         const path1 = svg.querySelector('#road-path');
         if (path1) path1.setAttribute('d', d);
-        
-        const mask = svg.querySelector('#road-mask');
-        if (mask) mask.setAttribute('width', newWidth + 1000);
     }
 }
 
@@ -2821,21 +2823,21 @@ function initCurvedTimeline() {
         );
     }
 
-    // --- Dark Card Entrance: glide up from slightly below ---
-    gsap.set(pinContainer, { opacity: 0, y: 60 });
-    gsap.to(pinContainer, {
-        opacity: 1,
-        y: 0,
-        duration: 1.0,
-        ease: 'expo.out',
-        delay: 0.15,
-        onComplete: () => gsap.set(pinContainer, { clearProps: 'all' }),
-        scrollTrigger: {
-            trigger: '#our-works',
-            start: 'top 85%',
-            once: true
+    // --- Dark Card Entrance: scrubbed glide up and down ---
+    gsap.fromTo(pinContainer,
+        { opacity: 0, y: 60 },
+        {
+            opacity: 1,
+            y: 0,
+            ease: 'power2.out',
+            scrollTrigger: {
+                trigger: '#our-works',
+                start: 'top 85%',
+                end: 'top 40%',
+                scrub: 0.6
+            }
         }
-    });
+    );
 
     // Only apply horizontal pinning scroll on desktop (width > 992px)
     let timelineCtx = gsap.context(() => {
@@ -2849,80 +2851,72 @@ function initCurvedTimeline() {
             const nodes = gsap.utils.toArray('.timeline-node');
 
             if (totalScrollDistance > 0) {
-                // Screen is narrower than content, enable horizontal scroll
-                const scrollTween = gsap.to(scrollContent, {
-                    x: -totalScrollDistance,
-                    ease: 'none',
-                    scrollTrigger: {
-                        trigger: '#our-works',
-                        pin: true,
-                        scrub: 1,
-                        start: 'top top',
-                        end: () => `+=${totalScrollDistance + 1000}`,
-                        invalidateOnRefresh: true,
-                        onRefresh: (self) => {
-                            if (self.spacer) {
-                                self.spacer.style.backgroundColor = '#f8fafc';
+                // Enable smooth horizontal scroll via lerp loop when hovered
+                let targetScroll = pinContainer.scrollLeft;
+                let currentScroll = pinContainer.scrollLeft;
+                let isAnimating = false;
+
+                function smoothScrollLoop() {
+                    if (!isAnimating) return;
+                    const diff = targetScroll - currentScroll;
+                    if (Math.abs(diff) < 0.5) {
+                        currentScroll = targetScroll;
+                        pinContainer.scrollLeft = currentScroll;
+                        isAnimating = false;
+                        return;
+                    }
+                    currentScroll += diff * 0.18; // Smooth 60fps lerp
+                    pinContainer.scrollLeft = currentScroll;
+                    requestAnimationFrame(smoothScrollLoop);
+                }
+
+                pinContainer.addEventListener('scroll', () => {
+                    if (!isAnimating) {
+                        currentScroll = pinContainer.scrollLeft;
+                        targetScroll = pinContainer.scrollLeft;
+                    }
+                }, { passive: true });
+
+                pinContainer.addEventListener('wheel', (evt) => {
+                    const delta = Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? evt.deltaX : evt.deltaY;
+                    if (delta !== 0) {
+                        const atStart = pinContainer.scrollLeft <= 0 && delta < 0;
+                        const atEnd = pinContainer.scrollLeft >= totalScrollDistance - 2 && delta > 0;
+                        
+                        if (!atStart && !atEnd) {
+                            evt.preventDefault();
+                            targetScroll += delta * 1.2;
+                            targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
+                            if (!isAnimating) {
+                                isAnimating = true;
+                                requestAnimationFrame(smoothScrollLoop);
                             }
                         }
                     }
-                });
+                }, { passive: false });
 
-                // --- Dynamic Road Drawing Animation ---
+                // --- Ensure Road Path SVG Layer is Always Visible ---
                 const maskPath = document.querySelector('#road-mask-path');
                 if (maskPath) {
-                    const pathEl = document.querySelector('#road-path');
-                    const pathLen = pathEl.getTotalLength();
-                    maskPath.style.strokeDasharray = pathLen;
-                    
-                    // Ratio to estimate physical horizontal pixels to arc length
-                    const ratio = pathLen / 7800;
-                    // The tip of the road will lead the viewport by 85% of screen width
-                    const initialDrawLen = (containerWidth * 0.85) * ratio;
-
-                    // Tween 1: Draw the initial road segment as the section enters vertically
-                    gsap.fromTo(maskPath,
-                        { strokeDashoffset: pathLen },
-                        {
-                            strokeDashoffset: pathLen - initialDrawLen,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 80%',
-                                end: 'top top',
-                                scrub: 1
-                            }
-                        }
-                    );
-
-                    // Tween 2: Draw the rest of the road as the section scrolls horizontally
-                    gsap.fromTo(maskPath,
-                        { strokeDashoffset: pathLen - initialDrawLen },
-                        {
-                            strokeDashoffset: 0,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top top',
-                                end: () => `+=${totalScrollDistance + 1000}`,
-                                scrub: 1
-                            }
-                        }
-                    );
+                    maskPath.style.width = '100%';
+                    maskPath.style.opacity = '1';
                 }
 
                 // --- Node and Card Reveal tied to Road Drawing ---
                 cards.forEach((card, index) => {
                     const node = nodes[index];
                     const isTop = card.classList.contains('card-top');
-                    const startY = isTop ? -40 : 40;
+                    const fallY = isTop ? -50 : 50;
+                    const tiltAngle = (index % 2 === 0) ? -12 : 12;
+                    const isLastCard = (index === cards.length - 1);
+                    const cardEndTrigger = isLastCard ? 'left 82%' : 'left 70%';
                     const nodeLeft = parseFloat(node.style.left || 0);
 
-                    if (nodeLeft < containerWidth * 0.85) {
+                    if (nodeLeft < containerWidth * 1.2) {
                         // Node is in the initial viewport: Reveal during vertical entrance
-                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 0.85)) * 80;
+                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 1.2)) * 80;
                         
-                        // Node pops in
+                        // Node pops in & out
                         gsap.fromTo(node,
                             { opacity: 0, scale: 0.5 },
                             {
@@ -2930,15 +2924,15 @@ function initCurvedTimeline() {
                                 scrollTrigger: {
                                     trigger: '#our-works',
                                     start: `top ${triggerPercent + 5}%`, // slightly after road passes
-                                    toggleActions: 'play none none reverse'
+                                    toggleActions: 'play none play reverse'
                                 }
                             }
                         );
-                        // Card slides in
+                        // Card slides & tilts in (falling off tilted when scrolling back)
                         gsap.fromTo(card,
-                            { opacity: 0, y: startY },
+                            { opacity: 0, y: fallY, rotation: tiltAngle },
                             {
-                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                opacity: 1, y: 0, rotation: 0, duration: 1, ease: 'power2.out',
                                 scrollTrigger: {
                                     trigger: '#our-works',
                                     start: `top ${triggerPercent}%`,
@@ -2949,29 +2943,31 @@ function initCurvedTimeline() {
                         );
                     } else {
                         // Node is outside initial viewport: Reveal during horizontal scroll
-                        // Node pops in when it crosses the 85% mark (right as the road tip hits it)
+                        // Node pops in when it crosses the 95% mark and pops out when scrolling back
                         gsap.fromTo(node,
                             { opacity: 0, scale: 0.5 },
                             {
-                                opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)',
+                                opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)',
                                 scrollTrigger: {
                                     trigger: node,
-                                    containerAnimation: scrollTween,
-                                    start: 'left 85%', 
-                                    toggleActions: 'play none none reverse'
+                                    scroller: pinContainer,
+                                    horizontal: true,
+                                    start: 'left 95%', 
+                                    toggleActions: 'play none play reverse'
                                 }
                             }
                         );
-                        // Card slides in shortly after
+                        // Card slides & tilts in & out with scrub (falling off tilted when scrolling back)
                         gsap.fromTo(card,
-                            { opacity: 0, y: startY },
+                            { opacity: 0, y: fallY, rotation: tiltAngle },
                             {
-                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
+                                opacity: 1, y: 0, rotation: 0, duration: 1, ease: 'power2.out',
                                 scrollTrigger: {
                                     trigger: node,
-                                    containerAnimation: scrollTween,
-                                    start: 'left 80%',
-                                    end: 'left 55%',
+                                    scroller: pinContainer,
+                                    horizontal: true,
+                                    start: 'left 95%',
+                                    end: cardEndTrigger,
                                     scrub: true
                                 }
                             }
@@ -2992,7 +2988,7 @@ function initCurvedTimeline() {
                             scrollTrigger: {
                                 trigger: '#our-works',
                                 start: 'top 60%',
-                                toggleActions: 'play none none reverse'
+                                toggleActions: 'play none play reverse'
                             }
                         }
                     );
@@ -3000,19 +2996,21 @@ function initCurvedTimeline() {
 
                 cards.forEach((card, index) => {
                     const isTop = card.classList.contains('card-top');
-                    const startY = isTop ? -40 : 40;
+                    const fallY = isTop ? -50 : 50;
+                    const tiltAngle = (index % 2 === 0) ? -12 : 12;
                     gsap.fromTo(card,
-                        { opacity: 0, y: startY },
+                        { opacity: 0, y: fallY, rotation: tiltAngle },
                         {
                             opacity: 1,
                             y: 0,
+                            rotation: 0,
                             duration: 1,
                             delay: index * 0.1 + 0.3,
-                            ease: 'power2.out',
+                            ease: 'back.out(1.4)',
                             scrollTrigger: {
                                 trigger: '#our-works',
                                 start: 'top 60%',
-                                toggleActions: 'play none none reverse'
+                                toggleActions: 'play none play reverse'
                             }
                         }
                     );
