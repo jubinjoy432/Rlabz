@@ -3,7 +3,9 @@
 $host = 'localhost';
 $dbname = 'rlabz_db'; // Change this to your actual database name
 $username = 'root';    // Change this to your database username
-$password = getenv('RLABZ_DB_PASSWORD') ?: '';
+$envFile = dirname(__DIR__, 2) . DIRECTORY_SEPARATOR . '.env';
+$envValues = is_file($envFile) ? parse_ini_file($envFile, false, INI_SCANNER_RAW) : [];
+$password = getenv('RLABZ_DB_PASSWORD') ?: ($envValues['RLABZ_DB_PASSWORD'] ?? '');
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

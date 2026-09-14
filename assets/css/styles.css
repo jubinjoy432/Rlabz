@@ -8336,21 +8336,19 @@ html.lenis body {
 
 /* ─── Central Logo ─── */
 .spinner-logo {
-    width: 48px;
+    width: 88px;
     height: auto;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-    background: #ffffff;
-    padding: 14px;
-    border-radius: 50%;
-    box-sizing: content-box;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    pointer-events: none;
     animation: centerPulse 2.5s ease-in-out infinite alternate;
-    box-shadow:
-        0 0 20px rgba(255, 255, 255, 0.6),
-        0 0 40px rgba(0, 210, 255, 0.15);
+    filter: drop-shadow(0 0 12px rgba(0, 210, 255, 0.4));
 }
 
 /* ─── Static Track Circles (faint full circles behind arcs) ─── */
@@ -8464,15 +8462,13 @@ html.lenis body {
 
 @keyframes centerPulse {
     0% {
-        box-shadow:
-            0 0 12px rgba(255, 255, 255, 0.4),
-            0 0 30px rgba(0, 210, 255, 0.1);
+        transform: translate(-50%, -50%) scale(0.95);
+        filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.3));
     }
 
     100% {
-        box-shadow:
-            0 0 28px rgba(255, 255, 255, 0.8),
-            0 0 60px rgba(0, 210, 255, 0.3);
+        transform: translate(-50%, -50%) scale(1.05);
+        filter: drop-shadow(0 0 16px rgba(0, 210, 255, 0.6)) drop-shadow(0 0 24px rgba(45, 140, 45, 0.3));
     }
 }
 
