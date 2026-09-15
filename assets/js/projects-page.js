@@ -292,6 +292,24 @@
             </div>
         `;
 
+        const detailUrl = `project-details.html?id=${project.id}`;
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('role', 'link');
+        card.setAttribute('aria-label', `View details for ${project.title}`);
+
+        card.addEventListener('click', (e) => {
+            if (e.target.closest('a')) return;
+            window.location.href = detailUrl;
+        });
+
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target.closest('a')) return;
+                e.preventDefault();
+                window.location.href = detailUrl;
+            }
+        });
+
         return card;
     }
 
