@@ -249,9 +249,19 @@
         // Team avatars
         let teamHTML = '';
         if (project.team && project.team.length > 0) {
-            const avatars = project.team.slice(0, 3).map(m =>
-                `<img src="${m.photo || imgPrefix + 'images/rz-logo.webp'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='${imgPrefix}images/rz-logo.webp'">`
-            ).join('');
+            const avatars = project.team.slice(0, 3).map(m => {
+                const initials = (m.name || 'Member')
+                    .trim()
+                    .split(/\s+/)
+                    .map(w => w[0])
+                    .join('')
+                    .slice(0, 2)
+                    .toUpperCase() || 'M';
+                if (m.photo && !m.photo.includes('rz-logo')) {
+                    return `<img src="${m.photo}" alt="${m.name || 'Team member'}" class="pg-card-team-avatar" loading="lazy" onerror="this.outerHTML='<span class=\\'pg-card-team-avatar pg-card-team-avatar-initials\\' title=\\'${m.name || 'Team member'}\\'>${initials}</span>'">`;
+                }
+                return `<span class="pg-card-team-avatar pg-card-team-avatar-initials" title="${m.name || 'Team member'}">${initials}</span>`;
+            }).join('');
             const teamCountText = project.team.length > 3 ? `+${project.team.length - 3} more` : `${project.team.length} member${project.team.length > 1 ? 's' : ''}`;
             teamHTML = `
                 <div class="pg-card-team">
