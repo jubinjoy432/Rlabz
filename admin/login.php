@@ -279,7 +279,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         <!-- Right Side: RLabz Logo -->
         <div class="login-right">
             <div class="brand-display">
-                <img src="../assets/images/rz-logo.webp" alt="RLabz Logo">
+                <img src="../assets/images/rlabz-logo-dark.png" alt="RLabz Logo" style="max-width: 200px;">
                 <div class="brand-text">RLABZ ADMIN</div>
             </div>
         </div>

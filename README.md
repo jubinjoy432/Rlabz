@@ -16,10 +16,17 @@ To get the project up and running on your local machine, follow these steps:
    ```
    *(Alternatively, use phpMyAdmin or a similar tool to import `database/schema.sql`)*
 3. Update your database credentials in the configuration file located at `admin/api/db.php`.
-4. To populate the database with initial data, you can run the migration script:
+4. To populate the database with initial project data, you can run the migration script:
    ```bash
    php database/migrate.php
    ```
+   **Note**: `migrate.php` resets the database and creates base project data.
+
+5. **(Optional)** To add demo data for Project Milestones, run the dedicated seeder script:
+   ```bash
+   php dev/seed_milestones.php
+   ```
+   *This ensures milestones are not accidentally overridden when running standard migrations.*
 
 ### 3. Running the Application
 If you are using a local server like XAMPP or WAMP, place the project folder in your `htdocs` or `www` directory and access it via `http://localhost/rlabzPro/Rlabz/`.
@@ -41,6 +48,7 @@ To manage projects and other content, you can access the admin dashboard:
 ### Folder Structure Overview
 - `admin/` - Admin dashboard and API endpoints
 - `assets/` - Static assets (CSS, JS, images)
-- `database/` - Database schemas and migration scripts
-- `dev/` - Development commands, JSON dumps, and reports
+- `database/` - Database schemas and primary migration scripts (`schema.sql`, `migrate.php`)
+- `dev/` - Development commands, seeder scripts (e.g. `seed_milestones.php`), JSON dumps, and reports
 - `uploads/` - Uploaded images and media
+- `public/` - Public-facing pages (e.g., `projects.html`, `project-details.html`)

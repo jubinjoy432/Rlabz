@@ -1,14 +1,10 @@
 :root {
     --bg-color: #f8faff;
-    /* Light/White Background */
     --text-color: #1e293b;
-    /* Dark Blue-Gray Text */
     --primary-blue: #0b5394;
     --primary-blue-rgb: 11, 83, 148;
     --secondary-blue: #e0f2fe;
-    /* Light Blue Accent */
     --accent-cyan: #0b5394;
-    /* Recycled Primary for consistency or slightly lighter */
     --accent-cyan-rgb: 11, 83, 148;
     --glass-bg: #ffffff;
     --glass-border: rgba(11, 83, 148, 0.1);
@@ -16,7 +12,20 @@
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Outfit', sans-serif;
     --card-shadow: 0 20px 40px -5px rgba(11, 83, 148, 0.15);
-    /* Stronger global shadow */
+    
+    /* RLabZ Official Tokens */
+    --crucible-core: #002C49;
+    --digital-flow: #27A3FF;
+    --transformation: #43AE47;
+    --catalyst-orange: #F9440D;
+    --white: #FFFFFF;
+    --paper-white: #F5F7FA;
+    --cloud-blue: #E3E9ED;
+    --hairline-slate: #D6DEE4;
+    --steel-slate: #6B7A87;
+    --slate-text: #3E4B55;
+    --charcoal: #2A2A2A;
+    --portal-canvas: #001220;
 }
 
 * {
@@ -149,72 +158,36 @@ body {
 
 .nav-logo {
     font-family: var(--font-heading);
-    font-size: 2.6rem;
-    font-weight: 800;
     text-decoration: none;
-    letter-spacing: -0.5px;
     display: flex;
     align-items: center;
-    transition: color 0.35s ease-in-out;
-    margin-top: -11px;
+    transition: all 0.35s ease-in-out;
     min-width: 160px;
-    /* Prevent nav links from shifting when brand text collapses */
 }
 
 .logo-image {
-    height: 65px;
+    height: 70px; /* Consistent height */
     width: auto;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-    transition: transform 0.35s ease-in-out;
+    transition: all 0.35s ease-in-out;
     object-fit: contain;
 }
 
-.brand-icon {
-    display: inline-flex;
-    align-items: center;
-    transition: transform 0.35s ease-in-out;
-    transform-origin: left center;
-    margin-right: 2px;
+.premium-nav.scrolled .logo-image {
+    height: 70px; /* Same size as unscrolled */
 }
 
-.brand-text {
-    display: inline-block;
-    overflow: hidden;
-    white-space: nowrap;
-    opacity: 1;
-    max-width: 150px;
-    font-weight: 800;
-    transition: opacity 0.35s ease-in-out, max-width 0.35s ease-in-out, margin 0.35s ease-in-out;
-    transform-origin: left center;
+/* Dual-logo swap for pages with dark hero (index.html) */
+.logo-dark {
+    display: none;
 }
 
-.brand-green {
-    color: #2d8c2d;
-    transition: color 0.35s;
+.premium-nav.scrolled .logo-light {
+    display: none;
 }
 
-.brand-blue {
-    color: #ffffff;
-    transition: color 0.35s;
-}
-
-.premium-nav.scrolled .brand-green {
-    color: #137213;
-}
-
-.premium-nav.scrolled .brand-blue {
-    color: #0b5394;
-}
-
-.premium-nav.scrolled .brand-icon {
-    transform: translateX(0) scale(1.15);
-    /* Slightly larger when text disappears */
-}
-
-.premium-nav.scrolled .brand-text {
-    opacity: 0;
-    max-width: 0;
-    margin-left: -8px;
+.premium-nav.scrolled .logo-dark {
+    display: block;
 }
 
 .nav-links-container {
@@ -8526,6 +8499,54 @@ html.lenis body {
 .timeline-pin-container::-webkit-scrollbar {
     display: none;
 }
+
+/* Timeline Navigation Buttons */
+.timeline-nav-btn {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #ffffff;
+    color: var(--primary-blue);
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.timeline-nav-btn:hover {
+    background: var(--primary-blue);
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.timeline-prev {
+    left: 20px;
+    margin-right: auto;
+    position: absolute;
+}
+
+.timeline-next {
+    right: 20px;
+    margin-left: auto;
+    position: absolute;
+}
+
+.timeline-nav-btn.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+    cursor: default;
+}
+
 
 .timeline-scroll-wrapper {
     position: relative;

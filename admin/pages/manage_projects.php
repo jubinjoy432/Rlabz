@@ -60,7 +60,7 @@ require_once '../includes/layout_header.php';
         <ul class="project-list" id="projectList">
             <?php foreach($projects as $p): ?>
             <li class="project-item">
-                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" alt="Project image" class="project-img" onerror="this.src='../../assets/images/rz-logo.webp'">
+                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" alt="Project image" class="project-img" onerror="this.src='../../assets/images/logo1.png'">
                 <div class="project-info">
                     <h3 class="project-title"><?php echo htmlspecialchars($p['title']); ?></h3>
                     <p><?php echo htmlspecialchars(substr($p['description'], 0, 100)); ?>...</p>

@@ -14,6 +14,8 @@ $completedProjects = 0;
 $deployedProjects = 0;
 $inDevProjects = 0;
 $totalMembers = 0;
+$activeSslMonitors = 0;
+$sslIssues = 0;
 $recentProjects = [];
 
 $chartDataStatus = ['Completed' => 0, 'Deployed' => 0, 'In Development' => 0];
@@ -40,18 +42,28 @@ if ($pdo) {
         $stmtMembers = $pdo->query("SELECT COUNT(*) FROM project_members");
         $totalMembers = $stmtMembers->fetchColumn();
 
+        // SSL Monitoring Stats
+        $stmtSslStats = $pdo->query("
+            SELECT 
+                COUNT(*) as total_monitored,
+                SUM(CASE WHEN status != 'active' OR (expiry_date IS NOT NULL AND DATEDIFF(expiry_date, CURDATE()) < 30) THEN 1 ELSE 0 END) as issues
+            FROM project_ssl_certs
+        ");
+        $sslStats = $stmtSslStats->fetch();
+        $activeSslMonitors = $sslStats['total_monitored'] ?: 0;
+        $sslIssues = $sslStats['issues'] ?: 0;
+
         // Recent 5
         $stmtRecent = $pdo->query("SELECT id, title, slug, status, year, image_path, category FROM projects ORDER BY id DESC LIMIT 5");
         $recentProjects = $stmtRecent->fetchAll();
 
-        // Expiring SSL Certificates
-        $stmtExpiring = $pdo->query("SELECT p.title, s.domain_url, s.expiry_date, DATEDIFF(s.expiry_date, CURDATE()) as days_left 
-                                     FROM project_ssl_certs s 
-                                     JOIN projects p ON s.project_id = p.id 
-                                     WHERE s.expiry_date IS NOT NULL 
-                                     AND s.expiry_date >= CURDATE() AND s.expiry_date <= DATE_ADD(CURDATE(), INTERVAL 30 DAY) 
-                                     ORDER BY s.expiry_date ASC");
-        $expiringSsl = $stmtExpiring->fetchAll();
+        // Admin Announcements
+        $stmtAnnouncements = $pdo->query("SELECT * FROM admin_announcements ORDER BY created_at DESC LIMIT 50");
+        $announcements = $stmtAnnouncements->fetchAll();
+        $unreadCount = 0;
+        foreach ($announcements as $a) {
+            if (!$a['is_read']) $unreadCount++;
+        }
 
     } catch (PDOException $e) {
         $error = "Failed to load stats: " . $e->getMessage();
@@ -111,6 +123,7 @@ require_once '../includes/layout_header.php';
         <div class="stat-card-label">Team Members</div>
     </div>
 
+
 </div>
 
 <!-- Charts Row -->
@@ -129,34 +142,100 @@ require_once '../includes/layout_header.php';
     </div>
 </div>
 
-<!-- Expiring SSL -->
-<?php if (!empty($expiringSsl)): ?>
-<div class="card" style="border: 1px solid #ef4444;">
-    <h2 style="color: #ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> Expiring SSL Certificates (Next 30 Days)</h2>
-    <div style="overflow-x:auto;">
-        <table class="recent-table">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Domain</th>
-                    <th>Expiry Date</th>
-                    <th>Days Left</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($expiringSsl as $ssl): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($ssl['title']); ?></td>
-                    <td><a href="<?php echo htmlspecialchars($ssl['domain_url']); ?>" target="_blank" style="color:#38bdf8;"><?php echo htmlspecialchars($ssl['domain_url']); ?></a></td>
-                    <td><?php echo htmlspecialchars($ssl['expiry_date']); ?></td>
-                    <td><span class="badge" style="background:#7f1d1d; color:#fca5a5;"><?php echo htmlspecialchars($ssl['days_left']); ?> Days</span></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+<!-- Admin Announcements -->
+<div class="card" style="display: flex; flex-direction: column; max-height: 400px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h2><i class="fa-solid fa-bullhorn"></i> Announcements</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <span class="badge badge-default" id="unread-count" style="background: <?php echo $unreadCount > 0 ? '#3b82f6' : '#334155'; ?>;"><?php echo $unreadCount; ?> new</span>
+            <button class="btn-action primary" onclick="refreshSslNow()" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;" id="btn-refresh-cron"><i class="fa-solid fa-rotate"></i> Check SSL</button>
+        </div>
+    </div>
+    <div class="announcements-container" style="flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 10px;">
+        <?php if(empty($announcements)): ?>
+            <div style="text-align:center; padding: 2rem; color: var(--text-muted);">No announcements yet.</div>
+        <?php else: ?>
+            <?php foreach($announcements as $a): 
+                $icon = 'fa-info-circle';
+                $color = '#3b82f6'; // info
+                $bg = 'rgba(59, 130, 246, 0.1)';
+                
+                if ($a['severity'] === 'success') {
+                    $icon = 'fa-check-circle';
+                    $color = '#4ade80';
+                    $bg = 'rgba(74, 222, 128, 0.1)';
+                } elseif ($a['severity'] === 'warning') {
+                    $icon = 'fa-triangle-exclamation';
+                    $color = '#fbbf24';
+                    $bg = 'rgba(251, 191, 36, 0.1)';
+                } elseif ($a['severity'] === 'danger') {
+                    $icon = 'fa-circle-exclamation';
+                    $color = '#ef4444';
+                    $bg = 'rgba(239, 68, 68, 0.1)';
+                }
+                
+                $opacity = $a['is_read'] ? '0.6' : '1';
+                $borderLeft = $a['is_read'] ? '3px solid transparent' : "3px solid $color";
+            ?>
+            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: #1e293b; border-radius: 8px; padding: 12px; display: flex; gap: 12px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: opacity 0.2s;">
+                <div style="color: <?= $color ?>; background: <?= $bg ?>; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="fa-solid <?= $icon ?>"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; display:flex; justify-content:space-between;">
+                        <?= htmlspecialchars($a['title']) ?>
+                        <span style="font-size:0.75rem; color:#64748b; font-weight:normal;"><?= date('M j, Y H:i', strtotime($a['created_at'])) ?></span>
+                    </div>
+                    <div style="font-size: 0.85rem; color: #cbd5e1; white-space: pre-line; line-height: 1.4;"><?= htmlspecialchars($a['message']) ?></div>
+                </div>
+                <?php if(!$a['is_read']): ?>
+                    <button class="btn-action" style="align-self: center;" title="Mark as Read" onclick="markRead(<?= $a['id'] ?>)">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                <?php endif; ?>
+            </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </div>
-<?php endif; ?>
+
+<script>
+async function markRead(id) {
+    try {
+        const res = await fetch(`../api/mark_announcement_read.php?id=${id}`);
+        const data = await res.json();
+        if(data.success) {
+            const item = document.getElementById(`announcement-${id}`);
+            item.style.opacity = '0.6';
+            item.style.borderLeft = '3px solid transparent';
+            const btn = item.querySelector('button');
+            if(btn) btn.remove();
+            
+            const badge = document.getElementById('unread-count');
+            let count = parseInt(badge.textContent);
+            if(count > 0) {
+                count--;
+                badge.textContent = count + ' new';
+                if(count === 0) badge.style.background = '#334155';
+            }
+        }
+    } catch(e) { console.error('Failed to mark read', e); }
+}
+
+async function refreshSslNow() {
+    const btn = document.getElementById('btn-refresh-cron');
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Checking...';
+    btn.disabled = true;
+    try {
+        await fetch(`../api/cron_ssl_reminder.php`);
+        window.location.reload();
+    } catch(e) {
+        alert('Failed to run SSL check.');
+        btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Check SSL';
+        btn.disabled = false;
+    }
+}
+</script>
 
 <!-- Recent Projects -->
 <div class="card">
@@ -180,7 +259,7 @@ require_once '../includes/layout_header.php';
                     <tr>
                         <td>
                             <div style="display:flex; align-items:center; gap:0.75rem;">
-                                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" class="project-thumb" alt="thumb" onerror="this.src='../../assets/images/rz-logo.webp'">
+                                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" class="project-thumb" alt="thumb" onerror="this.src='../../assets/images/logo1.png'">
                                 <div>
                                     <div class="project-title-cell"><?php echo htmlspecialchars($p['title']); ?></div>
                                     <div class="project-title-meta">/<?php echo htmlspecialchars($p['slug']); ?></div>

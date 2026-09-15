@@ -259,29 +259,43 @@ require_once 'includes/layout_header.php';
 
         <!-- SSL Certificate Module -->
         <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Details (Optional)</div>
-        <div class="form-row">
-            <div class="form-group">
+        <div class="form-row" style="align-items: flex-end;">
+            <div class="form-group" style="flex: 2;">
                 <label for="ssl_domain">Domain URL</label>
                 <input type="url" id="ssl_domain" name="ssl_domain" value="<?= htmlspecialchars($ssl['domain_url'] ?? '') ?>" placeholder="https://example.com">
             </div>
+            <div class="form-group" style="flex: 1;">
+                <button type="button" class="btn-action primary" id="btn-fetch-ssl" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details</button>
+            </div>
+        </div>
+        
+        <div id="ssl-status-message" style="margin-bottom: 1rem; font-size: 0.9rem;"></div>
+        
+        <div class="form-row">
             <div class="form-group">
                 <label for="ssl_provider">Provider</label>
-                <input type="text" id="ssl_provider" name="ssl_provider" value="<?= htmlspecialchars($ssl['provider'] ?? '') ?>" placeholder="Let's Encrypt">
+                <input type="text" id="ssl_provider" name="ssl_provider" value="<?= htmlspecialchars($ssl['provider'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+            </div>
+            <div class="form-group">
+                <label>Status / Days Remaining</label>
+                <input type="text" id="ssl_status_display" value="" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_issue_date">Issue Date</label>
-                <input type="date" id="ssl_issue_date" name="ssl_issue_date" value="<?= htmlspecialchars($ssl['issue_date'] ?? '') ?>">
+                <input type="date" id="ssl_issue_date" name="ssl_issue_date" value="<?= htmlspecialchars($ssl['issue_date'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label for="ssl_expiry_date">Expiry Date</label>
-                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" value="<?= htmlspecialchars($ssl['expiry_date'] ?? '') ?>">
+                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" value="<?= htmlspecialchars($ssl['expiry_date'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
+        <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="<?= htmlspecialchars($ssl['certificate_fingerprint'] ?? '') ?>">
 
         <button type="submit" class="btn-submit full-width"><i class="fa-solid fa-save"></i> Save Changes</button>
     </form>
+
 </div>
 
 <?php require_once 'includes/layout_footer.php'; ?>

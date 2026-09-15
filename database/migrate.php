@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once '../admin/api/db.php';
 
 $json = file_get_contents('../dev/projects_dump.json');
@@ -74,16 +74,46 @@ $pdf_data = [
 
 try {
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 0;");
+    
+    // Apply Schema Updates safely for SSL & Announcements
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `admin_announcements` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `type` VARCHAR(50) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `message` TEXT NOT NULL,
+            `severity` VARCHAR(50) DEFAULT 'info',
+            `reference_type` VARCHAR(50) DEFAULT NULL,
+            `reference_id` INT(11) DEFAULT NULL,
+            `is_read` TINYINT(1) DEFAULT 0,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+
+    // Add certificate_fingerprint column if it doesn't exist
+    try {
+        $pdo->exec("ALTER TABLE `project_ssl_certs` ADD COLUMN `certificate_fingerprint` VARCHAR(255) DEFAULT NULL AFTER `expiry_date`");
+    } catch (PDOException $e) {
+        // Ignore if column already exists (SQLSTATE 42S21)
+        if ($e->getCode() != '42S21' && !strpos($e->getMessage(), 'Duplicate column name')) {
+            throw $e;
+        }
+    }
+
     $pdo->exec("TRUNCATE TABLE projects;");
     $pdo->exec("TRUNCATE TABLE project_members;");
+    $pdo->exec("TRUNCATE TABLE project_faculty;");
     $pdo->exec("TRUNCATE TABLE project_screenshots;");
+    $pdo->exec("TRUNCATE TABLE project_milestones;");
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 1;");
 
     $stmt_project = $pdo->prepare("INSERT INTO projects 
-        (slug, title, year, short_description, description, objectives, problem_statement, key_features, expected_outcome, tech_stack, image_path, thumbnail_path, department, batch, faculty_name, faculty_designation, category, project_type, duration, status, github_link, demo_link, poster_path) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        (slug, title, year, short_description, description, objectives, problem_statement, key_features, expected_outcome, tech_stack, image_path, thumbnail_path, department, batch, category, project_type, duration, status, github_link, demo_link, poster_path) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     $stmt_member = $pdo->prepare("INSERT INTO project_members (project_id, name, photo_path) VALUES (?, ?, '')");
+    $stmt_faculty = $pdo->prepare("INSERT INTO project_faculty (project_id, name, designation, photo_path) VALUES (?, ?, ?, '')");
     $stmt_screenshot = $pdo->prepare("INSERT INTO project_screenshots (project_id, image_path) VALUES (?, ?)");
 
     foreach ($projects as $p) {
@@ -114,8 +144,6 @@ try {
             $p['thumbnail'] ?? '', // thumbnail_path
             $p['department'] ?? '',
             $p['batch'] ?? '',
-            $faculty,
-            $p['faculty']['designation'] ?? '',
             $p['category'] ?? '',
             $p['projectType'] ?? '',
             $p['duration'] ?? '',
@@ -129,6 +157,10 @@ try {
 
         foreach ($team as $member_name) {
             $stmt_member->execute([$project_id, $member_name]);
+        }
+
+        if (!empty($faculty)) {
+            $stmt_faculty->execute([$project_id, $faculty, $p['faculty']['designation'] ?? '']);
         }
 
         if (isset($p['screenshots']) && is_array($p['screenshots'])) {

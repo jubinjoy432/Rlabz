@@ -36,7 +36,7 @@
                 <div class="spinner-ring ring-2"></div>
                 <div class="spinner-ring ring-3"></div>
                 <!-- Centered logo -->
-                <img src="assets/images/rz-logo.webp" alt="RLabz Logo" class="spinner-logo">
+                <img src="assets/images/rlabz-icon.png" alt="RLabz Logo" class="spinner-logo">
             </div>
         </div>
     </div>
@@ -44,10 +44,8 @@
     <nav class="premium-nav">
         <div class="nav-content">
             <a href="#" class="nav-logo">
-                <span class="brand-icon">
-                    <img src="assets/images/rz-logo.webp" alt="RLabz Logo" class="logo-image">
-                </span>
-                <span class="brand-text"><span class="brand-green">R</span><span class="brand-blue">LabZ</span></span>
+                <img src="assets/images/rlabz-logo-white.png" alt="RLabz Logo" class="logo-image logo-light">
+                <img src="assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image logo-dark">
             </a>
             <div class="nav-links-container">
                 <span class="sliding-pill"></span>
@@ -240,8 +238,16 @@
                 View All <i class="fa-solid fa-arrow-right"></i>
             </a>
         </header>
-        <!-- GSAP Pin Container -->
-        <div class="timeline-pin-container">
+        <!-- Timeline Wrapper -->
+        <div class="timeline-section-wrapper" style="position: relative; max-width: 1400px; margin: 0 auto; width: 100%;">
+            <!-- Navigation Buttons -->
+            <button class="timeline-nav-btn timeline-prev" aria-label="Scroll Left"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="timeline-nav-btn timeline-next" aria-label="Scroll Right"><i class="fa-solid fa-chevron-right"></i></button>
+            
+            <!-- GSAP Pin Container -->
+            <div class="timeline-pin-container">
+
+
             <div class="timeline-scroll-wrapper">
                 <div class="timeline-scroll-content">
                                         <!-- SVG CURVY ROAD PATH LAYER -->
@@ -557,6 +563,7 @@
                 </div>
             </div>
         </div>
+        </div> <!-- Closing timeline-section-wrapper -->
         <!-- Removed View All Projects CTA from bottom -->
     </section>
 

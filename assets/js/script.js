@@ -2901,32 +2901,63 @@ function initCurvedTimeline() {
                 // Enable horizontal scroll via mouse wheel when hovered
                 let targetScroll = pinContainer.scrollLeft;
                 
+                // Navigation Buttons Logic
+                const prevBtn = document.querySelector('.timeline-prev');
+                const nextBtn = document.querySelector('.timeline-next');
+                
+                const updateButtons = () => {
+                    if (!prevBtn || !nextBtn) return;
+                    if (targetScroll <= 5) prevBtn.classList.add('disabled');
+                    else prevBtn.classList.remove('disabled');
+                    
+                    if (targetScroll >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
+                    else nextBtn.classList.remove('disabled');
+                };
+
+                if (prevBtn && nextBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        targetScroll = Math.max(0, targetScroll - containerWidth * 0.6);
+                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                    });
+                    nextBtn.addEventListener('click', () => {
+                        targetScroll = Math.min(totalScrollDistance, targetScroll + containerWidth * 0.6);
+                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                    });
+                    updateButtons();
+                }
+
                 pinContainer.addEventListener('scroll', () => {
                     if (!gsap.isTweening(pinContainer)) {
                         targetScroll = pinContainer.scrollLeft;
+                        updateButtons();
                     }
                 }, { passive: true });
 
                 pinContainer.addEventListener('wheel', (evt) => {
-                    if (evt.deltaY !== 0) {
+                    // Only intercept if scrolling vertically and we have horizontal space
+                    if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
                         const delta = evt.deltaY;
-                        const atStart = targetScroll <= 0 && delta < 0;
-                        const atEnd = targetScroll >= totalScrollDistance && delta > 0;
+                        
+                        // Small buffer to prevent getting stuck due to fractional pixels
+                        const atStart = targetScroll <= 5 && delta < 0;
+                        const atEnd = targetScroll >= (totalScrollDistance - 5) && delta > 0;
                         
                         if (!atStart && !atEnd) {
                             evt.preventDefault();
-                            targetScroll += delta * 1.5;
+                            targetScroll += delta * 1.2;
                             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
                             
                             gsap.to(pinContainer, {
                                 scrollLeft: targetScroll,
-                                duration: 0.6,
+                                duration: 0.7,
                                 ease: "power2.out",
-                                overwrite: "auto"
+                                overwrite: "auto",
+                                onUpdate: updateButtons
                             });
                         }
                     }
                 }, { passive: false });
+
 
                 // --- Dynamic Road Drawing Animation ---
                 const maskPath = document.querySelector('#road-mask-path');
@@ -3145,35 +3176,35 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Launch of Euphoria',
             year: '2019',
             desc: 'Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience. We set a new standard for college festivals with cutting edge technology integration.',
-            team: [{name: 'Alice S.', photo: 'images/rz-logo.webp'}, {name: 'Bob J.', photo: 'images/rz-logo.webp'}],
+            team: [{name: 'Alice S.', photo: 'images/logo1.png'}, {name: 'Bob J.', photo: 'images/logo1.png'}],
             tech: ['Event Management', 'TechFest', 'Innovation']
         },
         'campuscon': {
             title: 'CampusCon Initiative',
             year: '2020',
             desc: 'A major step towards integrating advanced campus networking solutions and fostering digital education. This initiative paved the way for seamless communication across departments.',
-            team: [{name: 'Charlie D.', photo: 'images/rz-logo.webp'}],
+            team: [{name: 'Charlie D.', photo: 'images/logo1.png'}],
             tech: ['Networking', 'Education', 'Infrastructure']
         },
         'ctrm': {
             title: 'CTRM Deployment',
             year: '2021',
             desc: 'Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity. This unified system replaced dozens of legacy tools.',
-            team: [{name: 'Diana P.', photo: 'images/rz-logo.webp'}],
+            team: [{name: 'Diana P.', photo: 'images/logo1.png'}],
             tech: ['Enterprise Software', 'Management', 'System Integration']
         },
         'fesbud': {
             title: 'Fesbud Platform',
             year: '2023',
             desc: 'A budget management and financial tracking system designed specifically for our complex ecosystem. It allows real-time tracking of expenses and resource allocation.',
-            team: [{name: 'Evan R.', photo: 'images/rz-logo.webp'}, {name: 'Fiona M.', photo: 'images/rz-logo.webp'}],
+            team: [{name: 'Evan R.', photo: 'images/logo1.png'}, {name: 'Fiona M.', photo: 'images/logo1.png'}],
             tech: ['FinTech', 'Budgeting', 'Analytics']
         },
         'arkon': {
             title: 'Arkon Expansion',
             year: '2025',
             desc: 'Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization. Arkon provides a scalable foundation for future AI projects.',
-            team: [{name: 'George H.', photo: 'images/rz-logo.webp'}],
+            team: [{name: 'George H.', photo: 'images/logo1.png'}],
             tech: ['AI', 'Cloud Native', 'Modernization']
         }
     };
@@ -3197,7 +3228,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const memberDiv = document.createElement('div');
                     memberDiv.className = 'es-team-member';
                     memberDiv.innerHTML = `
-                        <img src="${member.photo}" alt="${member.name}" class="es-team-photo" onerror="this.src='images/rz-logo.webp'">
+                        <img src="${member.photo}" alt="${member.name}" class="es-team-photo" onerror="this.src='images/logo1.png'">
                         <span class="es-team-name">${member.name}</span>
                     `;
                     modalTeam.appendChild(memberDiv);

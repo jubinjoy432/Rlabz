@@ -219,26 +219,39 @@ require_once '../includes/layout_header.php';
 
         <!-- SSL Certificate Module -->
         <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Details (Optional)</div>
-        <div class="form-row">
-            <div class="form-group">
+        <div class="form-row" style="align-items: flex-end;">
+            <div class="form-group" style="flex: 2;">
                 <label for="ssl_domain">Domain URL</label>
                 <input type="url" id="ssl_domain" name="ssl_domain" placeholder="https://example.com">
             </div>
+            <div class="form-group" style="flex: 1;">
+                <button type="button" class="btn-action primary" id="btn-fetch-ssl" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details</button>
+            </div>
+        </div>
+        
+        <div id="ssl-status-message" style="margin-bottom: 1rem; font-size: 0.9rem;"></div>
+        
+        <div class="form-row">
             <div class="form-group">
                 <label for="ssl_provider">Provider</label>
-                <input type="text" id="ssl_provider" name="ssl_provider" placeholder="Let's Encrypt">
+                <input type="text" id="ssl_provider" name="ssl_provider" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+            </div>
+            <div class="form-group">
+                <label>Status / Days Remaining</label>
+                <input type="text" id="ssl_status_display" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_issue_date">Issue Date</label>
-                <input type="date" id="ssl_issue_date" name="ssl_issue_date">
+                <input type="date" id="ssl_issue_date" name="ssl_issue_date" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label for="ssl_expiry_date">Expiry Date</label>
-                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date">
+                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
+        <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="">
 
         <button type="submit" class="btn-submit full-width"><i class="fa-solid fa-rocket"></i> Add Project</button>
     </form>
@@ -347,6 +360,48 @@ require_once '../includes/layout_header.php';
         `;
         container.appendChild(row);
     }
+
+    // ---- SSL Fetch Details ----
+    document.getElementById('btn-fetch-ssl').addEventListener('click', async function() {
+        const domainInput = document.getElementById('ssl_domain').value.trim();
+        const msgDiv = document.getElementById('ssl-status-message');
+        const btn = this;
+        
+        if (!domainInput) {
+            msgDiv.innerHTML = '<span style="color: #fca5a5;"><i class="fa-solid fa-triangle-exclamation"></i> Please enter a Domain URL first.</span>';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Fetching...';
+        msgDiv.innerHTML = '<span style="color: #94a3b8;">Connecting to domain...</span>';
+
+        try {
+            const response = await fetch(`../api/fetch_ssl.php?domain=${encodeURIComponent(domainInput)}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                msgDiv.innerHTML = `<span style="color: #fca5a5;"><i class="fa-solid fa-circle-xmark"></i> ${data.error}</span>`;
+                document.getElementById('ssl_provider').value = '';
+                document.getElementById('ssl_issue_date').value = '';
+                document.getElementById('ssl_expiry_date').value = '';
+                document.getElementById('ssl_status_display').value = '';
+                document.getElementById('ssl_fingerprint').value = '';
+            } else {
+                msgDiv.innerHTML = '<span style="color: #4ade80;"><i class="fa-solid fa-circle-check"></i> Certificate fetched successfully!</span>';
+                document.getElementById('ssl_provider').value = data.provider;
+                document.getElementById('ssl_issue_date').value = data.issue_date;
+                document.getElementById('ssl_expiry_date').value = data.expiry_date;
+                document.getElementById('ssl_status_display').value = `${data.status} (${data.days_left} days left)`;
+                document.getElementById('ssl_fingerprint').value = data.fingerprint;
+            }
+        } catch (err) {
+            msgDiv.innerHTML = '<span style="color: #fca5a5;"><i class="fa-solid fa-circle-xmark"></i> Network error occurred.</span>';
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details';
+    });
 </script>
 
 <?php require_once '../includes/layout_footer.php'; ?>

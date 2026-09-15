@@ -173,8 +173,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ssl_provider = isset($_POST['ssl_provider']) ? trim($_POST['ssl_provider']) : '';
             $ssl_issue_date = !empty($_POST['ssl_issue_date']) ? $_POST['ssl_issue_date'] : null;
             $ssl_expiry_date = !empty($_POST['ssl_expiry_date']) ? $_POST['ssl_expiry_date'] : null;
-            $stmtSsl = $pdo->prepare("INSERT INTO project_ssl_certs (project_id, domain_url, provider, issue_date, expiry_date) VALUES (?, ?, ?, ?, ?)");
-            $stmtSsl->execute([$id, $ssl_domain, $ssl_provider, $ssl_issue_date, $ssl_expiry_date]);
+            $ssl_fingerprint = !empty($_POST['ssl_fingerprint']) ? $_POST['ssl_fingerprint'] : null;
+            
+            $stmtSsl = $pdo->prepare("INSERT INTO project_ssl_certs (project_id, domain_url, provider, issue_date, expiry_date, certificate_fingerprint) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmtSsl->execute([$id, $ssl_domain, $ssl_provider, $ssl_issue_date, $ssl_expiry_date, $ssl_fingerprint]);
         }
 
         $pdo->commit();

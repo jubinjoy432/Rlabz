@@ -64,6 +64,7 @@
 
         // Main content
         renderOverview(project);
+        renderTimeline(project);
         renderScreenshots(project);
         renderFeatures(project);
 
@@ -86,9 +87,9 @@
         if (banner) {
             const img = banner.querySelector('img');
             if (img) {
-                img.src = project.thumbnail || '../assets/images/rz-logo.webp';
+                img.src = project.thumbnail || '../assets/images/logo1.png';
                 img.alt = project.title;
-                img.onerror = function () { this.src = '../assets/images/rz-logo.webp'; };
+                img.onerror = function () { this.src = '../assets/images/logo1.png'; };
             }
         }
 
@@ -158,6 +159,29 @@
         container.innerHTML = html || '<p style="color: rgba(255,255,255,0.3);">No description available yet.</p>';
     }
 
+    function renderTimeline(project) {
+        const card = document.getElementById('pdTimelineCard');
+        const container = document.getElementById('pdTimelineContent');
+        if (!card || !container) return;
+
+        if (!project.milestones || project.milestones.length === 0) {
+            card.style.display = 'none';
+            return;
+        }
+
+        container.innerHTML = project.milestones.map(m => {
+            // Format date to a readable string (e.g. Aug 15, 2026)
+            const dateObj = new Date(m.date);
+            const dateStr = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            return `
+                <div class="pd-timeline-item status-${m.status}">
+                    <div class="pd-timeline-date">${dateStr}</div>
+                    <div class="pd-timeline-title">${m.title}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
     function renderScreenshots(project) {
         const card = document.getElementById('pdScreenshotsCard');
         const grid = document.getElementById('pdScreenshotsGrid');
@@ -174,7 +198,7 @@
 
         grid.innerHTML = screenshots.map((src, i) =>
             `<div class="pd-screenshot-item" data-index="${i}">
-                <img src="${src}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.src='../assets/images/rz-logo.webp'">
+                <img src="${src}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.src='../assets/images/logo1.png'">
             </div>`
         ).join('');
     }
