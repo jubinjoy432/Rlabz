@@ -2695,37 +2695,33 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Custom Curved Horizontal Scrolling Timeline (GSAP + ScrollTrigger) ---
-let timelineInitialized = false;
-window.addEventListener('projectsLoaded', () => {
-    if (timelineInitialized) return;
-    timelineInitialized = true;
-    buildDynamicTimeline();
-    initCurvedTimeline();
-});
-if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitialized) {
-    timelineInitialized = true;
-    buildDynamicTimeline();
+let timelineCtx = null;
+let dynamicTimelineBuilt = false;
+
+function refreshTimeline() {
+    if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
+        buildDynamicTimeline();
+        dynamicTimelineBuilt = true;
+    }
     initCurvedTimeline();
 }
 
-// Fallback for static timeline (e.g. index.html) where projectsLoaded won't fire
+window.addEventListener('projectsLoaded', () => {
+    refreshTimeline();
+});
+
+if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
+    refreshTimeline();
+}
+
+// Fallback for static timeline if projectsLoaded takes time or is not yet fired
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
-            timelineInitialized = true;
+        if (!dynamicTimelineBuilt && document.querySelector('.timeline-scroll-content')) {
             initCurvedTimeline();
         }
-    }, 100);
+    }, 150);
 });
-// In case DOM is already loaded
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(() => {
-        if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
-            timelineInitialized = true;
-            initCurvedTimeline();
-        }
-    }, 100);
-}
 
 function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
@@ -2735,11 +2731,14 @@ function buildDynamicTimeline() {
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Sort projects by year ascending (old to new)
+    // Sort projects descending: latest year / latest project first at the start of the timeline
     const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
-        if (a.year === 'N/A' || !a.year) return -1;
-        if (b.year === 'N/A' || !b.year) return 1;
-        return parseInt(a.year) - parseInt(b.year);
+        const yearA = parseInt(a.year) || 0;
+        const yearB = parseInt(b.year) || 0;
+        if (yearB !== yearA) {
+            return yearB - yearA; // Newest year first
+        }
+        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0); // Newest ID first for tiebreak
     });
     
     // Base X offset
@@ -2886,8 +2885,12 @@ function initCurvedTimeline() {
         }
     });
 
+    if (timelineCtx) {
+        timelineCtx.revert();
+    }
+
     // Only apply horizontal pinning scroll on desktop (width > 992px)
-    let timelineCtx = gsap.context(() => {
+    timelineCtx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
         mm.add("(min-width: 993px)", () => {

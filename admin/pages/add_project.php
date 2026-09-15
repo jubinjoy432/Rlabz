@@ -44,8 +44,8 @@ require_once '../includes/layout_header.php';
 
         <div class="form-row">
             <div class="form-group">
-                <label for="year">Academic Year</label>
-                <input type="text" id="year" name="year" required placeholder="e.g. 2024">
+                <label for="year">Project Year</label>
+                <input type="text" id="year" name="year" required placeholder="e.g. 2025">
             </div>
             <div class="form-group">
                 <label for="batch">Batch</label>

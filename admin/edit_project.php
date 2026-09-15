@@ -64,7 +64,7 @@ require_once 'includes/layout_header.php';
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Academic Year</label>
+                <label>Project Year</label>
                 <input type="text" name="year" required value="<?= htmlspecialchars($project['year']) ?>">
             </div>
             <div class="form-group">

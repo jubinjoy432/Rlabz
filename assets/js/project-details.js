@@ -241,7 +241,7 @@
 
         const rows = [];
 
-        if (project.year) rows.push({ label: 'Academic Year', value: project.year });
+        if (project.year) rows.push({ label: 'Project Year', value: project.year });
         if (project.batch) rows.push({ label: 'Batch', value: project.batch });
         if (project.department) rows.push({ label: 'Department', value: project.department });
         if (project.faculty && project.faculty.length > 0) {
