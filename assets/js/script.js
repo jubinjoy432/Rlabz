@@ -2665,19 +2665,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Custom Curved Horizontal Scrolling Timeline (GSAP + ScrollTrigger) ---
 let timelineInitialized = false;
-window.addEventListener('projectsLoaded', () => {
-    if (timelineInitialized) return;
-    timelineInitialized = true;
-    buildDynamicTimeline();
-    initCurvedTimeline();
-});
-if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0 && !timelineInitialized) {
-    timelineInitialized = true;
+let timelineCtx = null;
+
+function setupTimeline() {
     buildDynamicTimeline();
     initCurvedTimeline();
 }
 
-// Fallback for static timeline (e.g. index.html) where projectsLoaded won't fire
+window.addEventListener('projectsLoaded', () => {
+    setupTimeline();
+});
+
+if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
+    setupTimeline();
+}
+
+// Fallback for static timeline (e.g. index.html) where projectsLoaded won't fire or before it fires
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         if (!timelineInitialized && document.querySelector('.timeline-scroll-content')) {
@@ -2700,15 +2703,23 @@ function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
     
+    const isSubfolder = window.location.pathname.includes('/public/');
+    const basePath = isSubfolder ? '' : 'public/';
+
     // Remove existing nodes and cards
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Sort projects by year ascending (old to new)
+    // Sort projects chronologically (old to new)
     const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
+        if (a.db_id && b.db_id) {
+            return a.db_id - b.db_id;
+        }
         if (a.year === 'N/A' || !a.year) return -1;
         if (b.year === 'N/A' || !b.year) return 1;
-        return parseInt(a.year) - parseInt(b.year);
+        const diff = parseInt(a.year) - parseInt(b.year);
+        if (diff !== 0) return diff;
+        return (a.db_id || 0) - (b.db_id || 0);
     });
     
     // Base X offset
@@ -2723,8 +2734,10 @@ function buildDynamicTimeline() {
         // Node
         const node = document.createElement('div');
         node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
+        node.style.position = 'absolute';
         node.style.left = `${currentX}px`;
         node.style.top = `${top}px`;
+        node.style.zIndex = '5';
         node.style.setProperty('--node-color', color);
         node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
         scrollContent.appendChild(node);
@@ -2734,12 +2747,14 @@ function buildDynamicTimeline() {
         const card = document.createElement('div');
         const borderTheme = (idx % 2 === 0) ? 'teal-border' : 'purple-border';
         card.className = `timeline-card clean-card card-${isBottom ? 'top' : 'bottom'} ${borderTheme}`;
+        card.style.position = 'absolute';
         card.style.left = `${cardLeft}px`;
         if (isBottom) {
             card.style.top = `10px`;
         } else {
             card.style.top = `270px`;
         }
+        card.style.zIndex = '2';
         card.setAttribute('data-node', idx);
         
         card.innerHTML = `
@@ -2840,7 +2855,10 @@ function initCurvedTimeline() {
     );
 
     // Only apply horizontal pinning scroll on desktop (width > 992px)
-    let timelineCtx = gsap.context(() => {
+    if (timelineCtx) {
+        timelineCtx.revert();
+    }
+    timelineCtx = gsap.context(() => {
         const mm = gsap.matchMedia();
 
         mm.add("(min-width: 993px)", () => {
@@ -3062,9 +3080,13 @@ function initCurvedTimeline() {
         });
     });
 
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+    }
+
     // Cleanup on window unload
     window.addEventListener('unload', () => {
-        timelineCtx.revert();
+        if (timelineCtx) timelineCtx.revert();
     });
 }
 
