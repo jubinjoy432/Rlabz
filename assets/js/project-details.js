@@ -205,7 +205,7 @@
         if (!grid) return;
 
         if (!project.tech || project.tech.length === 0) {
-            grid.innerHTML = '<p style="color: rgba(255,255,255,0.3);">No technologies listed.</p>';
+            grid.innerHTML = '<p style="color: #64748b;">No technologies listed.</p>';
             return;
         }
 
@@ -251,7 +251,10 @@
         }
 
         grid.innerHTML = project.team.map(member => {
-            const photoHtml = member.photo ? `<img src="${member.photo}" alt="${member.name}" class="pd-team-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+            const initials = (member.name || 'M').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'M';
+            const photoHtml = member.photo && !member.photo.includes('rz-logo')
+                ? `<img src="${member.photo}" alt="${member.name}" class="pd-team-avatar" loading="lazy" onerror="this.outerHTML='<div class=\\'pd-team-avatar pd-team-avatar-initials\\'>${initials}</div>'">`
+                : `<div class="pd-team-avatar pd-team-avatar-initials">${initials}</div>`;
             return `
                 <div class="pd-team-card">
                     ${photoHtml}
@@ -274,7 +277,10 @@
         }
 
         const f = project.faculty;
-        const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+        const fInitials = (f.name || 'F').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'F';
+        const photoHtml = f.photo && !f.photo.includes('rz-logo')
+            ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.outerHTML='<div class=\\'pd-faculty-avatar pd-faculty-avatar-initials\\'>${fInitials}</div>'">`
+            : `<div class="pd-faculty-avatar pd-faculty-avatar-initials">${fInitials}</div>`;
 
         container.innerHTML = `
             <div class="pd-faculty-card">
