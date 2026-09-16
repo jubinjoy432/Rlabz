@@ -160,6 +160,7 @@ require_once '../includes/layout_header.php';
                 <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
                     <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
                     <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+                    <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1;">
                     <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
                     <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
@@ -355,6 +356,7 @@ require_once '../includes/layout_header.php';
         row.innerHTML = `
             <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
             <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+            <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1;">
             <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
         `;

@@ -155,6 +155,7 @@ require_once 'includes/layout_header.php';
                     <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
                         <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
                         <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+                        <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL" style="flex: 1;">
                         <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
                         <input type="hidden" name="existing_faculty_photos[]" value="">
                         <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
@@ -164,6 +165,7 @@ require_once 'includes/layout_header.php';
                         <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem; align-items: center;">
                             <input type="text" name="faculty_names[]" value="<?= htmlspecialchars($f['name'] ?? '') ?>" placeholder="Faculty Name" style="flex: 1;">
                             <input type="text" name="faculty_designations[]" value="<?= htmlspecialchars($f['designation'] ?? '') ?>" placeholder="Designation" style="flex: 1;">
+                            <input type="text" name="faculty_linkedin[]" value="<?= htmlspecialchars($f['linkedin_link'] ?? '') ?>" placeholder="LinkedIn URL" style="flex: 1;">
                             
                             <div style="display:flex; flex-direction:column; flex:1;">
                                 <input type="file" name="faculty_photos[]" accept="image/*">
@@ -227,21 +229,45 @@ require_once 'includes/layout_header.php';
             <label>Project Cover Image (Upload new to replace)</label>
             <input type="file" name="image" accept="image/*">
             <?php if($project['image_path']): ?>
-                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">Current: <?= htmlspecialchars($project['image_path']) ?></p>
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                    <img src="../<?= htmlspecialchars($project['image_path']) ?>" alt="Cover" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['image_path'])) ?></span>
+                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
+                            <input type="checkbox" name="delete_image" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete cover image
+                        </label>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
         <div class="form-group">
             <label>Project Thumbnail (Upload new to replace)</label>
             <input type="file" name="thumbnail" accept="image/*">
             <?php if($project['thumbnail_path']): ?>
-                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">Current: <?= htmlspecialchars($project['thumbnail_path']) ?></p>
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                    <img src="../<?= htmlspecialchars($project['thumbnail_path']) ?>" alt="Thumbnail" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['thumbnail_path'])) ?></span>
+                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
+                            <input type="checkbox" name="delete_thumbnail" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete thumbnail image
+                        </label>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
         <div class="form-group">
             <label>Project Poster (Upload new to replace)</label>
             <input type="file" name="poster" accept="image/*">
             <?php if($project['poster_path']): ?>
-                <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">Current: <?= htmlspecialchars($project['poster_path']) ?></p>
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                    <img src="../<?= htmlspecialchars($project['poster_path']) ?>" alt="Poster" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+                    <div style="flex: 1;">
+                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['poster_path'])) ?></span>
+                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
+                            <input type="checkbox" name="delete_poster" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete poster image
+                        </label>
+                    </div>
+                </div>
             <?php endif; ?>
         </div>
 
@@ -330,6 +356,7 @@ require_once 'includes/layout_header.php';
         row.innerHTML = `
             <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
             <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
+            <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL" style="flex: 1;">
             <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
             <input type="hidden" name="existing_faculty_photos[]" value="">
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>

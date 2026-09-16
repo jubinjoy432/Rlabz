@@ -130,15 +130,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_POST['faculty_names']) && is_array($_POST['faculty_names'])) {
             $faculty_names = $_POST['faculty_names'];
             $faculty_designations = $_POST['faculty_designations'] ?? [];
+            $faculty_linkedin = $_POST['faculty_linkedin'] ?? [];
             $faculty_photos = $_FILES['faculty_photos'] ?? null;
 
-            $stmtFac = $pdo->prepare("INSERT INTO project_faculty (project_id, name, designation, photo_path) VALUES (?, ?, ?, ?)");
+            $stmtFac = $pdo->prepare("INSERT INTO project_faculty (project_id, name, designation, photo_path, linkedin_link) VALUES (?, ?, ?, ?, ?)");
 
             foreach ($faculty_names as $index => $f_name) {
                 $f_name = trim($f_name);
                 if (empty($f_name)) continue;
 
                 $f_designation = trim($faculty_designations[$index] ?? '');
+                $f_linkedin = trim($faculty_linkedin[$index] ?? '');
                 $f_photo_path = '';
 
                 if (isset($faculty_photos['name'][$index]) && $faculty_photos['error'][$index] === UPLOAD_ERR_OK) {
@@ -151,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                $stmtFac->execute([$project_id, $f_name, $f_designation, $f_photo_path]);
+                $stmtFac->execute([$project_id, $f_name, $f_designation, $f_photo_path, $f_linkedin]);
             }
         }
 

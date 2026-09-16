@@ -2731,14 +2731,14 @@ function buildDynamicTimeline() {
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Sort projects descending: latest year / latest project first at the start of the timeline
+    // Sort projects ascending: oldest year / oldest project first at the start of the timeline
     const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
         const yearA = parseInt(a.year) || 0;
         const yearB = parseInt(b.year) || 0;
-        if (yearB !== yearA) {
-            return yearB - yearA; // Newest year first
+        if (yearA !== yearB) {
+            return yearA - yearB; // Oldest year first
         }
-        return (parseInt(b.id) || 0) - (parseInt(a.id) || 0); // Newest ID first for tiebreak
+        return String(a.id).localeCompare(String(b.id)); // Alphabetical fallback for same year
     });
     
     // Base X offset
@@ -2836,6 +2836,12 @@ function buildDynamicTimeline() {
         const path1 = svg.querySelector('#road-path');
         if (path1) path1.setAttribute('d', d);
     }
+    
+    // Initial auto-scroll to extreme right for mobile
+    const pinContainer = document.querySelector('.timeline-pin-container');
+    if (pinContainer) {
+        pinContainer.scrollLeft = pinContainer.scrollWidth;
+    }
 }
 
 function initCurvedTimeline() {
@@ -2901,8 +2907,9 @@ function initCurvedTimeline() {
             const nodes = gsap.utils.toArray('.timeline-node');
 
             if (totalScrollDistance > 0) {
-                // Enable horizontal scroll via mouse wheel when hovered
-                let targetScroll = pinContainer.scrollLeft;
+                // Enable horizontal scroll via mouse wheel when hovered. Start from extreme right.
+                pinContainer.scrollLeft = totalScrollDistance;
+                let targetScroll = totalScrollDistance;
                 
                 // Navigation Buttons Logic
                 const prevBtn = document.querySelector('.timeline-prev');
@@ -2941,19 +2948,20 @@ function initCurvedTimeline() {
                     if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
                         const delta = evt.deltaY;
                         
-                        // Small buffer to prevent getting stuck due to fractional pixels
-                        const atStart = targetScroll <= 5 && delta < 0;
-                        const atEnd = targetScroll >= (totalScrollDistance - 5) && delta > 0;
+                        // Base atStart and atEnd on ACTUAL visual scroll position, not just the target
+                        // REVERSED LOGIC: Scrolling down (delta > 0) moves left. Scrolling up (delta < 0) moves right.
+                        const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
+                        const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
                         
                         if (!atStart && !atEnd) {
                             evt.preventDefault();
-                            targetScroll += delta * 1.2;
+                            targetScroll -= delta * 0.85; // Reversed: subtract delta to move left on scroll down
                             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
                             
                             gsap.to(pinContainer, {
                                 scrollLeft: targetScroll,
-                                duration: 0.7,
-                                ease: "power2.out",
+                                duration: 0.85,
+                                ease: "power1.out",
                                 overwrite: "auto",
                                 onUpdate: updateButtons
                             });
@@ -2965,111 +2973,11 @@ function initCurvedTimeline() {
                 // --- Dynamic Road Drawing Animation ---
                 const maskPath = document.querySelector('#road-mask-path');
                 if (maskPath) {
-                    // Draw the initial road segment past the visible viewport so it doesn't look abruptly cut off
-                    const initialDrawWidth = containerWidth * 1.2;
-
-                    // Tween 1: Draw the initial road segment as the section enters vertically
-                    gsap.fromTo(maskPath,
-                        { width: 0 },
-                        {
-                            width: initialDrawWidth,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 80%',
-                                end: 'top top',
-                                scrub: 1
-                            }
-                        }
-                    );
-
-                    // Tween 2: Draw the rest of the road as the section scrolls horizontally
-                    gsap.fromTo(maskPath,
-                        { width: initialDrawWidth },
-                        {
-                            width: scrollContent.scrollWidth,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: scrollContent,
-                                scroller: pinContainer,
-                                horizontal: true,
-                                start: 'left left',
-                                end: () => `+=${totalScrollDistance}`,
-                                scrub: 1
-                            }
-                        }
-                    );
+                    // Set mask to full width since we start at the end of the timeline
+                    maskPath.style.width = scrollContent.scrollWidth + 'px';
                 }
 
-                // --- Node and Card Reveal tied to Road Drawing ---
-                cards.forEach((card, index) => {
-                    const node = nodes[index];
-                    const isTop = card.classList.contains('card-top');
-                    const startY = isTop ? -40 : 40;
-                    const nodeLeft = parseFloat(node.style.left || 0);
-
-                    if (nodeLeft < containerWidth * 1.2) {
-                        // Node is in the initial viewport: Reveal during vertical entrance
-                        const triggerPercent = 80 - (nodeLeft / (containerWidth * 1.2)) * 80;
-                        
-                        // Node pops in
-                        gsap.fromTo(node,
-                            { opacity: 0, scale: 0.5 },
-                            {
-                                opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)',
-                                scrollTrigger: {
-                                    trigger: '#our-works',
-                                    start: `top ${triggerPercent + 5}%`, // slightly after road passes
-                                    toggleActions: 'play none none reverse'
-                                }
-                            }
-                        );
-                        // Card slides in
-                        gsap.fromTo(card,
-                            { opacity: 0, y: startY },
-                            {
-                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
-                                scrollTrigger: {
-                                    trigger: '#our-works',
-                                    start: `top ${triggerPercent}%`,
-                                    end: `top ${triggerPercent - 10}%`,
-                                    scrub: true
-                                }
-                            }
-                        );
-                    } else {
-                        // Node is outside initial viewport: Reveal during horizontal scroll
-                        // Node pops in when it crosses the 85% mark (right as the road tip hits it)
-                        gsap.fromTo(node,
-                            { opacity: 0, scale: 0.5 },
-                            {
-                                opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)',
-                                scrollTrigger: {
-                                    trigger: node,
-                                    scroller: pinContainer,
-                                    horizontal: true,
-                                    start: 'left 85%', 
-                                    toggleActions: 'play none none reverse'
-                                }
-                            }
-                        );
-                        // Card slides in shortly after
-                        gsap.fromTo(card,
-                            { opacity: 0, y: startY },
-                            {
-                                opacity: 1, y: 0, duration: 1, ease: 'power2.out',
-                                scrollTrigger: {
-                                    trigger: node,
-                                    scroller: pinContainer,
-                                    horizontal: true,
-                                    start: 'left 80%',
-                                    end: 'left 55%',
-                                    scrub: true
-                                }
-                            }
-                        );
-                    }
-                });
+                // Node and Cards are left fully visible by default to prevent backwards scrub disappearing bugs
             } else {
                 // Screen is wide enough to show all 1500px, no horizontal scroll needed
                 nodes.forEach((node, index) => {

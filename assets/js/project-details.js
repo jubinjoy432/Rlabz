@@ -317,11 +317,16 @@
 
         container.innerHTML = project.faculty.map(f => {
             const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
+            let liUrl = f.linkedin;
+            if (liUrl && !/^https?:\/\//i.test(liUrl)) {
+                liUrl = 'https://' + liUrl;
+            }
+            const linkedinHtml = liUrl ? `<a href="${liUrl}" target="_blank" rel="noopener" class="pd-team-linkedin" style="color: #0077b5; font-size: 1.1rem; margin-left: 0.5rem;"><i class="fa-brands fa-linkedin"></i></a>` : '';
             return `
                 <div class="pd-faculty-card">
                     ${photoHtml}
                     <div class="pd-faculty-info">
-                        <h4>${f.name}</h4>
+                        <h4 style="display:flex; align-items:center; margin:0;">${f.name} ${linkedinHtml}</h4>
                         ${f.designation ? `<div class="pd-faculty-designation">${f.designation}</div>` : ''}
                         <span class="pd-faculty-label"><i class="fa-solid fa-user-tie"></i> Faculty In-Charge</span>
                     </div>

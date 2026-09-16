@@ -147,13 +147,16 @@ require_once '../includes/layout_header.php';
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <h2 style="margin: 0; padding: 0; border: none; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-bullhorn" style="color: var(--accent-blue);"></i> Announcements
+                <i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> SSL Expiry & Announcements
             </h2>
             <span id="unread-count" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(100, 116, 139, 0.15)'; ?>; color: <?php echo $unreadCount > 0 ? '#60a5fa' : '#94a3b8'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.3)' : 'rgba(100, 116, 139, 0.2)'; ?>;">
                 <?php echo $unreadCount; ?> new
             </span>
         </div>
-        <div>
+        <div style="display: flex; gap: 0.5rem;">
+            <a href="ssl_certificates.php" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+                <i class="fa-solid fa-arrow-right"></i> <span>View SSL Certificates</span>
+            </a>
             <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
                 <i class="fa-solid fa-rotate"></i> <span>Check SSL</span>
             </button>
@@ -162,8 +165,8 @@ require_once '../includes/layout_header.php';
     <div class="announcements-container" style="flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 10px;">
         <?php if(empty($announcements)): ?>
             <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                <i class="fa-regular fa-bell-slash" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
-                No announcements yet.
+                <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
+                No SSL expired. (No other announcements)
             </div>
         <?php else: ?>
             <?php foreach($announcements as $a): 

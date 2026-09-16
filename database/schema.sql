@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `project_faculty` (
     `name` VARCHAR(100) NOT NULL,
     `designation` VARCHAR(100) DEFAULT '',
     `photo_path` VARCHAR(255) DEFAULT '',
+    `linkedin_link` VARCHAR(255) DEFAULT '',
     PRIMARY KEY (`id`),
     FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

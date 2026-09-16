@@ -46,7 +46,8 @@ try {
         $facultyByProject[$f['project_id']][] = [
             'name' => $f['name'],
             'designation' => $f['designation'],
-            'photo' => $f['photo_path']
+            'photo' => $f['photo_path'],
+            'linkedin' => $f['linkedin_link']
         ];
     }
 
