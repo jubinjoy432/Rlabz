@@ -234,21 +234,21 @@ require_once '../includes/layout_header.php';
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_provider">Provider</label>
-                <input type="text" id="ssl_provider" name="ssl_provider" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="text" id="ssl_provider" name="ssl_provider" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label>Status / Days Remaining</label>
-                <input type="text" id="ssl_status_display" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="text" id="ssl_status_display" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_issue_date">Issue Date</label>
-                <input type="date" id="ssl_issue_date" name="ssl_issue_date" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="date" id="ssl_issue_date" name="ssl_issue_date" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label for="ssl_expiry_date">Expiry Date</label>
-                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="">

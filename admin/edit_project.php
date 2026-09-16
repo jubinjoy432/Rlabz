@@ -274,21 +274,21 @@ require_once 'includes/layout_header.php';
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_provider">Provider</label>
-                <input type="text" id="ssl_provider" name="ssl_provider" value="<?= htmlspecialchars($ssl['provider'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="text" id="ssl_provider" name="ssl_provider" value="<?= htmlspecialchars($ssl['provider'] ?? '') ?>" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label>Status / Days Remaining</label>
-                <input type="text" id="ssl_status_display" value="" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="text" id="ssl_status_display" value="" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <div class="form-row">
             <div class="form-group">
                 <label for="ssl_issue_date">Issue Date</label>
-                <input type="date" id="ssl_issue_date" name="ssl_issue_date" value="<?= htmlspecialchars($ssl['issue_date'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="date" id="ssl_issue_date" name="ssl_issue_date" value="<?= htmlspecialchars($ssl['issue_date'] ?? '') ?>" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
             <div class="form-group">
                 <label for="ssl_expiry_date">Expiry Date</label>
-                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" value="<?= htmlspecialchars($ssl['expiry_date'] ?? '') ?>" readonly style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" value="<?= htmlspecialchars($ssl['expiry_date'] ?? '') ?>" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
             </div>
         </div>
         <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="<?= htmlspecialchars($ssl['certificate_fingerprint'] ?? '') ?>">
@@ -336,4 +336,46 @@ require_once 'includes/layout_header.php';
         `;
         container.appendChild(row);
     }
+
+    // ---- SSL Fetch Details ----
+    document.getElementById('btn-fetch-ssl')?.addEventListener('click', async function() {
+        const domainInput = document.getElementById('ssl_domain').value.trim();
+        const msgDiv = document.getElementById('ssl-status-message');
+        const btn = this;
+        
+        if (!domainInput) {
+            msgDiv.innerHTML = '<span style="color: #fca5a5;"><i class="fa-solid fa-triangle-exclamation"></i> Please enter a Domain URL first.</span>';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Fetching...';
+        msgDiv.innerHTML = '<span style="color: #94a3b8;">Connecting to domain...</span>';
+
+        try {
+            const response = await fetch(`api/fetch_ssl.php?domain=${encodeURIComponent(domainInput)}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                msgDiv.innerHTML = `<span style="color: #fca5a5;"><i class="fa-solid fa-circle-xmark"></i> ${data.error}</span>`;
+                document.getElementById('ssl_provider').value = '';
+                document.getElementById('ssl_issue_date').value = '';
+                document.getElementById('ssl_expiry_date').value = '';
+                document.getElementById('ssl_status_display').value = '';
+                document.getElementById('ssl_fingerprint').value = '';
+            } else {
+                msgDiv.innerHTML = '<span style="color: #4ade80;"><i class="fa-solid fa-circle-check"></i> Certificate fetched successfully!</span>';
+                document.getElementById('ssl_provider').value = data.provider;
+                document.getElementById('ssl_issue_date').value = data.issue_date;
+                document.getElementById('ssl_expiry_date').value = data.expiry_date;
+                document.getElementById('ssl_status_display').value = `${data.status} (${data.days_left} days left)`;
+                document.getElementById('ssl_fingerprint').value = data.fingerprint;
+            }
+        } catch (err) {
+            msgDiv.innerHTML = '<span style="color: #fca5a5;"><i class="fa-solid fa-circle-xmark"></i> Network error occurred.</span>';
+        }
+        
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details';
+    });
 </script>

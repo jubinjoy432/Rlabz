@@ -3,7 +3,8 @@
  * Cron Script for SSL Certificate Expiry Reminders
  */
 
-if (php_sapi_name() !== 'cli' && !isset($_GET['token'])) {
+session_start();
+if (php_sapi_name() !== 'cli' && !isset($_GET['token']) && (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true)) {
     die("Access denied.");
 }
 
