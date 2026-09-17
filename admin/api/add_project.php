@@ -70,15 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Handle Poster
     $poster_path = '';
-    if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
-        $ext = strtolower(pathinfo($_FILES['poster']['name'], PATHINFO_EXTENSION));
-        if (in_array($ext, $allowed)) {
-            $pname = uniqid('poster_') . '.' . $ext;
-            if (move_uploaded_file($_FILES['poster']['tmp_name'], $uploadDir . $pname)) {
-                $poster_path = 'uploads/' . $pname;
-            }
-        }
-    }
 
     // Insert into database
     try {

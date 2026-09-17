@@ -369,22 +369,24 @@
 /* ---- Project Card ---- */
 .project-gallery-card {
     background: var(--white);
+    border-radius: 10px;
     border: 1px solid var(--hairline-slate);
-    border-radius: 12px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(10px);
     animation: pgCardFadeIn 0.5s ease forwards;
-    box-shadow: 0 4px 12px rgba(0,44,73,0.03);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .project-gallery-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--digital-flow);
-    box-shadow: 0 12px 30px rgba(0,44,73,0.08);
+    transform: translateY(-2px);
+    border-color: var(--digital-blue);
+    box-shadow: 0 8px 24px rgba(0,44,73,0.08);
 }
 
 @keyframes pgCardFadeIn {
@@ -512,59 +514,6 @@
     white-space: nowrap;
 }
 
-/* Card Footer */
-.pg-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 1rem;
-    border-top: 1px solid var(--hairline-slate);
-}
-
-.pg-card-team {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.pg-card-team-avatars {
-    display: flex;
-}
-
-.pg-card-team-avatar {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--white);
-    object-fit: cover;
-    margin-left: -8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.pg-card-team-avatar:first-child {
-    margin-left: 0;
-}
-
-.pg-card-team-count {
-    color: var(--steel-slate);
-    font-size: 0.75rem;
-    font-weight: 600;
-    font-family: 'Outfit', sans-serif;
-}
-
-.pg-card-view-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.15rem;
-    background: var(--digital-flow);
-    border: 1px solid var(--digital-flow);
-    border-radius: 8px;
-    color: var(--white);
-    font-size: 0.78rem;
-    font-weight: 600;
-    font-family: 'Outfit', sans-serif;
-    text-decoration: none;
     transition: all 0.3s ease;
 }
 

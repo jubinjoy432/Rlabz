@@ -77,9 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         return $existingPath;
     }
 
-    $image_path = handleUpload('image', $project['image_path']);
+    $image_path = $project['image_path'];
     $thumbnail_path = handleUpload('thumbnail', $project['thumbnail_path']);
-    $poster_path = handleUpload('poster', $project['poster_path']);
+    $poster_path = $project['poster_path'];
 
     try {
         $pdo->beginTransaction();
@@ -170,6 +170,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 
                 $facStmt->execute([$id, $f_name, $f_designation, $f_photo_path, $f_linkedin]);
+            }
+        }
+
+        // --- Handle Screenshots Deletion ---
+        if (isset($_POST['delete_screenshots']) && is_array($_POST['delete_screenshots'])) {
+            $delScreenshotStmt = $pdo->prepare("SELECT image_path FROM project_screenshots WHERE id = ? AND project_id = ?");
+            $delStmt = $pdo->prepare("DELETE FROM project_screenshots WHERE id = ? AND project_id = ?");
+            foreach ($_POST['delete_screenshots'] as $ss_id) {
+                $delScreenshotStmt->execute([$ss_id, $id]);
+                if ($ssInfo = $delScreenshotStmt->fetch(PDO::FETCH_ASSOC)) {
+                    $physical_path = '../../' . $ssInfo['image_path'];
+                    if (file_exists($physical_path)) {
+                        unlink($physical_path);
+                    }
+                    $delStmt->execute([$ss_id, $id]);
+                }
+            }
+        }
+
+        // --- Handle New Screenshots Upload ---
+        if (isset($_FILES['new_screenshots'])) {
+            $ss_files = $_FILES['new_screenshots'];
+            $ssStmt = $pdo->prepare("INSERT INTO project_screenshots (project_id, image_path, sort_order) VALUES (?, ?, 0)");
+            
+            for ($i = 0; $i < count($ss_files['name']); $i++) {
+                if ($ss_files['error'][$i] === UPLOAD_ERR_OK) {
+                    $ss_ext = strtolower(pathinfo($ss_files['name'][$i], PATHINFO_EXTENSION));
+                    if (in_array($ss_ext, $allowed) && $ss_files['size'][$i] <= 5 * 1024 * 1024) {
+                        $ss_filename = uniqid('screenshot_') . '.' . $ss_ext;
+                        if (move_uploaded_file($ss_files['tmp_name'][$i], $uploadDir . $ss_filename)) {
+                            $ssStmt->execute([$id, 'uploads/' . $ss_filename]);
+                        }
+                    }
+                }
             }
         }
 

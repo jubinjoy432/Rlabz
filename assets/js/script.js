@@ -35,7 +35,7 @@ if (typeof Lenis !== 'undefined') {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const href = this.getAttribute('href');
-            
+
             if (isMobileLenisKilled) {
                 // Fallback to native smooth scrolling for anchor links on mobile
                 if (href === '#') {
@@ -2110,18 +2110,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── 1. Icon map ──
     const pjIconMap = {
-        1: "fa-heartbeat",   2: "fa-music",
+        1: "fa-heartbeat", 2: "fa-music",
         3: "fa-theater-masks", 4: "fa-calendar-alt",
-        5: "fa-users",       6: "fa-mobile-alt",
-        7: "fa-globe",       8: "fa-chalkboard-teacher",
+        5: "fa-users", 6: "fa-mobile-alt",
+        7: "fa-globe", 8: "fa-chalkboard-teacher",
         9: "fa-hands-helping", 10: "fa-glass-cheers"
     };
 
-    const track    = document.getElementById('pj-track');
+    const track = document.getElementById('pj-track');
     const viewport = document.getElementById('pj-viewport');
-    const prevBtn  = document.getElementById('pj-prev');
-    const nextBtn  = document.getElementById('pj-next');
-    const section  = document.getElementById('our-works');
+    const prevBtn = document.getElementById('pj-prev');
+    const nextBtn = document.getElementById('pj-next');
+    const section = document.getElementById('our-works');
 
     if (!track || !viewport || !section) return;
 
@@ -2130,9 +2130,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── 2. Build ONE pj-item per project ──
     function buildItem(id, proj, altIndex) {
-        const year      = proj.date ? proj.date.split(' ').pop() : '—';
+        const year = proj.date ? proj.date.split(' ').pop() : '—';
         const iconClass = pjIconMap[id] || 'fa-laptop-code';
-        const isTop     = altIndex % 2 === 0;
+        const isTop = altIndex % 2 === 0;
 
         const item = document.createElement('div');
         item.className = `pj-item ${isTop ? 'pj-item--top' : 'pj-item--bottom'}`;
@@ -2141,7 +2141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Year node on the timeline
         const node = document.createElement('div');
         node.className = 'pj-node';
-        
+
         // Year text label
         const yearLabel = document.createElement('div');
         yearLabel.className = 'pj-card-year';
@@ -2206,9 +2206,9 @@ document.addEventListener('DOMContentLoaded', () => {
     populateTrack();
 
     // ── 4. Measure and position so we start at the MIDDLE set ──
-    let ITEM_W  = 0; // computed after layout
+    let ITEM_W = 0; // computed after layout
     let ITEM_GAP = 0;
-    let SET_W   = 0; // width of one full set of N items
+    let SET_W = 0; // width of one full set of N items
     let offsetX = 0; // current horizontal translation (negative = scroll right)
     let isDragging = false;
     let dragStartX = 0;
@@ -2222,13 +2222,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const first = items[0];
         const second = items[1];
         if (!second) return;
-        
+
         // Use offsetLeft to get scale-invariant distance between items
         const distance = second.offsetLeft - first.offsetLeft;
-        ITEM_W   = first.offsetWidth;
+        ITEM_W = first.offsetWidth;
         ITEM_GAP = distance - ITEM_W;
         SET_W = N * distance;
-        
+
         // Start positioned at the middle set (set index 1)
         offsetX = -(SET_W + viewport.clientWidth / 2 - ITEM_W / 2);
     }
@@ -2246,7 +2246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function applyTransform(animated) {
         track.style.transition = animated ? 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
-        track.style.transform  = `translateX(${offsetX}px)`;
+        track.style.transform = `translateX(${offsetX}px)`;
     }
 
     // ── 5. Infinite loop seam check — jump silently when near edges ──
@@ -2267,11 +2267,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCenter() {
         const allItems = Array.from(track.querySelectorAll('.pj-item'));
         const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
-        let bestItem   = null;
-        let bestDist   = Infinity;
+        let bestItem = null;
+        let bestDist = Infinity;
 
         allItems.forEach(item => {
-            const r    = item.getBoundingClientRect();
+            const r = item.getBoundingClientRect();
             const itemCenter = r.left + r.width / 2;
             const dist = Math.abs(itemCenter - vpCenter);
             if (dist < bestDist) { bestDist = dist; bestItem = item; }
@@ -2307,7 +2307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isUserInteracting) {
             const delta = time - lastTime;
             // Cap delta to avoid huge jumps on tab-resume
-            const step  = Math.min(delta, 50) * AUTO_SPEED * 0.06;
+            const step = Math.min(delta, 50) * AUTO_SPEED * 0.06;
             offsetX -= step;
             applyTransform(false);
             checkSeam();
@@ -2325,12 +2325,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // Find item currently closest to center
         const allItems = Array.from(track.querySelectorAll('.pj-item'));
         const vpCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
-        let bestItem   = null;
-        let bestDist   = Infinity;
+        let bestItem = null;
+        let bestDist = Infinity;
 
         allItems.forEach(item => {
-            const r    = item.getBoundingClientRect();
-            const ic   = r.left + r.width / 2;
+            const r = item.getBoundingClientRect();
+            const ic = r.left + r.width / 2;
             const dist = Math.abs(ic - vpCenter);
             if (dist < bestDist) { bestDist = dist; bestItem = item; }
         });
@@ -2340,7 +2340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const siblings = allItems;
         const cursorIndex = siblings.indexOf(bestItem);
         const targetIndex = Math.max(0, Math.min(siblings.length - 1, cursorIndex + direction));
-        const targetItem  = siblings[targetIndex];
+        const targetItem = siblings[targetIndex];
 
         if (targetItem) {
             const r = targetItem.getBoundingClientRect();
@@ -2360,7 +2360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard nav
     section.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft')  snapToNearest(-1);
+        if (e.key === 'ArrowLeft') snapToNearest(-1);
         if (e.key === 'ArrowRight') snapToNearest(1);
     });
 
@@ -2426,13 +2426,17 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.registerPlugin(ScrollTrigger);
         gsap.fromTo('.pj-header',
             { y: 40, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
-              scrollTrigger: { trigger: '#our-works', start: 'top 75%', once: true } }
+            {
+                y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+                scrollTrigger: { trigger: '#our-works', start: 'top 75%', once: true }
+            }
         );
         gsap.fromTo('.pj-timeline-unified',
             { opacity: 0 },
-            { opacity: 1, duration: 1, ease: 'power2.out',
-              scrollTrigger: { trigger: '#our-works', start: 'top 70%', once: true } }
+            {
+                opacity: 1, duration: 1, ease: 'power2.out',
+                scrollTrigger: { trigger: '#our-works', start: 'top 70%', once: true }
+            }
         );
     }
 
@@ -2467,21 +2471,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Modal open/close ──
 function pjOpenModal(id, proj, iconClass) {
-    const modal    = document.getElementById('pj-modal');
+    const modal = document.getElementById('pj-modal');
     if (!modal) return;
 
-    document.getElementById('pj-modal-icon').innerHTML  = `<i class="fas ${iconClass || 'fa-laptop-code'}"></i>`;
-    document.getElementById('pj-modal-title').textContent  = proj.title  || '';
-    document.getElementById('pj-modal-desc').textContent   = proj.desc   || '';
+    document.getElementById('pj-modal-icon').innerHTML = `<i class="fas ${iconClass || 'fa-laptop-code'}"></i>`;
+    document.getElementById('pj-modal-title').textContent = proj.title || '';
+    document.getElementById('pj-modal-desc').textContent = proj.desc || '';
     document.getElementById('pj-modal-client').textContent = proj.client || '';
-    document.getElementById('pj-modal-year').textContent   = proj.date   || '';
+    document.getElementById('pj-modal-year').textContent = proj.date || '';
 
     // Tech badges
     const techWrap = document.getElementById('pj-modal-tech');
     techWrap.innerHTML = '';
     (proj.tech || []).forEach(t => {
         const b = document.createElement('span');
-        b.className   = 'pj-tech-badge';
+        b.className = 'pj-tech-badge';
         b.textContent = t;
         techWrap.appendChild(b);
     });
@@ -2489,7 +2493,7 @@ function pjOpenModal(id, proj, iconClass) {
     // Link
     const linkEl = document.getElementById('pj-modal-link');
     if (proj.link && proj.link !== '#') {
-        linkEl.href  = proj.link;
+        linkEl.href = proj.link;
         linkEl.style.display = 'inline-flex';
     } else {
         linkEl.style.display = 'none';
@@ -2500,9 +2504,9 @@ function pjOpenModal(id, proj, iconClass) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const modal     = document.getElementById('pj-modal');
-    const closeBtn  = document.getElementById('pj-modal-close');
-    const backdrop  = document.getElementById('pj-modal-backdrop');
+    const modal = document.getElementById('pj-modal');
+    const closeBtn = document.getElementById('pj-modal-close');
+    const backdrop = document.getElementById('pj-modal-backdrop');
 
     function pjCloseModal() {
         if (!modal) return;
@@ -2510,8 +2514,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
     }
 
-    if (closeBtn)  closeBtn.addEventListener('click',  pjCloseModal);
-    if (backdrop)  backdrop.addEventListener('click',  pjCloseModal);
+    if (closeBtn) closeBtn.addEventListener('click', pjCloseModal);
+    if (backdrop) backdrop.addEventListener('click', pjCloseModal);
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) pjCloseModal();
@@ -2726,7 +2730,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
-    
+
     // Remove existing nodes and cards
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
@@ -2740,16 +2744,16 @@ function buildDynamicTimeline() {
         }
         return String(a.id).localeCompare(String(b.id)); // Alphabetical fallback for same year
     });
-    
+
     // Base X offset
-    let currentX = 240; 
+    let currentX = 240;
     let isBottom = true;
     const colors = ['#00e5ff', '#2962ff', '#651fff', '#d500f9', '#ff1744'];
 
     projects.forEach((proj, idx) => {
         const top = isBottom ? 340 : 160;
         const color = colors[idx % colors.length];
-        
+
         // Node
         const node = document.createElement('div');
         node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
@@ -2757,7 +2761,7 @@ function buildDynamicTimeline() {
         node.style.top = `${top}px`;
         node.style.setProperty('--node-color', color);
         node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
-        
+
         // Connecting Line
         const line = document.createElement('div');
         line.style.position = 'absolute';
@@ -2775,9 +2779,9 @@ function buildDynamicTimeline() {
             line.style.height = '60px';
         }
         node.appendChild(line);
-        
+
         scrollContent.appendChild(node);
-        
+
         // Card
         const cardLeft = currentX - 100; // Center the 220px card
         const card = document.createElement('div');
@@ -2789,7 +2793,7 @@ function buildDynamicTimeline() {
             card.style.bottom = `440px`; // 520 - 80 = 440px from bottom (bottom edge at 80px from top)
         }
         card.setAttribute('data-node', idx);
-        
+
         const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
         card.innerHTML = `
             <a href="${basePath}project-details.html?id=${proj.id}" class="clean-card-link">
@@ -2798,7 +2802,7 @@ function buildDynamicTimeline() {
             </a>
         `;
         scrollContent.appendChild(card);
-        
+
         currentX += 260;
         isBottom = !isBottom;
     });
@@ -2806,17 +2810,17 @@ function buildDynamicTimeline() {
     // Update SVG Path
     const svg = scrollContent.querySelector('svg.timeline-svg-path');
     if (svg) {
-        const endX = currentX - 260; 
+        const endX = currentX - 260;
         const newWidth = endX + 800; // Extra padding
         scrollContent.style.width = `${newWidth}px`;
         svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
         svg.style.width = `${newWidth}px`;
-        
+
         // Generate the curvy path
         let d = "M 0 250 C 80 250 150 340 240 340";
         let curX = 240;
         let atBottom = true;
-        
+
         for (let i = 0; i < projects.length - 1; i++) {
             if (atBottom) {
                 // curve to top
@@ -2828,15 +2832,15 @@ function buildDynamicTimeline() {
             curX += 260;
             atBottom = !atBottom;
         }
-        
+
         // Final line
         let endY = atBottom ? 340 : 160;
         d += ` C ${curX + 110} ${endY} ${curX + 160} 250 ${curX + 220} 250 L ${newWidth} 250`;
-        
+
         const path1 = svg.querySelector('#road-path');
         if (path1) path1.setAttribute('d', d);
     }
-    
+
     // Initial auto-scroll to extreme right for mobile
     const pinContainer = document.querySelector('.timeline-pin-container');
     if (pinContainer) {
@@ -2868,7 +2872,7 @@ function initCurvedTimeline() {
                 scrollTrigger: {
                     trigger: '#our-works',
                     start: 'top 100%',  // fire as soon as section enters viewport bottom
-                    end:   'top 30%',   // complete quickly — energetic, not slow
+                    end: 'top 30%',   // complete quickly — energetic, not slow
                     scrub: 0.6,         // tight scrub = snappy, physical feel
                 }
             }
@@ -2910,16 +2914,16 @@ function initCurvedTimeline() {
                 // Enable horizontal scroll via mouse wheel when hovered. Start from extreme right.
                 pinContainer.scrollLeft = totalScrollDistance;
                 let targetScroll = totalScrollDistance;
-                
+
                 // Navigation Buttons Logic
                 const prevBtn = document.querySelector('.timeline-prev');
                 const nextBtn = document.querySelector('.timeline-next');
-                
+
                 const updateButtons = () => {
                     if (!prevBtn || !nextBtn) return;
                     if (targetScroll <= 5) prevBtn.classList.add('disabled');
                     else prevBtn.classList.remove('disabled');
-                    
+
                     if (targetScroll >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
                     else nextBtn.classList.remove('disabled');
                 };
@@ -2947,17 +2951,17 @@ function initCurvedTimeline() {
                     // Only intercept if scrolling vertically and we have horizontal space
                     if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
                         const delta = evt.deltaY;
-                        
+
                         // Base atStart and atEnd on ACTUAL visual scroll position, not just the target
                         // REVERSED LOGIC: Scrolling down (delta > 0) moves left. Scrolling up (delta < 0) moves right.
                         const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
                         const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
-                        
+
                         if (!atStart && !atEnd) {
                             evt.preventDefault();
                             targetScroll -= delta * 0.85; // Reversed: subtract delta to move left on scroll down
                             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
-                            
+
                             gsap.to(pinContainer, {
                                 scrollLeft: targetScroll,
                                 duration: 0.85,
@@ -3019,7 +3023,7 @@ function initCurvedTimeline() {
                 });
             }
         });
-        
+
         // Mobile fallback (GSAP does not pin or translate horizontally, let CSS handle it)
         mm.add("(max-width: 992px)", () => {
             const cards = gsap.utils.toArray('.timeline-card');
@@ -3080,57 +3084,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalYear = document.getElementById('es-modal-year');
     const modalTech = document.getElementById('es-modal-tech');
     const modalTeam = document.getElementById('es-modal-team');
-    
+
     // We keep static data for preview purposes until the fetch API is fully integrated
     const projectData = {
         'euphoria': {
             title: 'Launch of Euphoria',
             year: '2019',
             desc: 'Our flagship techfest that brought together thousands of innovators and creators for a 3-day immersive experience. We set a new standard for college festivals with cutting edge technology integration.',
-            team: [{name: 'Alice S.', photo: 'images/logo1.png'}, {name: 'Bob J.', photo: 'images/logo1.png'}],
+            team: [{ name: 'Alice S.', photo: 'images/logo1.png' }, { name: 'Bob J.', photo: 'images/logo1.png' }],
             tech: ['Event Management', 'TechFest', 'Innovation']
         },
         'campuscon': {
             title: 'CampusCon Initiative',
             year: '2020',
             desc: 'A major step towards integrating advanced campus networking solutions and fostering digital education. This initiative paved the way for seamless communication across departments.',
-            team: [{name: 'Charlie D.', photo: 'images/logo1.png'}],
+            team: [{ name: 'Charlie D.', photo: 'images/logo1.png' }],
             tech: ['Networking', 'Education', 'Infrastructure']
         },
         'ctrm': {
             title: 'CTRM Deployment',
             year: '2021',
             desc: 'Implementing the comprehensive CTRM platform to streamline administrative processes and boost productivity. This unified system replaced dozens of legacy tools.',
-            team: [{name: 'Diana P.', photo: 'images/logo1.png'}],
+            team: [{ name: 'Diana P.', photo: 'images/logo1.png' }],
             tech: ['Enterprise Software', 'Management', 'System Integration']
         },
         'fesbud': {
             title: 'Fesbud Platform',
             year: '2023',
             desc: 'A budget management and financial tracking system designed specifically for our complex ecosystem. It allows real-time tracking of expenses and resource allocation.',
-            team: [{name: 'Evan R.', photo: 'images/logo1.png'}, {name: 'Fiona M.', photo: 'images/logo1.png'}],
+            team: [{ name: 'Evan R.', photo: 'images/logo1.png' }, { name: 'Fiona M.', photo: 'images/logo1.png' }],
             tech: ['FinTech', 'Budgeting', 'Analytics']
         },
         'arkon': {
             title: 'Arkon Expansion',
             year: '2025',
             desc: 'Our latest expansion into cutting-edge AI-driven solutions and infrastructure modernization. Arkon provides a scalable foundation for future AI projects.',
-            team: [{name: 'George H.', photo: 'images/logo1.png'}],
+            team: [{ name: 'George H.', photo: 'images/logo1.png' }],
             tech: ['AI', 'Cloud Native', 'Modernization']
         }
     };
 
     // Event delegation is used below instead of static selection
-    
+
     function openModal(projectId) {
         if (!modal || !projectData[projectId]) return;
-        
+
         const data = projectData[projectId];
-        
+
         modalTitle.textContent = data.title;
         modalDesc.textContent = data.desc;
         modalYear.textContent = data.year;
-        
+
         // Populate Team Members
         if (modalTeam) {
             modalTeam.innerHTML = '';
@@ -3146,7 +3150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
-        
+
         // Populate tech badges
         if (modalTech) {
             modalTech.innerHTML = '';
@@ -3159,7 +3163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         }
-        
+
         modal.classList.add('is-open');
     }
 
@@ -3178,7 +3182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (modalClose) modalClose.addEventListener('click', closeModal);
     if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
-    
+
     // Close on escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();

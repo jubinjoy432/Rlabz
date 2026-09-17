@@ -188,20 +188,15 @@ require_once '../includes/layout_header.php';
         <div class="form-section-title"><i class="fa-solid fa-images"></i> Images</div>
 
         <div class="form-group">
-            <label for="image">Project Cover Image / Thumbnail</label>
+            <label for="image">Project Thumbnail</label>
             <input type="file" id="image" name="image" accept="image/*" required>
-            <span class="form-help">Max size 5MB. Recommended: WebP or JPG. This will be used as the project thumbnail.</span>
+            <span class="form-help">Max size 5MB. Recommended: WebP or JPG. This will be used as the project thumbnail in the gallery and hero section.</span>
         </div>
 
         <div class="form-group">
             <label for="screenshots">Additional Screenshots</label>
             <input type="file" id="screenshots" name="screenshots[]" accept="image/*" multiple>
             <span class="form-help">Select multiple images. These will be shown in the project gallery.</span>
-        </div>
-
-        <div class="form-group">
-            <label for="poster">Project Poster (optional)</label>
-            <input type="file" id="poster" name="poster" accept="image/*">
         </div>
 
         <!-- Links -->

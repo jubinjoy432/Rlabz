@@ -25,6 +25,11 @@ try {
     // 3.6 Get all milestones
     $stmtMilestones = $pdo->query("SELECT * FROM project_milestones ORDER BY project_id, sort_order ASC, milestone_date ASC");
     $milestonesData = $stmtMilestones->fetchAll(PDO::FETCH_ASSOC);
+
+    // 3.7 Get SSL domains
+    $stmtSsl = $pdo->query("SELECT project_id, domain_url FROM project_ssl_certs");
+    $sslData = $stmtSsl->fetchAll(PDO::FETCH_ASSOC);
+
     // 4. Organize members and screenshots by project ID
     $membersByProject = [];
     foreach ($members as $m) {
@@ -60,6 +65,11 @@ try {
         ];
     }
 
+    $sslDomainByProject = [];
+    foreach ($sslData as $s) {
+        $sslDomainByProject[$s['project_id']] = $s['domain_url'];
+    }
+
     // 5. Attach members and screenshots to their projects, map to frontend expected format
     $frontend_projects = [];
     
@@ -91,6 +101,7 @@ try {
             'status' => $p['status'],
             'githubLink' => $p['github_link'],
             'demoLink' => $p['demo_link'],
+            'sslDomain' => $sslDomainByProject[$p_id] ?? null,
             'poster' => $p['poster_path']
         ];
         

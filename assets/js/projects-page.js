@@ -230,13 +230,10 @@
     }
 
     function createCardElement(project, index) {
-        const card = document.createElement('article');
+        const card = document.createElement('a');
+        card.href = `project-details.html?id=${project.id}`;
         card.className = 'project-gallery-card';
         card.style.animationDelay = `${index * 0.06}s`;
-        card.style.cursor = 'pointer';
-        card.onclick = () => {
-            window.location.href = `project-details.html?id=${project.id}`;
-        };
 
         const statusClass = project.status === 'Deployed' ? 'status-deployed' :
             project.status === 'In Development' ? 'status-in-development' : 'status-completed';
@@ -246,23 +243,6 @@
         ).join('');
         const extraTechCount = project.tech.length - 4;
         const techExtra = extraTechCount > 0 ? `<span class="pg-card-tag">+${extraTechCount}</span>` : '';
-
-        // Team avatars
-        let teamHTML = '';
-        if (project.team && project.team.length > 0) {
-            const avatars = project.team.slice(0, 3).map(m =>
-                `<img src="${m.photo || '../assets/images/logo1.png'}" alt="${m.name}" class="pg-card-team-avatar" loading="lazy" onerror="this.src='../assets/images/logo1.png'">`
-            ).join('');
-            const teamCountText = project.team.length > 3 ? `+${project.team.length - 3} more` : `${project.team.length} member${project.team.length > 1 ? 's' : ''}`;
-            teamHTML = `
-                <div class="pg-card-team">
-                    <div class="pg-card-team-avatars">${avatars}</div>
-                    <span class="pg-card-team-count">${teamCountText}</span>
-                </div>
-            `;
-        } else {
-            teamHTML = `<div class="pg-card-team"><span class="pg-card-team-count">${project.department || 'RLabZ'}</span></div>`;
-        }
 
         card.innerHTML = `
             <div class="pg-card-image">
@@ -274,12 +254,6 @@
                 <h3 class="pg-card-title">${project.title}</h3>
                 <p class="pg-card-desc">${project.shortDescription}</p>
                 <div class="pg-card-tags">${techTags}${techExtra}</div>
-                <div class="pg-card-footer">
-                    ${teamHTML}
-                    <span class="pg-card-view-btn">
-                        View <i class="fa-solid fa-arrow-right"></i>
-                    </span>
-                </div>
             </div>
         `;
 

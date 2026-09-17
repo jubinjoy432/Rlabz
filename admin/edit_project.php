@@ -31,6 +31,10 @@ $stmtSsl = $pdo->prepare("SELECT * FROM project_ssl_certs WHERE project_id = ?")
 $stmtSsl->execute([$id]);
 $ssl = $stmtSsl->fetch(PDO::FETCH_ASSOC);
 
+$stmtScreenshots = $pdo->prepare("SELECT * FROM project_screenshots WHERE project_id = ? ORDER BY sort_order, id");
+$stmtScreenshots->execute([$id]);
+$screenshots = $stmtScreenshots->fetchAll(PDO::FETCH_ASSOC);
+
 $pageTitle = "Edit Project";
 require_once 'includes/layout_header.php';
 ?>
@@ -225,47 +229,47 @@ require_once 'includes/layout_header.php';
         </div>
 
         <div class="form-section-title"><i class="fa-solid fa-images"></i> Images</div>
-        <div class="form-group">
-            <label>Project Cover Image (Upload new to replace)</label>
-            <input type="file" name="image" accept="image/*">
-            <?php if($project['image_path']): ?>
-                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
-                    <img src="../<?= htmlspecialchars($project['image_path']) ?>" alt="Cover" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    <div style="flex: 1;">
-                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['image_path'])) ?></span>
-                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
-                            <input type="checkbox" name="delete_image" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete cover image
-                        </label>
-                    </div>
-                </div>
-            <?php endif; ?>
-        </div>
+
         <div class="form-group">
             <label>Project Thumbnail (Upload new to replace)</label>
             <input type="file" name="thumbnail" accept="image/*">
             <?php if($project['thumbnail_path']): ?>
-                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                <div id="thumbnail-preview-card" style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: var(--white); padding: 10px; border-radius: 8px; border: 1px solid var(--hairline-slate);">
                     <img src="../<?= htmlspecialchars($project['thumbnail_path']) ?>" alt="Thumbnail" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                     <div style="flex: 1;">
-                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['thumbnail_path'])) ?></span>
-                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
-                            <input type="checkbox" name="delete_thumbnail" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete thumbnail image
-                        </label>
+                        <span style="font-size: 0.8rem; color: var(--slate-text); display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['thumbnail_path'])) ?></span>
+                        <button type="button" class="btn-action" style="background: #F9440D; color: white; border: none; padding: 6px 16px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; display: inline-block; white-space: nowrap; margin-top: 4px; height: auto; width: auto;" onclick="document.getElementById('thumbnail-preview-card').style.display='none'; const input = document.createElement('input'); input.type='hidden'; input.name='delete_thumbnail'; input.value='1'; this.parentElement.appendChild(input);">
+                            Delete
+                        </button>
                     </div>
                 </div>
             <?php endif; ?>
         </div>
-        <div class="form-group">
-            <label>Project Poster (Upload new to replace)</label>
-            <input type="file" name="poster" accept="image/*">
-            <?php if($project['poster_path']): ?>
-                <div style="margin-top: 10px; display: flex; align-items: center; gap: 15px; background: rgba(15, 23, 42, 0.4); padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.05);">
-                    <img src="../<?= htmlspecialchars($project['poster_path']) ?>" alt="Poster" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    <div style="flex: 1;">
-                        <span style="font-size: 0.8rem; color: #94a3b8; display: block; margin-bottom: 4px;">Current: <?= htmlspecialchars(basename($project['poster_path'])) ?></span>
-                        <label style="font-size: 0.85rem; color: #fca5a5; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
-                            <input type="checkbox" name="delete_poster" value="1" style="accent-color: #ef4444; width: 14px; height: 14px; margin: 0;"> Delete poster image
-                        </label>
+
+
+        <div class="form-group" style="margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
+            <label>Project Screenshots (Upload multiple)</label>
+            <input type="file" name="new_screenshots[]" accept="image/*" multiple>
+            
+            <?php if (!empty($screenshots)): ?>
+                <div style="margin-top: 15px;">
+                    <label style="margin-bottom: 10px; display: block;">Existing Screenshots</label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                        <?php foreach ($screenshots as $ss): ?>
+                            <div class="screenshot-card" id="screenshot-card-<?= $ss['id'] ?>" style="background: var(--white); border: 1px solid var(--hairline-slate); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                                <div style="height: 100px; overflow: hidden; background: #f8fafc;">
+                                    <img src="../<?= htmlspecialchars($ss['image_path']) ?>" alt="Screenshot" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                                <div style="padding: 10px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <span style="font-size: 0.75rem; color: var(--slate-text); display: block; margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="<?= htmlspecialchars(basename($ss['image_path'])) ?>">
+                                        <?= htmlspecialchars(basename($ss['image_path'])) ?>
+                                    </span>
+                                    <button type="button" class="btn-action" style="background: #F9440D; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; width: 100%; height: auto;" onclick="document.getElementById('screenshot-card-<?= $ss['id'] ?>').style.display='none'; const input = document.createElement('input'); input.type='hidden'; input.name='delete_screenshots[]'; input.value='<?= $ss['id'] ?>'; this.parentElement.appendChild(input);">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             <?php endif; ?>

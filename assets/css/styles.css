@@ -12,7 +12,7 @@
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Outfit', sans-serif;
     --card-shadow: 0 20px 40px -5px rgba(11, 83, 148, 0.15);
-    
+
     /* RLabZ Official Tokens */
     --crucible-core: #002C49;
     --digital-flow: #27A3FF;
@@ -165,16 +165,17 @@ body {
     min-width: 160px;
 }
 
-.logo-image {
-    height: 70px; /* Consistent height */
-    width: auto;
+.premium-nav .logo-image {
+    width: 100px;
+    height: auto;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all 0.35s ease-in-out;
     object-fit: contain;
 }
 
 .premium-nav.scrolled .logo-image {
-    height: 70px; /* Same size as unscrolled */
+    width: 100px;
+    height: auto;
 }
 
 /* Dual-logo swap for pages with dark hero (index.html) */
@@ -2407,7 +2408,7 @@ h2 {
     background: #f8faff;
     /* Light BG */
     overflow: hidden;
-    font-family: 'Outfit', sans-serif;
+    font-family: var(--font-body);
     isolation: isolate;
 }
 
@@ -3914,7 +3915,7 @@ footer {
     --client_form_gray_medium: #e9ecef;
     --client_form_shadow: rgba(106, 13, 173, 0.15);
 
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: var(--font-body);
     background: linear-gradient(135deg, var(--client_form_black) 0%, #1a0033 100%);
     color: var(--client_form_white);
     overflow-x: hidden;
@@ -4936,7 +4937,8 @@ footer {
 .cube-swiper {
     position: relative;
     width: 400px;
-    height: 520px; overflow: visible;
+    height: 520px;
+    overflow: visible;
 }
 
 .cube-swiper .swiper-slide {
@@ -5172,7 +5174,7 @@ footer {
 }
 
 .client_form_heading {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-size: 3.5rem;
     font-weight: 700;
     color: #0b5394;
@@ -5306,7 +5308,7 @@ footer {
 }
 
 .testimonial-info h4 {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-size: 1.1rem;
     font-weight: 700;
     color: #0b5394;
@@ -5384,7 +5386,7 @@ footer {
 }
 
 .client_form_logos_heading {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-size: 2.5rem;
     font-weight: 700;
     color: #0b5394;
@@ -5475,7 +5477,7 @@ footer {
 
 /* Logo Section Heading */
 .client_form_logos_heading {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-size: 3rem;
     font-weight: 800;
     margin-bottom: 20px;
@@ -5489,7 +5491,7 @@ footer {
 
 /* Logo Section Subtitle */
 .client_form_logos_subtitle {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
     font-size: 1.1rem;
     color: #475569;
     margin-bottom: 60px;
@@ -5583,7 +5585,7 @@ footer {
 
 /* Text Styling */
 .client_form_logo_text {
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--font-heading);
     font-weight: 700;
     font-size: 1.1rem;
     color: #334155;
@@ -6481,8 +6483,13 @@ html.lenis body {
 }
 
 @keyframes worksWaveFlow {
-    from { stroke-dashoffset: 0; }
-    to { stroke-dashoffset: -320; }
+    from {
+        stroke-dashoffset: 0;
+    }
+
+    to {
+        stroke-dashoffset: -320;
+    }
 }
 
 .works-wave-track {
@@ -7417,7 +7424,7 @@ html.lenis body {
 }
 
 .center-bento-title {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: var(--font-heading);
     font-size: 2.0rem;
     line-height: 1.05;
     font-weight: 800;
@@ -8493,9 +8500,10 @@ html.lenis body {
     background: #ffffff;
     border-radius: 28px;
     /* Hide scrollbar */
-    -ms-overflow-style: none; 
-    scrollbar-width: none; 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
+
 .timeline-pin-container::-webkit-scrollbar {
     display: none;
 }
@@ -8510,10 +8518,10 @@ html.lenis body {
     border-radius: 50%;
     background: #ffffff;
     color: var(--primary-blue);
-    border: 1px solid rgba(0,0,0,0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     font-size: 1.2rem;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     z-index: 50;
     display: flex;
     align-items: center;
@@ -8525,7 +8533,7 @@ html.lenis body {
 .timeline-nav-btn:hover {
     background: var(--primary-blue);
     color: #ffffff;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     transform: translateY(-50%) scale(1.05);
 }
 
@@ -8591,14 +8599,16 @@ html.lenis body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
+
 .node-inner {
     font-family: var(--font-heading, 'Space Grotesk', sans-serif);
     font-size: 1.15rem;
     font-weight: 800;
     color: var(--node-color, #2563eb) !important;
 }
+
 .timeline-node:hover {
     transform: translate(-50%, -50%) scale(1.08);
 }
@@ -8610,9 +8620,11 @@ html.lenis body {
     z-index: 2;
     transition: transform 0.3s ease;
 }
+
 .timeline-card:hover {
     transform: translateY(-4px);
 }
+
 .clean-card-link {
     display: flex;
     flex-direction: column;
@@ -8620,6 +8632,7 @@ html.lenis body {
     color: inherit;
     text-align: center;
 }
+
 .card-title {
     font-family: var(--font-heading, 'Space Grotesk', sans-serif);
     font-size: 1.1rem;
@@ -8629,6 +8642,7 @@ html.lenis body {
     margin-bottom: 0.4rem;
     line-height: 1.3;
 }
+
 .card-desc {
     font-size: 0.85rem;
     color: #64748b;
@@ -8683,7 +8697,8 @@ html.lenis body {
         padding: 1.5rem 1rem 2rem 1rem;
         position: relative;
         will-change: unset;
-        transform: none !important; /* Override any GSAP transform */
+        transform: none !important;
+        /* Override any GSAP transform */
     }
 
     /* Vertical connector line */
@@ -8694,13 +8709,11 @@ html.lenis body {
         top: 0;
         bottom: 0;
         width: 2px;
-        background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.03),
-            rgba(255, 255, 255, 0.22) 8%,
-            rgba(255, 255, 255, 0.22) 92%,
-            rgba(255, 255, 255, 0.03)
-        );
+        background: linear-gradient(to bottom,
+                rgba(255, 255, 255, 0.03),
+                rgba(255, 255, 255, 0.22) 8%,
+                rgba(255, 255, 255, 0.22) 92%,
+                rgba(255, 255, 255, 0.03));
         z-index: 1;
     }
 
@@ -8728,7 +8741,7 @@ html.lenis body {
         margin-top: 0;
     }
 
-    
+
 
     .node-inner {
         width: 28px;
@@ -8753,9 +8766,9 @@ html.lenis body {
 
     /* Cards stack below their respective node */
     .timeline-card {
-    height: 240px;
-    display: flex;
-    flex-direction: column;
+        height: 240px;
+        display: flex;
+        flex-direction: column;
         position: relative !important;
         left: auto !important;
         top: auto !important;
@@ -8810,7 +8823,7 @@ html.lenis body {
         height: 44px;
     }
 
-    
+
 
     .node-inner {
         width: 26px;
@@ -8825,9 +8838,9 @@ html.lenis body {
     }
 
     .timeline-card {
-    height: 240px;
-    display: flex;
-    flex-direction: column;
+        height: 240px;
+        display: flex;
+        flex-direction: column;
         width: calc(100% - 60px) !important;
         margin-left: 60px !important;
     }
@@ -8862,7 +8875,7 @@ html.lenis body {
         height: 40px;
     }
 
-    
+
 
     .node-inner {
         width: 24px;
@@ -8881,9 +8894,9 @@ html.lenis body {
     }
 
     .timeline-card {
-    height: 240px;
-    display: flex;
-    flex-direction: column;
+        height: 240px;
+        display: flex;
+        flex-direction: column;
         width: calc(100% - 54px) !important;
         margin-left: 54px !important;
         padding: 0.85rem 0.9rem !important;
@@ -8961,12 +8974,14 @@ html.lenis body {
         align-items: center;
         gap: 1rem;
     }
+
     .es-view-more-btn {
         position: static;
         transform: none;
         padding: 0.55rem 1.1rem;
         font-size: 0.82rem;
     }
+
     .es-view-more-btn:hover {
         transform: translateY(-2px);
     }
@@ -9003,8 +9018,10 @@ html.lenis body {
     position: relative;
     z-index: 2;
     width: min(540px, 94vw);
-    background: #0f172a; /* Premium dark background */
-    border: 1px solid rgba(14, 165, 233, 0.25); /* Teal border matching theme */
+    background: #0f172a;
+    /* Premium dark background */
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    /* Teal border matching theme */
     border-radius: 28px;
     padding: 2.5rem 2.2rem 2rem;
     box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 30px rgba(14, 165, 233, 0.15);
@@ -9013,8 +9030,15 @@ html.lenis body {
 }
 
 @keyframes esModalIn {
-    from { opacity: 0; transform: scale(0.88) translateY(24px); }
-    to   { opacity: 1; transform: scale(1) translateY(0); }
+    from {
+        opacity: 0;
+        transform: scale(0.88) translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
 }
 
 .es-modal-close {
@@ -9094,7 +9118,7 @@ html.lenis body {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #bae6fd;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .es-team-name {
@@ -9127,11 +9151,11 @@ html.lenis body {
    ========================================= */
 
 /* --- Blue Theme --- */
-.blue-theme 
-.blue-theme .node-inner {
+.blue-theme .blue-theme .node-inner {
     background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
 }
+
 .blue-theme.node-top .node-year::before,
 .blue-theme.node-bottom .node-year::after {
     color: rgba(37, 99, 235, 0.8);
@@ -9141,6 +9165,7 @@ html.lenis body {
     border: 1.5px solid rgba(37, 99, 235, 0.3);
     box-shadow: 0 15px 40px -10px rgba(37, 99, 235, 0.1);
 }
+
 .blue-border:hover {
     border-color: rgba(37, 99, 235, 0.6);
     box-shadow: 0 20px 45px -5px rgba(37, 99, 235, 0.2);
@@ -9176,19 +9201,36 @@ html.lenis body {
     }
 
     /* Colored Lines matching Themes */
-    .teal-border.card-top::after { background: linear-gradient(to bottom, rgba(14, 165, 233, 0.8), transparent); }
-    .teal-border.card-bottom::after { background: linear-gradient(to top, rgba(14, 165, 233, 0.8), transparent); }
+    .teal-border.card-top::after {
+        background: linear-gradient(to bottom, rgba(14, 165, 233, 0.8), transparent);
+    }
 
-    .purple-border.card-top::after { background: linear-gradient(to bottom, rgba(139, 92, 246, 0.8), transparent); }
-    .purple-border.card-bottom::after { background: linear-gradient(to top, rgba(139, 92, 246, 0.8), transparent); }
+    .teal-border.card-bottom::after {
+        background: linear-gradient(to top, rgba(14, 165, 233, 0.8), transparent);
+    }
 
-    .blue-border.card-top::after { background: linear-gradient(to bottom, rgba(37, 99, 235, 0.8), transparent); }
-    .blue-border.card-bottom::after { background: linear-gradient(to top, rgba(37, 99, 235, 0.8), transparent); }
+    .purple-border.card-top::after {
+        background: linear-gradient(to bottom, rgba(139, 92, 246, 0.8), transparent);
+    }
+
+    .purple-border.card-bottom::after {
+        background: linear-gradient(to top, rgba(139, 92, 246, 0.8), transparent);
+    }
+
+    .blue-border.card-top::after {
+        background: linear-gradient(to bottom, rgba(37, 99, 235, 0.8), transparent);
+    }
+
+    .blue-border.card-bottom::after {
+        background: linear-gradient(to top, rgba(37, 99, 235, 0.8), transparent);
+    }
 }
 
 /* Hide lines on mobile where they stack vertically */
 @media (max-width: 992px) {
-    .card-top::after, .card-bottom::after {
+
+    .card-top::after,
+    .card-bottom::after {
         display: none !important;
     }
 }
@@ -9197,8 +9239,9 @@ html.lenis body {
 .timeline-svg-path .svg-track {
     stroke: #2b2b2b !important;
     stroke-width: 52 !important;
-    filter: drop-shadow(0px 15px 25px rgba(0,0,0,0.8)) !important;
+    filter: drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.8)) !important;
 }
+
 .timeline-svg-path .svg-line {
     stroke: #ffffff !important;
     stroke-width: 5 !important;
@@ -9253,8 +9296,122 @@ html.lenis body {
     .timeline-view-all-cta {
         padding: 2rem 1rem 0.5rem;
     }
+
     .view-all-projects-btn {
         padding: 0.85rem 2rem;
         font-size: 0.95rem;
+    }
+}
+
+/* =====================================================
+   RLabZ Impact Section (Design | Develop | Training)
+   ===================================================== */
+.rlabz-impact-section {
+    padding: 6rem 5%;
+    background: var(--bg-color);
+    position: relative;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.impact-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.impact-header h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+}
+
+.impact-header h2 .divider {
+    color: var(--digital-flow);
+    font-weight: 300;
+    margin: 0 0.5rem;
+}
+
+.impact-desc {
+    font-size: 1.15rem;
+    color: var(--slate-text);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.impact-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.impact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px -12px rgba(11, 83, 148, 0.25);
+}
+
+.impact-card h3 {
+    font-size: 1.8rem;
+    color: var(--primary-blue);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-heading);
+}
+
+.impact-card h3 i {
+    color: var(--digital-flow);
+}
+
+.impact-card p {
+    color: var(--slate-text);
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.stats-grid {
+    display: flex;
+    justify-content: center;
+    background: var(--primary-blue);
+    padding: 3rem;
+    border-radius: 20px;
+    color: var(--white);
+    box-shadow: 0 15px 35px -10px rgba(11, 83, 148, 0.4);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 4rem;
+    font-weight: 800;
+    font-family: var(--font-heading);
+    margin-bottom: 0.5rem;
+    color: var(--white);
+}
+
+.stat-label {
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+@media (max-width: 992px) {
+    .impact-grid {
+        grid-template-columns: 1fr;
     }
 }

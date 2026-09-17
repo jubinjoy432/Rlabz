@@ -110,6 +110,15 @@
             }
             meta.innerHTML = badges;
         }
+        
+        const actionsContainer = document.getElementById('pdHeroActions');
+        if (actionsContainer) {
+            if (project.sslDomain) {
+                actionsContainer.innerHTML = `<a href="${project.sslDomain}" target="_blank" class="pd-visit-website-btn">Visit Website &rarr;</a>`;
+            } else {
+                actionsContainer.innerHTML = '';
+            }
+        }
     }
 
     function renderNavigation(project) {
@@ -187,18 +196,22 @@
         const grid = document.getElementById('pdScreenshotsGrid');
         if (!card || !grid) return;
 
-        const screenshots = project.screenshots && project.screenshots.length > 0
-            ? project.screenshots
-            : (project.thumbnail ? [project.thumbnail] : []);
+        let screenshots = project.screenshots && project.screenshots.length > 0
+            ? project.screenshots.filter(src => src && typeof src === 'string' && src.trim() !== '')
+            : [];
 
         if (screenshots.length === 0) {
             card.style.display = 'none';
             return;
         }
 
+        card.style.display = '';
+
+        const getImgPath = (path) => (path && (path.startsWith('uploads/') || path.startsWith('images/'))) ? '../' + path : path;
+
         grid.innerHTML = screenshots.map((src, i) =>
             `<div class="pd-screenshot-item" data-index="${i}">
-                <img src="${src}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.src='../assets/images/logo1.png'">
+                <img src="${getImgPath(src)}" alt="${project.title} screenshot ${i + 1}" loading="lazy" onerror="this.onerror=null; this.closest('.pd-screenshot-item').style.display='none'; if(Array.from(this.closest('#pdScreenshotsGrid').children).every(c => c.style.display === 'none')) document.getElementById('pdScreenshotsCard').style.display='none';">
             </div>`
         ).join('');
     }
