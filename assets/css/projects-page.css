@@ -514,24 +514,6 @@
     white-space: nowrap;
 }
 
-    transition: all 0.3s ease;
-}
-
-.pg-card-view-btn:hover {
-    background: var(--crucible-core);
-    border-color: var(--crucible-core);
-    transform: translateX(2px);
-}
-
-.pg-card-view-btn i {
-    font-size: 0.65rem;
-    transition: transform 0.3s ease;
-}
-
-.pg-card-view-btn:hover i {
-    transform: translateX(3px);
-}
-
 /* ---- Load More ---- */
 .projects-load-more-wrapper {
     display: flex;
