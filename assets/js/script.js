@@ -2748,7 +2748,7 @@ function buildDynamicTimeline() {
     // Base X offset
     let currentX = 240;
     let isBottom = true;
-    const colors = ['#00e5ff', '#2962ff', '#651fff', '#d500f9', '#ff1744'];
+    const colors = ['#27A3FF', '#43AE47', '#002C49', '#1689D6', '#2E7C31'];
 
     projects.forEach((proj, idx) => {
         const top = isBottom ? 340 : 160;

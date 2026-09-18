@@ -1247,7 +1247,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span class="mobile-text">
                             <span class="typing-target-mobile"></span>
                             <span class="banner-actions" style="display: flex; opacity: 0; width: 0; overflow: hidden; align-items: center; gap: 10px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
-                                <a href="" target="_blank" class="banner-btn" style="white-space: nowrap; background: white; color: #d6aa31; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; text-decoration: none; font-weight: bold;">Know More &rarr;</a>
+                                <a href="" target="_blank" class="banner-btn" style="white-space: nowrap; background: white; color: #F9440D; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; text-decoration: none; font-weight: bold;">Know More &rarr;</a>
                                 <button class="popup-close-btn" style="background: none; border: none; color: white; opacity: 0.9; font-size: 1.2rem; cursor: pointer; padding: 0;"><i class="fas fa-times"></i></button>
                             </span>
                         </span>

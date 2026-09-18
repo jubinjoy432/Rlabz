@@ -1,17 +1,17 @@
 :root {
-    --bg-color: #f8faff;
-    --text-color: #1e293b;
-    --primary-blue: #0b5394;
-    --primary-blue-rgb: 11, 83, 148;
-    --secondary-blue: #e0f2fe;
-    --accent-cyan: #0b5394;
-    --accent-cyan-rgb: 11, 83, 148;
+    --bg-color: #F5F7FA;
+    --text-color: #2A2A2A;
+    --primary-blue: #27A3FF;
+    --primary-blue-rgb: 39, 163, 255;
+    --secondary-blue: #E3E9ED;
+    --accent-cyan: #27A3FF;
+    --accent-cyan-rgb: 39, 163, 255;
     --glass-bg: #ffffff;
-    --glass-border: rgba(11, 83, 148, 0.1);
+    --glass-border: rgba(39, 163, 255, 0.1);
     --card-hover-bg: #ffffff;
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Outfit', sans-serif;
-    --card-shadow: 0 20px 40px -5px rgba(11, 83, 148, 0.15);
+    --card-shadow: 0 20px 40px -5px rgba(39, 163, 255, 0.15);
 
     /* RLabZ Official Tokens */
     --crucible-core: #002C49;
@@ -79,10 +79,10 @@ body {
     opacity: 1;
     pointer-events: none;
     background:
-        radial-gradient(circle 400px at 15% 30%, rgba(11, 83, 148, 0.35) 0%, transparent 70%),
-        radial-gradient(circle 350px at 85% 25%, rgba(100, 60, 200, 0.25) 0%, transparent 70%),
-        radial-gradient(circle 300px at 70% 80%, rgba(56, 189, 248, 0.20) 0%, transparent 70%),
-        radial-gradient(circle 320px at 20% 75%, rgba(11, 83, 148, 0.20) 0%, transparent 70%);
+        radial-gradient(circle 400px at 15% 30%, rgba(39, 163, 255, 0.15) 0%, transparent 70%),
+        radial-gradient(circle 350px at 85% 25%, rgba(67, 174, 71, 0.15) 0%, transparent 70%),
+        radial-gradient(circle 300px at 70% 80%, rgba(39, 163, 255, 0.20) 0%, transparent 70%),
+        radial-gradient(circle 320px at 20% 75%, rgba(0, 44, 73, 0.15) 0%, transparent 70%);
     animation: aurora-drift 20s ease-in-out infinite alternate;
     filter: blur(60px);
 }
@@ -452,7 +452,7 @@ h2 {
     letter-spacing: -2px;
     background: linear-gradient(to right,
             #1e293b 20%,
-            #0b5394 40%,
+            var(--primary-blue) 40%,
             #1e293b 60%,
             #1e293b 80%);
     background-size: 200% auto;
@@ -652,7 +652,7 @@ h2 {
     /* Force viewport height */
     min-height: 700px;
     /* Minimum accessible height */
-    background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%);
+    background: radial-gradient(circle at 50% 50%, var(--primary-blue) 0%, #022c5e 100%);
     /* More Intense/Darker Blue Edge for contrast */
     overflow: hidden;
     font-family: var(--hero-font-main);
@@ -1140,7 +1140,7 @@ h2 {
 
 .ui-hero {
     height: 40%;
-    background: linear-gradient(135deg, #0b5394 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #3b82f6 100%);
     /* Brand Blue Gradient */
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(11, 83, 148, 0.2);
@@ -1162,7 +1162,7 @@ h2 {
 /* Tablet UI (CTA Blue) */
 .ui-header {
     height: 15%;
-    background: linear-gradient(135deg, #0b5394 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #3b82f6 100%);
     /* Brand Blue Gradient */
     border-radius: 6px;
     box-shadow: 0 4px 10px rgba(11, 83, 148, 0.2);
@@ -1192,7 +1192,7 @@ h2 {
 /* Mobile UI (Action Blue) */
 .ui-app-header {
     height: 25%;
-    background: linear-gradient(135deg, #0b5394 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, #3b82f6 100%);
     /* Brand Blue Gradient */
     border-radius: 12px;
     margin-top: 10px;
@@ -1221,7 +1221,7 @@ h2 {
     right: 15px;
     width: 35px;
     height: 35px;
-    background: #0b5394;
+    background: var(--primary-blue);
     /* Brand Blue */
     border-radius: 50%;
     display: flex;
@@ -2522,7 +2522,7 @@ h2 {
 .about-stat-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px -5px rgba(11, 83, 148, 0.2);
-    border-color: #0b5394;
+    border-color: var(--primary-blue);
     background: #ffffff;
 }
 
@@ -2539,7 +2539,7 @@ h2 {
     font-size: 3.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    background: linear-gradient(to right, #1e293b, #0b5394);
+    background: linear-gradient(to right, #1e293b, var(--primary-blue));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -2617,7 +2617,7 @@ h2 {
 }
 
 .about-stat-icon {
-    color: #0b5394;
+    color: var(--primary-blue);
     margin-bottom: 1rem;
     transform: scale(1.2);
     display: flex;
@@ -2638,7 +2638,7 @@ h2 {
     content: '+';
     font-size: 2rem;
     margin-left: 0.25rem;
-    color: #0b5394;
+    color: var(--primary-blue);
 }
 
 .about-stat-label {
@@ -2675,14 +2675,14 @@ h2 {
 .about-feature-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 40px -10px rgba(11, 83, 148, 0.15);
-    border-color: #0b5394;
+    border-color: var(--primary-blue);
 }
 
 .about-card-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
-    color: #0b5394;
+    color: var(--primary-blue);
 }
 
 .about-card-text {
@@ -2697,7 +2697,7 @@ h2 {
 }
 
 .about-accent-text {
-    color: #0b5394;
+    color: var(--primary-blue);
     font-weight: 700;
 }
 
@@ -2749,7 +2749,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #0b5394;
+    color: var(--primary-blue);
     flex-shrink: 0;
     box-shadow: 0 4px 10px rgba(11, 83, 148, 0.1);
 }
@@ -2758,7 +2758,7 @@ h2 {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #0b5394;
+    color: var(--primary-blue);
     margin-bottom: 0.5rem;
     font-weight: 600;
 }
@@ -2790,7 +2790,7 @@ h2 {
 }
 
 .about-ric-feature-item svg {
-    color: #0b5394;
+    color: var(--primary-blue);
     flex-shrink: 0;
 }
 
@@ -2960,7 +2960,7 @@ h2 {
 }
 
 .contact-header-center .section-title {
-    color: #0b5394;
+    color: var(--primary-blue);
     font-size: 2.5rem;
     font-weight: 700;
 }
@@ -3022,7 +3022,7 @@ h2 {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #0b5394;
+    border-color: var(--primary-blue);
     background: #ffffff;
     box-shadow: 0 0 0 3px rgba(11, 83, 148, 0.1);
 }
@@ -3058,7 +3058,7 @@ h2 {
 }
 
 .submit-btn {
-    background: #0b5394;
+    background: var(--primary-blue);
     color: white;
     padding: 1rem 2.5rem;
     border-radius: 50px;
@@ -3077,8 +3077,8 @@ h2 {
 
 /* Right Column: Info Card */
 .contact-info-card {
-    background: #0b1c36;
-    /* Deep Blue from Reference */
+    background: #002C49;
+    /* Deep Blue from RLabZ Palette */
     color: white;
     padding: 3rem;
     border-radius: 32px;
@@ -3188,10 +3188,10 @@ h2 {
    Footer
    ========================================= */
 .main-footer {
-    background-color: #020202;
-    color: #94a3b8;
+    background-color: #001220;
+    color: #6B7A87;
     padding: 4rem 2rem 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid #002C49;
     text-align: center;
     font-size: 0.95rem;
 }
@@ -3467,80 +3467,80 @@ h2 {
 
 /* --- Per-Card Top Borders & Hover Tints --- */
 
-/* Card 1: Mobile — Indigo */
+/* Card 1: Mobile - Blue/Navy */
 .feature-card:nth-child(1)::before {
-    background: linear-gradient(90deg, #6366f1, #818cf8);
+    background: linear-gradient(90deg, #27A3FF, #002C49);
 }
 
 .feature-card:nth-child(1)::after {
-    background: linear-gradient(180deg, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
+    background: linear-gradient(180deg, rgba(39, 163, 255, 0.04) 0%, transparent 50%);
 }
 
 .feature-card:nth-child(1):hover .feature-icon-box {
-    background: linear-gradient(135deg, #6366f1, #818cf8);
-    box-shadow: 0 8px 20px -4px rgba(99, 102, 241, 0.35);
+    background: linear-gradient(135deg, #27A3FF, #002C49);
+    box-shadow: 0 8px 20px -4px rgba(39, 163, 255, 0.35);
 }
 
 .feature-card:nth-child(1) .feature-tags span {
-    background: rgba(99, 102, 241, 0.08);
-    color: #4f46e5;
+    background: rgba(39, 163, 255, 0.08);
+    color: #27A3FF;
 }
 
-/* Card 2: Web — Cyan */
+/* Card 2: Web - Navy/Blue */
 .feature-card:nth-child(2)::before {
-    background: linear-gradient(90deg, #0284c7, #22d3ee);
+    background: linear-gradient(90deg, #002C49, #27A3FF);
 }
 
 .feature-card:nth-child(2)::after {
-    background: linear-gradient(180deg, rgba(14, 165, 233, 0.04) 0%, transparent 50%);
+    background: linear-gradient(180deg, rgba(0, 44, 73, 0.04) 0%, transparent 50%);
 }
 
 .feature-card:nth-child(2):hover .feature-icon-box {
-    background: linear-gradient(135deg, #0284c7, #22d3ee);
-    box-shadow: 0 8px 20px -4px rgba(14, 165, 233, 0.35);
+    background: linear-gradient(135deg, #002C49, #27A3FF);
+    box-shadow: 0 8px 20px -4px rgba(39, 163, 255, 0.35);
 }
 
 .feature-card:nth-child(2) .feature-tags span {
-    background: rgba(14, 165, 233, 0.08);
-    color: #0284c7;
+    background: rgba(39, 163, 255, 0.08);
+    color: #002C49;
 }
 
-/* Card 3: Services — Emerald */
+/* Card 3: Services - Green */
 .feature-card:nth-child(3)::before {
-    background: linear-gradient(90deg, #059669, #34d399);
+    background: linear-gradient(90deg, #43AE47, #2E7C31);
 }
 
 .feature-card:nth-child(3)::after {
-    background: linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, transparent 50%);
+    background: linear-gradient(180deg, rgba(67, 174, 71, 0.04) 0%, transparent 50%);
 }
 
 .feature-card:nth-child(3):hover .feature-icon-box {
-    background: linear-gradient(135deg, #059669, #34d399);
-    box-shadow: 0 8px 20px -4px rgba(16, 185, 129, 0.35);
+    background: linear-gradient(135deg, #43AE47, #2E7C31);
+    box-shadow: 0 8px 20px -4px rgba(67, 174, 71, 0.35);
 }
 
 .feature-card:nth-child(3) .feature-tags span {
-    background: rgba(16, 185, 129, 0.08);
-    color: #059669;
+    background: rgba(67, 174, 71, 0.08);
+    color: #43AE47;
 }
 
-/* Card 4: Cloud — Amber */
+/* Card 4: Cloud - Blue/Orange */
 .feature-card:nth-child(4)::before {
-    background: linear-gradient(90deg, #d97706, #fbbf24);
+    background: linear-gradient(90deg, #27A3FF, #F9440D);
 }
 
 .feature-card:nth-child(4)::after {
-    background: linear-gradient(180deg, rgba(245, 158, 11, 0.04) 0%, transparent 50%);
+    background: linear-gradient(180deg, rgba(249, 68, 13, 0.04) 0%, transparent 50%);
 }
 
 .feature-card:nth-child(4):hover .feature-icon-box {
-    background: linear-gradient(135deg, #d97706, #fbbf24);
-    box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.35);
+    background: linear-gradient(135deg, #27A3FF, #F9440D);
+    box-shadow: 0 8px 20px -4px rgba(249, 68, 13, 0.35);
 }
 
 .feature-card:nth-child(4) .feature-tags span {
-    background: rgba(245, 158, 11, 0.08);
-    color: #b45309;
+    background: rgba(249, 68, 13, 0.08);
+    color: #F9440D;
 }
 
 /* --- Content --- */
@@ -3676,8 +3676,8 @@ h2 {
 }
 
 .contact-form button[type="submit"] {
-    background: white;
-    color: var(--primary-blue);
+    background: #27A3FF;
+    color: white;
     font-weight: 700;
     width: 100%;
     padding: 1rem;
@@ -5177,7 +5177,7 @@ footer {
     font-family: var(--font-heading);
     font-size: 3.5rem;
     font-weight: 700;
-    color: #0b5394;
+    color: var(--primary-blue);
     margin-bottom: 1.5rem;
     line-height: 1.2;
 }
@@ -5304,14 +5304,14 @@ footer {
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #0b5394;
+    border: 3px solid var(--primary-blue);
 }
 
 .testimonial-info h4 {
     font-family: var(--font-heading);
     font-size: 1.1rem;
     font-weight: 700;
-    color: #0b5394;
+    color: var(--primary-blue);
     margin: 0 0 0.25rem 0;
 }
 
@@ -5389,7 +5389,7 @@ footer {
     font-family: var(--font-heading);
     font-size: 2.5rem;
     font-weight: 700;
-    color: #0b5394;
+    color: var(--primary-blue);
     margin-bottom: 0.5rem;
 }
 
@@ -5482,7 +5482,7 @@ footer {
     font-weight: 800;
     margin-bottom: 20px;
     text-align: center;
-    color: #0b5394;
+    color: var(--primary-blue);
     /* Solid blue color */
     letter-spacing: -1px;
     opacity: 1 !important;
@@ -5536,7 +5536,7 @@ footer {
     transform: translateY(-5px);
     background: rgba(255, 255, 255, 0.6);
     box-shadow: 0 10px 25px rgba(11, 83, 148, 0.15);
-    border-color: #0b5394;
+    border-color: var(--primary-blue);
 }
 
 /* Shine Effect (Pseudo-element) */
@@ -5575,7 +5575,7 @@ footer {
 /* Icon Styling */
 .client_form_logo_icon {
     font-size: 2rem;
-    color: #0b5394;
+    color: var(--primary-blue);
     transition: transform 0.3s ease;
 }
 
@@ -6251,7 +6251,7 @@ html.lenis body {
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
-    color: #0b5394;
+    color: var(--primary-blue);
     /* Primary blue text */
     white-space: nowrap;
 }
@@ -6536,7 +6536,7 @@ html.lenis body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, #0b5394 0%, #022c5e 100%);
+    background: linear-gradient(145deg, var(--primary-blue) 0%, #022c5e 100%);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     box-shadow:
         0 0 0 2px rgba(255, 255, 255, 0.35),
@@ -6546,7 +6546,7 @@ html.lenis body {
 
 .works-wave-item.is-focused .works-wave-hex {
     transform: scale(1.18);
-    background: linear-gradient(145deg, #0b7ec4 0%, #0b5394 100%);
+    background: linear-gradient(145deg, #0b7ec4 0%, var(--primary-blue) 100%);
     box-shadow:
         0 0 0 3px rgba(255, 255, 255, 0.65),
         0 0 32px rgba(141, 220, 255, 0.75),
@@ -6627,7 +6627,7 @@ html.lenis body {
     font-size: 1rem;
     line-height: 1.2;
     margin-bottom: 0.65rem;
-    color: #0b5394;
+    color: var(--primary-blue);
 }
 
 .works-wave-meta-block {
@@ -6830,7 +6830,7 @@ html.lenis body {
 
 .close-modal-btn:hover {
     transform: rotate(90deg) scale(1.1);
-    color: #0b5394;
+    color: var(--primary-blue);
 }
 
 .modal-icon {
@@ -6894,7 +6894,7 @@ html.lenis body {
 }
 
 .modal-btn:hover {
-    background: #0b5394;
+    background: var(--primary-blue);
     transform: translateY(-2px);
 }
 
@@ -6977,7 +6977,7 @@ html.lenis body {
 
 .close-modal-btn:hover {
     transform: rotate(90deg) scale(1.1);
-    color: #0b5394;
+    color: var(--primary-blue);
 }
 
 .modal-icon {
@@ -7041,7 +7041,7 @@ html.lenis body {
 }
 
 .modal-btn:hover {
-    background: #0b5394;
+    background: var(--primary-blue);
     transform: translateY(-2px);
 }
 
@@ -7280,7 +7280,7 @@ html.lenis body {
         right: 0rem;
         width: 40px;
         height: 40px;
-        background-color: #0b5394;
+        background-color: var(--primary-blue);
         color: #ffffff;
         border-radius: 50%;
         display: flex;
@@ -7992,7 +7992,7 @@ html.lenis body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 50% 50%, #0b5394 0%, #022c5e 100%);
+    background: radial-gradient(circle at 50% 50%, var(--primary-blue) 0%, #022c5e 100%);
     z-index: 99999;
     display: flex;
     align-items: center;
@@ -8184,7 +8184,7 @@ html.lenis body {
 
 .typing-cursor {
     font-weight: 300;
-    color: #0b5394;
+    color: var(--primary-blue);
     animation: blink 0.8s infinite;
 }
 
@@ -8267,8 +8267,8 @@ html.lenis body {
     position: absolute;
     inset: -1px;
     /* Cover border */
-    background: #d6aa31;
-    /* Same yellow as discover more button */
+    background: #F9440D;
+    /* Same color as discover more button */
     border-radius: inherit;
     opacity: 0;
     z-index: -1;
