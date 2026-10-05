@@ -58,7 +58,7 @@ if ($pdo) {
         $recentProjects = $stmtRecent->fetchAll();
 
         // Admin Announcements
-        $stmtAnnouncements = $pdo->query("SELECT * FROM admin_announcements ORDER BY created_at DESC LIMIT 50");
+        $stmtAnnouncements = $pdo->query("SELECT * FROM admin_announcements WHERE is_read = 0 ORDER BY created_at DESC LIMIT 50");
         $announcements = $stmtAnnouncements->fetchAll();
         $unreadCount = 0;
         foreach ($announcements as $a) {
@@ -220,10 +220,18 @@ async function markRead(id) {
         const data = await res.json();
         if(data.success) {
             const item = document.getElementById(`announcement-${id}`);
-            item.style.opacity = '0.6';
-            item.style.borderLeft = '3px solid transparent';
-            const btn = item.querySelector('button');
-            if(btn) btn.remove();
+            if (item) item.remove();
+            
+            // Check if container is empty
+            const container = document.querySelector('.announcements-container');
+            if (container && container.querySelectorAll('.announcement-item').length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
+                        No SSL expired. (No other announcements)
+                    </div>
+                `;
+            }
             
             const badge = document.getElementById('unread-count');
             let count = parseInt(badge.textContent);
