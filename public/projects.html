@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Repository - RLabz</title>
+    <link rel="icon" type="image/png" href="../assets/images/rlabz-icon.png?v=2">
     <meta name="description" content="Explore the complete portfolio of projects developed under RLabz — web applications, mobile apps, and platforms built by students and faculty.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,10 +123,14 @@
         <!-- Projects Grid -->
         <div class="projects-grid" id="projectsGrid"></div>
 
-        <!-- Load More -->
-        <div class="projects-load-more-wrapper">
-            <button class="projects-load-more-btn" id="projectsLoadMore" type="button">
-                Load More Projects <i class="fa-solid fa-chevron-down"></i>
+        <!-- Pagination -->
+        <div class="projects-pagination" id="projectsPagination" role="navigation" aria-label="Project pagination">
+            <button class="pg-page-btn pg-prev" id="pgPrev" aria-label="Previous page" disabled>
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div class="pg-page-numbers" id="pgPageNumbers"></div>
+            <button class="pg-page-btn pg-next" id="pgNext" aria-label="Next page">
+                <i class="fa-solid fa-chevron-right"></i>
             </button>
         </div>
 

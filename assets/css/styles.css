@@ -166,7 +166,7 @@ body {
 }
 
 .premium-nav .logo-image {
-    width: 100px;
+    width: 190px;
     height: auto;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
     transition: all 0.35s ease-in-out;
@@ -174,7 +174,7 @@ body {
 }
 
 .premium-nav.scrolled .logo-image {
-    width: 100px;
+    width: 170px;
     height: auto;
 }
 
@@ -200,7 +200,7 @@ body {
     padding: 0.35rem;
     border-radius: 50px;
     gap: 0.5rem;
-    /* Absolutely center in the navbar — immune to logo/actions width changes */
+    /* Absolutely center in the navbar â€” immune to logo/actions width changes */
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -1207,7 +1207,7 @@ h2 {
 }
 
 .ui-card {
-    height: 40px;
+    height: 20px;
     background: #ffffff;
     border: 1px solid #bfdbfe;
     /* Light Blue border */
@@ -1399,7 +1399,7 @@ h2 {
         gap: 0;
     }
 
-    /* Robot sits above via position:fixed — collapse the empty placeholder */
+    /* Robot sits above via position:fixed â€” collapse the empty placeholder */
     .hero-blue-visual {
         display: none;
     }
@@ -3151,7 +3151,7 @@ h2 {
 
 .social-link {
     width: 40px;
-    height: 40px;
+    height: 20px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.1);
     display: flex;
@@ -3332,10 +3332,10 @@ h2 {
     }
 }
 
-/* Feature Grid Layout — Enhanced */
+/* Feature Grid Layout â€” Enhanced */
 .features-section {
     padding: 6rem 2rem;
-    background: linear-gradient(180deg, #f8faff 0%, #f0f9ff 100%);
+    background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
     position: relative;
 }
 
@@ -3410,7 +3410,7 @@ h2 {
 
 /* Top gradient border deleted per user request */
 
-/* Subtle background tint layer — fades in on hover */
+/* Subtle background tint layer â€” fades in on hover */
 .feature-card::after {
     content: '';
     position: absolute;
@@ -3482,8 +3482,9 @@ h2 {
 }
 
 .feature-card:nth-child(1) .feature-tags span {
-    background: rgba(39, 163, 255, 0.08);
-    color: #27A3FF;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Card 2: Web - Navy/Blue */
@@ -3501,8 +3502,9 @@ h2 {
 }
 
 .feature-card:nth-child(2) .feature-tags span {
-    background: rgba(39, 163, 255, 0.08);
-    color: #002C49;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Card 3: Services - Green */
@@ -3520,8 +3522,9 @@ h2 {
 }
 
 .feature-card:nth-child(3) .feature-tags span {
-    background: rgba(67, 174, 71, 0.08);
-    color: #43AE47;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Card 4: Cloud - Blue/Orange */
@@ -3539,8 +3542,9 @@ h2 {
 }
 
 .feature-card:nth-child(4) .feature-tags span {
-    background: rgba(249, 68, 13, 0.08);
-    color: #F9440D;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* --- Content --- */
@@ -4269,7 +4273,7 @@ footer {
     align-items: center;
     justify-content: center;
     width: 40px;
-    height: 40px;
+    height: 20px;
     border-radius: 50%;
     background: rgba(106, 13, 173, 0.1);
     border: 2px solid var(--client_form_purple);
@@ -6372,7 +6376,7 @@ html.lenis body {
 }
 
 
-/* Our Works — Responsive Container */
+/* Our Works â€” Responsive Container */
 #our-works {
     margin: 2rem auto !important;
     max-width: min(1400px, calc(100% - 4rem)) !important;
@@ -6381,7 +6385,7 @@ html.lenis body {
 }
 
 /* =========================================
-   OUR WORKS — WAVY TIMELINE (Desktop)
+   OUR WORKS â€” WAVY TIMELINE (Desktop)
    ========================================= */
 
 .works-wave-timeline {
@@ -7279,7 +7283,7 @@ html.lenis body {
         bottom: 1rem;
         right: 0rem;
         width: 40px;
-        height: 40px;
+        height: 20px;
         background-color: var(--primary-blue);
         color: #ffffff;
         border-radius: 50%;
@@ -7311,8 +7315,8 @@ html.lenis body {
 .feature-bento-grid>.feature-card {
     border-radius: 20px;
     padding: 1.5rem;
-    background: #ffffff;
-    box-shadow: 0 10px 30px -5px rgba(11, 83, 148, 0.15);
+    background: transparent;
+    box-shadow: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
@@ -7320,19 +7324,32 @@ html.lenis body {
 
 .feature-bento-grid>.feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(11, 83, 148, 0.15);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
 }
 
-/* Match the screenshot colors conceptually */
+
+/* Bento Card Inner â€” horizontal icon-left, text-right layout */
+.bento-card-inner {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+}
+
 .bento-top-left {
     grid-column: 1;
     grid-row: 1;
     border-top-left-radius: 40px !important;
-    background: #310b65 !important;
+    background: linear-gradient(140deg, #0c2e52 0%, #0B72CE 100%) !important;
     color: white !important;
     opacity: 0;
-    /* GSAP initial state */
     visibility: hidden;
+    padding: 1.6rem 1.4rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .bento-top-left p,
@@ -7340,20 +7357,59 @@ html.lenis body {
     color: white !important;
 }
 
+.bento-top-left .feature-tags span {
+    background: rgba(11, 114, 206, 0.25);
+    border: 1px solid rgba(11, 114, 206, 0.5);
+    color: white;
+}
+
+.bento-top-left .feature-icon-box {
+    background: rgba(255,255,255, 0.18);
+    border-radius: 14px;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
 .bento-bottom-left {
     grid-column: 1;
     grid-row: 2;
     border-bottom-left-radius: 40px !important;
-    background: #1a0f5a !important;
+    background: linear-gradient(140deg, #052e2a 0%, #18B2A6 100%) !important;
     color: white !important;
     opacity: 0;
-    /* GSAP initial state */
     visibility: hidden;
+    padding: 1.6rem 1.4rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .bento-bottom-left p,
 .bento-bottom-left h3 {
     color: white !important;
+}
+
+.bento-bottom-left .feature-tags span {
+    background: rgba(24, 178, 166, 0.25);
+    border: 1px solid rgba(24, 178, 166, 0.5);
+    color: white;
+}
+
+.bento-bottom-left .feature-icon-box {
+    background: rgba(255,255,255, 0.18);
+    border-radius: 14px;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 0;
+    box-shadow: none;
 }
 
 .bento-center {
@@ -7373,7 +7429,7 @@ html.lenis body {
     overflow: visible;
     /* Allow scaled text to overflow initially */
     border: 1.5px solid transparent;
-    /* Invisible initially — GSAP animates it in */
+    /* Invisible initially â€” GSAP animates it in */
 }
 
 /* Slide-up mask reveal: each line is clipped by overflow:hidden */
@@ -7395,11 +7451,14 @@ html.lenis body {
     grid-column: 3;
     grid-row: 1;
     border-top-right-radius: 40px !important;
-    background: #0f402f !important;
+    background: linear-gradient(140deg, #052e1a 0%, #185E38 100%) !important;
     color: white !important;
     opacity: 0;
-    /* GSAP initial state */
     visibility: hidden;
+    padding: 1.6rem 1.4rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .bento-top-right p,
@@ -7407,20 +7466,59 @@ html.lenis body {
     color: white !important;
 }
 
+.bento-top-right .feature-tags span {
+    background: rgba(69, 184, 72, 0.25);
+    border: 1px solid rgba(69, 184, 72, 0.5);
+    color: white;
+}
+
+.bento-top-right .feature-icon-box {
+    background: rgba(255,255,255, 0.18);
+    border-radius: 14px;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
 .bento-bottom-right {
     grid-column: 3;
     grid-row: 2;
     border-bottom-right-radius: 40px !important;
-    background: #ff7640 !important;
+    background: linear-gradient(140deg, #7a1c05 0%, #FF6B35 100%) !important;
     color: white !important;
     opacity: 0;
-    /* GSAP initial state */
     visibility: hidden;
+    padding: 1.6rem 1.4rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .bento-bottom-right p,
 .bento-bottom-right h3 {
     color: white !important;
+}
+
+.bento-bottom-right .feature-tags span {
+    background: rgba(255, 107, 53, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: white;
+}
+
+.bento-bottom-right .feature-icon-box {
+    background: rgba(255,255,255, 0.18);
+    border-radius: 14px;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 0;
+    box-shadow: none;
 }
 
 .center-bento-title {
@@ -8028,7 +8126,7 @@ html.lenis body {
     height: 180px;
 }
 
-/* ─── Central Logo ─── */
+/* â”€â”€â”€ Central Logo â”€â”€â”€ */
 .spinner-logo {
     width: 48px;
     height: auto;
@@ -8038,7 +8136,7 @@ html.lenis body {
     transform: translate(-50%, -50%);
     z-index: 10;
     background: #ffffff;
-    padding: 14px;
+    padding: 10px;
     border-radius: 50%;
     box-sizing: content-box;
     animation: centerPulse 2.5s ease-in-out infinite alternate;
@@ -8047,7 +8145,7 @@ html.lenis body {
         0 0 40px rgba(0, 210, 255, 0.15);
 }
 
-/* ─── Static Track Circles (faint full circles behind arcs) ─── */
+/* â”€â”€â”€ Static Track Circles (faint full circles behind arcs) â”€â”€â”€ */
 .spinner-track {
     position: absolute;
     top: 50%;
@@ -8077,7 +8175,7 @@ html.lenis body {
     margin-left: -55px;
 }
 
-/* ─── Spinning Arcs (base) ─── */
+/* â”€â”€â”€ Spinning Arcs (base) â”€â”€â”€ */
 .spinner-ring {
     position: absolute;
     top: 50%;
@@ -8086,7 +8184,7 @@ html.lenis body {
     border: 4px solid transparent;
 }
 
-/* Outer Decorative Dashed Ring – slow spin */
+/* Outer Decorative Dashed Ring â€“ slow spin */
 .spinner-ring.ring-outer {
     width: 200px;
     height: 200px;
@@ -8096,7 +8194,7 @@ html.lenis body {
     animation: spinCW 12s linear infinite;
 }
 
-/* Ring 1 – Outer, Cyan – 3/4 arc */
+/* Ring 1 â€“ Outer, Cyan â€“ 3/4 arc */
 .spinner-ring.ring-1 {
     width: 180px;
     height: 180px;
@@ -8109,7 +8207,7 @@ html.lenis body {
     filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.7));
 }
 
-/* Ring 2 – Middle, Green – 3/4 arc */
+/* Ring 2 â€“ Middle, Green â€“ 3/4 arc */
 .spinner-ring.ring-2 {
     width: 144px;
     height: 144px;
@@ -8122,7 +8220,7 @@ html.lenis body {
     filter: drop-shadow(0 0 10px rgba(45, 140, 45, 0.7));
 }
 
-/* Ring 3 – Inner, Light Blue – 3/4 arc */
+/* Ring 3 â€“ Inner, Light Blue â€“ 3/4 arc */
 .spinner-ring.ring-3 {
     width: 110px;
     height: 110px;
@@ -8135,7 +8233,7 @@ html.lenis body {
     filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
 }
 
-/* ─── Keyframes ─── */
+/* â”€â”€â”€ Keyframes â”€â”€â”€ */
 @keyframes spinCW {
     from {
         transform: rotate(0deg);
@@ -8461,13 +8559,13 @@ html.lenis body {
 }
 
 /* ==========================================================
-   PROJECTS — Elfsight Horizontal Carousel Timeline (Dark)
+   PROJECTS â€” Elfsight Horizontal Carousel Timeline (Dark)
    ========================================================== */
 
 /* =====================================================
 
 /* =====================================================
-   PROJECTS SECTION — Custom Curvy Horizontal Scroll Timeline
+   PROJECTS SECTION â€” Custom Curvy Horizontal Scroll Timeline
    ===================================================== */
 
 .horizontal-timeline-section .section-header {
@@ -8651,10 +8749,10 @@ html.lenis body {
 }
 
 /* ======================================================
-   RESPONSIVE — Our Works Timeline
+   RESPONSIVE â€” Our Works Timeline
    ====================================================== */
 
-/* --- Tablet & below (≤ 992px): switch to vertical stack --- */
+/* --- Tablet & below (â‰¤ 992px): switch to vertical stack --- */
 @media (max-width: 992px) {
     .horizontal-timeline-section {
         padding: 5rem 1.5rem 4rem;
@@ -8795,7 +8893,7 @@ html.lenis body {
     }
 }
 
-/* --- Small tablets (≤ 768px) --- */
+/* --- Small tablets (â‰¤ 768px) --- */
 @media (max-width: 768px) {
     .horizontal-timeline-section {
         padding: 4rem 1rem 3rem;
@@ -8846,7 +8944,7 @@ html.lenis body {
     }
 }
 
-/* --- Phone (≤ 480px) --- */
+/* --- Phone (â‰¤ 480px) --- */
 @media (max-width: 480px) {
     .horizontal-timeline-section {
         padding: 3.5rem 0.75rem 2.5rem;
@@ -8872,7 +8970,7 @@ html.lenis body {
     .timeline-node {
         left: 20px !important;
         width: 40px;
-        height: 40px;
+        height: 20px;
     }
 
 
@@ -9174,66 +9272,7 @@ html.lenis body {
 /* --- Connecting Lines to Road --- */
 
 
-/* For Desktop (horizontal layout) */
-@media (min-width: 993px) {
-    .card-top::after {
-        content: '';
-        position: absolute;
-        bottom: -140px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 2px;
-        height: 140px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), transparent);
-        z-index: -1;
-    }
-
-    .card-bottom::after {
-        content: '';
-        position: absolute;
-        top: -140px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 2px;
-        height: 140px;
-        background: linear-gradient(to top, rgba(255, 255, 255, 0.5), transparent);
-        z-index: -1;
-    }
-
-    /* Colored Lines matching Themes */
-    .teal-border.card-top::after {
-        background: linear-gradient(to bottom, rgba(14, 165, 233, 0.8), transparent);
-    }
-
-    .teal-border.card-bottom::after {
-        background: linear-gradient(to top, rgba(14, 165, 233, 0.8), transparent);
-    }
-
-    .purple-border.card-top::after {
-        background: linear-gradient(to bottom, rgba(139, 92, 246, 0.8), transparent);
-    }
-
-    .purple-border.card-bottom::after {
-        background: linear-gradient(to top, rgba(139, 92, 246, 0.8), transparent);
-    }
-
-    .blue-border.card-top::after {
-        background: linear-gradient(to bottom, rgba(37, 99, 235, 0.8), transparent);
-    }
-
-    .blue-border.card-bottom::after {
-        background: linear-gradient(to top, rgba(37, 99, 235, 0.8), transparent);
-    }
-}
-
-/* Hide lines on mobile where they stack vertically */
-@media (max-width: 992px) {
-
-    .card-top::after,
-    .card-bottom::after {
-        display: none !important;
-    }
-}
+/* Removed duplicate card::after lines */
 
 /* --- Asphalt Road Styling --- */
 .timeline-svg-path .svg-track {
@@ -9415,3 +9454,125 @@ html.lenis body {
         grid-template-columns: 1fr;
     }
 }
+/* Icon boxes for bento cards */
+.bento-top-left .feature-icon-box {
+    background: rgba(11, 114, 206, 0.4);
+    box-shadow: 0 4px 15px rgba(11, 114, 206, 0.3);
+}
+.bento-top-right .feature-icon-box {
+    background: rgba(69, 184, 72, 0.4);
+    box-shadow: 0 4px 15px rgba(69, 184, 72, 0.3);
+}
+.bento-bottom-left .feature-icon-box {
+    background: rgba(24, 178, 166, 0.4);
+    box-shadow: 0 4px 15px rgba(24, 178, 166, 0.3);
+}
+.bento-bottom-right .feature-icon-box {
+    background: rgba(255, 107, 53, 0.4);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+/* ---- Timeline Line Reveal Animation ---- */
+#road-mask-path {
+    transition: width 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.timeline-node {
+    background: var(--node-color, #2563eb) !important;
+    border: none !important;
+}
+
+.node-inner {
+    color: #ffffff !important;
+}
+
+.timeline-node:nth-child(3n+1) {
+    --node-color: #0B72CE;
+}
+
+.timeline-node:nth-child(3n+2) {
+    --node-color: #45B848;
+}
+
+.timeline-node:nth-child(3n+3) {
+    --node-color: #18B2A6;
+}
+
+#road-mask-path {
+    transition: width 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---- Bento card content overrides for coloured backgrounds ---- */
+.bento-card .feature-content h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    margin-bottom: 0.35rem;
+}
+
+.bento-card .feature-content p {
+    color: rgba(255, 255, 255, 0.82) !important;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 0.75rem;
+}
+
+/* Bento feature-tags default text (inside coloured card) is already white per per-card rules */
+.bento-card .feature-tags {
+    margin-top: auto;
+}
+
+/* Hover lift for bento cards — coloured glow based on card */
+.bento-top-left:hover    { box-shadow: 0 20px 50px rgba(11, 114, 206, 0.35) !important; }
+.bento-bottom-left:hover { box-shadow: 0 20px 50px rgba(24, 178, 166, 0.35) !important; }
+.bento-top-right:hover   { box-shadow: 0 20px 50px rgba(69, 184, 72, 0.35) !important; }
+.bento-bottom-right:hover{ box-shadow: 0 20px 50px rgba(255, 107, 53, 0.35) !important; }
+
+/* Glow halo animates in sync with draw path */
+#timeline-glow-path {
+    stroke-dasharray: 99999;
+    stroke-dashoffset: 99999;
+    transition: stroke-dashoffset 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* --- CONSOLIDATED TIMELINE DESIGN OVERRIDES --- */
+.horizontal-timeline-section {
+    background-color: #ffffff !important;
+    padding-top: 3rem !important;
+    padding-bottom: 2rem !important;
+}
+.timeline-pin-container {
+    height: 590px !important;
+}
+.timeline-node {
+    width: 76px !important;
+    height: 76px !important;
+    background: #ffffff !important;
+    border-width: 5px !important;
+    border-style: solid !important;
+}
+.timeline-node:nth-child(4n+1) { --node-color: #002C49; border-color: var(--node-color) !important; box-shadow: 0 0 12px rgba(0,44,73,0.25) !important; }
+.timeline-node:nth-child(4n+2) { --node-color: #27A3FF; border-color: var(--node-color) !important; box-shadow: 0 0 12px rgba(39,163,255,0.3) !important; }
+.timeline-node:nth-child(4n+3) { --node-color: #43AE47; border-color: var(--node-color) !important; box-shadow: 0 0 12px rgba(67,174,71,0.3) !important; }
+.timeline-node:nth-child(4n+4) { --node-color: #0078B5; border-color: var(--node-color) !important; box-shadow: 0 0 12px rgba(0,120,181,0.3) !important; }
+.timeline-node .node-inner { color: var(--node-color) !important; font-size: 1.1rem !important; font-weight: 800 !important; }
+.timeline-node::before { content: ''; position: absolute; width: 2px; height: 20px; background-color: var(--node-color); left: 50%; transform: translateX(-50%); }
+.timeline-node.node-top::before { bottom: 100% !important; top: auto !important; }
+.timeline-node.node-bottom::before { top: 100% !important; bottom: auto !important; }
+.timeline-card { background: transparent !important; box-shadow: none !important; border: none !important; width: 210px !important; text-align: center !important; margin-left: 0 !important; }
+.timeline-card .card-content { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+.timeline-card.card-top { bottom: 418px !important; top: auto !important; }
+.timeline-card.card-bottom { top: 398px !important; bottom: auto !important; }
+.timeline-card .card-actions, .timeline-card .timeline-arrow-link, .timeline-card::after, .timeline-card::before { display: none !important; }
+.timeline-card .card-title { font-weight: 700 !important; color: #1e293b !important; -webkit-text-fill-color: #1e293b !important; font-size: 1.05rem !important; margin-top: 0 !important; margin-bottom: 0.3rem !important; text-align: center !important; }
+.timeline-card .card-desc { color: #64748b !important; font-size: 0.82rem !important; line-height: 1.45 !important; text-align: center !important; display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+.timeline-nav-btn { background: #ffffff !important; color: #94a3b8 !important; border: 1px solid rgba(0,0,0,0.08) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important; width: 44px !important; height: 44px !important; border-radius: 50% !important; }
+.timeline-nav-btn:hover { background: #f8fafc !important; color: #64748b !important; }
+#robot-popup, .robot-popup, .fixed-sidebar-btn, .robot-sidebar-dock { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+
+/* Force light logo when scrolled over dark sections */
+.premium-nav.scrolled.nav-over-dark .logo-dark { display: none !important; }
+.premium-nav.scrolled.nav-over-dark .logo-light { display: block !important; }

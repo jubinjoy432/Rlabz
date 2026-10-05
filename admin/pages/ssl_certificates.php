@@ -25,6 +25,9 @@ try {
         <h1>SSL Certificates</h1>
         <p>Monitor and manage project SSL certificates.</p>
     </div>
+    <div class="page-header-right">
+        <button id="btnFetchAllSsl" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.15);" onclick="fetchAllSsl()"><i class="fa-solid fa-sync"></i> Refresh SSL Status</button>
+    </div>
 </div>
 
 <div class="card">
@@ -86,3 +89,29 @@ try {
 </div>
 
 <?php require_once '../includes/layout_footer.php'; ?>
+
+<script>
+function fetchAllSsl() {
+    const btn = document.getElementById('btnFetchAllSsl');
+    if (btn) {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Refreshing...';
+        btn.disabled = true;
+    }
+    fetch('../api/cron_ssl_reminder.php')
+        .then(r => r.text())
+        .then(res => {
+            window.location.reload();
+        })
+        .catch(e => {
+            alert("Failed to refresh SSL");
+            window.location.reload();
+        });
+}
+
+// Auto-fetch in background without needing the button
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        fetch('../api/cron_ssl_reminder.php').catch(e => console.error('Auto SSL update failed', e));
+    }, 2000); // Small delay to let page render first
+});
+</script>

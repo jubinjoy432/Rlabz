@@ -93,24 +93,116 @@ require_once '../includes/layout_header.php';
     <?php endif; ?>
 </div>
 
+<!-- Pagination Controls (client-side) -->
+<div class="admin-pagination" id="adminPagination" style="display:none;">
+    <button class="adm-pg-btn adm-pg-prev" id="admPrev" disabled>
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <div class="adm-pg-numbers" id="admPageNums"></div>
+    <button class="adm-pg-btn adm-pg-next" id="admNext">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    <span class="adm-pg-info" id="admPgInfo"></span>
+</div>
+
 <script>
-    // Simple client-side search filter
-    const searchInput = document.getElementById('projectSearch');
-    const projectList = document.getElementById('projectList');
-    if (searchInput && projectList) {
-        const items = projectList.querySelectorAll('.project-item');
-        searchInput.addEventListener('input', function() {
-            const term = this.value.toLowerCase();
-            items.forEach(item => {
-                const title = item.querySelector('.project-title').textContent.toLowerCase();
-                if (title.includes(term)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+(function () {
+    const ITEMS_PER_PAGE = 10;
+    let currentPage = 1;
+    let allItems = [];
+    let filteredItems = [];
+
+    const searchInput  = document.getElementById('projectSearch');
+    const projectList  = document.getElementById('projectList');
+    const pagination   = document.getElementById('adminPagination');
+    const admPrev      = document.getElementById('admPrev');
+    const admNext      = document.getElementById('admNext');
+    const admPageNums  = document.getElementById('admPageNums');
+    const admPgInfo    = document.getElementById('admPgInfo');
+
+    if (!projectList) return;
+
+    allItems     = Array.from(projectList.querySelectorAll('.project-item'));
+    filteredItems = allItems.slice();
+
+    function totalPages() {
+        return Math.max(1, Math.ceil(filteredItems.length / ITEMS_PER_PAGE));
+    }
+
+    function renderPage() {
+        // Hide all then show only the current page slice
+        allItems.forEach(item => { item.style.display = 'none'; });
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end   = Math.min(start + ITEMS_PER_PAGE, filteredItems.length);
+        filteredItems.slice(start, end).forEach(item => { item.style.display = 'flex'; });
+
+        // Show / hide pagination
+        if (filteredItems.length <= ITEMS_PER_PAGE) {
+            pagination.style.display = 'none';
+        } else {
+            pagination.style.display = 'flex';
+            renderPaginationControls(start + 1, end);
+        }
+    }
+
+    function renderPaginationControls(start, end) {
+        const total = totalPages();
+        admPrev.disabled = currentPage === 1;
+        admNext.disabled = currentPage === total;
+        admPgInfo.textContent = `${start}–${end} of ${filteredItems.length}`;
+
+        admPageNums.innerHTML = '';
+        getPageRange(currentPage, total).forEach(p => {
+            if (p === '...') {
+                const el = document.createElement('span');
+                el.className = 'adm-pg-ellipsis';
+                el.textContent = '…';
+                admPageNums.appendChild(el);
+            } else {
+                const btn = document.createElement('button');
+                btn.className = 'adm-pg-btn adm-pg-num' + (p === currentPage ? ' active' : '');
+                btn.textContent = p;
+                btn.addEventListener('click', () => goToPage(p));
+                admPageNums.appendChild(btn);
+            }
         });
     }
+
+    function getPageRange(current, total) {
+        if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+        const pages = [1];
+        if (current > 3) pages.push('...');
+        for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) pages.push(i);
+        if (current < total - 2) pages.push('...');
+        pages.push(total);
+        return pages;
+    }
+
+    function goToPage(page) {
+        const total = totalPages();
+        if (page < 1 || page > total) return;
+        currentPage = page;
+        renderPage();
+    }
+
+    admPrev.addEventListener('click', () => goToPage(currentPage - 1));
+    admNext.addEventListener('click', () => goToPage(currentPage + 1));
+
+    // Search — refilter and reset to page 1
+    if (searchInput) {
+        searchInput.addEventListener('input', function () {
+            const term = this.value.trim().toLowerCase();
+            filteredItems = term
+                ? allItems.filter(item => item.textContent.toLowerCase().includes(term))
+                : allItems.slice();
+            currentPage = 1;
+            renderPage();
+        });
+    }
+
+    // Initial render
+    renderPage();
+})();
 </script>
 
 <?php require_once '../includes/layout_footer.php'; ?>

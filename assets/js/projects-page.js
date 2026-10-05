@@ -1,13 +1,13 @@
 /**
  * Projects Gallery Page — JavaScript
- * Handles search, filtering, card rendering, and load more
+ * Handles search, filtering, card rendering, and numbered pagination
  */
 
 (function () {
     'use strict';
 
     const ITEMS_PER_PAGE = 9;
-    let displayedCount = 0;
+    let currentPage = 1;
     let filteredProjects = [];
     let activeFilters = {
         year: [],
@@ -22,8 +22,11 @@
     const searchInput = document.getElementById('projectsSearchInput');
     const searchClear = document.getElementById('projectsSearchClear');
     const resultsCount = document.getElementById('projectsResultsCount');
-    const loadMoreBtn = document.getElementById('projectsLoadMore');
     const activeFiltersContainer = document.getElementById('activeFiltersContainer');
+    const pagination = document.getElementById('projectsPagination');
+    const pgPrev = document.getElementById('pgPrev');
+    const pgNext = document.getElementById('pgNext');
+    const pgPageNumbers = document.getElementById('pgPageNumbers');
 
     // Initialize when data is ready
     let initialized = false;
@@ -45,6 +48,9 @@
         setupSearch();
         setupFilterDropdowns();
         applyFilters();
+
+        if (pgPrev) pgPrev.addEventListener('click', () => goToPage(currentPage - 1));
+        if (pgNext) pgNext.addEventListener('click', () => goToPage(currentPage + 1));
     }
 
     // ---- Populate Filter Dropdowns ----
@@ -80,16 +86,18 @@
 
         searchInput.addEventListener('input', () => {
             searchQuery = searchInput.value.trim().toLowerCase();
-            searchClear.classList.toggle('visible', searchQuery.length > 0);
+            if (searchClear) searchClear.classList.toggle('visible', searchQuery.length > 0);
             applyFilters();
         });
 
-        searchClear.addEventListener('click', () => {
-            searchInput.value = '';
-            searchQuery = '';
-            searchClear.classList.remove('visible');
-            applyFilters();
-        });
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                searchQuery = '';
+                searchClear.classList.remove('visible');
+                applyFilters();
+            });
+        }
     }
 
     // ---- Filter Dropdowns ----
@@ -141,8 +149,8 @@
             activeFilters[type].splice(idx, 1);
         }
         // Update dropdown UI
-        const menu = document.querySelectorAll(`[data-filter-type="${type}"][data-value="${value}"]`);
-        menu.forEach(el => el.classList.remove('selected'));
+        document.querySelectorAll(`[data-filter-type="${type}"][data-value="${value}"]`)
+            .forEach(el => el.classList.remove('selected'));
         applyFilters();
     }
 
@@ -151,9 +159,9 @@
             activeFilters[key] = [];
         });
         document.querySelectorAll('.filter-option').forEach(el => el.classList.remove('selected'));
-        searchInput.value = '';
+        if (searchInput) searchInput.value = '';
         searchQuery = '';
-        searchClear.classList.remove('visible');
+        if (searchClear) searchClear.classList.remove('visible');
         applyFilters();
     }
 
@@ -193,16 +201,33 @@
             return true;
         });
 
-        displayedCount = 0;
-        renderCards();
+        currentPage = 1;
+        renderPage();
         renderActiveFilters();
         updateResultsCount();
     }
 
-    function renderCards() {
+    function totalPages() {
+        return Math.max(1, Math.ceil(filteredProjects.length / ITEMS_PER_PAGE));
+    }
+
+    function goToPage(page) {
+        const total = totalPages();
+        if (page < 1 || page > total) return;
+        currentPage = page;
+        renderPage();
+        updateResultsCount();
+        // Scroll to top of grid
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderPage() {
+        if (!grid) return;
         grid.innerHTML = '';
-        const toShow = filteredProjects.slice(0, displayedCount + ITEMS_PER_PAGE);
-        displayedCount = toShow.length;
+
+        const start = (currentPage - 1) * ITEMS_PER_PAGE;
+        const end = Math.min(start + ITEMS_PER_PAGE, filteredProjects.length);
+        const toShow = filteredProjects.slice(start, end);
 
         if (toShow.length === 0) {
             grid.innerHTML = `
@@ -212,21 +237,68 @@
                     <p>Try adjusting your search or filters to find what you're looking for.</p>
                 </div>
             `;
-            loadMoreBtn.classList.add('hidden');
+        } else {
+            toShow.forEach((project, index) => {
+                const card = createCardElement(project, index);
+                grid.appendChild(card);
+            });
+        }
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        if (!pagination || !pgPageNumbers) return;
+
+        const total = totalPages();
+
+        // Hide pagination if only one page
+        if (total <= 1) {
+            pagination.style.display = 'none';
             return;
         }
+        pagination.style.display = 'flex';
 
-        toShow.forEach((project, index) => {
-            const card = createCardElement(project, index);
-            grid.appendChild(card);
+        // Prev / Next state
+        if (pgPrev) pgPrev.disabled = currentPage === 1;
+        if (pgNext) pgNext.disabled = currentPage === total;
+
+        // Build page number buttons with ellipsis
+        pgPageNumbers.innerHTML = '';
+        const pages = getPageRange(currentPage, total);
+
+        pages.forEach(p => {
+            if (p === '...') {
+                const ellipsis = document.createElement('span');
+                ellipsis.className = 'pg-ellipsis';
+                ellipsis.textContent = '…';
+                pgPageNumbers.appendChild(ellipsis);
+            } else {
+                const btn = document.createElement('button');
+                btn.className = 'pg-page-btn pg-num' + (p === currentPage ? ' active' : '');
+                btn.textContent = p;
+                btn.setAttribute('aria-label', `Page ${p}`);
+                if (p === currentPage) btn.setAttribute('aria-current', 'page');
+                btn.addEventListener('click', () => goToPage(p));
+                pgPageNumbers.appendChild(btn);
+            }
         });
+    }
 
-        // Show/hide load more
-        if (displayedCount >= filteredProjects.length) {
-            loadMoreBtn.classList.add('hidden');
-        } else {
-            loadMoreBtn.classList.remove('hidden');
+    // Returns an array of page numbers with ellipsis for large page counts
+    function getPageRange(current, total) {
+        if (total <= 7) {
+            return Array.from({ length: total }, (_, i) => i + 1);
         }
+        const pages = [];
+        pages.push(1);
+        if (current > 3) pages.push('...');
+        for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+            pages.push(i);
+        }
+        if (current < total - 2) pages.push('...');
+        pages.push(total);
+        return pages;
     }
 
     function createCardElement(project, index) {
@@ -284,27 +356,10 @@
 
     function updateResultsCount() {
         if (!resultsCount) return;
-        resultsCount.innerHTML = `Showing <span>${displayedCount}</span> of <span>${filteredProjects.length}</span> projects`;
-    }
-
-    // Load More
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener('click', () => {
-            const start = displayedCount;
-            const end = Math.min(displayedCount + ITEMS_PER_PAGE, filteredProjects.length);
-
-            for (let i = start; i < end; i++) {
-                const card = createCardElement(filteredProjects[i], i - start);
-                grid.appendChild(card);
-            }
-
-            displayedCount = end;
-            updateResultsCount();
-
-            if (displayedCount >= filteredProjects.length) {
-                loadMoreBtn.classList.add('hidden');
-            }
-        });
+        const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+        const end = Math.min(currentPage * ITEMS_PER_PAGE, filteredProjects.length);
+        const showing = filteredProjects.length > 0 ? `${start}–${end}` : '0';
+        resultsCount.innerHTML = `Showing <span>${showing}</span> of <span>${filteredProjects.length}</span> projects`;
     }
 
     // Expose for inline handlers

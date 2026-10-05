@@ -2,7 +2,8 @@
 // admin/includes/layout_header.php
 $currentPage = basename($_SERVER['PHP_SELF']);
 // Determine path offset based on current location
-$isRootAdmin = ($currentPage === 'edit_project.php');
+$isRootAdmin = (basename(dirname($_SERVER['PHP_SELF'])) === 'admin');
+$faviconPath = $isRootAdmin ? "../assets/images/rlabz-icon.png?v=2" : "../../assets/images/rlabz-icon.png?v=2";
 $cssPath = $isRootAdmin ? 'assets/css/admin_style.css' : '../assets/css/admin_style.css';
 $homePath = $isRootAdmin ? 'pages/overview.php' : 'overview.php';
 $managePath = $isRootAdmin ? 'pages/manage_projects.php' : 'manage_projects.php';
@@ -18,6 +19,7 @@ $sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($pageTitle) ? $pageTitle . ' - RLabz Admin' : 'Admin Dashboard - RLabz'; ?></title>
+    <link rel="icon" type="image/png" href="<?php echo $faviconPath; ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;500;600;700&display=swap" rel="stylesheet">
@@ -33,9 +35,9 @@ $sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="<?php echo $homePath; ?>" class="sidebar-logo">
-            <div class="sidebar-logo-icon"><i class="fa-solid fa-shield-halved"></i></div>
-            <div class="sidebar-logo-text">RLabz</div>
+        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 1.5rem 1.5rem;">
+            <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
+            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="max-width: 150px; height: auto;">
         </a>
 
         <nav class="sidebar-nav">

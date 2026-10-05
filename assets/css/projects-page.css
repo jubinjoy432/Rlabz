@@ -662,3 +662,79 @@
         font-size: 0.8rem;
     }
 }
+
+/* ---- Numbered Pagination ---- */
+.projects-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 2rem 1.5rem 3rem;
+    flex-wrap: wrap;
+}
+
+.pg-page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 0.6rem;
+    border-radius: 10px;
+    border: 1.5px solid rgba(11, 83, 148, 0.15);
+    background: #ffffff;
+    color: #334155;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.pg-page-btn:hover:not(:disabled):not(.active) {
+    background: #f0f7ff;
+    border-color: #0B72CE;
+    color: #0B72CE;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(11, 114, 206, 0.15);
+}
+
+.pg-page-btn.active {
+    background: linear-gradient(135deg, #0B72CE, #072A46);
+    border-color: #0B72CE;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(11, 114, 206, 0.35);
+    cursor: default;
+}
+
+.pg-page-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pg-prev, .pg-next {
+    font-size: 0.8rem;
+    min-width: 38px;
+}
+
+.pg-page-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pg-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 42px;
+    color: #94a3b8;
+    font-size: 1rem;
+    font-weight: 600;
+    user-select: none;
+}

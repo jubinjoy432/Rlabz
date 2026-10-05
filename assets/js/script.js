@@ -2547,6 +2547,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 nav.classList.remove('scrolled');
             }
 
+            // Dark sections detection for logo color swap
+            const darkSections = document.querySelectorAll('.hero-blue-section, #client_form_section, footer');
+            let isOverDark = false;
+            const navCenterY = 40;
+            darkSections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= navCenterY && rect.bottom >= navCenterY) {
+                    isOverDark = true;
+                }
+            });
+            if (isOverDark || window.scrollY < 50) { 
+                nav.classList.add('nav-over-dark');
+            } else {
+                nav.classList.remove('nav-over-dark');
+            }
+
             // Scroll Spy Logic
             let currentSectionId = '';
 
@@ -2778,7 +2794,8 @@ function buildDynamicTimeline() {
             line.style.bottom = '100%';
             line.style.height = '60px';
         }
-        node.appendChild(line);
+        // Removed dynamic inline line injection since it conflicts with CSS overrides
+        // node.appendChild(line);
 
         scrollContent.appendChild(node);
 
@@ -2787,11 +2804,6 @@ function buildDynamicTimeline() {
         const card = document.createElement('div');
         card.className = `timeline-card clean-card card-${isBottom ? 'bottom' : 'top'}`;
         card.style.left = `${cardLeft}px`;
-        if (isBottom) {
-            card.style.top = `420px`;
-        } else {
-            card.style.bottom = `440px`; // 520 - 80 = 440px from bottom (bottom edge at 80px from top)
-        }
         card.setAttribute('data-node', idx);
 
         const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
@@ -2807,14 +2819,20 @@ function buildDynamicTimeline() {
         isBottom = !isBottom;
     });
 
-    // Update SVG Path
-    const svg = scrollContent.querySelector('svg.timeline-svg-path');
-    if (svg) {
+    // Update SVG Paths
+    const svgs = scrollContent.querySelectorAll('svg.timeline-svg-path');
+    if (svgs.length > 0) {
         const endX = currentX - 260;
-        const newWidth = endX + 800; // Extra padding
+        const newWidth = endX + 150; // Tighter padding at the end
         scrollContent.style.width = `${newWidth}px`;
-        svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
-        svg.style.width = `${newWidth}px`;
+        
+        svgs.forEach(svg => {
+            svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
+            svg.style.width = `${newWidth}px`;
+        });
+
+        const clipRect = document.querySelector('#svg-clip rect');
+        if (clipRect) clipRect.setAttribute('width', newWidth);
 
         // Generate the curvy path
         let d = "M 0 250 C 80 250 150 340 240 340";
@@ -2833,12 +2851,12 @@ function buildDynamicTimeline() {
             atBottom = !atBottom;
         }
 
-        // Final line
-        let endY = atBottom ? 340 : 160;
-        d += ` C ${curX + 110} ${endY} ${curX + 160} 250 ${curX + 220} 250 L ${newWidth} 250`;
-
-        const path1 = svg.querySelector('#road-path');
+        const path1 = document.querySelector('#road-path');
         if (path1) path1.setAttribute('d', d);
+        
+        // Also update the ghost track in the HTML to match
+        const pathBase = document.querySelector('#road-path-base');
+        if (pathBase) pathBase.setAttribute('d', d);
     }
 
     // Initial auto-scroll to extreme right for mobile
@@ -2926,6 +2944,42 @@ function initCurvedTimeline() {
 
                     if (targetScroll >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
                     else nextBtn.classList.remove('disabled');
+
+                    // --- Road Mask Width (clipping div grows to show more of the SVG) ---
+                    // This handles the drawing animation since CSS transitions the width
+                    const maskPath = document.querySelector('#road-mask-path');
+                    if (maskPath) {
+                        maskPath.style.width = (targetScroll + containerWidth) + 'px';
+                    }
+
+                    // Trigger cascade for newly revealed nodes
+                    nodes.forEach((node, index) => {
+                        const nodeLeft = parseInt(node.style.left || 0);
+                        if (nodeLeft < targetScroll + containerWidth) {
+                            if (!node.classList.contains('revealed')) {
+                                node.classList.add('revealed');
+                                gsap.fromTo(node, 
+                                    { scale: 0.85, opacity: 0 },
+                                    { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: (index % 3) * 0.05 }
+                                );
+                            }
+                        }
+                    });
+
+                    // Trigger cascade for newly revealed cards
+                    cards.forEach((card, index) => {
+                        const cardLeft = parseInt(card.style.left || 0);
+                        if (cardLeft < targetScroll + containerWidth) {
+                            if (!card.classList.contains('revealed')) {
+                                card.classList.add('revealed');
+                                const isTop = card.classList.contains('card-top');
+                                gsap.fromTo(card, 
+                                    { y: isTop ? -20 : 20, opacity: 0 },
+                                    { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.4)', delay: (index % 3) * 0.1 }
+                                );
+                            }
+                        }
+                    });
                 };
 
                 if (prevBtn && nextBtn) {
@@ -2959,13 +3013,13 @@ function initCurvedTimeline() {
 
                         if (!atStart && !atEnd) {
                             evt.preventDefault();
-                            targetScroll -= delta * 0.85; // Reversed: subtract delta to move left on scroll down
+                            targetScroll -= delta * 0.45; // Slower scroll speed multiplier
                             targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
 
                             gsap.to(pinContainer, {
                                 scrollLeft: targetScroll,
-                                duration: 0.85,
-                                ease: "power1.out",
+                                duration: 1.4, // Smoother and slower transition
+                                ease: "power2.out",
                                 overwrite: "auto",
                                 onUpdate: updateButtons
                             });
@@ -2973,13 +3027,8 @@ function initCurvedTimeline() {
                     }
                 }, { passive: false });
 
-
-                // --- Dynamic Road Drawing Animation ---
-                const maskPath = document.querySelector('#road-mask-path');
-                if (maskPath) {
-                    // Set mask to full width since we start at the end of the timeline
-                    maskPath.style.width = scrollContent.scrollWidth + 'px';
-                }
+                // --- Initial trigger for the road mask and visible nodes ---
+                updateButtons();
 
                 // Node and Cards are left fully visible by default to prevent backwards scrub disappearing bugs
             } else {

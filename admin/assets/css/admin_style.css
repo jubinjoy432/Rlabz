@@ -589,3 +589,74 @@ a { text-decoration: none; color: inherit; }
     .stats-grid { grid-template-columns: 1fr 1fr; }
     .admin-content { padding: 1.25rem 1rem; }
 }
+/* ---- Admin Project List Pagination ---- */
+.admin-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 1.5rem 0 1rem;
+    flex-wrap: wrap;
+}
+
+.adm-pg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 0.5rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.adm-pg-btn:hover:not(:disabled):not(.active) {
+    background: rgba(37, 99, 235, 0.08);
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.adm-pg-btn.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    cursor: default;
+}
+
+.adm-pg-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.adm-pg-numbers {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.adm-pg-ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 36px;
+    color: var(--text-secondary);
+    font-weight: 600;
+    user-select: none;
+}
+
+.adm-pg-info {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
