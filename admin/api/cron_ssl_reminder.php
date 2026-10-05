@@ -87,8 +87,9 @@ try {
             echo " -> Failed: $last_error\n";
             continue; 
         }
-        
-        // Successful check
+        // Successful check, auto-resolve any previous failure announcements
+        $pdo->prepare("UPDATE admin_announcements SET is_read = 1 WHERE reference_type = 'ssl_certificate' AND reference_id = ? AND type = 'ssl_failed'")->execute([$cert['id']]);
+
         $validFrom = date('Y-m-d', $certInfo['validFrom_time_t']);
         $validTo = date('Y-m-d', $certInfo['validTo_time_t']);
         $provider = $certInfo['issuer']['O'] ?? ($certInfo['issuer']['CN'] ?? 'Unknown Provider');
