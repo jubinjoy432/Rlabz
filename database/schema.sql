@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
     `status` VARCHAR(20) DEFAULT 'Completed',
     `github_link` VARCHAR(255) DEFAULT '',
     `demo_link` VARCHAR(255) DEFAULT '',
+    `ssl_tracking_enabled` TINYINT(1) DEFAULT 1,
     `poster_path` VARCHAR(255) DEFAULT '',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -107,7 +108,8 @@ CREATE TABLE IF NOT EXISTS `project_screenshots` (
 -- ALTER TABLE `projects` ADD COLUMN `status` VARCHAR(20) DEFAULT 'Completed' AFTER `duration`;
 -- ALTER TABLE `projects` ADD COLUMN `github_link` VARCHAR(255) DEFAULT '' AFTER `status`;
 -- ALTER TABLE `projects` ADD COLUMN `demo_link` VARCHAR(255) DEFAULT '' AFTER `github_link`;
--- ALTER TABLE `projects` ADD COLUMN `poster_path` VARCHAR(255) DEFAULT '' AFTER `demo_link`;
+-- ALTER TABLE `projects` ADD COLUMN `ssl_tracking_enabled` TINYINT(1) DEFAULT 1 AFTER `demo_link`;
+-- ALTER TABLE `projects` ADD COLUMN `poster_path` VARCHAR(255) DEFAULT '' AFTER `ssl_tracking_enabled`;
 -- ALTER TABLE `project_members` ADD COLUMN `role` VARCHAR(50) DEFAULT '' AFTER `photo_path`;
 -- ALTER TABLE `project_members` ADD COLUMN `register_number` VARCHAR(20) DEFAULT '' AFTER `role`;
 
