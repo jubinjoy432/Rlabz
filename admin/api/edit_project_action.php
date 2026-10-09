@@ -81,6 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $thumbnail_path = handleUpload('thumbnail', $project['thumbnail_path']);
     $poster_path = $project['poster_path'];
 
+    $ssl_tracking_enabled = isset($_POST['ssl_tracking_enabled']) ? 1 : 0;
+
     try {
         $pdo->beginTransaction();
 
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             objectives = ?, problem_statement = ?, expected_outcome = ?, tech_stack = ?, 
             key_features = ?, department = ?, batch = ?, category = ?, project_type = ?, 
             status = ?, duration = ?, 
-            github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?
+            github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?, ssl_tracking_enabled = ?
             WHERE id = ?");
         
         $stmt->execute([
@@ -97,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $objectives, $problem_statement, $expected_outcome, $tech_stack,
             $key_features, $department, $batch, $category, $project_type,
             $status, $duration,
-            $github_link, $demo_link, $image_path, $thumbnail_path, $poster_path,
+            $github_link, $demo_link, $image_path, $thumbnail_path, $poster_path, $ssl_tracking_enabled,
             $id
         ]);
 

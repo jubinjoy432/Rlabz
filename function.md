@@ -34,6 +34,13 @@ The `/admin` portal (secured by login) allows authorized administrators to manag
 ### Project Health & Tracking
 - **Milestone Tracking**: Create and manage a timeline for projects. Track milestones by date and status (Upcoming, Current, Completed).
 - **SSL Certificate Monitoring**: A dedicated module to track the SSL certificates of deployed project domains. Records provider, issue date, expiry date, and status alerts for renewals.
+  - **Automated Sync**: It automatically syncs tracked domains by checking if the `ssl_tracking_enabled` flag is checked on a project and validates its `demo_link`.
+  - **Threshold Alerts**: Generates automatic announcements based on expiration proximity:
+    - **<= 30 Days**: Warning Alert ("Expiring Soon").
+    - **<= 14 Days**: Warning Alert ("Expiring Soon").
+    - **<= 7 Days**: Danger Alert ("Critical").
+    - **<= 0 Days**: Danger Alert ("Expired").
+  - **Automated Renewals**: By comparing SSL fingerprints during each check, the system detects if a certificate was successfully renewed and automatically logs a Success announcement and clears previous warnings.
 
 ### System Administration
 - **Announcements System**: Admins can generate and view system alerts and notifications (e.g., SSL expiry warnings).

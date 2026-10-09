@@ -303,12 +303,23 @@
 
     function createCardElement(project, index) {
         const card = document.createElement('a');
-        card.href = `project-details.html?id=${project.id}`;
+        const hasDemoLink = project.demoLink && project.demoLink.trim() !== '' && project.demoLink !== '#';
+        if (hasDemoLink) {
+            card.href = project.demoLink;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+        } else {
+            card.href = `project-details.html?id=${project.id}`;
+        }
         card.className = 'project-gallery-card';
         card.style.animationDelay = `${index * 0.06}s`;
 
         const statusClass = project.status === 'Deployed' ? 'status-deployed' :
             project.status === 'In Development' ? 'status-in-development' : 'status-completed';
+
+        const hostedIndicator = hasDemoLink 
+            ? `<span class="pg-card-tag" style="background: var(--digital-blue); color: white; border-color: var(--digital-blue);"><i class="fa-solid fa-globe"></i> Hosted Site</span>` 
+            : '';
 
         const techTags = project.tech.slice(0, 4).map(t =>
             `<span class="pg-card-tag">${t}</span>`
@@ -325,7 +336,7 @@
             <div class="pg-card-content">
                 <h3 class="pg-card-title">${project.title}</h3>
                 <p class="pg-card-desc">${project.shortDescription}</p>
-                <div class="pg-card-tags">${techTags}${techExtra}</div>
+                <div class="pg-card-tags">${hostedIndicator}${techTags}${techExtra}</div>
             </div>
         `;
 

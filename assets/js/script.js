@@ -2723,7 +2723,10 @@ function refreshTimeline() {
         buildDynamicTimeline();
         dynamicTimelineBuilt = true;
     }
-    initCurvedTimeline();
+    // Only init the desktop GSAP timeline on desktop
+    if (window.innerWidth > 992) {
+        initCurvedTimeline();
+    }
 }
 
 window.addEventListener('projectsLoaded', () => {
@@ -2736,9 +2739,14 @@ if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
 
 // Fallback for static timeline if projectsLoaded takes time or is not yet fired
 document.addEventListener('DOMContentLoaded', () => {
+    // On mobile: immediately hide the desktop wrapper (even before projects load)
+    if (window.innerWidth <= 992) {
+        const wrapper = document.querySelector('.timeline-section-wrapper');
+        if (wrapper) wrapper.style.display = 'none';
+    }
     setTimeout(() => {
         if (!dynamicTimelineBuilt && document.querySelector('.timeline-scroll-content')) {
-            initCurvedTimeline();
+            if (window.innerWidth > 992) initCurvedTimeline();
         }
     }, 150);
 });
@@ -2747,21 +2755,107 @@ function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
 
-    // Remove existing nodes and cards
+    // Remove ALL existing nodes and cards (both static HTML ones and dynamic ones)
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Sort projects ascending: oldest year / oldest project first at the start of the timeline
-    const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
+    // Remove any existing mobile carousel
+    const existingCarousel = document.getElementById('mobile-project-carousel');
+    if (existingCarousel) existingCarousel.remove();
+
+    // Sort projects: oldest first for desktop timeline; newest first for mobile preview
+    const sorted = [...window.RLABZ_PROJECTS].sort((a, b) => {
         const yearA = parseInt(a.year) || 0;
         const yearB = parseInt(b.year) || 0;
-        if (yearA !== yearB) {
-            return yearA - yearB; // Oldest year first
-        }
-        return String(a.id).localeCompare(String(b.id)); // Alphabetical fallback for same year
+        if (yearA !== yearB) return yearA - yearB;
+        return String(a.id).localeCompare(String(b.id));
     });
 
-    // Base X offset
+    const isMobile = window.innerWidth <= 992;
+
+    // ─── MOBILE: inject a compact swipeable card carousel ───────────────────
+    if (isMobile) {
+        const timelineSection = document.getElementById('our-works');
+        if (!timelineSection) return;
+
+        // Hide the desktop timeline wrapper entirely on mobile
+        const wrapper = timelineSection.querySelector('.timeline-section-wrapper');
+        if (wrapper) wrapper.style.display = 'none';
+
+        const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
+        const colors = ['#002C49', '#27A3FF', '#43AE47', '#0078B5', '#2E7C31', '#8B5CF6'];
+
+        // Show ALL projects on mobile in newest-first order
+        const mobileProjects = [...sorted].reverse();
+
+        const carousel = document.createElement('div');
+        carousel.id = 'mobile-project-carousel';
+        carousel.innerHTML = `
+            <div class="mob-proj-track" id="mob-proj-track">
+                ${mobileProjects.map((proj, i) => {
+                    const href = `${basePath}project-details.html?id=${proj.id}`;
+                    const target = '';
+                    const color = colors[i % colors.length];
+                    const statusClass = (proj.status || '').toLowerCase().replace(/\s+/g, '-');
+                    const hasDemoLink = proj.demoLink && proj.demoLink.trim() !== '' && proj.demoLink !== '#';
+                    return `
+                    <a href="${href}"${target} class="mob-proj-card" style="--card-accent: ${color};">
+                        <div class="mob-proj-year" style="background: ${color};">${proj.year || '—'}</div>
+                        <div class="mob-proj-body">
+                            <h3 class="mob-proj-title">${proj.title}</h3>
+                            <p class="mob-proj-desc">${proj.shortDescription || proj.category || ''}</p>
+                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                                <span class="mob-proj-status ${statusClass}">${proj.status || 'Active'}</span>
+                                ${hasDemoLink ? '<span class="mob-proj-hosted"><i class="fa-solid fa-globe" style="font-size:0.6rem;"></i> Hosted</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="mob-proj-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    </a>`;
+                }).join('')}
+            </div>
+            <div class="mob-proj-counter" id="mob-proj-counter">
+                <span id="mob-proj-current">1</span> / <span>${mobileProjects.length}</span>
+            </div>
+            <div class="mob-proj-dots" id="mob-proj-dots">
+                ${mobileProjects.map((_, i) => `<button class="mob-dot${i===0?' active':''}" data-idx="${i}" aria-label="Project ${i+1}"></button>`).join('')}
+            </div>
+        `;
+
+        // Insert right after the section header
+        const sectionHeader = timelineSection.querySelector('.section-header');
+        if (sectionHeader) {
+            sectionHeader.insertAdjacentElement('afterend', carousel);
+        } else {
+            timelineSection.appendChild(carousel);
+        }
+
+        // Swipe / dot interactivity
+        const track = carousel.querySelector('#mob-proj-track');
+        const dots = carousel.querySelectorAll('.mob-dot');
+        let current = 0;
+
+        const goTo = (idx) => {
+            current = Math.max(0, Math.min(idx, mobileProjects.length - 1));
+            const card = track.querySelectorAll('.mob-proj-card')[current];
+            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            dots.forEach((d, i) => d.classList.toggle('active', i === current));
+        };
+
+        dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.idx))));
+
+        // Touch swipe support
+        let startX = 0;
+        track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener('touchend', e => {
+            const diff = startX - e.changedTouches[0].clientX;
+            if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
+        }, { passive: true });
+
+        return; // do not build desktop nodes on mobile
+    }
+
+    // ─── DESKTOP: build the curvy timeline nodes ────────────────────────────
+    const projects = sorted;
     let currentX = 240;
     let isBottom = true;
     const colors = ['#27A3FF', '#43AE47', '#002C49', '#1689D6', '#2E7C31'];
@@ -2770,45 +2864,26 @@ function buildDynamicTimeline() {
         const top = isBottom ? 340 : 160;
         const color = colors[idx % colors.length];
 
-        // Node
         const node = document.createElement('div');
         node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
         node.style.left = `${currentX}px`;
         node.style.top = `${top}px`;
         node.style.setProperty('--node-color', color);
         node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
-
-        // Connecting Line
-        const line = document.createElement('div');
-        line.style.position = 'absolute';
-        line.style.width = '2px';
-        line.style.left = '50%';
-        line.style.transform = 'translateX(-50%)';
-        line.style.backgroundColor = color;
-        line.style.opacity = '0.5';
-        line.style.zIndex = '-1';
-        if (isBottom) {
-            line.style.top = '100%';
-            line.style.height = '60px';
-        } else {
-            line.style.bottom = '100%';
-            line.style.height = '60px';
-        }
-        // Removed dynamic inline line injection since it conflicts with CSS overrides
-        // node.appendChild(line);
-
         scrollContent.appendChild(node);
 
-        // Card
-        const cardLeft = currentX - 100; // Center the 220px card
+        const cardLeft = currentX - 100;
         const card = document.createElement('div');
         card.className = `timeline-card clean-card card-${isBottom ? 'bottom' : 'top'}`;
         card.style.left = `${cardLeft}px`;
         card.setAttribute('data-node', idx);
 
         const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
+        const hasDemoLink = proj.demoLink && proj.demoLink.trim() !== '' && proj.demoLink !== '#';
+        const cardHref = hasDemoLink ? proj.demoLink : `${basePath}project-details.html?id=${proj.id}`;
+        const targetAttr = hasDemoLink ? ' target="_blank" rel="noopener noreferrer"' : '';
         card.innerHTML = `
-            <a href="${basePath}project-details.html?id=${proj.id}" class="clean-card-link">
+            <a href="${cardHref}"${targetAttr} class="clean-card-link">
                 <h3 class="card-title">${proj.title}</h3>
                 <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
             </a>
@@ -2829,6 +2904,9 @@ function buildDynamicTimeline() {
         svgs.forEach(svg => {
             svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
             svg.style.width = `${newWidth}px`;
+            if (svg.parentElement) {
+                svg.parentElement.style.width = `${newWidth}px`;
+            }
         });
 
         const clipRect = document.querySelector('#svg-clip rect');
@@ -2897,21 +2975,7 @@ function initCurvedTimeline() {
         );
     }
 
-    // --- Dark Card Entrance: glide up from slightly below ---
-    gsap.set(pinContainer, { opacity: 0, y: 60 });
-    gsap.to(pinContainer, {
-        opacity: 1,
-        y: 0,
-        duration: 1.0,
-        ease: 'expo.out',
-        delay: 0.15,
-        onComplete: () => gsap.set(pinContainer, { clearProps: 'all' }),
-        scrollTrigger: {
-            trigger: '#our-works',
-            start: 'top 85%',
-            once: true
-        }
-    });
+    // Removed pinContainer GSAP entrance animation to prevent opacity 0 bugs on mobile
 
     if (timelineCtx) {
         timelineCtx.revert();
@@ -3073,43 +3137,28 @@ function initCurvedTimeline() {
             }
         });
 
-        // Mobile fallback (GSAP does not pin or translate horizontally, let CSS handle it)
+        // Mobile: do NOT animate opacity — CSS already shows nodes/cards. Only do subtle slide-in
         mm.add("(max-width: 992px)", () => {
             const cards = gsap.utils.toArray('.timeline-card');
             const nodes = gsap.utils.toArray('.timeline-node');
 
-            cards.forEach((card, index) => {
-                const node = nodes[index];
-                gsap.fromTo(card,
-                    { opacity: 0, y: 40 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: node,
-                            start: 'top 55%',
-                            end: 'top 45%',
-                            scrub: true
-                        }
-                    }
-                );
+            // Ensure everything is visible first (clear any GSAP inline styles)
+            [...cards, ...nodes].forEach(el => {
+                gsap.set(el, { clearProps: 'opacity,visibility,transform' });
             });
 
-            nodes.forEach((node) => {
-                gsap.fromTo(node,
-                    { opacity: 0, scale: 0.6 },
+            // Simple scroll-triggered slide-in (does NOT touch opacity)
+            cards.forEach((card) => {
+                gsap.fromTo(card,
+                    { x: 30 },
                     {
-                        opacity: 1,
-                        scale: 1,
+                        x: 0,
                         duration: 0.6,
-                        ease: 'back.out(1.5)',
+                        ease: 'power2.out',
                         scrollTrigger: {
-                            trigger: node,
-                            start: 'top 85%',
-                            end: 'top 65%',
-                            scrub: true
+                            trigger: card,
+                            start: 'top 90%',
+                            toggleActions: 'play none none none'
                         }
                     }
                 );

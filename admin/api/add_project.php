@@ -71,17 +71,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle Poster
     $poster_path = '';
 
+    $ssl_tracking_enabled = isset($_POST['ssl_tracking_enabled']) ? 1 : 0;
+
     // Insert into database
     try {
         $pdo->beginTransaction();
 
-        $stmt = $pdo->prepare("INSERT INTO projects (slug, title, year, short_description, description, objectives, problem_statement, expected_outcome, tech_stack, key_features, image_path, thumbnail_path, department, batch, category, project_type, duration, status, github_link, demo_link, poster_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $pdo->prepare("INSERT INTO projects (slug, title, year, short_description, description, objectives, problem_statement, expected_outcome, tech_stack, key_features, image_path, thumbnail_path, department, batch, category, project_type, duration, status, github_link, demo_link, poster_path, ssl_tracking_enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
             $slug, $title, $year, $short_description, $description,
             $objectives, $problem_statement, $expected_outcome,
             $tech_stack, $key_features, $image_path, $image_path,
             $department, $batch, $category, $project_type, $duration,
-            $status, $github_link, $demo_link, $poster_path
+            $status, $github_link, $demo_link, $poster_path, $ssl_tracking_enabled
         ]);
         
         $project_id = $pdo->lastInsertId();

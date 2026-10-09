@@ -815,17 +815,18 @@
     }
 
     .pd-hero-banner {
-        height: 280px;
+        min-height: 280px;
     }
 }
 
 @media (max-width: 768px) {
     .pd-page-wrapper {
-        padding-top: 80px;
+        padding-top: 90px;
     }
 
     .pd-hero-banner {
-        height: 220px;
+        min-height: 220px;
+        padding: 2rem 1.5rem;
         border-radius: 16px;
     }
 
@@ -881,7 +882,7 @@
 
 @media (max-width: 480px) {
     .pd-hero-banner {
-        height: 180px;
+        min-height: 180px;
     }
 
     .pd-hero-title {

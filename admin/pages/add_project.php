@@ -208,46 +208,20 @@ require_once '../includes/layout_header.php';
                 <input type="url" id="github_link" name="github_link" placeholder="https://github.com/...">
             </div>
             <div class="form-group">
-                <label for="demo_link">Demo Link</label>
+                <label for="demo_link">Hosting / Demo Link</label>
                 <input type="url" id="demo_link" name="demo_link" placeholder="https://...">
             </div>
         </div>
 
         <!-- SSL Certificate Module -->
-        <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Details (Optional)</div>
-        <div class="form-row" style="align-items: flex-end;">
-            <div class="form-group" style="flex: 2;">
-                <label for="ssl_domain">Domain URL</label>
-                <input type="url" id="ssl_domain" name="ssl_domain" placeholder="https://example.com">
-            </div>
-            <div class="form-group" style="flex: 1;">
-                <button type="button" class="btn-action primary" id="btn-fetch-ssl" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details</button>
-            </div>
-        </div>
-        
-        <div id="ssl-status-message" style="margin-bottom: 1rem; font-size: 0.9rem;"></div>
-        
+        <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Tracking</div>
         <div class="form-row">
-            <div class="form-group">
-                <label for="ssl_provider">Provider</label>
-                <input type="text" id="ssl_provider" name="ssl_provider" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
-            </div>
-            <div class="form-group">
-                <label>Status / Days Remaining</label>
-                <input type="text" id="ssl_status_display" placeholder="Auto-filled on fetch" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
+            <div class="form-group" style="flex-direction: row; align-items: center; gap: 10px;">
+                <input type="checkbox" id="ssl_tracking_enabled" name="ssl_tracking_enabled" value="1" checked style="width: auto; height: 18px; cursor: pointer;">
+                <label for="ssl_tracking_enabled" style="margin: 0; cursor: pointer;">Enable automated SSL Certificate tracking for this project's hosted demo link</label>
             </div>
         </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="ssl_issue_date">Issue Date</label>
-                <input type="date" id="ssl_issue_date" name="ssl_issue_date" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
-            </div>
-            <div class="form-group">
-                <label for="ssl_expiry_date">Expiry Date</label>
-                <input type="date" id="ssl_expiry_date" name="ssl_expiry_date" style="background: #1e293b; color: #94a3b8; border-color: #334155;">
-            </div>
-        </div>
-        <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="">
+
 
         <button type="submit" class="btn-submit full-width"><i class="fa-solid fa-rocket"></i> Add Project</button>
     </form>

@@ -58,6 +58,25 @@ function add_announcement($pdo, $type, $title, $message, $severity, $ref_id = nu
 }
 
 try {
+    // 1. Remove tracking for projects where ssl_tracking_enabled = 0
+    $pdo->exec("DELETE FROM project_ssl_certs WHERE project_id IN (SELECT id FROM projects WHERE ssl_tracking_enabled = 0)");
+    
+    // 2. Add tracking for projects where ssl_tracking_enabled = 1 and demo_link is valid
+    $pdo->exec("INSERT INTO project_ssl_certs (project_id, domain_url)
+                SELECT id, demo_link FROM projects 
+                WHERE ssl_tracking_enabled = 1 
+                AND demo_link IS NOT NULL 
+                AND demo_link != '' 
+                AND demo_link != '#'
+                AND id NOT IN (SELECT project_id FROM project_ssl_certs)");
+                
+    // 3. Update domains if demo_link changed
+    $pdo->exec("UPDATE project_ssl_certs s 
+                JOIN projects p ON s.project_id = p.id 
+                SET s.domain_url = p.demo_link 
+                WHERE p.ssl_tracking_enabled = 1 
+                AND s.domain_url != p.demo_link");
+
     $stmt = $pdo->query("SELECT s.*, p.title as project_title FROM project_ssl_certs s JOIN projects p ON s.project_id = p.id WHERE s.domain_url IS NOT NULL AND s.domain_url != ''");
     $certs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -79,7 +98,7 @@ try {
             $last_error = $certInfo['error'];
             
             if ($last_alert_level !== 'Failed') {
-                add_announcement($pdo, 'ssl_failed', 'SSL Certificate Check Failed', "{$cert['domain_url']}\nReason: $last_error", 'danger', $cert['id']);
+                add_announcement($pdo, 'ssl_failed', "{$cert['project_title']} SSL Check Failed", "{$cert['domain_url']}\nReason: $last_error", 'danger', $cert['id']);
                 $last_alert_level = 'Failed';
             }
             
@@ -106,32 +125,32 @@ try {
         } elseif ($cert['certificate_fingerprint'] !== $new_fingerprint) {
             // RENEWED!
             $last_alert_level = null;
-            add_announcement($pdo, 'ssl_renewed', 'SSL Certificate Renewed', "{$cert['domain_url']}\nThe SSL certificate has been successfully renewed.\nNew expiry: $validTo\nValidity: " . floor(($certInfo['validTo_time_t'] - $certInfo['validFrom_time_t']) / (60*60*24)) . " days\nDetected: " . date('d F Y'), 'success', $cert['id']);
+            add_announcement($pdo, 'ssl_renewed', "{$cert['project_title']} SSL Renewed", "{$cert['domain_url']}\nThe SSL certificate has been successfully renewed.\nNew expiry: $validTo\nValidity: " . floor(($certInfo['validTo_time_t'] - $certInfo['validFrom_time_t']) / (60*60*24)) . " days\nDetected: " . date('d F Y'), 'success', $cert['id']);
         }
         
         // Check thresholds
         if ($days_left <= 0) {
             $status = 'Expired';
             if ($last_alert_level !== 'Expired') {
-                add_announcement($pdo, 'ssl_expired', 'SSL Certificate Expired', "{$cert['domain_url']}\nThis certificate expired on $validTo.", 'danger', $cert['id']);
+                add_announcement($pdo, 'ssl_expired', "{$cert['project_title']} SSL Expired", "{$cert['domain_url']}\nThis certificate expired on $validTo.", 'danger', $cert['id']);
                 $last_alert_level = 'Expired';
             }
         } elseif ($days_left <= 7) {
             $status = 'Critical';
             if (!in_array($last_alert_level, ['Expired', '7_days'])) {
-                add_announcement($pdo, 'ssl_critical', 'SSL Certificate Expiring', "{$cert['domain_url']}\nCritical: Expires in $days_left days ($validTo).", 'danger', $cert['id']);
+                add_announcement($pdo, 'ssl_critical', "{$cert['project_title']} SSL Critical", "{$cert['domain_url']}\nCritical: Expires in $days_left days ($validTo).", 'danger', $cert['id']);
                 $last_alert_level = '7_days';
             }
         } elseif ($days_left <= 14) {
             $status = 'Warning';
             if (!in_array($last_alert_level, ['Expired', '7_days', '14_days'])) {
-                add_announcement($pdo, 'ssl_warning', 'SSL Certificate Expiring Soon', "{$cert['domain_url']}\nWarning: Expires in $days_left days ($validTo).", 'warning', $cert['id']);
+                add_announcement($pdo, 'ssl_warning', "{$cert['project_title']} SSL Expiring", "{$cert['domain_url']}\nWarning: Expires in $days_left days ($validTo).", 'warning', $cert['id']);
                 $last_alert_level = '14_days';
             }
         } elseif ($days_left <= 30) {
             $status = 'Expiring Soon';
             if (!in_array($last_alert_level, ['Expired', '7_days', '14_days', '30_days'])) {
-                add_announcement($pdo, 'ssl_notice', 'SSL Certificate Expiring Soon', "{$cert['domain_url']}\nNotice: Expires in $days_left days ($validTo).", 'warning', $cert['id']);
+                add_announcement($pdo, 'ssl_notice', "{$cert['project_title']} SSL Expiring Soon", "{$cert['domain_url']}\nNotice: Expires in $days_left days ($validTo).", 'warning', $cert['id']);
                 $last_alert_level = '30_days';
             }
         } else {

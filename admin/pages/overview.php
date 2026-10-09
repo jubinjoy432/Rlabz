@@ -143,30 +143,27 @@ require_once '../includes/layout_header.php';
 </div>
 
 <!-- Admin Announcements -->
-<div class="card" style="display: flex; flex-direction: column; max-height: 420px;">
+<div class="card" style="display: flex; flex-direction: column; max-height: 380px; min-height: 0;">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <h2 style="margin: 0; padding: 0; border: none; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> SSL Expiry & Announcements
+                <i class="fa-solid fa-bullhorn" style="color: var(--accent-blue);"></i> Announcements
             </h2>
             <span id="unread-count" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(100, 116, 139, 0.15)'; ?>; color: <?php echo $unreadCount > 0 ? '#60a5fa' : '#94a3b8'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.3)' : 'rgba(100, 116, 139, 0.2)'; ?>;">
                 <?php echo $unreadCount; ?> new
             </span>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-            <a href="ssl_certificates.php" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
-                <i class="fa-solid fa-arrow-right"></i> <span>View SSL Certificates</span>
+            <a href="announcements.php" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+                <i class="fa-solid fa-list"></i> <span>View All</span>
             </a>
-            <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-                <i class="fa-solid fa-rotate"></i> <span>Check SSL</span>
-            </button>
         </div>
     </div>
-    <div class="announcements-container" style="flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 10px;">
+    <div class="announcements-container" style="flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 10px;">
         <?php if(empty($announcements)): ?>
             <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
-                No SSL expired. (No other announcements)
+                <i class="fa-solid fa-bell-slash" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
+                No new announcements.
             </div>
         <?php else: ?>
             <?php foreach($announcements as $a): 
@@ -176,31 +173,31 @@ require_once '../includes/layout_header.php';
                 
                 if ($a['severity'] === 'success') {
                     $icon = 'fa-check-circle';
-                    $color = '#4ade80';
-                    $bg = 'rgba(74, 222, 128, 0.12)';
+                    $color = '#22c55e';
+                    $bg = 'rgba(34, 197, 94, 0.12)';
                 } elseif ($a['severity'] === 'warning') {
                     $icon = 'fa-triangle-exclamation';
-                    $color = '#fbbf24';
-                    $bg = 'rgba(251, 191, 36, 0.12)';
+                    $color = '#f59e0b';
+                    $bg = 'rgba(245, 158, 11, 0.12)';
                 } elseif ($a['severity'] === 'danger') {
                     $icon = 'fa-circle-exclamation';
                     $color = '#ef4444';
                     $bg = 'rgba(239, 68, 68, 0.12)';
                 }
                 
-                $opacity = $a['is_read'] ? '0.6' : '1';
-                $borderLeft = $a['is_read'] ? '3px solid transparent' : "3px solid $color";
+                $opacity = $a['is_read'] ? '0.65' : '1';
+                $borderLeft = $a['is_read'] ? '4px solid #cbd5e1' : "4px solid $color";
             ?>
-            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; display: flex; gap: 12px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s;">
+            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; display: flex; gap: 12px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s ease;">
                 <div style="color: <?= $color ?>; background: <?= $bg ?>; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;">
                     <i class="fa-solid <?= $icon ?>"></i>
                 </div>
                 <div style="flex: 1;">
-                    <div style="font-weight: 600; color: #f8fafc; font-size: 0.9rem; margin-bottom: 4px; display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-weight: 600; color: #1e293b; font-size: 0.95rem; margin-bottom: 4px; display:flex; justify-content:space-between; align-items:center;">
                         <?= htmlspecialchars($a['title']) ?>
-                        <span style="font-size:0.75rem; color:#64748b; font-weight:normal;"><?= date('M j, Y H:i', strtotime($a['created_at'])) ?></span>
+                        <span style="font-size:0.75rem; color:#64748b; font-weight:500;"><?= date('M j, Y H:i', strtotime($a['created_at'])) ?></span>
                     </div>
-                    <div style="font-size: 0.85rem; color: #cbd5e1; white-space: pre-line; line-height: 1.45;"><?= htmlspecialchars($a['message']) ?></div>
+                    <div style="font-size: 0.85rem; color: #475569; white-space: pre-line; line-height: 1.45;"><?= htmlspecialchars($a['message']) ?></div>
                 </div>
                 <?php if(!$a['is_read']): ?>
                     <button class="btn-action" style="align-self: center; background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);" title="Mark as Read" onclick="markRead(<?= $a['id'] ?>)">
@@ -227,8 +224,8 @@ async function markRead(id) {
             if (container && container.querySelectorAll('.announcement-item').length === 0) {
                 container.innerHTML = `
                     <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                        <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
-                        No SSL expired. (No other announcements)
+                        <i class="fa-solid fa-bell-slash" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
+                        No new announcements.
                     </div>
                 `;
             }
