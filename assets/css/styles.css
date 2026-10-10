@@ -8748,270 +8748,6 @@ html.lenis body {
     margin: 0;
 }
 
-/* ======================================================
-   RESPONSIVE â€” Our Works Timeline
-   ====================================================== */
-
-/* --- Tablet & below (â‰¤ 992px): switch to vertical stack --- */
-@media (max-width: 992px) {
-    .horizontal-timeline-section {
-        padding: 5rem 1.5rem 4rem;
-        min-height: auto;
-        height: auto;
-        overflow: visible;
-    }
-
-    .horizontal-timeline-section .section-header {
-        margin-bottom: 2rem;
-    }
-
-    .horizontal-timeline-section .section-title {
-        font-size: 2.4rem;
-        letter-spacing: -0.5px;
-    }
-
-    /* The dark card becomes a regular block container */
-    .timeline-pin-container {
-        height: auto;
-        overflow: visible;
-        display: block;
-        border-radius: 24px;
-        padding: 2rem 0;
-    }
-    
-    .timeline-nav-btn { display: none !important; }
-
-    .timeline-scroll-wrapper {
-        height: auto;
-        width: 100%;
-        display: block;
-    }
-
-    /* Vertical flex column for the scroll content */
-    .timeline-scroll-content {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        padding: 1.5rem 1rem 2rem 1rem;
-        position: relative;
-        will-change: unset;
-        transform: none !important;
-        /* Override any GSAP transform */
-    }
-
-    /* Vertical connector line */
-    .timeline-scroll-content::before {
-        content: '';
-        position: absolute;
-        left: 52px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(to bottom,
-                rgba(255, 255, 255, 0.03),
-                rgba(255, 255, 255, 0.22) 8%,
-                rgba(255, 255, 255, 0.22) 92%,
-                rgba(255, 255, 255, 0.03));
-        z-index: 1;
-    }
-
-    /* Hide the horizontal SVG path on mobile */
-    .timeline-svg-path {
-        display: none;
-    }
-
-    /* Each project is a row: node + card side by side */
-    .timeline-node {
-        position: relative !important;
-        left: 28px !important;
-        top: auto !important;
-        bottom: auto !important;
-        transform: translate(-50%, 0) !important;
-        width: 48px;
-        height: 48px;
-        margin-bottom: 0.75rem;
-        margin-top: 2rem;
-        z-index: 3;
-        flex-shrink: 0;
-    }
-
-    .timeline-node:first-of-type {
-        margin-top: 0;
-    }
-
-
-
-    .node-inner {
-        width: 28px;
-        height: 28px;
-    }
-
-    /* Year label to the right of the node */
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 60px !important;
-        right: auto !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        font-size: 1.05rem;
-    }
-
-    .node-top .node-year::before,
-    .node-bottom .node-year::after {
-        display: none;
-    }
-
-    /* Cards stack below their respective node */
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        bottom: auto !important;
-        width: calc(100% - 68px) !important;
-        margin-left: 68px !important;
-        margin-bottom: 2rem !important;
-        transform: none !important;
-        opacity: 1 !important;
-        border-radius: 14px;
-        padding: 1rem 1.1rem;
-    }
-
-    .timeline-card:hover {
-        transform: translateY(-3px) !important;
-    }
-
-    .card-title {
-        font-size: 1.1rem;
-    }
-
-    .card-desc {
-        font-size: 0.82rem;
-    }
-}
-
-/* --- Small tablets (â‰¤ 768px) --- */
-@media (max-width: 768px) {
-    .horizontal-timeline-section {
-        padding: 4rem 1rem 3rem;
-    }
-
-    .horizontal-timeline-section .section-title {
-        font-size: 2rem;
-    }
-
-    .timeline-pin-container {
-        border-radius: 18px;
-    }
-
-    .timeline-scroll-content {
-        padding: 1rem 0.75rem 1.5rem 0.75rem;
-    }
-
-    .timeline-scroll-content::before {
-        left: 46px;
-    }
-
-    .timeline-node {
-        left: 22px !important;
-        width: 44px;
-        height: 44px;
-    }
-
-
-
-    .node-inner {
-        width: 26px;
-        height: 26px;
-    }
-
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 54px !important;
-        font-size: 0.95rem;
-    }
-
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        width: calc(100% - 60px) !important;
-        margin-left: 60px !important;
-    }
-}
-
-/* --- Phone (â‰¤ 480px) --- */
-@media (max-width: 480px) {
-    .horizontal-timeline-section {
-        padding: 3.5rem 0.75rem 2.5rem;
-    }
-
-    .horizontal-timeline-section .section-title {
-        font-size: 1.75rem;
-        letter-spacing: -0.3px;
-    }
-
-    .timeline-pin-container {
-        border-radius: 14px;
-    }
-
-    .timeline-scroll-content {
-        padding: 1rem 0.5rem 1.5rem 0.5rem;
-    }
-
-    .timeline-scroll-content::before {
-        left: 40px;
-    }
-
-    .timeline-node {
-        left: 20px !important;
-        width: 40px;
-        height: 20px;
-    }
-
-
-
-    .node-inner {
-        width: 24px;
-        height: 24px;
-    }
-
-    .node-inner i {
-        font-size: 0.65rem;
-    }
-
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 48px !important;
-        font-size: 0.88rem;
-    }
-
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        width: calc(100% - 54px) !important;
-        margin-left: 54px !important;
-        padding: 0.85rem 0.9rem !important;
-    }
-
-    .card-title {
-        font-size: 1rem;
-    }
-
-    .card-desc {
-        font-size: 0.78rem;
-        margin-bottom: 0.6rem;
-    }
-}
-
 /* ---- Section Header Row (title centered, View More right) ---- */
 .es-section-header-row {
     display: flex;
@@ -9546,7 +9282,6 @@ html.lenis body {
     padding-top: 3rem !important;
     padding-bottom: 2rem !important;
 }
-@media (min-width: 993px) {
     .timeline-pin-container {
         height: 590px !important;
     }
@@ -9574,7 +9309,7 @@ html.lenis body {
     .timeline-card .card-desc { color: #64748b !important; font-size: 0.82rem !important; line-height: 1.45 !important; text-align: center !important; display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; text-overflow: ellipsis !important; }
     .timeline-nav-btn { background: #ffffff !important; color: #94a3b8 !important; border: 1px solid rgba(0,0,0,0.08) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important; width: 44px !important; height: 44px !important; border-radius: 50% !important; }
     .timeline-nav-btn:hover { background: #f8fafc !important; color: #64748b !important; }
-}
+
 #robot-popup, .robot-popup, .fixed-sidebar-btn, .robot-sidebar-dock { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
 /* Force light logo when scrolled over dark sections */
@@ -9643,144 +9378,6 @@ html.lenis body {
     }
 }
 
-@media (max-width: 992px) {
-    /* ---- TIMELINE: Absolute fix for blank screen ---- */
-    /* Override anything that could leave the container invisible */
-    .timeline-section-wrapper { overflow: visible !important; }
-    .timeline-pin-container {
-        height: auto !important;
-        min-height: unset !important;
-        overflow: visible !important;
-        display: block !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-    }
-    .timeline-scroll-wrapper {
-        height: auto !important;
-        min-height: unset !important;
-        overflow: visible !important;
-        display: block !important;
-    }
-    .timeline-scroll-content {
-        height: auto !important;
-        min-height: unset !important;
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        transform: none !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        position: relative !important;
-        gap: 0 !important;
-        padding: 1.5rem 1rem 2rem !important;
-        overflow: visible !important;
-    }
-    /* Remove ALL GSAP-applied transforms/opacity that may persist on mobile */
-    .timeline-pin-container[style*="opacity"],
-    .timeline-scroll-content[style*="opacity"],
-    .timeline-scroll-wrapper[style*="opacity"] {
-        opacity: 1 !important;
-    }
-    .timeline-pin-container[style*="transform"],
-    .timeline-scroll-content[style*="transform"],
-    .timeline-scroll-wrapper[style*="transform"] {
-        transform: none !important;
-    }
-    /* Each node is inline with the vertical connector */
-    .timeline-node {
-        position: relative !important;
-        left: 28px !important;
-        top: auto !important;
-        bottom: auto !important;
-        transform: translateX(-50%) !important;
-        width: 50px !important;
-        height: 50px !important;
-        margin-top: 1.5rem !important;
-        margin-bottom: 0.6rem !important;
-        flex-shrink: 0 !important;
-        z-index: 3 !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-    .timeline-node:first-of-type { margin-top: 0 !important; }
-    .timeline-node::before { display: none !important; }
-    .node-inner {
-        font-size: 0.9rem !important;
-        font-weight: 800 !important;
-    }
-    /* Cards go full width beside the connector line */
-    .timeline-card {
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        bottom: auto !important;
-        right: auto !important;
-        width: calc(100% - 56px) !important;
-        margin-left: 56px !important;
-        margin-bottom: 1.5rem !important;
-        transform: none !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        border-radius: 14px !important;
-        padding: 1rem 1.1rem !important;
-        background: #f8fafc !important;
-        border: 1px solid #e2e8f0 !important;
-        text-align: left !important;
-    }
-    .timeline-card.card-top,
-    .timeline-card.card-bottom {
-        position: relative !important;
-        top: auto !important;
-        bottom: auto !important;
-    }
-    .timeline-card .card-title { text-align: left !important; font-size: 1rem !important; }
-    .timeline-card .card-desc  { text-align: left !important; font-size: 0.82rem !important; }
-    .timeline-card:hover { transform: translateY(-3px) !important; }
-    .timeline-svg-path { display: none !important; }
-    .timeline-nav-btn { display: none !important; }
-    /* Vertical connector line on mobile */
-    .timeline-scroll-content::before {
-        content: '' !important;
-        display: block !important;
-        position: absolute !important;
-        left: 28px !important;
-        top: 0 !important;
-        bottom: 0 !important;
-        width: 2px !important;
-        background: linear-gradient(to bottom, rgba(0,44,73,0.08), rgba(39,163,255,0.35) 15%, rgba(39,163,255,0.35) 85%, rgba(0,44,73,0.08)) !important;
-        z-index: 1 !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero-blue-title { font-size: 2.1rem !important; }
-    .timeline-node {
-        left: 22px !important;
-        width: 44px !important;
-        height: 44px !important;
-    }
-    .timeline-card {
-        width: calc(100% - 50px) !important;
-        margin-left: 50px !important;
-    }
-    .timeline-scroll-content::before { left: 22px !important; }
-}
-
-@media (max-width: 480px) {
-    .hero-blue-title { font-size: 1.8rem !important; }
-    .timeline-node {
-        left: 18px !important;
-        width: 38px !important;
-        height: 38px !important;
-    }
-    .node-inner { font-size: 0.72rem !important; }
-    .timeline-card {
-        width: calc(100% - 44px) !important;
-        margin-left: 44px !important;
-    }
-    .timeline-scroll-content::before { left: 18px !important; }
-}
 
 /* =============================================
    MOBILE PROJECT CAROUSEL
@@ -9929,4 +9526,75 @@ html.lenis body {
 .mob-proj-viewall:hover { background: #0078B5; transform: translateY(-2px); }
 .mob-proj-viewall i { font-size: 0.85rem; transition: transform 0.2s ease; }
 .mob-proj-viewall:hover i { transform: translateX(4px); }
+
+/* =========================================================
+   MOBILE RESPONSIVENESS OVERRIDES
+   ========================================================= */
+@media (max-width: 992px) {
+    /* Hero section */
+    .hero-blue-container {
+        flex-direction: column;
+        padding-top: 4rem;
+    }
+    .hero-text-slider {
+        width: 100%;
+        text-align: center;
+        padding-right: 0;
+    }
+    .hero-blue-visual {
+        width: 100%;
+        margin-top: 2rem;
+    }
+    .hero-blue-title {
+        font-size: 2.5rem;
+    }
+    
+    /* Bento Grid */
+    .feature-bento-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+    }
+    .bento-card {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        margin-bottom: 1rem;
+    }
+    .bento-center {
+        position: relative !important;
+        width: 100% !important;
+        height: auto !important;
+        margin-bottom: 1rem;
+        transform: none !important;
+    }
+
+    /* Our Projects Timeline Container */
+    #our-works {
+        overflow: hidden; /* Ensure no horizontal scroll leaks out */
+    }
+    .timeline-pin-container {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important;  /* IE/Edge */
+    }
+    .timeline-pin-container::-webkit-scrollbar {
+        display: none !important; /* Chrome/Safari */
+    }
+}
+@media (max-width: 768px) {
+    .hero-blue-title {
+        font-size: 2rem;
+    }
+}
+@media (max-width: 600px) {
+    .es-section-header-row .view-all-projects-btn {
+        position: static !important;
+        margin-top: 0.5rem;
+    }
+}
+
 

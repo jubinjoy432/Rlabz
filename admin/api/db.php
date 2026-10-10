@@ -1,9 +1,19 @@
 <?php
 // admin/api/db.php
-$host = 'localhost';
-$dbname = 'rlabz_db'; // Change this to your actual database name
-$username = 'root';    // Change this to your database username
-$password = '';        // Change this to your database password
+$envPath = __DIR__ . '/../../.env';
+if (file_exists($envPath)) {
+    $env = parse_ini_file($envPath);
+    $host = $env['DB_HOST'] ?? 'localhost';
+    $dbname = $env['DB_NAME'] ?? 'rlabz_db';
+    $username = $env['DB_USER'] ?? 'root';
+    $password = $env['DB_PASS'] ?? '';
+} else {
+    // Fallback if .env is missing
+    $host = 'localhost';
+    $dbname = 'rlabz_db';
+    $username = 'root';
+    $password = '';
+}
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

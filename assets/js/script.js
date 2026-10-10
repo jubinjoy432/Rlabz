@@ -2723,10 +2723,8 @@ function refreshTimeline() {
         buildDynamicTimeline();
         dynamicTimelineBuilt = true;
     }
-    // Only init the desktop GSAP timeline on desktop
-    if (window.innerWidth > 992) {
-        initCurvedTimeline();
-    }
+    // Init the GSAP timeline everywhere
+    initCurvedTimeline();
 }
 
 window.addEventListener('projectsLoaded', () => {
@@ -2739,14 +2737,9 @@ if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
 
 // Fallback for static timeline if projectsLoaded takes time or is not yet fired
 document.addEventListener('DOMContentLoaded', () => {
-    // On mobile: immediately hide the desktop wrapper (even before projects load)
-    if (window.innerWidth <= 992) {
-        const wrapper = document.querySelector('.timeline-section-wrapper');
-        if (wrapper) wrapper.style.display = 'none';
-    }
     setTimeout(() => {
         if (!dynamicTimelineBuilt && document.querySelector('.timeline-scroll-content')) {
-            if (window.innerWidth > 992) initCurvedTimeline();
+            initCurvedTimeline();
         }
     }, 150);
 });
@@ -2771,88 +2764,7 @@ function buildDynamicTimeline() {
         return String(a.id).localeCompare(String(b.id));
     });
 
-    const isMobile = window.innerWidth <= 992;
-
-    // ─── MOBILE: inject a compact swipeable card carousel ───────────────────
-    if (isMobile) {
-        const timelineSection = document.getElementById('our-works');
-        if (!timelineSection) return;
-
-        // Hide the desktop timeline wrapper entirely on mobile
-        const wrapper = timelineSection.querySelector('.timeline-section-wrapper');
-        if (wrapper) wrapper.style.display = 'none';
-
-        const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
-        const colors = ['#002C49', '#27A3FF', '#43AE47', '#0078B5', '#2E7C31', '#8B5CF6'];
-
-        // Show ALL projects on mobile in newest-first order
-        const mobileProjects = [...sorted].reverse();
-
-        const carousel = document.createElement('div');
-        carousel.id = 'mobile-project-carousel';
-        carousel.innerHTML = `
-            <div class="mob-proj-track" id="mob-proj-track">
-                ${mobileProjects.map((proj, i) => {
-                    const href = `${basePath}project-details.html?id=${proj.id}`;
-                    const target = '';
-                    const color = colors[i % colors.length];
-                    const statusClass = (proj.status || '').toLowerCase().replace(/\s+/g, '-');
-                    const hasDemoLink = proj.demoLink && proj.demoLink.trim() !== '' && proj.demoLink !== '#';
-                    return `
-                    <a href="${href}"${target} class="mob-proj-card" style="--card-accent: ${color};">
-                        <div class="mob-proj-year" style="background: ${color};">${proj.year || '—'}</div>
-                        <div class="mob-proj-body">
-                            <h3 class="mob-proj-title">${proj.title}</h3>
-                            <p class="mob-proj-desc">${proj.shortDescription || proj.category || ''}</p>
-                            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-                                <span class="mob-proj-status ${statusClass}">${proj.status || 'Active'}</span>
-                                ${hasDemoLink ? '<span class="mob-proj-hosted"><i class="fa-solid fa-globe" style="font-size:0.6rem;"></i> Hosted</span>' : ''}
-                            </div>
-                        </div>
-                        <div class="mob-proj-arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                    </a>`;
-                }).join('')}
-            </div>
-            <div class="mob-proj-counter" id="mob-proj-counter">
-                <span id="mob-proj-current">1</span> / <span>${mobileProjects.length}</span>
-            </div>
-            <div class="mob-proj-dots" id="mob-proj-dots">
-                ${mobileProjects.map((_, i) => `<button class="mob-dot${i===0?' active':''}" data-idx="${i}" aria-label="Project ${i+1}"></button>`).join('')}
-            </div>
-        `;
-
-        // Insert right after the section header
-        const sectionHeader = timelineSection.querySelector('.section-header');
-        if (sectionHeader) {
-            sectionHeader.insertAdjacentElement('afterend', carousel);
-        } else {
-            timelineSection.appendChild(carousel);
-        }
-
-        // Swipe / dot interactivity
-        const track = carousel.querySelector('#mob-proj-track');
-        const dots = carousel.querySelectorAll('.mob-dot');
-        let current = 0;
-
-        const goTo = (idx) => {
-            current = Math.max(0, Math.min(idx, mobileProjects.length - 1));
-            const card = track.querySelectorAll('.mob-proj-card')[current];
-            if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            dots.forEach((d, i) => d.classList.toggle('active', i === current));
-        };
-
-        dots.forEach(dot => dot.addEventListener('click', () => goTo(parseInt(dot.dataset.idx))));
-
-        // Touch swipe support
-        let startX = 0;
-        track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-        track.addEventListener('touchend', e => {
-            const diff = startX - e.changedTouches[0].clientX;
-            if (Math.abs(diff) > 50) goTo(diff > 0 ? current + 1 : current - 1);
-        }, { passive: true });
-
-        return; // do not build desktop nodes on mobile
-    }
+    const isMobile = false; // Force desktop timeline on mobile
 
     // ─── DESKTOP: build the curvy timeline nodes ────────────────────────────
     const projects = sorted;
@@ -2981,11 +2893,9 @@ function initCurvedTimeline() {
         timelineCtx.revert();
     }
 
-    // Only apply horizontal pinning scroll on desktop (width > 992px)
+    // Apply horizontal pinning scroll on all devices
     timelineCtx = gsap.context(() => {
-        const mm = gsap.matchMedia();
-
-        mm.add("(min-width: 993px)", () => {
+        // We no longer restrict by min-width; horizontal scroll runs everywhere
             const containerWidth = pinContainer.offsetWidth;
             const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
 
@@ -3135,35 +3045,6 @@ function initCurvedTimeline() {
                     );
                 });
             }
-        });
-
-        // Mobile: do NOT animate opacity — CSS already shows nodes/cards. Only do subtle slide-in
-        mm.add("(max-width: 992px)", () => {
-            const cards = gsap.utils.toArray('.timeline-card');
-            const nodes = gsap.utils.toArray('.timeline-node');
-
-            // Ensure everything is visible first (clear any GSAP inline styles)
-            [...cards, ...nodes].forEach(el => {
-                gsap.set(el, { clearProps: 'opacity,visibility,transform' });
-            });
-
-            // Simple scroll-triggered slide-in (does NOT touch opacity)
-            cards.forEach((card) => {
-                gsap.fromTo(card,
-                    { x: 30 },
-                    {
-                        x: 0,
-                        duration: 0.6,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: card,
-                            start: 'top 90%',
-                            toggleActions: 'play none none none'
-                        }
-                    }
-                );
-            });
-        });
     });
 
     // Cleanup on window unload
@@ -3285,4 +3166,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
+    
+    // Mobile Navbar Toggle
+    const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+    const navLinksContainer = document.querySelector('.nav-links-container');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    if (menuToggleBtn && navLinksContainer) {
+        menuToggleBtn.addEventListener('click', () => {
+            menuToggleBtn.classList.toggle('open');
+            navLinksContainer.classList.toggle('open');
+        });
+        
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggleBtn.classList.remove('open');
+                navLinksContainer.classList.remove('open');
+            });
+        });
+    }
 });
