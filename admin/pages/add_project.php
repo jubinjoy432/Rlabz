@@ -47,10 +47,6 @@ require_once '../includes/layout_header.php';
                 <label for="year">Project Year</label>
                 <input type="text" id="year" name="year" required placeholder="e.g. 2025">
             </div>
-            <div class="form-group">
-                <label for="batch">Batch</label>
-                <input type="text" id="batch" name="batch" placeholder="e.g. 2022-2024">
-            </div>
         </div>
 
         <div class="form-group">
@@ -79,89 +75,79 @@ require_once '../includes/layout_header.php';
             <textarea id="expected_outcome" name="expected_outcome" placeholder="Expected results and impact..."></textarea>
         </div>
 
-        <!-- Classification -->
+        <!-- 2. CLASSIFICATION -->
         <div class="form-section-title"><i class="fa-solid fa-tags"></i> Classification</div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="department">Department</label>
-                <select id="department" name="department">
-                    <option value="MCA">MCA</option>
-                    <option value="BCA">BCA</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label for="category">Category</label>
-                <select id="category" name="category">
-                    <option value="Web Application">Web Application</option>
+                <select id="category" name="category" onchange="toggleCategoryOther(this.value)">
+                    <option value="Web Application" selected>Web Application</option>
                     <option value="Mobile Application">Mobile Application</option>
                     <option value="Desktop Application">Desktop Application</option>
                     <option value="Platform">Platform</option>
                     <option value="Other">Other</option>
                 </select>
+                <div id="categoryOtherGroup" style="margin-top: 0.5rem; display: none;">
+                    <label style="font-size: 0.85rem; color: #475569;">Specify Category</label>
+                    <input type="text" name="category_custom" id="categoryCustomInput" placeholder="Enter custom category">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="project_type">Project Type</label>
+                <select id="project_type" name="project_type">
+                    <option value="Academic" selected>Academic</option>
+                    <option value="Client">Client</option>
+                    <option value="Internal">Internal</option>
+                </select>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="project_type">Project Type</label>
-                <select id="project_type" name="project_type">
-                    <option value="Academic">Academic</option>
-                    <option value="Client">Client</option>
-                    <option value="Internal">Internal</option>
+                <label for="status">Project Status</label>
+                <select id="status" name="status">
+                    <option value="In Development" selected>In Development</option>
+                    <option value="Deployed">Deployed</option>
+                    <option value="Completed">Completed</option>
                 </select>
+                <span class="form-help">Default is "In Development".</span>
+            </div>
+        </div>
+
+        <!-- 3. TEAM DETAILS -->
+        <div class="form-section-title"><i class="fa-solid fa-users-gear"></i> Team Details</div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="department">Department</label>
+                <select id="department" name="department" onchange="toggleDepartmentOther(this.value)">
+                    <option value="MCA" selected>MCA</option>
+                    <option value="BCA">BCA</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Other">Other</option>
+                </select>
+                <div id="departmentOtherGroup" style="margin-top: 0.5rem; display: none;">
+                    <label style="font-size: 0.85rem; color: #475569;">Specify Department</label>
+                    <input type="text" name="department_custom" id="departmentCustomInput" placeholder="Enter custom department">
+                </div>
             </div>
             <div class="form-group">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="Completed">Completed</option>
-                    <option value="Deployed">Deployed</option>
-                    <option value="In Development">In Development</option>
-                </select>
+                <label for="batch">Batch</label>
+                <input type="text" id="batch" name="batch" placeholder="e.g. 2024-2026">
             </div>
         </div>
 
+        <!-- Faculty Information -->
         <div class="form-group">
-            <label for="duration">Duration</label>
-            <input type="text" id="duration" name="duration" placeholder="e.g. 6 months">
-        </div>
-
-        <!-- Technologies -->
-        <div class="form-section-title"><i class="fa-solid fa-microchip"></i> Technologies</div>
-
-        <div class="form-group">
-            <label>Tech Stack</label>
-            <div class="tech-tags-input-wrapper" id="techTagsWrapper">
-                <input type="text" class="tech-tags-text-input" id="techTagsInput" placeholder="Type and press Enter...">
-            </div>
-            <input type="hidden" name="tech_stack" id="techStackHidden">
-            <span class="form-help">Press Enter or comma to add a technology tag.</span>
-        </div>
-
-        <!-- Key Features -->
-        <div class="form-section-title"><i class="fa-solid fa-list-check"></i> Key Features</div>
-
-        <div class="form-group">
-            <label>Features</label>
-            <div class="tech-tags-input-wrapper" id="featuresWrapper">
-                <input type="text" class="tech-tags-text-input" id="featuresInput" placeholder="Type a feature and press Enter...">
-            </div>
-            <input type="hidden" name="key_features" id="keyFeaturesHidden">
-            <span class="form-help">Add features like "Authentication", "Dashboard", "Reports", etc.</span>
-        </div>
-
-        <!-- Faculty -->
-        <div class="form-section-title"><i class="fa-solid fa-user-tie"></i> Faculty Information</div>
-
-        <div class="form-group">
+            <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;"><i class="fa-solid fa-user-tie"></i> Faculty Information</label>
             <div class="faculty-members-container" id="faculty-members-container">
-                <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
-                    <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
-                    <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1;">
-                    <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
+                <div class="faculty-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem; flex-wrap: wrap;">
+                    <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1; min-width: 140px;">
+                    <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1; min-width: 130px;">
+                    <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL" style="flex: 1; min-width: 130px;">
+                    <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1; min-width: 130px;" title="Upload photo file">
+                    <input type="url" name="faculty_photo_urls[]" placeholder="Or Photo URL / Drive Link" style="flex: 1.5; min-width: 160px;">
                     <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             </div>
@@ -169,19 +155,45 @@ require_once '../includes/layout_header.php';
         </div>
 
         <!-- Team Members -->
-        <div class="form-section-title"><i class="fa-solid fa-users"></i> Team Members</div>
-        
         <div class="form-group">
+            <label style="font-weight: 600; margin-bottom: 0.5rem; display: block;"><i class="fa-solid fa-users"></i> Team Members</label>
             <div class="team-members-container" id="team-members-container">
-                <div class="team-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-                    <input type="text" name="member_names[]" placeholder="Student Name" style="flex: 1;">
-                    <input type="text" name="member_roles[]" placeholder="Role (optional)" style="flex: 1;">
-                    <input type="text" name="member_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1.5;">
-                    <input type="file" name="member_photos[]" accept="image/*" style="flex: 1;">
+                <div class="team-member-row" style="display:flex; gap:0.5rem; margin-bottom:0.5rem; flex-wrap: wrap;">
+                    <input type="text" name="member_names[]" placeholder="Student Name" style="flex: 1; min-width: 140px;">
+                    <input type="text" name="member_roles[]" placeholder="Role (optional)" style="flex: 1; min-width: 130px;">
+                    <input type="text" name="member_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1; min-width: 130px;">
+                    <input type="file" name="member_photos[]" accept="image/*" style="flex: 1; min-width: 130px;" title="Upload photo file">
+                    <input type="url" name="member_photo_urls[]" placeholder="Or Photo URL / Drive Link" style="flex: 1.5; min-width: 160px;">
                     <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
                 </div>
             </div>
             <button type="button" class="btn-add" onclick="addMemberRow()"><i class="fas fa-plus"></i> Add Member</button>
+        </div>
+
+        <!-- 4. OTHER PROJECT DETAILS -->
+        <div class="form-section-title"><i class="fa-solid fa-sliders"></i> Other Project Details</div>
+
+        <div class="form-group">
+            <label for="duration">Duration</label>
+            <input type="text" id="duration" name="duration" placeholder="e.g. 6 months">
+        </div>
+
+        <div class="form-group">
+            <label>Technologies (comma separated)</label>
+            <div class="tech-tags-input-wrapper" id="techTagsWrapper">
+                <input type="text" class="tech-tags-text-input" id="techTagsInput" placeholder="Type and press Enter...">
+            </div>
+            <input type="hidden" name="tech_stack" id="techStackHidden">
+            <span class="form-help">Press Enter or comma to add a technology tag.</span>
+        </div>
+
+        <div class="form-group">
+            <label>Key Features (comma separated)</label>
+            <div class="tech-tags-input-wrapper" id="featuresWrapper">
+                <input type="text" class="tech-tags-text-input" id="featuresInput" placeholder="Type a feature and press Enter...">
+            </div>
+            <input type="hidden" name="key_features" id="keyFeaturesHidden">
+            <span class="form-help">Add features like "Authentication", "Dashboard", "Reports", etc.</span>
         </div>
 
         <!-- Images -->
@@ -189,14 +201,18 @@ require_once '../includes/layout_header.php';
 
         <div class="form-group">
             <label for="image">Project Thumbnail</label>
-            <input type="file" id="image" name="image" accept="image/*" required>
-            <span class="form-help">Max size 5MB. Recommended: WebP or JPG. This will be used as the project thumbnail in the gallery and hero section.</span>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.35rem;">
+                <input type="file" id="image" name="image" accept="image/*" style="flex: 1; min-width: 200px;">
+                <input type="url" id="image_url" name="image_url" placeholder="Or paste Image URL / Google Drive link" style="flex: 1.5; min-width: 250px;">
+            </div>
+            <span class="form-help">Upload a file (max 5MB) OR provide a direct image link / Google Drive share link.</span>
         </div>
 
         <div class="form-group">
             <label for="screenshots">Additional Screenshots</label>
-            <input type="file" id="screenshots" name="screenshots[]" accept="image/*" multiple>
-            <span class="form-help">Select multiple images. These will be shown in the project gallery.</span>
+            <input type="file" id="screenshots" name="screenshots[]" accept="image/*" multiple style="margin-bottom: 0.35rem;">
+            <input type="text" id="screenshot_urls" name="screenshot_urls" placeholder="Or comma-separated image URLs / Google Drive links">
+            <span class="form-help">Upload multiple images or paste comma-separated image URLs.</span>
         </div>
 
         <!-- Links -->
@@ -215,13 +231,22 @@ require_once '../includes/layout_header.php';
 
         <!-- SSL Certificate Module -->
         <div class="form-section-title"><i class="fa-solid fa-shield-halved"></i> SSL Certificate Details (Optional)</div>
-        <div class="form-row" style="align-items: flex-end;">
-            <div class="form-group" style="flex: 2;">
+        <div class="form-row" style="align-items: flex-end; gap: 1rem; flex-wrap: wrap;">
+            <div class="form-group" style="flex: 2; min-width: 250px;">
                 <label for="ssl_domain">Domain URL</label>
                 <input type="url" id="ssl_domain" name="ssl_domain" placeholder="https://example.com">
             </div>
-            <div class="form-group" style="flex: 1;">
-                <button type="button" class="btn-action primary" id="btn-fetch-ssl" style="width: 100%; padding: 0.75rem;"><i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details</button>
+            <div class="form-group" style="flex: 1.2; min-width: 200px;">
+                <!-- Highlighted Checkbox & SSL Fetch Text -->
+                <label class="ssl-highlight-box" for="ssl_tracking_enabled" style="display: flex; align-items: center; gap: 0.65rem; background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%); border: 2px solid #0284c7; border-radius: 8px; padding: 0.65rem 0.85rem; cursor: pointer; box-shadow: 0 0 14px rgba(14, 165, 233, 0.25); height: 46px; box-sizing: border-box; margin: 0;">
+                    <input type="checkbox" id="ssl_tracking_enabled" name="ssl_tracking_enabled" value="1" checked style="width: 1.25rem; height: 1.25rem; accent-color: #0284c7; cursor: pointer; margin: 0;">
+                    <span style="font-size: 0.88rem; font-weight: 700; color: #38bdf8; letter-spacing: 0.02em; white-space: nowrap;">
+                        <i class="fa-solid fa-shield-check" style="margin-right: 4px;"></i> Enable SSL Fetch
+                    </span>
+                </label>
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 170px;">
+                <button type="button" class="btn-action primary" id="btn-fetch-ssl" style="width: 100%; height: 46px; padding: 0 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details</button>
             </div>
         </div>
         
@@ -340,7 +365,7 @@ require_once '../includes/layout_header.php';
             slugInput.dataset.manual = '1';
         });
     }
-    // ---- Faculty Member Rows ----
+    // ---- Faculty & Team Member Rows ----
     function addFacultyRow() {
         const container = document.getElementById('faculty-members-container');
         const row = document.createElement('div');
@@ -348,11 +373,32 @@ require_once '../includes/layout_header.php';
         row.style.display = 'flex';
         row.style.gap = '0.5rem';
         row.style.marginBottom = '0.5rem';
+        row.style.flexWrap = 'wrap';
         row.innerHTML = `
-            <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1;">
-            <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1;">
-            <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1;">
-            <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1;">
+            <input type="text" name="faculty_names[]" placeholder="Faculty Name" style="flex: 1; min-width: 140px;">
+            <input type="text" name="faculty_designations[]" placeholder="Designation" style="flex: 1; min-width: 130px;">
+            <input type="text" name="faculty_linkedin[]" placeholder="LinkedIn URL" style="flex: 1; min-width: 130px;">
+            <input type="file" name="faculty_photos[]" accept="image/*" style="flex: 1; min-width: 130px;" title="Upload photo file">
+            <input type="url" name="faculty_photo_urls[]" placeholder="Or Photo URL / Drive Link" style="flex: 1.5; min-width: 160px;">
+            <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(row);
+    }
+
+    function addMemberRow() {
+        const container = document.getElementById('team-members-container');
+        const row = document.createElement('div');
+        row.className = 'team-member-row';
+        row.style.display = 'flex';
+        row.style.gap = '0.5rem';
+        row.style.marginBottom = '0.5rem';
+        row.style.flexWrap = 'wrap';
+        row.innerHTML = `
+            <input type="text" name="member_names[]" placeholder="Student Name" style="flex: 1; min-width: 140px;">
+            <input type="text" name="member_roles[]" placeholder="Role (optional)" style="flex: 1; min-width: 130px;">
+            <input type="text" name="member_linkedin[]" placeholder="LinkedIn URL (optional)" style="flex: 1; min-width: 130px;">
+            <input type="file" name="member_photos[]" accept="image/*" style="flex: 1; min-width: 130px;" title="Upload photo file">
+            <input type="url" name="member_photo_urls[]" placeholder="Or Photo URL / Drive Link" style="flex: 1.5; min-width: 160px;">
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
         `;
         container.appendChild(row);
@@ -399,6 +445,30 @@ require_once '../includes/layout_header.php';
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-down"></i> Fetch SSL Details';
     });
+
+    function toggleDepartmentOther(val) {
+        const group = document.getElementById('departmentOtherGroup');
+        const input = document.getElementById('departmentCustomInput');
+        if (val === 'Other') {
+            group.style.display = 'block';
+            input.focus();
+        } else {
+            group.style.display = 'none';
+            input.value = '';
+        }
+    }
+
+    function toggleCategoryOther(val) {
+        const group = document.getElementById('categoryOtherGroup');
+        const input = document.getElementById('categoryCustomInput');
+        if (val === 'Other') {
+            group.style.display = 'block';
+            input.focus();
+        } else {
+            group.style.display = 'none';
+            input.value = '';
+        }
+    }
 </script>
 
 <?php require_once '../includes/layout_footer.php'; ?>

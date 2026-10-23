@@ -8676,7 +8676,7 @@ html.lenis body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 7800px;
+    width: 100%;
     height: 520px;
     overflow: visible;
     pointer-events: none;
@@ -8749,264 +8749,92 @@ html.lenis body {
 }
 
 /* ======================================================
-   RESPONSIVE â€” Our Works Timeline
+   RESPONSIVE — Our Works Timeline
    ====================================================== */
 
-/* --- Tablet & below (â‰¤ 992px): switch to vertical stack --- */
 @media (max-width: 992px) {
     .horizontal-timeline-section {
-        padding: 5rem 1.5rem 4rem;
-        min-height: auto;
-        height: auto;
-        overflow: visible;
+        padding: 4rem 1.5rem 3rem;
     }
 
     .horizontal-timeline-section .section-header {
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .horizontal-timeline-section .section-title {
-        font-size: 2.4rem;
+        font-size: 2.3rem;
         letter-spacing: -0.5px;
     }
 
-    /* The dark card becomes a regular block container */
     .timeline-pin-container {
-        height: auto;
-        overflow: visible;
-        display: block;
         border-radius: 24px;
-        padding: 2rem 0;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x pan-y;
     }
 
-    .timeline-scroll-wrapper {
-        height: auto;
-        width: 100%;
-        display: block;
+    .timeline-prev {
+        left: 12px;
     }
 
-    /* Vertical flex column for the scroll content */
-    .timeline-scroll-content {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        padding: 1.5rem 1rem 2rem 1rem;
-        position: relative;
-        will-change: unset;
-        transform: none !important;
-        /* Override any GSAP transform */
+    .timeline-next {
+        right: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .horizontal-timeline-section {
+        padding: 3.5rem 1rem 2.5rem;
     }
 
-    /* Vertical connector line */
-    .timeline-scroll-content::before {
-        content: '';
-        position: absolute;
-        left: 52px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: linear-gradient(to bottom,
-                rgba(255, 255, 255, 0.03),
-                rgba(255, 255, 255, 0.22) 8%,
-                rgba(255, 255, 255, 0.22) 92%,
-                rgba(255, 255, 255, 0.03));
-        z-index: 1;
+    .horizontal-timeline-section .section-title {
+        font-size: 1.9rem;
     }
 
-    /* Hide the horizontal SVG path on mobile */
-    .timeline-svg-path {
-        display: none;
+    .timeline-pin-container {
+        border-radius: 20px;
     }
 
-    /* Each project is a row: node + card side by side */
-    .timeline-node {
-        position: relative !important;
-        left: 28px !important;
-        top: auto !important;
-        bottom: auto !important;
-        transform: translate(-50%, 0) !important;
-        width: 48px;
-        height: 48px;
-        margin-bottom: 0.75rem;
-        margin-top: 2rem;
-        z-index: 3;
-        flex-shrink: 0;
-    }
-
-    .timeline-node:first-of-type {
-        margin-top: 0;
-    }
-
-
-
-    .node-inner {
-        width: 28px;
-        height: 28px;
-    }
-
-    /* Year label to the right of the node */
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 60px !important;
-        right: auto !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
+    .timeline-nav-btn {
+        width: 44px;
+        height: 44px;
         font-size: 1.05rem;
     }
 
-    .node-top .node-year::before,
-    .node-bottom .node-year::after {
-        display: none;
+    .timeline-prev {
+        left: 8px;
     }
 
-    /* Cards stack below their respective node */
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        bottom: auto !important;
-        width: calc(100% - 68px) !important;
-        margin-left: 68px !important;
-        margin-bottom: 2rem !important;
-        transform: none !important;
-        opacity: 1 !important;
-        border-radius: 14px;
-        padding: 1rem 1.1rem;
-    }
-
-    .timeline-card:hover {
-        transform: translateY(-3px) !important;
-    }
-
-    .card-title {
-        font-size: 1.1rem;
-    }
-
-    .card-desc {
-        font-size: 0.82rem;
+    .timeline-next {
+        right: 8px;
     }
 }
 
-/* --- Small tablets (â‰¤ 768px) --- */
-@media (max-width: 768px) {
-    .horizontal-timeline-section {
-        padding: 4rem 1rem 3rem;
-    }
-
-    .horizontal-timeline-section .section-title {
-        font-size: 2rem;
-    }
-
-    .timeline-pin-container {
-        border-radius: 18px;
-    }
-
-    .timeline-scroll-content {
-        padding: 1rem 0.75rem 1.5rem 0.75rem;
-    }
-
-    .timeline-scroll-content::before {
-        left: 46px;
-    }
-
-    .timeline-node {
-        left: 22px !important;
-        width: 44px;
-        height: 44px;
-    }
-
-
-
-    .node-inner {
-        width: 26px;
-        height: 26px;
-    }
-
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 54px !important;
-        font-size: 0.95rem;
-    }
-
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        width: calc(100% - 60px) !important;
-        margin-left: 60px !important;
-    }
-}
-
-/* --- Phone (â‰¤ 480px) --- */
 @media (max-width: 480px) {
     .horizontal-timeline-section {
-        padding: 3.5rem 0.75rem 2.5rem;
+        padding: 2.75rem 0.5rem 2rem;
     }
 
     .horizontal-timeline-section .section-title {
-        font-size: 1.75rem;
+        font-size: 1.6rem;
         letter-spacing: -0.3px;
     }
 
     .timeline-pin-container {
-        border-radius: 14px;
+        border-radius: 16px;
     }
 
-    .timeline-scroll-content {
-        padding: 1rem 0.5rem 1.5rem 0.5rem;
-    }
-
-    .timeline-scroll-content::before {
-        left: 40px;
-    }
-
-    .timeline-node {
-        left: 20px !important;
+    .timeline-nav-btn {
         width: 40px;
-        height: 20px;
+        height: 40px;
+        font-size: 0.95rem;
     }
 
-
-
-    .node-inner {
-        width: 24px;
-        height: 24px;
+    .timeline-prev {
+        left: 6px;
     }
 
-    .node-inner i {
-        font-size: 0.65rem;
-    }
-
-    .node-top .node-year,
-    .node-bottom .node-year,
-    .node-bottom.year-left .node-year {
-        left: 48px !important;
-        font-size: 0.88rem;
-    }
-
-    .timeline-card {
-        height: 240px;
-        display: flex;
-        flex-direction: column;
-        width: calc(100% - 54px) !important;
-        margin-left: 54px !important;
-        padding: 0.85rem 0.9rem !important;
-    }
-
-    .card-title {
-        font-size: 1rem;
-    }
-
-    .card-desc {
-        font-size: 0.78rem;
-        margin-bottom: 0.6rem;
+    .timeline-next {
+        right: 6px;
     }
 }
 

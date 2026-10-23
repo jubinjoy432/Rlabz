@@ -2831,6 +2831,9 @@ function buildDynamicTimeline() {
             svg.style.width = `${newWidth}px`;
         });
 
+        const ghostWrapper = scrollContent.querySelector('div[style*="pointer-events: none"]');
+        if (ghostWrapper) ghostWrapper.style.width = `${newWidth}px`;
+
         const clipRect = document.querySelector('#svg-clip rect');
         if (clipRect) clipRect.setAttribute('width', newWidth);
 
@@ -2917,209 +2920,170 @@ function initCurvedTimeline() {
         timelineCtx.revert();
     }
 
-    // Only apply horizontal pinning scroll on desktop (width > 992px)
+    // Unified horizontal scrolling timeline for all viewports (desktop, tablet, mobile)
     timelineCtx = gsap.context(() => {
-        const mm = gsap.matchMedia();
+        const containerWidth = pinContainer.offsetWidth;
+        const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
 
-        mm.add("(min-width: 993px)", () => {
-            const containerWidth = pinContainer.offsetWidth;
-            const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
+        const cards = gsap.utils.toArray('.timeline-card');
+        const nodes = gsap.utils.toArray('.timeline-node');
 
-            const cards = gsap.utils.toArray('.timeline-card');
-            const nodes = gsap.utils.toArray('.timeline-node');
+        if (totalScrollDistance > 0) {
+            // Enable horizontal scroll via mouse wheel, touch, or navigation buttons. Start from extreme right.
+            pinContainer.scrollLeft = totalScrollDistance;
+            let targetScroll = totalScrollDistance;
 
-            if (totalScrollDistance > 0) {
-                // Enable horizontal scroll via mouse wheel when hovered. Start from extreme right.
-                pinContainer.scrollLeft = totalScrollDistance;
-                let targetScroll = totalScrollDistance;
+            // Navigation Buttons Logic
+            const prevBtn = document.querySelector('.timeline-prev');
+            const nextBtn = document.querySelector('.timeline-next');
 
-                // Navigation Buttons Logic
-                const prevBtn = document.querySelector('.timeline-prev');
-                const nextBtn = document.querySelector('.timeline-next');
+            const updateButtons = () => {
+                if (!prevBtn || !nextBtn) return;
+                const currentLeft = pinContainer.scrollLeft;
+                if (currentLeft <= 5) prevBtn.classList.add('disabled');
+                else prevBtn.classList.remove('disabled');
 
-                const updateButtons = () => {
-                    if (!prevBtn || !nextBtn) return;
-                    if (targetScroll <= 5) prevBtn.classList.add('disabled');
-                    else prevBtn.classList.remove('disabled');
+                if (currentLeft >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
+                else nextBtn.classList.remove('disabled');
 
-                    if (targetScroll >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
-                    else nextBtn.classList.remove('disabled');
-
-                    // --- Road Mask Width (clipping div grows to show more of the SVG) ---
-                    // This handles the drawing animation since CSS transitions the width
-                    const maskPath = document.querySelector('#road-mask-path');
-                    if (maskPath) {
-                        maskPath.style.width = (targetScroll + containerWidth) + 'px';
-                    }
-
-                    // Trigger cascade for newly revealed nodes
-                    nodes.forEach((node, index) => {
-                        const nodeLeft = parseInt(node.style.left || 0);
-                        if (nodeLeft < targetScroll + containerWidth) {
-                            if (!node.classList.contains('revealed')) {
-                                node.classList.add('revealed');
-                                gsap.fromTo(node, 
-                                    { scale: 0.85, opacity: 0 },
-                                    { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: (index % 3) * 0.05 }
-                                );
-                            }
-                        }
-                    });
-
-                    // Trigger cascade for newly revealed cards
-                    cards.forEach((card, index) => {
-                        const cardLeft = parseInt(card.style.left || 0);
-                        if (cardLeft < targetScroll + containerWidth) {
-                            if (!card.classList.contains('revealed')) {
-                                card.classList.add('revealed');
-                                const isTop = card.classList.contains('card-top');
-                                gsap.fromTo(card, 
-                                    { y: isTop ? -20 : 20, opacity: 0 },
-                                    { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.4)', delay: (index % 3) * 0.1 }
-                                );
-                            }
-                        }
-                    });
-                };
-
-                if (prevBtn && nextBtn) {
-                    prevBtn.addEventListener('click', () => {
-                        targetScroll = Math.max(0, targetScroll - containerWidth * 0.6);
-                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                    });
-                    nextBtn.addEventListener('click', () => {
-                        targetScroll = Math.min(totalScrollDistance, targetScroll + containerWidth * 0.6);
-                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                    });
-                    updateButtons();
+                // --- Road Mask Width (clipping div grows to show more of the SVG) ---
+                const maskPath = document.querySelector('#road-mask-path');
+                if (maskPath) {
+                    maskPath.style.width = (currentLeft + containerWidth) + 'px';
                 }
 
-                pinContainer.addEventListener('scroll', () => {
-                    if (!gsap.isTweening(pinContainer)) {
-                        targetScroll = pinContainer.scrollLeft;
-                        updateButtons();
-                    }
-                }, { passive: true });
-
-                pinContainer.addEventListener('wheel', (evt) => {
-                    // Only intercept if scrolling vertically and we have horizontal space
-                    if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
-                        const delta = evt.deltaY;
-
-                        // Base atStart and atEnd on ACTUAL visual scroll position, not just the target
-                        // REVERSED LOGIC: Scrolling down (delta > 0) moves left. Scrolling up (delta < 0) moves right.
-                        const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
-                        const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
-
-                        if (!atStart && !atEnd) {
-                            evt.preventDefault();
-                            targetScroll -= delta * 0.45; // Slower scroll speed multiplier
-                            targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
-
-                            gsap.to(pinContainer, {
-                                scrollLeft: targetScroll,
-                                duration: 1.4, // Smoother and slower transition
-                                ease: "power2.out",
-                                overwrite: "auto",
-                                onUpdate: updateButtons
-                            });
-                        }
-                    }
-                }, { passive: false });
-
-                // --- Initial trigger for the road mask and visible nodes ---
-                updateButtons();
-
-                // Node and Cards are left fully visible by default to prevent backwards scrub disappearing bugs
-            } else {
-                // Screen is wide enough to show all 1500px, no horizontal scroll needed
+                // Trigger cascade for newly revealed nodes
                 nodes.forEach((node, index) => {
-                    gsap.fromTo(node,
-                        { opacity: 0, scale: 0.5 },
-                        {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.8,
-                            delay: index * 0.1,
-                            ease: 'back.out(1.7)',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 60%',
-                                toggleActions: 'play none none reverse'
-                            }
+                    const nodeLeft = parseInt(node.style.left || 0);
+                    if (nodeLeft < currentLeft + containerWidth + 120) {
+                        if (!node.classList.contains('revealed')) {
+                            node.classList.add('revealed');
+                            gsap.fromTo(node, 
+                                { scale: 0.85, opacity: 0 },
+                                { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: (index % 3) * 0.05 }
+                            );
                         }
-                    );
+                    }
                 });
 
+                // Trigger cascade for newly revealed cards
                 cards.forEach((card, index) => {
-                    const isTop = card.classList.contains('card-top');
-                    const startY = isTop ? -40 : 40;
-                    gsap.fromTo(card,
-                        { opacity: 0, y: startY },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1,
-                            delay: index * 0.1 + 0.3,
-                            ease: 'power2.out',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 60%',
-                                toggleActions: 'play none none reverse'
-                            }
+                    const cardLeft = parseInt(card.style.left || 0);
+                    if (cardLeft < currentLeft + containerWidth + 120) {
+                        if (!card.classList.contains('revealed')) {
+                            card.classList.add('revealed');
+                            const isTop = card.classList.contains('card-top');
+                            gsap.fromTo(card, 
+                                { y: isTop ? -20 : 20, opacity: 0 },
+                                { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.4)', delay: (index % 3) * 0.1 }
+                            );
                         }
-                    );
+                    }
+                });
+            };
+
+            if (prevBtn && nextBtn) {
+                const newPrev = prevBtn.cloneNode(true);
+                const newNext = nextBtn.cloneNode(true);
+                prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+                nextBtn.parentNode.replaceChild(newNext, nextBtn);
+
+                newPrev.addEventListener('click', () => {
+                    const scrollStep = Math.max(260, containerWidth * 0.6);
+                    targetScroll = Math.max(0, pinContainer.scrollLeft - scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                });
+                newNext.addEventListener('click', () => {
+                    const scrollStep = Math.max(260, containerWidth * 0.6);
+                    targetScroll = Math.min(totalScrollDistance, pinContainer.scrollLeft + scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
                 });
             }
-        });
 
-        // Mobile fallback (GSAP does not pin or translate horizontally, let CSS handle it)
-        mm.add("(max-width: 992px)", () => {
-            const cards = gsap.utils.toArray('.timeline-card');
-            const nodes = gsap.utils.toArray('.timeline-node');
+            pinContainer.addEventListener('scroll', () => {
+                if (!gsap.isTweening(pinContainer)) {
+                    targetScroll = pinContainer.scrollLeft;
+                    updateButtons();
+                }
+            }, { passive: true });
 
-            cards.forEach((card, index) => {
-                const node = nodes[index];
-                gsap.fromTo(card,
-                    { opacity: 0, y: 40 },
-                    {
-                        opacity: 1,
-                        y: 0,
-                        duration: 0.8,
-                        ease: 'power2.out',
-                        scrollTrigger: {
-                            trigger: node,
-                            start: 'top 55%',
-                            end: 'top 45%',
-                            scrub: true
-                        }
+            pinContainer.addEventListener('wheel', (evt) => {
+                // Only intercept if scrolling vertically and we have horizontal space
+                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
+                    const delta = evt.deltaY;
+                    const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
+                    const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
+
+                    if (!atStart && !atEnd) {
+                        evt.preventDefault();
+                        targetScroll -= delta * 0.45;
+                        targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
+
+                        gsap.to(pinContainer, {
+                            scrollLeft: targetScroll,
+                            duration: 1.4,
+                            ease: "power2.out",
+                            overwrite: "auto",
+                            onUpdate: updateButtons
+                        });
                     }
-                );
-            });
+                }
+            }, { passive: false });
 
-            nodes.forEach((node) => {
+            // Initial trigger
+            updateButtons();
+        } else {
+            nodes.forEach((node, index) => {
                 gsap.fromTo(node,
-                    { opacity: 0, scale: 0.6 },
+                    { opacity: 0, scale: 0.5 },
                     {
                         opacity: 1,
                         scale: 1,
-                        duration: 0.6,
-                        ease: 'back.out(1.5)',
+                        duration: 0.8,
+                        delay: index * 0.1,
+                        ease: 'back.out(1.7)',
                         scrollTrigger: {
-                            trigger: node,
-                            start: 'top 85%',
-                            end: 'top 65%',
-                            scrub: true
+                            trigger: '#our-works',
+                            start: 'top 60%',
+                            toggleActions: 'play none none reverse'
                         }
                     }
                 );
             });
-        });
+
+            cards.forEach((card, index) => {
+                const isTop = card.classList.contains('card-top');
+                const startY = isTop ? -40 : 40;
+                gsap.fromTo(card,
+                    { opacity: 0, y: startY },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        delay: index * 0.1 + 0.3,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: '#our-works',
+                            start: 'top 60%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+        }
     });
 
     // Cleanup on window unload
     window.addEventListener('unload', () => {
         timelineCtx.revert();
+    });
+
+    let timelineResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(timelineResizeTimer);
+        timelineResizeTimer = setTimeout(() => {
+            initCurvedTimeline();
+        }, 250);
     });
 }
 

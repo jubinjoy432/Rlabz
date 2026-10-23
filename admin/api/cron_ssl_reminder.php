@@ -58,7 +58,26 @@ function add_announcement($pdo, $type, $title, $message, $severity, $ref_id = nu
 }
 
 try {
-    $stmt = $pdo->query("SELECT s.*, p.title as project_title FROM project_ssl_certs s JOIN projects p ON s.project_id = p.id WHERE s.domain_url IS NOT NULL AND s.domain_url != ''");
+    // 1. Sync any projects with a website/demo link and ssl_tracking_enabled = 1 into project_ssl_certs if missing
+    $pdo->exec("
+        INSERT INTO project_ssl_certs (project_id, domain_url, status)
+        SELECT p.id, p.demo_link, 'Pending'
+        FROM projects p
+        LEFT JOIN project_ssl_certs s ON p.id = s.project_id
+        WHERE s.id IS NULL 
+          AND p.demo_link IS NOT NULL 
+          AND p.demo_link != '' 
+          AND p.demo_link != '#'
+          AND (p.ssl_tracking_enabled = 1 OR p.ssl_tracking_enabled IS NULL)
+    ");
+
+    $stmt = $pdo->query("SELECT s.*, p.title as project_title 
+                         FROM project_ssl_certs s 
+                         JOIN projects p ON s.project_id = p.id 
+                         WHERE (p.ssl_tracking_enabled = 1 OR p.ssl_tracking_enabled IS NULL)
+                           AND s.domain_url IS NOT NULL 
+                           AND s.domain_url != '' 
+                           AND s.domain_url != '#'");
     $certs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $updateStmt = $pdo->prepare("UPDATE project_ssl_certs SET 

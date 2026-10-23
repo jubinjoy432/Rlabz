@@ -515,6 +515,40 @@
     white-space: nowrap;
 }
 
+.pg-card-tag.pg-card-tag-type {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    color: var(--steel-slate, #64748b);
+    background: rgba(100, 116, 139, 0.08);
+    border-color: rgba(100, 116, 139, 0.22);
+}
+
+.pg-card-tag.pg-card-tag-status {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+.pg-card-tag.pg-card-tag-status.status-deployed {
+    color: #16a34a;
+    background: rgba(22, 163, 74, 0.08);
+    border-color: rgba(22, 163, 74, 0.28);
+}
+
+.pg-card-tag.pg-card-tag-status.status-in-development {
+    color: #ea580c;
+    background: rgba(234, 88, 12, 0.08);
+    border-color: rgba(234, 88, 12, 0.28);
+}
+
+.pg-card-tag.pg-card-tag-status.status-completed {
+    color: #0284c7;
+    background: rgba(2, 132, 199, 0.08);
+    border-color: rgba(2, 132, 199, 0.28);
+}
+
 /* ---- Load More ---- */
 .projects-load-more-wrapper {
     display: flex;

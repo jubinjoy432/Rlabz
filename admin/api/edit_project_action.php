@@ -6,10 +6,29 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 }
 require_once 'db.php';
 
+function normalize_image_url($url) {
+    if (empty($url)) return '';
+    $url = trim($url);
+    if (preg_match('/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i', $url, $matches)) {
+        return "https://lh3.googleusercontent.com/d/" . $matches[1];
+    }
+    return $url;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'] ?? null;
-    if (!$id) {
+    $id = intval($_POST['id'] ?? 0);
+    if ($id <= 0) {
         header("Location: ../dashboard.php?error=" . urlencode("Project ID is missing."));
+        exit;
+    }
+
+    // Fetch existing project to get current data and image paths
+    $stmt = $pdo->prepare("SELECT * FROM projects WHERE id = ?");
+    $stmt->execute([$id]);
+    $project = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$project) {
+        header("Location: ../dashboard.php?error=" . urlencode("Project not found."));
         exit;
     }
 
@@ -22,34 +41,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $problem_statement = trim($_POST['problem_statement'] ?? '');
     $expected_outcome = trim($_POST['expected_outcome'] ?? '');
     $tech_stack = trim($_POST['tech_stack'] ?? '');
-    $key_features = trim($_POST['key_features'] ?? '');
     $department = trim($_POST['department'] ?? 'MCA');
+    if ($department === 'Other' && !empty(trim($_POST['department_custom'] ?? ''))) {
+        $department = trim($_POST['department_custom']);
+    }
+
     $batch = trim($_POST['batch'] ?? '');
+
     $category = trim($_POST['category'] ?? 'Web Application');
+    if ($category === 'Other' && !empty(trim($_POST['category_custom'] ?? ''))) {
+        $category = trim($_POST['category_custom']);
+    }
     $project_type = trim($_POST['project_type'] ?? 'Academic');
-    $status = trim($_POST['status'] ?? 'Completed');
+    
+    // Status preservation and validation
+    $valid_statuses = ['In Development', 'Deployed', 'Completed'];
+    $submitted_status = trim($_POST['status'] ?? '');
+    if (in_array($submitted_status, $valid_statuses)) {
+        $status = $submitted_status;
+    } else {
+        // Preserve existing project status if valid, else fallback to 'In Development'
+        $status = in_array($project['status'], $valid_statuses) ? $project['status'] : 'In Development';
+    }
+
     $duration = trim($_POST['duration'] ?? '');
     $github_link = trim($_POST['github_link'] ?? '');
     $demo_link = trim($_POST['demo_link'] ?? '');
+    $ssl_tracking_enabled = isset($_POST['ssl_tracking_enabled']) ? 1 : 0;
     
     if (empty($title) || empty($year) || empty($description)) {
         header("Location: ../edit_project.php?id=$id&error=" . urlencode("Title, Year, and Description are required."));
         exit;
     }
 
+    if (empty($short_description)) {
+        $short_description = $description;
+    }
+
     if (empty($slug)) {
         $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $title));
         $slug = trim($slug, '-');
-    }
-
-    // Fetch existing project to get current image paths
-    $stmt = $pdo->prepare("SELECT * FROM projects WHERE id = ?");
-    $stmt->execute([$id]);
-    $project = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$project) {
-        header("Location: ../dashboard.php?error=" . urlencode("Project not found."));
-        exit;
     }
 
     $uploadDir = '../../uploads/';
@@ -79,6 +110,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $image_path = $project['image_path'];
     $thumbnail_path = handleUpload('thumbnail', $project['thumbnail_path']);
+    
+    // If no new file uploaded but thumbnail_url provided, use normalized URL
+    if (!empty($_POST['thumbnail_url']) && (empty($_FILES['thumbnail']['name']) || $_FILES['thumbnail']['error'] !== UPLOAD_ERR_OK)) {
+        $thumbnail_path = normalize_image_url($_POST['thumbnail_url']);
+    }
+
     $poster_path = $project['poster_path'];
 
     try {
@@ -89,7 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             objectives = ?, problem_statement = ?, expected_outcome = ?, tech_stack = ?, 
             key_features = ?, department = ?, batch = ?, category = ?, project_type = ?, 
             status = ?, duration = ?, 
-            github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?
+            github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?,
+            ssl_tracking_enabled = ?
             WHERE id = ?");
         
         $stmt->execute([
@@ -98,15 +136,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $key_features, $department, $batch, $category, $project_type,
             $status, $duration,
             $github_link, $demo_link, $image_path, $thumbnail_path, $poster_path,
+            $ssl_tracking_enabled,
             $id
         ]);
 
-        // Process team members (Dynamic rows)
+        // Process team members (Dynamic rows with upload or URL)
         if (isset($_POST['member_names']) && is_array($_POST['member_names'])) {
             $member_names = $_POST['member_names'];
             $member_roles = $_POST['member_roles'] ?? [];
             $member_linkedin = $_POST['member_linkedin'] ?? [];
             $existing_photos = $_POST['existing_photos'] ?? [];
+            $member_photo_urls = $_POST['member_photo_urls'] ?? [];
             $member_photos = $_FILES['member_photos'] ?? null;
             
             // Delete old members
@@ -131,18 +171,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $m_photo_path = 'uploads/' . $m_filename;
                         }
                     }
+                } elseif (!empty($member_photo_urls[$index])) {
+                    $m_photo_path = normalize_image_url($member_photo_urls[$index]);
                 }
                 
                 $memStmt->execute([$id, $m_name, $m_role, $m_photo_path, $m_linkedin]);
             }
         }
 
-        // Process faculty members (Dynamic rows)
+        // Process faculty members (Dynamic rows with upload or URL)
         if (isset($_POST['faculty_names']) && is_array($_POST['faculty_names'])) {
             $faculty_names = $_POST['faculty_names'];
             $faculty_designations = $_POST['faculty_designations'] ?? [];
             $faculty_linkedin = $_POST['faculty_linkedin'] ?? [];
             $existing_faculty_photos = $_POST['existing_faculty_photos'] ?? [];
+            $faculty_photo_urls = $_POST['faculty_photo_urls'] ?? [];
             $faculty_photos = $_FILES['faculty_photos'] ?? null;
             
             // Delete old faculty
@@ -167,6 +210,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $f_photo_path = 'uploads/' . $f_filename;
                         }
                     }
+                } elseif (!empty($faculty_photo_urls[$index])) {
+                    $f_photo_path = normalize_image_url($faculty_photo_urls[$index]);
                 }
                 
                 $facStmt->execute([$id, $f_name, $f_designation, $f_photo_path, $f_linkedin]);
