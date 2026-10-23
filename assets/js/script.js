@@ -18,6 +18,8 @@ if (typeof Lenis !== 'undefined') {
 
     gsap.ticker.lagSmoothing(0);
 
+    window.lenis = lenis;
+    window.isMobileLenisKilled = false;
     let isMobileLenisKilled = false;
 
     // Forces scroll onto the main thread on mobile to eliminate compositor divergence 
@@ -28,6 +30,7 @@ if (typeof Lenis !== 'undefined') {
         // feedback vibrations when fighting GSAP's normalizeScroll
         lenis.destroy();
         isMobileLenisKilled = true;
+        window.isMobileLenisKilled = true;
     }
 
     // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
@@ -1563,11 +1566,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        backToTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const startY = window.pageYOffset || document.documentElement.scrollTop;
+            if (startY <= 0) return;
+
+            if (window.lenis && !window.isMobileLenisKilled && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(0, {
+                    duration: 1.6,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+                return;
+            }
+
+            // Smooth fallback for mobile or when Lenis is not active
+            const duration = 1400; // ms for a calm, controlled upward glide
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function scrollStep(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeOutCubic(progress);
+                const targetY = startY * (1 - eased);
+
+                window.scrollTo(0, targetY);
+
+                if (progress < 1) {
+                    requestAnimationFrame(scrollStep);
+                }
+            }
+
+            requestAnimationFrame(scrollStep);
         });
     }
     // --- Scroll Animations for Bottom Cards (Our Works) ---
