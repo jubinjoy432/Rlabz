@@ -143,21 +143,29 @@ require_once '../includes/layout_header.php';
 </div>
 
 <!-- Admin Announcements -->
-<div class="card" style="display: flex; flex-direction: column; max-height: 420px;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; gap: 0.75rem;">
+<div class="card" style="display: flex; flex-direction: column; max-height: 440px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 0.75rem;">
         <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <h2 style="margin: 0; padding: 0; border: none; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> SSL Expiry & Announcements
+            <h2 style="margin: 0; padding: 0; border: none; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
+                <i class="fa-solid fa-bell" style="color: #f59e0b;"></i> SSL Expiry & Announcements
             </h2>
-            <span id="unread-count" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.15)' : 'rgba(100, 116, 139, 0.15)'; ?>; color: <?php echo $unreadCount > 0 ? '#60a5fa' : '#94a3b8'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? 'rgba(59, 130, 246, 0.3)' : 'rgba(100, 116, 139, 0.2)'; ?>;">
+            <span id="unread-count" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: <?php echo $unreadCount > 0 ? '#fef3c7' : '#f1f5f9'; ?>; color: <?php echo $unreadCount > 0 ? '#b45309' : '#64748b'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? '#fde68a' : '#e2e8f0'; ?>;">
                 <?php echo $unreadCount; ?> new
             </span>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <a href="ssl_certificates.php" style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
-                <i class="fa-solid fa-arrow-right"></i> <span>View SSL Certificates</span>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <?php if($unreadCount > 0): ?>
+            <button type="button" onclick="markAllReadOverview()" id="btn-mark-all-read" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                <i class="fa-solid fa-check-double"></i> <span>Mark All Read</span>
+            </button>
+            <?php endif; ?>
+            <a href="announcements.php" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>View All</span>
             </a>
-            <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" style="display: inline-flex; align-items: center; gap: 0.5rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.95rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+            <a href="ssl_certificates.php" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #f8fafc; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> <span>SSL Tracker</span>
+            </a>
+            <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <i class="fa-solid fa-rotate"></i> <span>Check SSL</span>
             </button>
         </div>
@@ -165,45 +173,81 @@ require_once '../includes/layout_header.php';
     <div class="announcements-container" style="flex: 1; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 10px;">
         <?php if(empty($announcements)): ?>
             <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
-                No SSL expired. (No other announcements)
+                <i class="fa-solid fa-circle-check" style="font-size: 1.8rem; color: #10b981; margin-bottom: 0.5rem; display: block;"></i>
+                All clear! No pending SSL expiry notices or unread announcements.
             </div>
         <?php else: ?>
             <?php foreach($announcements as $a): 
-                $icon = 'fa-info-circle';
-                $color = '#3b82f6'; // info
-                $bg = 'rgba(59, 130, 246, 0.12)';
+                $type = $a['type'] ?? '';
+                $severity = $a['severity'] ?? 'info';
                 
-                if ($a['severity'] === 'success') {
-                    $icon = 'fa-check-circle';
-                    $color = '#4ade80';
-                    $bg = 'rgba(74, 222, 128, 0.12)';
-                } elseif ($a['severity'] === 'warning') {
+                // MAIN PURPOSE HIGHLIGHT: Expiring SSL vs Expired vs Failed
+                if (in_array($type, ['ssl_notice', 'ssl_warning', 'ssl_critical']) || stripos($a['title'], 'Expiring') !== false) {
+                    // Vibrant Amber / Gold for Expiring Soon
+                    $icon = 'fa-hourglass-half';
+                    $color = '#b45309';
+                    $bg = '#fef3c7';
+                    $border = '#f59e0b';
+                    $pillBg = '#fef3c7';
+                    $pillColor = '#92400e';
+                    $pillText = 'Expiring Soon';
+                } elseif ($type === 'ssl_expired' || stripos($a['title'], 'Expired') !== false) {
+                    // Urgent Red for Expired (<= 0 days)
                     $icon = 'fa-triangle-exclamation';
-                    $color = '#fbbf24';
-                    $bg = 'rgba(251, 191, 36, 0.12)';
-                } elseif ($a['severity'] === 'danger') {
-                    $icon = 'fa-circle-exclamation';
-                    $color = '#ef4444';
-                    $bg = 'rgba(239, 68, 68, 0.12)';
+                    $color = '#b91c1c';
+                    $bg = '#fee2e2';
+                    $border = '#ef4444';
+                    $pillBg = '#fee2e2';
+                    $pillColor = '#991b1b';
+                    $pillText = 'Expired';
+                } elseif ($type === 'ssl_failed' || $severity === 'danger' || stripos($a['title'], 'Check Failed') !== false) {
+                    // Crimson Rose for Check Failed
+                    $icon = 'fa-circle-xmark';
+                    $color = '#be123c';
+                    $bg = '#ffe4e6';
+                    $border = '#f43f5e';
+                    $pillBg = '#ffe4e6';
+                    $pillColor = '#9f1239';
+                    $pillText = 'Check Failed';
+                } elseif ($type === 'ssl_renewed' || $severity === 'success') {
+                    // Green for Renewed
+                    $icon = 'fa-shield-heart';
+                    $color = '#15803d';
+                    $bg = '#dcfce7';
+                    $border = '#22c55e';
+                    $pillBg = '#dcfce7';
+                    $pillColor = '#166534';
+                    $pillText = 'Renewed';
+                } else {
+                    // General info
+                    $icon = 'fa-info-circle';
+                    $color = '#1d4ed8';
+                    $bg = '#dbeafe';
+                    $border = '#3b82f6';
+                    $pillBg = '#dbeafe';
+                    $pillColor = '#1e40af';
+                    $pillText = 'Notice';
                 }
                 
-                $opacity = $a['is_read'] ? '0.6' : '1';
-                $borderLeft = $a['is_read'] ? '3px solid transparent' : "3px solid $color";
+                $opacity = $a['is_read'] ? '0.65' : '1';
+                $borderLeft = $a['is_read'] ? '4px solid #cbd5e1' : "4px solid $border";
             ?>
-            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; display: flex; gap: 12px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s;">
-                <div style="color: <?= $color ?>; background: <?= $bg ?>; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem;">
+            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 7px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                <div style="color: <?= $color ?>; background: <?= $bg ?>; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
                     <i class="fa-solid <?= $icon ?>"></i>
                 </div>
-                <div style="flex: 1;">
-                    <div style="font-weight: 600; color: #f8fafc; font-size: 0.9rem; margin-bottom: 4px; display:flex; justify-content:space-between; align-items:center;">
-                        <?= htmlspecialchars($a['title']) ?>
-                        <span style="font-size:0.75rem; color:#64748b; font-weight:normal;"><?= date('M j, Y H:i', strtotime($a['created_at'])) ?></span>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: nowrap; gap: 0.5rem;">
+                        <span style="font-weight: 600; color: #0f172a; font-size: 0.86rem; display: inline-flex; align-items: center; gap: 0.45rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            <?= htmlspecialchars($a['title']) ?>
+                            <span style="font-size: 0.68rem; font-weight: 700; padding: 0.08rem 0.45rem; border-radius: 9999px; background: <?= $pillBg ?>; color: <?= $pillColor ?>; flex-shrink: 0;"><?= $pillText ?></span>
+                        </span>
+                        <span style="font-size:0.72rem; color:#94a3b8; font-weight:500; flex-shrink: 0;"><i class="fa-regular fa-clock" style="font-size: 0.68rem;"></i> <?= date('M j, g:i A', strtotime($a['created_at'])) ?></span>
                     </div>
-                    <div style="font-size: 0.85rem; color: #cbd5e1; white-space: pre-line; line-height: 1.45;"><?= htmlspecialchars($a['message']) ?></div>
+                    <div style="font-size: 0.8rem; color: #475569; line-height: 1.35; white-space: pre-line; word-break: break-word; margin-top: 1px;"><?= htmlspecialchars($a['message']) ?></div>
                 </div>
                 <?php if(!$a['is_read']): ?>
-                    <button class="btn-action" style="align-self: center; background: rgba(74,222,128,0.1); color: #4ade80; border: 1px solid rgba(74,222,128,0.2);" title="Mark as Read" onclick="markRead(<?= $a['id'] ?>)">
+                    <button class="btn-action" style="align-self: center; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 5px; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 0.75rem;" title="Mark as Read" onclick="markRead(<?= $a['id'] ?>)">
                         <i class="fa-solid fa-check"></i>
                     </button>
                 <?php endif; ?>
@@ -227,10 +271,12 @@ async function markRead(id) {
             if (container && container.querySelectorAll('.announcement-item').length === 0) {
                 container.innerHTML = `
                     <div style="text-align:center; padding: 2.5rem 1rem; color: var(--text-muted); font-size: 0.9rem;">
-                        <i class="fa-solid fa-shield" style="font-size: 1.5rem; opacity: 0.5; margin-bottom: 0.5rem; display: block;"></i>
-                        No SSL expired. (No other announcements)
+                        <i class="fa-solid fa-circle-check" style="font-size: 1.8rem; color: #10b981; margin-bottom: 0.5rem; display: block;"></i>
+                        All clear! No pending SSL expiry notices or unread announcements.
                     </div>
                 `;
+                const markAllBtn = document.getElementById('btn-mark-all-read');
+                if (markAllBtn) markAllBtn.remove();
             }
             
             const badge = document.getElementById('unread-count');
@@ -238,11 +284,26 @@ async function markRead(id) {
             if(count > 0) {
                 count--;
                 badge.textContent = count + ' new';
-                if(count === 0) badge.style.background = '#334155';
+                if(count === 0) {
+                    badge.style.background = '#f1f5f9';
+                    badge.style.color = '#64748b';
+                    badge.style.borderColor = '#e2e8f0';
+                }
             }
         }
     } catch(e) { console.error('Failed to mark read', e); }
 }
+
+async function markAllReadOverview() {
+    try {
+        const res = await fetch(`../api/mark_announcement_read.php?action=mark_all_read`);
+        const data = await res.json();
+        if(data.success) {
+            window.location.reload();
+        }
+    } catch(e) { console.error('Failed to mark all read', e); }
+}
+
 
 async function refreshSslNow() {
     const btn = document.getElementById('btn-refresh-cron');

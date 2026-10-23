@@ -221,13 +221,22 @@ try {
         $stmt_screenshot = $pdo->prepare("INSERT INTO project_screenshots (project_id, image_path) VALUES (?, ?)");
 
         foreach ($projects as $p) {
-            $slug = $p['id'];
-            $stmt_check->execute([$slug]);
-            $existing = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            $slug = !empty($p['slug']) ? $p['slug'] : (!empty($p['id']) && !is_numeric($p['id']) ? $p['id'] : '');
+            $title = $p['title'] ?? '';
+            
+            // Check by slug or title to prevent duplicate seeding
+            $existing = null;
+            if (!empty($slug)) {
+                $stmt_check->execute([$slug]);
+                $existing = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            }
+            if (!$existing && !empty($title)) {
+                $stmt_title = $pdo->prepare("SELECT id, status, description, short_description FROM projects WHERE title = ?");
+                $stmt_title->execute([$title]);
+                $existing = $stmt_title->fetch(PDO::FETCH_ASSOC);
+            }
 
             if ($existing) {
-                // Project already exists: preserve title, status, and description!
-                // Only if short_description is empty, update it with description
                 if (empty($existing['short_description']) && !empty($existing['description'])) {
                     $pdo->prepare("UPDATE projects SET short_description = ? WHERE id = ?")->execute([$existing['description'], $existing['id']]);
                 }
@@ -285,8 +294,9 @@ try {
 
             if (!empty($p['screenshots']) && is_array($p['screenshots'])) {
                 foreach ($p['screenshots'] as $ss) {
-                    if (!empty($ss)) {
-                        $stmt_screenshot->execute([$newId, $ss]);
+                    $ss_path = is_array($ss) ? ($ss['image_path'] ?? '') : $ss;
+                    if (!empty($ss_path)) {
+                        $stmt_screenshot->execute([$newId, $ss_path]);
                     }
                 }
             }

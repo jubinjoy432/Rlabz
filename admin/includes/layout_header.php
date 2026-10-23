@@ -12,6 +12,14 @@ $sitePath = $isRootAdmin ? '../index.html' : '../../index.html';
 $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
 $usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
 $sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
+$announcementsPath = $isRootAdmin ? 'pages/announcements.php' : 'announcements.php';
+
+$sidebarUnreadCount = 0;
+if (isset($pdo) && $pdo) {
+    try {
+        $sidebarUnreadCount = (int)$pdo->query("SELECT COUNT(*) FROM admin_announcements WHERE is_read = 0")->fetchColumn();
+    } catch(Exception $e) {}
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,13 +45,19 @@ $sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
     <aside class="admin-sidebar" id="adminSidebar">
         <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 1.5rem 1.5rem;">
             <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
-            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="max-width: 150px; height: auto;">
+            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="max-width: 175px; height: auto;">
         </a>
 
         <nav class="sidebar-nav">
             <div class="sidebar-section-label">Core</div>
             <a href="<?php echo $homePath; ?>" class="sidebar-link <?php echo $currentPage == 'overview.php' ? 'active' : ''; ?>">
                 <i class="fa-solid fa-chart-pie"></i> Overview
+            </a>
+            <a href="<?php echo $announcementsPath; ?>" class="sidebar-link <?php echo $currentPage == 'announcements.php' ? 'active' : ''; ?>">
+                <i class="fa-solid fa-bell"></i> Announcements
+                <?php if($sidebarUnreadCount > 0): ?>
+                    <span style="margin-left: auto; background: #f59e0b; color: #ffffff; font-size: 0.68rem; font-weight: 700; padding: 0.1rem 0.45rem; border-radius: 9999px;"><?php echo $sidebarUnreadCount; ?></span>
+                <?php endif; ?>
             </a>
             
             <div class="sidebar-section-label">Projects</div>

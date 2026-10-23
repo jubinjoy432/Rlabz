@@ -96,12 +96,9 @@ try {
         if (isset($certInfo['error'])) {
             $status = 'Check Failed';
             $last_error = $certInfo['error'];
+            $last_alert_level = 'Failed';
             
-            if ($last_alert_level !== 'Failed') {
-                add_announcement($pdo, 'ssl_failed', 'SSL Certificate Check Failed', "{$cert['domain_url']}\nReason: $last_error", 'danger', $cert['id']);
-                $last_alert_level = 'Failed';
-            }
-            
+            // Only update SSL cert status for the SSL section; do not spam announcements for invalid/unreachable domains
             $failUpdateStmt->execute([$status, $last_error, $last_alert_level, $cert['id']]);
             echo " -> Failed: $last_error\n";
             continue; 

@@ -162,19 +162,19 @@ body {
     display: flex;
     align-items: center;
     transition: all 0.35s ease-in-out;
-    min-width: 160px;
+    min-width: 180px;
 }
 
 .premium-nav .logo-image {
-    width: 190px;
+    width: 225px;
     height: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));
     transition: all 0.35s ease-in-out;
     object-fit: contain;
 }
 
 .premium-nav.scrolled .logo-image {
-    width: 170px;
+    width: 195px;
     height: auto;
 }
 
