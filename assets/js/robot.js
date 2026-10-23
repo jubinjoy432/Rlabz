@@ -320,15 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chestScreen.position.y = 0.1;
     bodyGroup.add(chestScreen);
 
-    // HEART & CHEST GLOW
-    const chestGlow = new THREE.Mesh(
-        new THREE.CircleGeometry(0.32, 32),
-        new THREE.MeshBasicMaterial({ color: 0x0ea5e9, transparent: true, opacity: 0.45, depthWrite: false }) // Cyan glow
-    );
-    chestGlow.position.set(0, 0.1, 0.595);
-    bodyGroup.add(chestGlow);
-
-    // RLabz Brand Icon on Chest Screen
+    // RLabz Brand Icon on Chest Screen (Completely transparent background)
     const logoLoader = new THREE.TextureLoader();
     logoLoader.load('assets/images/rlabz-icon.png', function (logoTexture) {
         if (THREE.SRGBColorSpace) {
@@ -340,20 +332,20 @@ document.addEventListener('DOMContentLoaded', () => {
         logoTexture.minFilter = THREE.LinearMipmapLinearFilter;
         
         // Ratio: 1024x993 ≈ 1:1
-        const logoWidth = 0.52;
+        const logoWidth = 0.54;
         const logoHeight = logoWidth * (993 / 1024);
         const logoGeo = new THREE.PlaneGeometry(logoWidth, logoHeight);
         const logoMat = new THREE.MeshBasicMaterial({
             map: logoTexture,
             transparent: true,
-            alphaTest: 0.05,
+            alphaTest: 0.02,
             depthWrite: false
         });
         const logoMesh = new THREE.Mesh(logoGeo, logoMat);
         logoMesh.position.set(0, 0.1, 0.61);
         bodyGroup.add(logoMesh);
     }, undefined, function (err) {
-        console.warn('Robot chest icon texture load failed, keeping ambient glow', err);
+        console.warn('Robot chest icon texture load failed', err);
     });
 
     // Neck
