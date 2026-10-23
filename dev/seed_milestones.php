@@ -68,6 +68,29 @@ try {
             echo "Project not found for slug: $slug (skipping milestone seeding)\n";
         }
     }
+    // Seed SSL certificates (non-destructive)
+    $stmt_ssl_find = $pdo->prepare("SELECT id FROM project_ssl_certs WHERE project_id = ? AND domain_url = ?");
+    $stmt_ssl_insert = $pdo->prepare("INSERT INTO project_ssl_certs (project_id, domain_url, provider, issue_date, expiry_date, certificate_fingerprint) VALUES (?, ?, ?, ?, ?, ?)");
+    foreach ($milestones as $slug => $project_milestones) {
+        $stmt_find->execute([$slug, "%$slug%"]); 
+        $project = $stmt_find->fetch(PDO::FETCH_ASSOC);
+        if ($project) {
+            $project_id = $project['id'];
+            $domain = $slug . ".example.com";
+            $stmt_ssl_find->execute([$project_id, $domain]);
+            if (!$stmt_ssl_find->fetch(PDO::FETCH_ASSOC)) {
+                $stmt_ssl_insert->execute([
+                    $project_id,
+                    $domain,
+                    "Let's Encrypt",
+                    date('Y-m-d'),
+                    date('Y-m-d', strtotime('+90 days')),
+                    bin2hex(random_bytes(16))
+                ]);
+                echo "Added SSL entry for {$domain} to project ID {$project_id}.\n";
+            }
+        }
+    }
 
     echo "Milestone seeding check completed without truncating existing data.\n";
 

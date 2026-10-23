@@ -208,17 +208,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
                 
-                $s_ext = strtolower(pathinfo($sname, PATHINFO_EXTENSION));
-                if (!in_array($s_ext, $allowed)) continue;
-                
-                $s_filename = uniqid('screenshot_') . '.' . $s_ext;
-                if (move_uploaded_file($_FILES['screenshots']['tmp_name'][$index], $uploadDir . $s_filename)) {
-                    $stmtScreenshot->execute([$project_id, 'uploads/' . $s_filename, $index]);
-                }
-            }
-        }
+
 
         // --- Handle SSL Details (Optional) ---
+        // Ensure SSL table exists (idempotent)
+        $pdo->exec("CREATE TABLE IF NOT EXISTS `project_ssl_certs` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `project_id` INT(11) NOT NULL,
+            `domain_url` VARCHAR(255) NOT NULL,
+            `provider` VARCHAR(100) DEFAULT '',
+            `issue_date` DATE DEFAULT NULL,
+            `expiry_date` DATE DEFAULT NULL,
+            `certificate_fingerprint` VARCHAR(255) DEFAULT NULL,
+            `last_checked_at` TIMESTAMP NULL DEFAULT NULL,
+            `status` VARCHAR(50) DEFAULT 'Pending',
+            `last_error` TEXT DEFAULT NULL,
+            `last_alert_level` VARCHAR(50) DEFAULT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (`id`),
+            FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
         if (!empty($_POST['ssl_domain'])) {
             $ssl_domain = trim($_POST['ssl_domain']);
             $ssl_provider = isset($_POST['ssl_provider']) ? trim($_POST['ssl_provider']) : '';
@@ -240,9 +249,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../dashboard.php?error=" . urlencode("Database error: " . $e->getMessage()));
         exit;
     }
+    }
 
-} else {
-    header("Location: ../dashboard.php");
-    exit;
-}
 ?>
