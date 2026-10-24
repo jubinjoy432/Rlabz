@@ -2635,7 +2635,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (nav) {
         let navTicking = false;
-        const darkSections = Array.from(document.querySelectorAll('.hero-blue-section, #client_form_section, footer'));
+        const darkSections = Array.from(document.querySelectorAll('#client_form_section, footer'));
         const allSections = Array.from(sections);
 
         const onNavScroll = () => {
