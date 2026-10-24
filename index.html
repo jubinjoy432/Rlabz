@@ -37,7 +37,7 @@
                 <div class="spinner-ring ring-2"></div>
                 <div class="spinner-ring ring-3"></div>
                 <!-- Centered logo -->
-                <img src="assets/images/rlabz-icon.png" alt="RLabz Logo" class="spinner-logo">
+                <img src="assets/images/rlabz-icon.png" alt="RLabz Logo" class="spinner-logo" decoding="async">
             </div>
         </div>
     </div>
@@ -45,8 +45,8 @@
     <nav class="premium-nav">
         <div class="nav-content">
             <a href="#" class="nav-logo">
-                <img src="assets/images/rlabz-logo-white.png" alt="RLabz Logo" class="logo-image logo-light">
-                <img src="assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image logo-dark">
+                <img src="assets/images/rlabz-logo-white.png" alt="RLabz Logo" class="logo-image logo-light" decoding="async">
+                <img src="assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image logo-dark" decoding="async">
             </a>
             <div class="nav-links-container">
                 <span class="sliding-pill"></span>
@@ -2004,13 +2004,17 @@
             const cardJS = document.querySelector('.card-js');
 
             if (cardWrapper && heroVisual) {
-                heroVisual.addEventListener('mousemove', (e) => {
-                    const rect = cardWrapper.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
+                let cardTicking = false;
+                let mouseX = 0, mouseY = 0;
+                let cachedRect = null;
 
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
+                const updateTilt = () => {
+                    if (!cachedRect) cachedRect = cardWrapper.getBoundingClientRect();
+                    const x = mouseX - cachedRect.left;
+                    const y = mouseY - cachedRect.top;
+
+                    const centerX = cachedRect.width / 2;
+                    const centerY = cachedRect.height / 2;
 
                     // Container Tilt
                     const rotateX = ((y - centerY) / centerY) * -5; // Subtle tilt
@@ -2027,9 +2031,26 @@
 
                     // HTML (Back)
                     if (cardHTML) cardHTML.style.transform = `translate(${((x - centerX) * 0.01)}px, ${((y - centerY) * 0.01)}px)`;
+
+                    cardTicking = false;
+                };
+
+                heroVisual.addEventListener('mouseenter', () => {
+                    cachedRect = cardWrapper.getBoundingClientRect();
                 });
 
+                heroVisual.addEventListener('mousemove', (e) => {
+                    mouseX = e.clientX;
+                    mouseY = e.clientY;
+                    if (!cardTicking) {
+                        cardTicking = true;
+                        requestAnimationFrame(updateTilt);
+                    }
+                }, { passive: true });
+
                 heroVisual.addEventListener('mouseleave', () => {
+                    cardTicking = false;
+                    cachedRect = null;
                     cardWrapper.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
                     if (cardJS) cardJS.style.transform = 'translate(0, 0)';
                     if (cardSCSS) cardSCSS.style.transform = 'translate(0, 0)';
@@ -2050,8 +2071,12 @@
 
                 // Initial resize
                 resize();
-                // Resize on window change
-                window.addEventListener('resize', resize);
+                // Debounced resize on window change
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(resize, 100);
+                }, { passive: true });
 
                 // Particle Class
                 class LiquidParticle {
@@ -2106,7 +2131,11 @@
                     particles.push(new LiquidParticle());
                 }
 
+                let liquidRafId = null;
+                let isLiquidVisible = false;
+
                 const animateLiquid = () => {
+                    if (!isLiquidVisible) return;
                     ctx.clearRect(0, 0, width, height);
 
                     particles.forEach(p => {
@@ -2114,10 +2143,28 @@
                         p.draw(ctx);
                     });
 
-                    requestAnimationFrame(animateLiquid);
+                    liquidRafId = requestAnimationFrame(animateLiquid);
                 };
 
-                animateLiquid();
+                // Pause canvas rendering loop when off-screen to save GPU/CPU cycles
+                const liquidObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            if (!isLiquidVisible) {
+                                isLiquidVisible = true;
+                                liquidRafId = requestAnimationFrame(animateLiquid);
+                            }
+                        } else {
+                            isLiquidVisible = false;
+                            if (liquidRafId) {
+                                cancelAnimationFrame(liquidRafId);
+                                liquidRafId = null;
+                            }
+                        }
+                    });
+                }, { threshold: 0.05 });
+
+                liquidObserver.observe(canvas);
             }
         });
     </script>

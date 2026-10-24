@@ -8329,7 +8329,7 @@ html.lenis body {
     z-index: 100 !important;
     opacity: 0;
     transition: opacity 0.5s ease-out;
-    will-change: left, top, opacity, transform;
+    will-change: transform, opacity;
 }
 
 #robot-popup.visible {
@@ -9401,3 +9401,24 @@ html.lenis body {
 /* Force light logo when scrolled over dark sections */
 .premium-nav.scrolled.nav-over-dark .logo-dark { display: none !important; }
 .premium-nav.scrolled.nav-over-dark .logo-light { display: block !important; }
+
+/* Compositing & GPU Acceleration Layers */
+.hero-cards-wrapper,
+.hero-text-slider .slider-track,
+.timeline-scroll-content,
+.testimonial-card {
+    will-change: transform;
+}
+
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+

@@ -783,6 +783,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let vw = window.innerWidth;
     let vh = Math.max(window.innerHeight, 1);
     let scrollY = window.scrollY;
+    let _cachedRHero = null;
+    let _cachedRBento = null;
+    let _cachedRAnchor = null;
+    let _lastRectScrollY = -999999;
+    let _lastTargetElement = null;
+    let _cachedBubbleW = null;
 
     function invalidateRobotMobileCache() {
         window._robotMobileCached = false;
@@ -793,6 +799,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window._robotMobileCachedScaleHero = null;
         window._robotMobileCachedAnchorX = null;
         window._robotMobileCachedAnchorY = null;
+        _cachedRHero = null;
+        _cachedBubbleW = null;
+        _lastRectScrollY = -999999;
     }
 
     function syncViewportMetrics() {
@@ -994,10 +1003,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 } else {
                     // === DESKTOP: Original scroll-linked behavior (unchanged) ===
-                    const rHero = heroVisual.getBoundingClientRect();
-                    const rBento = bentoSection.getBoundingClientRect();
                     const targetElement = targetAnchor ? targetAnchor : targetHeading;
-                    const rAnchor = targetElement.getBoundingClientRect();
+                    if (_lastRectScrollY !== scrollY || !_cachedRHero || _lastTargetElement !== targetElement) {
+                        _cachedRHero = heroVisual.getBoundingClientRect();
+                        _cachedRBento = bentoSection.getBoundingClientRect();
+                        _cachedRAnchor = targetElement.getBoundingClientRect();
+                        _lastRectScrollY = scrollY;
+                        _lastTargetElement = targetElement;
+                    }
+                    const rHero = _cachedRHero;
+                    const rBento = _cachedRBento;
+                    const rAnchor = _cachedRAnchor;
 
                     const rCenter = {
                         left: vw / 2,
@@ -1205,7 +1221,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (isMobile) {
                     popup.style.transform = 'translate(0, -50%)'; // Anchor to left
-                    const bubbleW = popup.getBoundingClientRect().width || 110;
+                    if (!_cachedBubbleW) _cachedBubbleW = popup.offsetWidth || 110;
+                    const bubbleW = _cachedBubbleW;
 
                     // Clamp padding so it doesn't overflow right edge entirely
                     const maxPx = window.innerWidth - bubbleW - 10;

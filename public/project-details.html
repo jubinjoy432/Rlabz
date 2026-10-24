@@ -14,7 +14,7 @@
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="../assets/css/project-details.css">
 </head>
@@ -24,7 +24,7 @@
     <nav class="premium-nav">
         <div class="nav-content">
             <a href="../index.html" class="nav-logo">
-                <img src="../assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image">
+                <img src="../assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image" decoding="async">
             </a>
             <div class="nav-links-container">
                 <span class="sliding-pill"></span>
@@ -193,7 +193,7 @@
         <button class="pd-lightbox-prev" id="pdLightboxPrev" aria-label="Previous image">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
-        <img class="pd-lightbox-img" id="pdLightboxImg" src="" alt="Screenshot">
+        <img class="pd-lightbox-img" id="pdLightboxImg" src="" alt="Screenshot" decoding="async">
         <button class="pd-lightbox-next" id="pdLightboxNext" aria-label="Next image">
             <i class="fa-solid fa-chevron-right"></i>
         </button>

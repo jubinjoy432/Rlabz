@@ -266,14 +266,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (showcaseContainer && showcaseStage) {
         // Optimization: Cache elements to avoid querying DOM on every frame
         const parallaxElements = document.querySelectorAll('.device, .floating-badge');
+        let showcaseTicking = false;
+        let sClientX = 0, sClientY = 0;
+        let sRect = null;
 
-        showcaseContainer.addEventListener('mousemove', (e) => {
-            const rect = showcaseContainer.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        const updateShowcaseParallax = () => {
+            if (!sRect) sRect = showcaseContainer.getBoundingClientRect();
+            const x = sClientX - sRect.left;
+            const y = sClientY - sRect.top;
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+            const centerX = sRect.width / 2;
+            const centerY = sRect.height / 2;
 
             // Rotate stage based on mouse position
             const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg tilt
@@ -287,22 +290,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 const moveX = ((x - centerX) / centerX) * speed * -1;
                 const moveY = ((y - centerY) / centerY) * speed * -1;
 
-                // Keep existing transforms (like translateZ) and add parallax
-                // We use CSS custom properties to avoid overwriting the transform property directly 
-                // if it's complex, but here a simple approach is to modify the transform matrix 
-                // or just use translate3d if the base transform is handled via CSS classes.
-                // However, our CSS uses translate(-50%, -50%) etc. 
-                // So best to apply parallax to a wrapper OR use CSS variables.
-
-                // Let's use CSS variables for cleaner integration if supported, 
-                // but since we didn't set that up in CSS, we'll use a simpler approach:
-                // We'll update a custom property --parallax-x and --parallax-y
                 el.style.setProperty('--parallax-x', `${moveX}px`);
                 el.style.setProperty('--parallax-y', `${moveY}px`);
             });
+            showcaseTicking = false;
+        };
+
+        showcaseContainer.addEventListener('mouseenter', () => {
+            sRect = showcaseContainer.getBoundingClientRect();
         });
 
+        showcaseContainer.addEventListener('mousemove', (e) => {
+            sClientX = e.clientX;
+            sClientY = e.clientY;
+            if (!showcaseTicking) {
+                showcaseTicking = true;
+                requestAnimationFrame(updateShowcaseParallax);
+            }
+        }, { passive: true });
+
         showcaseContainer.addEventListener('mouseleave', () => {
+            showcaseTicking = false;
+            sRect = null;
             showcaseStage.style.transform = 'rotateX(0) rotateY(0)';
             parallaxElements.forEach(el => {
                 el.style.setProperty('--parallax-x', '0px');
@@ -313,32 +322,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.card');
 
     cards.forEach(card => {
-        card.addEventListener('mousemove', handleMouseMove);
-        card.addEventListener('mouseleave', handleMouseLeave);
-        card.addEventListener('mouseenter', () => setActiveCard(card));
-        card.addEventListener('mouseleave', () => setActiveCard(null));
+        let cardTicking = false;
+        let cx = 0, cy = 0;
+        let cRect = null;
+
+        card.addEventListener('mouseenter', () => {
+            cRect = card.getBoundingClientRect();
+            setActiveCard(card);
+        });
+
+        card.addEventListener('mousemove', (e) => {
+            cx = e.clientX;
+            cy = e.clientY;
+            if (!cardTicking) {
+                cardTicking = true;
+                requestAnimationFrame(() => {
+                    if (!cRect) cRect = card.getBoundingClientRect();
+                    const x = cx - cRect.left;
+                    const y = cy - cRect.top;
+
+                    const rotateX = (y - cRect.height / 2) / -20;
+                    const rotateY = (x - cRect.width / 2) / 20;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+
+                    // Set CSS variables for spotlight effect
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                    cardTicking = false;
+                });
+            }
+        }, { passive: true });
+
+        card.addEventListener('mouseleave', () => {
+            cardTicking = false;
+            cRect = null;
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            setActiveCard(null);
+        });
     });
-
-    function handleMouseMove(e) {
-        const card = this;
-        const cardRect = card.getBoundingClientRect();
-
-        const x = e.clientX - cardRect.left;
-        const y = e.clientY - cardRect.top;
-
-        const rotateX = (y - cardRect.height / 2) / -20;
-        const rotateY = (x - cardRect.width / 2) / 20;
-
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-
-        // Set CSS variables for spotlight effect
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    }
-
-    function handleMouseLeave(e) {
-        this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
-    }
 
     // --- ENHANCED AMBIENT PARTICLES ---
     // === ENHANCED AMBIENT PARTICLES (REFACTORED) ===
@@ -397,16 +419,33 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        document.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            // simple check if mouse is over section vertically
-            if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                mouse.x = e.clientX - rect.left;
-                mouse.y = e.clientY - rect.top;
-            } else {
-                mouse.x = -1000;
-                mouse.y = -1000;
+        let pMouseTicking = false;
+        let pClientX = -1000, pClientY = -1000;
+        let cRect = null;
+
+        section.addEventListener('mouseenter', () => {
+            cRect = canvas.getBoundingClientRect();
+        });
+
+        section.addEventListener('mousemove', (e) => {
+            pClientX = e.clientX;
+            pClientY = e.clientY;
+            if (!pMouseTicking) {
+                pMouseTicking = true;
+                requestAnimationFrame(() => {
+                    if (!cRect) cRect = canvas.getBoundingClientRect();
+                    mouse.x = pClientX - cRect.left;
+                    mouse.y = pClientY - cRect.top;
+                    pMouseTicking = false;
+                });
             }
+        }, { passive: true });
+
+        section.addEventListener('mouseleave', () => {
+            pMouseTicking = false;
+            cRect = null;
+            mouse.x = -1000;
+            mouse.y = -1000;
         });
 
         class Particle {
@@ -599,11 +638,39 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            requestAnimationFrame(animate);
+            if (isSectionVisible) {
+                particleRafId = requestAnimationFrame(animate);
+            }
         }
 
-        window.addEventListener('resize', resize);
-        setTimeout(() => { resize(); animate(); }, 100);
+        let isSectionVisible = false;
+        let particleRafId = null;
+
+        const particleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!isSectionVisible) {
+                        isSectionVisible = true;
+                        particleRafId = requestAnimationFrame(animate);
+                    }
+                } else {
+                    isSectionVisible = false;
+                    if (particleRafId) {
+                        cancelAnimationFrame(particleRafId);
+                        particleRafId = null;
+                    }
+                }
+            });
+        }, { threshold: 0.05 });
+
+        particleObserver.observe(section);
+
+        let pResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(pResizeTimer);
+            pResizeTimer = setTimeout(resize, 150);
+        }, { passive: true });
+        setTimeout(() => { resize(); }, 100);
         setTimeout(() => { resize(); }, 500);
     }
 
@@ -797,40 +864,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dots = document.querySelectorAll('.feature-slider-dots .feature-dot');
                 const swipeArrow = document.querySelector('.card-swipe-arrow');
                 if (dots.length > 0) {
+                    let mSliderTicking = false;
+                    let cachedCardWidth = 0;
+
                     mobileSliderWrapper.addEventListener('scroll', () => {
-                        const scrollLeft = mobileSliderWrapper.scrollLeft;
-                        // Query the first slide (which could be the feature-card or the bento-center slide)
-                        const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
-                        if (!cardElement) return;
+                        if (!mSliderTicking) {
+                            mSliderTicking = true;
+                            requestAnimationFrame(() => {
+                                const scrollLeft = mobileSliderWrapper.scrollLeft;
+                                if (!cachedCardWidth) {
+                                    const cardElement = mobileSliderWrapper.querySelector('.feature-card, .feature-card-slide');
+                                    if (cardElement) cachedCardWidth = cardElement.offsetWidth;
+                                }
+                                if (!cachedCardWidth) { mSliderTicking = false; return; }
 
-                        const cardWidth = cardElement.offsetWidth;
-                        const gap = 20; // Matches CSS 1.25rem gap
-                        const index = Math.round(scrollLeft / (cardWidth + gap));
+                                const gap = 20; // Matches CSS 1.25rem gap
+                                const index = Math.round(scrollLeft / (cachedCardWidth + gap));
 
-                        dots.forEach((dot, i) => {
-                            dot.classList.toggle('active', i === index);
-                        });
+                                dots.forEach((dot, i) => {
+                                    dot.classList.toggle('active', i === index);
+                                });
 
-                        if (swipeArrow) {
-                            swipeArrow.style.transition = 'opacity 0.3s ease';
-                            swipeArrow.style.opacity = index >= dots.length - 1 ? '0' : '1';
+                                if (swipeArrow) {
+                                    swipeArrow.style.transition = 'opacity 0.3s ease';
+                                    swipeArrow.style.opacity = index >= dots.length - 1 ? '0' : '1';
+                                }
+
+                                // Programmatically trigger robot prop holding by checking active centered card
+                                const allCards = mobileSliderWrapper.querySelectorAll('.feature-card-slide, .feature-card');
+                                if (allCards[index] && allCards[index].classList.contains('feature-card')) {
+                                    const title = allCards[index].querySelector('h3') ? allCards[index].querySelector('h3').textContent.trim() : null;
+                                    if (window.lastActiveRobotProp !== title) {
+                                        window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
+                                        window.lastActiveRobotProp = title;
+                                    }
+                                } else {
+                                    if (window.lastActiveRobotProp !== null) {
+                                        window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
+                                        window.lastActiveRobotProp = null;
+                                    }
+                                }
+                                mSliderTicking = false;
+                            });
                         }
-
-                        // Programmatically trigger robot prop holding by checking active centered card
-                        const allCards = mobileSliderWrapper.querySelectorAll('.feature-card-slide, .feature-card');
-                        if (allCards[index] && allCards[index].classList.contains('feature-card')) {
-                            const title = allCards[index].querySelector('h3') ? allCards[index].querySelector('h3').textContent.trim() : null;
-                            if (window.lastActiveRobotProp !== title) {
-                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title } }));
-                                window.lastActiveRobotProp = title;
-                            }
-                        } else {
-                            if (window.lastActiveRobotProp !== null) {
-                                window.dispatchEvent(new CustomEvent('robot-show-prop', { detail: { title: null } }));
-                                window.lastActiveRobotProp = null;
-                            }
-                        }
-                    });
+                    }, { passive: true });
 
                     // Make dots clickable
                     dots.forEach((dot, index) => {
@@ -1244,8 +1321,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const rect = section.getBoundingClientRect();
-            const sectionHeight = section.offsetHeight;
             const viewportHeight = window.innerHeight;
+            // Early return if section is completely off-screen
+            if (rect.bottom < 0 || rect.top > viewportHeight) return;
+
+            const sectionHeight = section.offsetHeight;
 
             // Calculate scroll progress (0 to 1) based on sticky section
             // The section is 400vh, but logic applies to the scrollable part (300vh)
@@ -1312,10 +1392,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 ticking = true;
             }
-        });
+        }, { passive: true });
 
-        // Resize listener
-        window.addEventListener('resize', updateCards);
+        // Debounced resize listener
+        let stackResizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(stackResizeTimer);
+            stackResizeTimer = setTimeout(updateCards, 150);
+        }, { passive: true });
 
         // Initial call
         updateCards();
@@ -1362,7 +1446,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     // =========================================
-    // About Us Section Logic
+    // About Us Section Logic (Optimized)
     // =========================================
 
     // --- 1. Animated Stats Counter ---
@@ -1398,134 +1482,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     statValues.forEach(stat => statsObserver.observe(stat));
 
-    // --- 2. Mouse Tracking for Feature Cards ---
+    // --- 2. Mouse Tracking for Feature Cards (rAF Throttled) ---
     const featureCards = document.querySelectorAll('.about-feature-card');
 
     featureCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+        let cardTicking = false;
+        let mx = 0, my = 0;
+        let cRect = null;
 
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
+        card.addEventListener('mouseenter', () => {
+            cRect = card.getBoundingClientRect();
+        });
+
+        card.addEventListener('mousemove', (e) => {
+            mx = e.clientX;
+            my = e.clientY;
+            if (!cardTicking) {
+                cardTicking = true;
+                requestAnimationFrame(() => {
+                    if (!cRect) cRect = card.getBoundingClientRect();
+                    const x = mx - cRect.left;
+                    const y = my - cRect.top;
+
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                    cardTicking = false;
+                });
+            }
+        }, { passive: true });
+
+        card.addEventListener('mouseleave', () => {
+            cardTicking = false;
+            cRect = null;
         });
     });
 
-    // --- 3. Scroll-Triggered Animations ---
+    // --- 3. Scroll-Triggered Animations (IntersectionObserver replacing scroll polling) ---
     const scrollElements = document.querySelectorAll('.about-reveal, .about-scale-in, .about-blur-in, .about-slide-left, .about-slide-right');
 
-    const elementInView = (el, percentageScroll = 100) => {
-        const elementTop = el.getBoundingClientRect().top;
-        return (
-            elementTop <=
-            ((window.innerHeight || document.documentElement.clientHeight) * (percentageScroll / 100))
-        );
-    };
-
-    const displayScrollElement = (element) => {
-        element.classList.add('active');
-    };
-
-    const handleScrollAnimation = () => {
-        scrollElements.forEach((el) => {
-            if (elementInView(el, 85)) {
-                displayScrollElement(el);
-            }
-        });
-    };
-
-    window.addEventListener('scroll', () => {
-        handleScrollAnimation();
-    });
-
-    // Trigger on load for elements already in view
-    handleScrollAnimation();
-
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    // =========================================
-    // About Us Section Logic
-    // =========================================
-
-    // --- 1. Animated Stats Counter ---
-    const statValues = document.querySelectorAll('.about-stat-value');
-
-    const animateCounter = (element) => {
-        const target = parseInt(element.dataset.target);
-        const duration = 2000;
-        const increment = target / (duration / 16);
-        let current = 0;
-
-        const updateCounter = () => {
-            current += increment;
-            if (current < target) {
-                element.textContent = Math.floor(current);
-                requestAnimationFrame(updateCounter);
-            } else {
-                element.textContent = target;
-            }
-        };
-
-        updateCounter();
-    };
-
-    const statsObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+    const scrollRevealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                animateCounter(entry.target);
-                statsObserver.unobserve(entry.target);
+                entry.target.classList.add('active');
+                scrollRevealObserver.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.15, rootMargin: '0px 0px -15% 0px' });
 
-    statValues.forEach(stat => statsObserver.observe(stat));
-
-    // --- 2. Mouse Tracking for Feature Cards ---
-    const featureCards = document.querySelectorAll('.about-feature-card');
-
-    featureCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            card.style.setProperty('--mouse-x', `${x}px`);
-            card.style.setProperty('--mouse-y', `${y}px`);
-        });
-    });
-
-    // --- 3. Scroll-Triggered Animations ---
-    const scrollElements = document.querySelectorAll('.about-reveal, .about-scale-in, .about-blur-in, .about-slide-left, .about-slide-right');
-
-    const elementInView = (el, percentageScroll = 100) => {
-        const elementTop = el.getBoundingClientRect().top;
-        return (
-            elementTop <=
-            ((window.innerHeight || document.documentElement.clientHeight) * (percentageScroll / 100))
-        );
-    };
-
-    const displayScrollElement = (element) => {
-        element.classList.add('active');
-    };
-
-    const handleScrollAnimation = () => {
-        scrollElements.forEach((el) => {
-            if (elementInView(el, 85)) {
-                displayScrollElement(el);
-            }
-        });
-    };
-
-    window.addEventListener('scroll', () => {
-        handleScrollAnimation();
-    });
-
-    // Trigger on load for elements already in view
-    handleScrollAnimation();
-
+    scrollElements.forEach(el => scrollRevealObserver.observe(el));
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1558,13 +1562,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.getElementById('backToTop');
 
     if (backToTopBtn) {
+        let bttTicking = false;
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
+            if (!bttTicking) {
+                bttTicking = true;
+                requestAnimationFrame(() => {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.classList.add('visible');
+                    } else {
+                        backToTopBtn.classList.remove('visible');
+                    }
+                    bttTicking = false;
+                });
             }
-        });
+        }, { passive: true });
 
         backToTopBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -1742,7 +1753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.requestAnimationFrame(updateParallax);
             ticking = true;
         }
-    });
+    }, { passive: true });
 
 
     // --- Reactive 3D Device Hover Effect ---
@@ -1750,13 +1761,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const stageToRotate = document.querySelector('.showcase-stage');
 
     if (elementToHover && stageToRotate) {
-        elementToHover.addEventListener('mousemove', (e) => {
-            const rect = elementToHover.getBoundingClientRect();
-            const x = e.clientX - rect.left; // Mouse X relative to container
-            const y = e.clientY - rect.top; // Mouse Y relative to container
+        let hoverTicking = false;
+        let hClientX = 0, hClientY = 0;
+        let hRect = null;
+        const devices = document.querySelectorAll('.device');
 
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
+        const updateDeviceParallax = () => {
+            if (!hRect) hRect = elementToHover.getBoundingClientRect();
+            const x = hClientX - hRect.left;
+            const y = hClientY - hRect.top;
+
+            const centerX = hRect.width / 2;
+            const centerY = hRect.height / 2;
 
             // Calculate rotation (max +/- 20 degrees) - More Energetic
             const rotateY = ((x - centerX) / centerX) * 20;
@@ -1765,25 +1781,39 @@ document.addEventListener('DOMContentLoaded', () => {
             stageToRotate.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
             // Parallax for individual devices
-            const devices = document.querySelectorAll('.device');
             devices.forEach(device => {
                 const speed = parseFloat(device.getAttribute('data-speed')) || 2;
-                // Significant increase in movement range for "energetic" feel
                 const moveX = ((x - centerX) / centerX) * speed * 12;
                 const moveY = ((y - centerY) / centerY) * speed * 12;
 
                 device.style.setProperty('--parallax-x', `${moveX}px`);
                 device.style.setProperty('--parallax-y', `${moveY}px`);
             });
+            hoverTicking = false;
+        };
+
+        elementToHover.addEventListener('mouseenter', () => {
+            hRect = elementToHover.getBoundingClientRect();
+            stageToRotate.style.transition = 'transform 0.1s ease-out';
         });
 
+        elementToHover.addEventListener('mousemove', (e) => {
+            hClientX = e.clientX;
+            hClientY = e.clientY;
+            if (!hoverTicking) {
+                hoverTicking = true;
+                requestAnimationFrame(updateDeviceParallax);
+            }
+        }, { passive: true });
+
         elementToHover.addEventListener('mouseleave', () => {
+            hoverTicking = false;
+            hRect = null;
             // Reset rotation
             stageToRotate.style.transition = 'transform 0.5s ease-out';
             stageToRotate.style.transform = 'rotateX(0deg) rotateY(0deg)';
 
             // Reset Parallax
-            const devices = document.querySelectorAll('.device');
             devices.forEach(device => {
                 device.style.transition = 'transform 0.5s ease-out'; // Smooth return
                 device.style.setProperty('--parallax-x', '0px');
@@ -1799,23 +1829,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 stageToRotate.style.transition = 'transform 0.1s ease-out'; // Restore quick response
             }, 500);
         });
-
-        elementToHover.addEventListener('mouseenter', () => {
-            stageToRotate.style.transition = 'transform 0.1s ease-out';
-        });
     }
 
 
     // --- Navbar Scroll Effect ---
     const navbar = document.querySelector('.premium-nav');
     if (navbar) {
+        let navScrollTicking = false;
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
+            if (!navScrollTicking) {
+                navScrollTicking = true;
+                requestAnimationFrame(() => {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                    navScrollTicking = false;
+                });
             }
-        });
+        }, { passive: true });
     }
 
 });
@@ -2024,11 +2057,40 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        requestAnimationFrame(animate);
+        if (isMeshVisible) {
+            meshRafId = requestAnimationFrame(animate);
+        }
     }
 
-    window.addEventListener('resize', resize);
-    setTimeout(() => { resize(); requestAnimationFrame(animate); }, 100);
+    let isMeshVisible = false;
+    let meshRafId = null;
+
+    if (section) {
+        const meshObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (!isMeshVisible) {
+                        isMeshVisible = true;
+                        meshRafId = requestAnimationFrame(animate);
+                    }
+                } else {
+                    isMeshVisible = false;
+                    if (meshRafId) {
+                        cancelAnimationFrame(meshRafId);
+                        meshRafId = null;
+                    }
+                }
+            });
+        }, { threshold: 0.05 });
+        meshObserver.observe(section);
+    }
+
+    let meshResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(meshResizeTimer);
+        meshResizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
+    setTimeout(resize, 100);
 });
 
 // =========================================
@@ -2572,62 +2634,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('section');
 
     if (nav) {
-        window.addEventListener('scroll', () => {
-            // Navbar Background toggle
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+        let navTicking = false;
+        const darkSections = Array.from(document.querySelectorAll('.hero-blue-section, #client_form_section, footer'));
+        const allSections = Array.from(sections);
 
-            // Dark sections detection for logo color swap
-            const darkSections = document.querySelectorAll('.hero-blue-section, #client_form_section, footer');
-            let isOverDark = false;
+        const onNavScroll = () => {
+            const currentScrollY = window.scrollY;
             const navCenterY = 40;
-            darkSections.forEach(sec => {
-                const rect = sec.getBoundingClientRect();
+            const halfWindowH = window.innerHeight / 2;
+
+            // --- BATCH ALL DOM READS FIRST ---
+            let isOverDark = false;
+            for (let i = 0; i < darkSections.length; i++) {
+                const rect = darkSections[i].getBoundingClientRect();
                 if (rect.top <= navCenterY && rect.bottom >= navCenterY) {
                     isOverDark = true;
+                    break;
                 }
-            });
-            if (isOverDark || window.scrollY < 50) { 
-                nav.classList.add('nav-over-dark');
-            } else {
-                nav.classList.remove('nav-over-dark');
             }
 
-            // Scroll Spy Logic
             let currentSectionId = '';
-
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-
-                // Trigger if the top of the section has reached the upper half of the viewport
-                if (rect.top <= window.innerHeight / 2) {
-                    currentSectionId = section.getAttribute('id');
+            for (let i = 0; i < allSections.length; i++) {
+                const rect = allSections[i].getBoundingClientRect();
+                if (rect.top <= halfWindowH) {
+                    currentSectionId = allSections[i].getAttribute('id');
                 }
-            });
+            }
 
-            // Update Active Link
             let matchingLink = null;
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    matchingLink = link;
+            if (currentSectionId) {
+                for (let i = 0; i < navLinks.length; i++) {
+                    if (navLinks[i].getAttribute('href') === `#${currentSectionId}`) {
+                        matchingLink = navLinks[i];
+                        break;
+                    }
                 }
-            });
+            }
 
-            // Only update the active class if we found a matching link for this section
-            // This prevents the active link from losing its white text color when scrolling past sections without nav items (like About Us)
-            if (matchingLink) {
+            // --- BATCH ALL DOM WRITES AFTERWARDS ---
+            nav.classList.toggle('scrolled', currentScrollY > 50);
+            nav.classList.toggle('nav-over-dark', isOverDark || currentScrollY < 50);
+
+            if (matchingLink && !matchingLink.classList.contains('active')) {
                 navLinks.forEach(link => link.classList.remove('active'));
                 matchingLink.classList.add('active');
             }
-        });
+
+            navTicking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            if (!navTicking) {
+                navTicking = true;
+                requestAnimationFrame(onNavScroll);
+            }
+        }, { passive: true });
 
         // Trigger once on load in case user refreshed while down the page
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        }
+        onNavScroll();
     }
 });
 
