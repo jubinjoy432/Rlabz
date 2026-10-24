@@ -309,8 +309,7 @@
         card.className = 'project-gallery-card';
         card.style.animationDelay = `${index * 0.06}s`;
 
-        const statusClass = project.status === 'Deployed' ? 'status-deployed' :
-            project.status === 'In Development' ? 'status-in-development' : 'status-completed';
+        const statusClass = project.status === 'In Development' ? 'status-in-development' : 'status-completed';
 
         let tagsHtml = '';
         if (project.tech && project.tech.length > 0) {

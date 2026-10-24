@@ -18,7 +18,7 @@ $activeSslMonitors = 0;
 $sslIssues = 0;
 $recentProjects = [];
 
-$chartDataStatus = ['Completed' => 0, 'Deployed' => 0, 'In Development' => 0];
+$chartDataStatus = ['Completed' => 0, 'In Development' => 0];
 $chartDataYear = [];
 
 if ($pdo) {
@@ -30,10 +30,11 @@ if ($pdo) {
         
         foreach ($allProjects as $p) {
             if ($p['status'] === 'Completed') $completedProjects++;
-            if ($p['status'] === 'Deployed') $deployedProjects++;
             if ($p['status'] === 'In Development') $inDevProjects++;
             
-            $chartDataStatus[$p['status']] = ($chartDataStatus[$p['status']] ?? 0) + 1;
+            if (isset($chartDataStatus[$p['status']])) {
+                $chartDataStatus[$p['status']]++;
+            }
             
             $y = $p['year'] ? $p['year'] : 'N/A';
             $chartDataYear[$y] = ($chartDataYear[$y] ?? 0) + 1;
@@ -106,11 +107,6 @@ require_once '../includes/layout_header.php';
         <div class="stat-card-icon"><i class="fa-solid fa-check-circle"></i></div>
         <div class="stat-card-value"><?php echo $completedProjects; ?></div>
         <div class="stat-card-label">Completed</div>
-    </div>
-    <div class="stat-card stat-purple">
-        <div class="stat-card-icon"><i class="fa-solid fa-rocket"></i></div>
-        <div class="stat-card-value"><?php echo $deployedProjects; ?></div>
-        <div class="stat-card-label">Deployed</div>
     </div>
     <div class="stat-card stat-amber">
         <div class="stat-card-icon"><i class="fa-solid fa-code"></i></div>
@@ -342,7 +338,13 @@ async function refreshSslNow() {
                     <tr>
                         <td>
                             <div style="display:flex; align-items:center; gap:0.75rem;">
-                                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" class="project-thumb" alt="thumb" onerror="this.src='../../assets/images/logo1.png'">
+                                <?php
+                                    $ovImg = $p['image_path'] ?? '';
+                                    $ovSrc = empty($ovImg) 
+                                        ? '../../assets/images/logo1.png' 
+                                        : (preg_match('#^https?://#i', $ovImg) ? $ovImg : '../../' . ltrim($ovImg, '/'));
+                                ?>
+                                <img src="<?php echo htmlspecialchars($ovSrc); ?>" class="project-thumb" alt="thumb" onerror="this.onerror=null;this.src='../../assets/images/logo1.png';">
                                 <div>
                                     <div class="project-title-cell"><?php echo htmlspecialchars($p['title']); ?></div>
                                     <div class="project-title-meta">/<?php echo htmlspecialchars($p['slug']); ?></div>
@@ -355,10 +357,7 @@ async function refreshSslNow() {
                         </td>
                         <td>
                             <?php
-                                $statusClass = 'badge-default';
-                                if($p['status'] == 'Deployed') $statusClass = 'badge-deployed';
-                                if($p['status'] == 'Completed') $statusClass = 'badge-completed';
-                                if($p['status'] == 'In Development') $statusClass = 'badge-dev';
+                                $statusClass = ($p['status'] === 'Completed') ? 'badge-completed' : 'badge-dev';
                             ?>
                             <span class="badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($p['status']); ?></span>
                         </td>
@@ -394,7 +393,7 @@ async function refreshSslNow() {
             labels: <?php echo $statusLabels; ?>,
             datasets: [{
                 data: <?php echo $statusData; ?>,
-                backgroundColor: ['#38bdf8', '#4ade80', '#fbbf24', '#a78bfa'],
+                backgroundColor: ['#10b981', '#f59e0b'],
                 borderWidth: 0,
                 hoverOffset: 4
             }]

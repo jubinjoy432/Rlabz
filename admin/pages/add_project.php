@@ -17,14 +17,6 @@ require_once '../includes/layout_header.php';
 </div>
 
 <div class="card">
-    <?php if(isset($_GET['success'])): ?>
-        <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Project added successfully!</div>
-    <?php endif; ?>
-    
-    <?php if(isset($_GET['error'])): ?>
-        <div class="alert alert-error"><i class="fa-solid fa-exclamation-circle"></i> Error: <?php echo htmlspecialchars($_GET['error']); ?></div>
-    <?php endif; ?>
-
     <form action="../api/add_project.php" method="POST" enctype="multipart/form-data" id="addProjectForm">
         
         <!-- Basic Info -->
@@ -108,7 +100,6 @@ require_once '../includes/layout_header.php';
                 <label for="status">Project Status</label>
                 <select id="status" name="status">
                     <option value="In Development" selected>In Development</option>
-                    <option value="Deployed">Deployed</option>
                     <option value="Completed">Completed</option>
                 </select>
                 <span class="form-help">Default is "In Development".</span>

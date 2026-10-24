@@ -129,13 +129,12 @@ require_once 'includes/layout_header.php';
                 <label>Project Status</label>
                 <?php 
                     $currentStatus = trim($project['status'] ?? '');
-                    if (!in_array($currentStatus, ['In Development', 'Deployed', 'Completed'])) {
-                        $currentStatus = 'In Development';
+                    if (!in_array($currentStatus, ['In Development', 'Completed'])) {
+                        $currentStatus = 'Completed';
                     }
                 ?>
                 <select name="status">
                     <option value="In Development" <?= $currentStatus === 'In Development' ? 'selected' : '' ?>>In Development</option>
-                    <option value="Deployed" <?= $currentStatus === 'Deployed' ? 'selected' : '' ?>>Deployed</option>
                     <option value="Completed" <?= $currentStatus === 'Completed' ? 'selected' : '' ?>>Completed</option>
                 </select>
                 <span class="form-help" style="font-size: 0.8rem; color: #64748b;">Current saved status: <strong><?= htmlspecialchars($project['status'] ?? 'None') ?></strong></span>

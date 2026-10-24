@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $objectives = trim($_POST['objectives'] ?? '');
     $problem_statement = trim($_POST['problem_statement'] ?? '');
     $expected_outcome = trim($_POST['expected_outcome'] ?? '');
+    $key_features = trim($_POST['key_features'] ?? '');
     $tech_stack = trim($_POST['tech_stack'] ?? '');
     $department = trim($_POST['department'] ?? 'MCA');
     if ($department === 'Other' && !empty(trim($_POST['department_custom'] ?? ''))) {
@@ -39,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $project_type = trim($_POST['project_type'] ?? 'Academic');
     
-    // Validate status: supported values are 'In Development', 'Deployed', 'Completed'
-    $valid_statuses = ['In Development', 'Deployed', 'Completed'];
+    // Validate status: supported values are 'In Development', 'Completed'
+    $valid_statuses = ['In Development', 'Completed'];
     $status_input = trim($_POST['status'] ?? '');
     $status = in_array($status_input, $valid_statuses) ? $status_input : 'In Development';
 
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Validate basics
     if (empty($title) || empty($year) || empty($description)) {
-        header("Location: ../dashboard.php?error=" . urlencode("Title, Year, and Description are required."));
+        header("Location: ../pages/add_project.php?error=" . urlencode("Title, Year, and Description are required."));
         exit;
     }
 
@@ -63,6 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($slug)) {
         $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', $title));
         $slug = trim($slug, '-');
+    }
+    if (empty($slug)) {
+        $slug = 'project-' . time();
+    }
+
+    // Ensure slug is unique
+    $checkSlugStmt = $pdo->prepare("SELECT COUNT(*) FROM projects WHERE slug = ?");
+    $checkSlugStmt->execute([$slug]);
+    if ($checkSlugStmt->fetchColumn() > 0) {
+        $slug = $slug . '-' . time();
     }
 
     $uploadDir = '../../uploads/';
@@ -76,11 +87,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         if (!in_array($ext, $allowed)) {
-            header("Location: ../dashboard.php?error=" . urlencode("Invalid cover image format."));
+            header("Location: ../pages/add_project.php?error=" . urlencode("Invalid cover image format."));
             exit;
         }
         if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-            header("Location: ../dashboard.php?error=" . urlencode("Cover image exceeds 5MB limit."));
+            header("Location: ../pages/add_project.php?error=" . urlencode("Cover image exceeds 5MB limit."));
             exit;
         }
         $newFilename = uniqid('proj_') . '.' . $ext;
@@ -213,23 +224,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         // --- Handle SSL Details (Optional) ---
-        // Ensure SSL table exists (idempotent)
-        $pdo->exec("CREATE TABLE IF NOT EXISTS `project_ssl_certs` (
-            `id` INT(11) NOT NULL AUTO_INCREMENT,
-            `project_id` INT(11) NOT NULL,
-            `domain_url` VARCHAR(255) NOT NULL,
-            `provider` VARCHAR(100) DEFAULT '',
-            `issue_date` DATE DEFAULT NULL,
-            `expiry_date` DATE DEFAULT NULL,
-            `certificate_fingerprint` VARCHAR(255) DEFAULT NULL,
-            `last_checked_at` TIMESTAMP NULL DEFAULT NULL,
-            `status` VARCHAR(50) DEFAULT 'Pending',
-            `last_error` TEXT DEFAULT NULL,
-            `last_alert_level` VARCHAR(50) DEFAULT NULL,
-            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (`id`),
-            FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
         if (!empty($_POST['ssl_domain'])) {
             $ssl_domain = trim($_POST['ssl_domain']);
             $ssl_provider = isset($_POST['ssl_provider']) ? trim($_POST['ssl_provider']) : '';
@@ -241,16 +235,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSsl->execute([$project_id, $ssl_domain, $ssl_provider, $ssl_issue_date, $ssl_expiry_date, $ssl_fingerprint]);
         }
 
-        $pdo->commit();
-        header("Location: ../dashboard.php?success=1");
+        if ($pdo->inTransaction()) {
+            $pdo->commit();
+        }
+        header("Location: ../pages/manage_projects.php?success=" . urlencode("Project created successfully!"));
         exit;
     } catch (PDOException $e) {
         if ($pdo->inTransaction()) {
             $pdo->rollBack();
         }
-        header("Location: ../dashboard.php?error=" . urlencode("Database error: " . $e->getMessage()));
+        header("Location: ../pages/add_project.php?error=" . urlencode("Database error: " . $e->getMessage()));
         exit;
     }
-    }
-
+} else {
+    header("Location: ../pages/manage_projects.php");
+    exit;
+}
 ?>

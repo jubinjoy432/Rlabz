@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $project_type = trim($_POST['project_type'] ?? 'Academic');
     
     // Status preservation and validation
-    $valid_statuses = ['In Development', 'Deployed', 'Completed'];
+    $valid_statuses = ['In Development', 'Completed'];
     $submitted_status = trim($_POST['status'] ?? '');
     if (in_array($submitted_status, $valid_statuses)) {
         $status = $submitted_status;
@@ -265,12 +265,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtSsl->execute([$id, $ssl_domain, $ssl_provider, $ssl_issue_date, $ssl_expiry_date, $ssl_fingerprint]);
         }
 
-        $pdo->commit();
-        header("Location: ../edit_project.php?id=$id&success=1");
+        if ($pdo->inTransaction()) {
+            $pdo->commit();
+        }
+        header("Location: ../edit_project.php?id=$id&success=" . urlencode("Project updated successfully!"));
         exit;
 
     } catch (PDOException $e) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         header("Location: ../edit_project.php?id=$id&error=" . urlencode("Database Error: " . $e->getMessage()));
         exit;
     }

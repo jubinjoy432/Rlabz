@@ -40,7 +40,7 @@ $categories = array_filter(array_unique(array_map(function($p) { return trim($p[
 sort($categories);
 $departments = array_filter(array_unique(array_map(function($p) { return trim($p['department'] ?? ''); }, $projects)));
 sort($departments);
-$statuses = ['Deployed', 'Completed', 'In Development'];
+$statuses = ['Completed', 'In Development'];
 ?>
 
 <div class="card">
@@ -83,11 +83,8 @@ $statuses = ['Deployed', 'Completed', 'In Development'];
         </div>
     </div>
     
-    <?php if(isset($_GET['success'])): ?>
-        <div class="alert alert-success"><i class="fa-solid fa-check-circle"></i> Action completed successfully!</div>
-    <?php endif; ?>
     <?php if(isset($error)): ?>
-        <div class="alert alert-error"><i class="fa-solid fa-exclamation-circle"></i> <?php echo $error; ?></div>
+        <script>document.addEventListener("DOMContentLoaded", function() { if(typeof showAdminToast === 'function') showAdminToast('error', 'Error', <?php echo json_encode($error); ?>); });</script>
     <?php endif; ?>
     
     <?php if(empty($projects)): ?>
@@ -103,7 +100,13 @@ $statuses = ['Deployed', 'Completed', 'In Development'];
                 data-category="<?php echo htmlspecialchars($p['category'] ?? ''); ?>"
                 data-department="<?php echo htmlspecialchars($p['department'] ?? ''); ?>"
                 data-year="<?php echo htmlspecialchars($p['year'] ?? ''); ?>">
-                <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" alt="Project image" class="project-img" onerror="this.src='../../assets/images/logo1.png'">
+                <?php
+                    $imgPath = $p['image_path'] ?? '';
+                    $imgSrc = empty($imgPath) 
+                        ? '../../assets/images/logo1.png' 
+                        : (preg_match('#^https?://#i', $imgPath) ? $imgPath : '../../' . ltrim($imgPath, '/'));
+                ?>
+                <img src="<?php echo htmlspecialchars($imgSrc); ?>" alt="Project image" class="project-img" onerror="this.onerror=null;this.src='../../assets/images/logo1.png';">
                 <div class="project-info">
                     <h3 class="project-title"><?php echo htmlspecialchars($p['title']); ?></h3>
                     <p><?php echo htmlspecialchars(substr($p['description'], 0, 100)); ?>...</p>
@@ -111,10 +114,7 @@ $statuses = ['Deployed', 'Completed', 'In Development'];
                         <span class="badge badge-default"><?php echo htmlspecialchars($p['year']); ?></span>
                         <?php if(!empty($p['status'])): ?>
                             <?php
-                                $statusClass = 'badge-default';
-                                if($p['status'] == 'Deployed') $statusClass = 'badge-deployed';
-                                if($p['status'] == 'Completed') $statusClass = 'badge-completed';
-                                if($p['status'] == 'In Development') $statusClass = 'badge-dev';
+                                $statusClass = ($p['status'] === 'Completed') ? 'badge-completed' : 'badge-dev';
                             ?>
                         <span class="badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($p['status']); ?></span>
                         <?php endif; ?>

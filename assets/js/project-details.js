@@ -97,8 +97,7 @@
         if (tagline) tagline.textContent = project.shortDescription || project.fullDescription || '';
 
         if (meta) {
-            const statusClass = project.status === 'Deployed' ? 'status-deployed' :
-                project.status === 'In Development' ? 'status-in-development' : 'status-completed';
+            const statusClass = project.status === 'In Development' ? 'status-in-development' : 'status-completed';
 
             let badges = `<span class="pd-meta-badge pd-meta-year"><i class="fa-regular fa-calendar"></i> ${project.year}</span>`;
             if (project.department) {
