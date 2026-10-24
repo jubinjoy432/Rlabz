@@ -43,9 +43,9 @@ if (isset($pdo) && $pdo) {
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 1.5rem 1.5rem;">
+        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 1.5rem 1rem;">
             <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
-            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="max-width: 175px; height: auto;">
+            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="width: 225px; max-width: 100%; height: auto; object-fit: contain;">
         </a>
 
         <nav class="sidebar-nav">
