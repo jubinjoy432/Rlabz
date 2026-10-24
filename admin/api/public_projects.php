@@ -5,6 +5,15 @@ header('Access-Control-Allow-Origin: *'); // Allow all origins
 
 require_once 'db.php';
 
+function normalize_public_image_url($url) {
+    if (empty($url)) return '';
+    $url = trim($url);
+    if (preg_match('/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?id=)([a-zA-Z0-9_-]+)/i', $url, $matches)) {
+        return "https://lh3.googleusercontent.com/d/" . $matches[1];
+    }
+    return $url;
+}
+
 try {
     // 1. Get all projects
     $stmt = $pdo->query("SELECT * FROM projects ORDER BY year DESC, id DESC");
@@ -36,14 +45,14 @@ try {
         $membersByProject[$m['project_id']][] = [
             'name' => $m['name'],
             'role' => $m['role'],
-            'photo' => $m['photo_path'],
+            'photo' => normalize_public_image_url($m['photo_path']),
             'linkedin' => $m['linkedin_link']
         ];
     }
 
     $screenshotsByProject = [];
     foreach ($screenshots as $s) {
-        $screenshotsByProject[$s['project_id']][] = $s['image_path']; // Simplify for frontend compatibility
+        $screenshotsByProject[$s['project_id']][] = normalize_public_image_url($s['image_path']);
     }
 
     $facultyByProject = [];
@@ -51,7 +60,7 @@ try {
         $facultyByProject[$f['project_id']][] = [
             'name' => $f['name'],
             'designation' => $f['designation'],
-            'photo' => $f['photo_path'],
+            'photo' => normalize_public_image_url($f['photo_path']),
             'linkedin' => $f['linkedin_link']
         ];
     }
@@ -88,7 +97,7 @@ try {
             'expectedOutcome' => $p['expected_outcome'],
             'tech' => !empty($p['tech_stack']) ? array_map('trim', explode(',', $p['tech_stack'])) : [],
             'keyFeatures' => !empty($p['key_features']) ? array_map('trim', explode(',', $p['key_features'])) : [],
-            'thumbnail' => $p['thumbnail_path'],
+            'thumbnail' => normalize_public_image_url($p['thumbnail_path']),
             'screenshots' => $screenshotsByProject[$p_id] ?? [],
             'team' => $membersByProject[$p_id] ?? [],
             'faculty' => $facultyByProject[$p_id] ?? [],
@@ -102,7 +111,7 @@ try {
             'githubLink' => $p['github_link'],
             'demoLink' => $p['demo_link'],
             'sslDomain' => $sslDomainByProject[$p_id] ?? null,
-            'poster' => $p['poster_path']
+            'poster' => normalize_public_image_url($p['poster_path'])
         ];
         
         $frontend_projects[] = $mapped_project;

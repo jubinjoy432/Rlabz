@@ -94,7 +94,7 @@
         }
 
         if (title) title.textContent = project.title;
-        if (tagline) tagline.textContent = project.shortDescription;
+        if (tagline) tagline.textContent = project.shortDescription || project.fullDescription || '';
 
         if (meta) {
             const statusClass = project.status === 'Deployed' ? 'status-deployed' :
@@ -237,13 +237,20 @@
     function renderTechnologies(project) {
         const grid = document.getElementById('pdTechGrid');
         if (!grid) return;
+        const card = document.getElementById('pdTechCard') || grid.closest('.pd-card');
 
-        if (!project.tech || project.tech.length === 0) {
-            grid.innerHTML = '<p style="color: rgba(255,255,255,0.3);">No technologies listed.</p>';
+        const validTech = Array.isArray(project.tech)
+            ? project.tech.map(t => typeof t === 'string' ? t.trim() : '').filter(t => t.length > 0)
+            : [];
+
+        if (validTech.length === 0) {
+            if (card) card.style.display = 'none';
+            grid.innerHTML = '';
             return;
         }
 
-        grid.innerHTML = project.tech.map(t =>
+        if (card) card.style.display = '';
+        grid.innerHTML = validTech.map(t =>
             `<span class="pd-tech-badge">${t}</span>`
         ).join('');
     }
@@ -258,8 +265,12 @@
         if (project.batch) rows.push({ label: 'Batch', value: project.batch });
         if (project.department) rows.push({ label: 'Department', value: project.department });
         if (project.faculty && project.faculty.length > 0) {
-            const facultyNames = project.faculty.map(f => f.name).join(', ');
-            rows.push({ label: 'Guide', value: facultyNames });
+            const facultyNames = project.faculty
+                .filter(f => f && f.name && f.name.trim() !== '')
+                .map(f => f.name).join(', ');
+            if (facultyNames) {
+                rows.push({ label: 'Guide', value: facultyNames });
+            }
         }
         if (project.projectType) rows.push({ label: 'Project Type', value: project.projectType });
         if (project.category) rows.push({ label: 'Category', value: project.category });
@@ -319,16 +330,22 @@
         const container = document.getElementById('pdFacultyContent');
         if (!card || !container) return;
 
-        if (!project.faculty || project.faculty.length === 0) {
+        const validFaculty = Array.isArray(project.faculty)
+            ? project.faculty.filter(f => f && f.name && f.name.trim() !== '')
+            : [];
+
+        if (validFaculty.length === 0) {
             card.style.display = 'none';
+            container.innerHTML = '';
             return;
         }
 
+        card.style.display = '';
         container.style.display = 'grid';
         container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
         container.style.gap = '1.5rem';
 
-        container.innerHTML = project.faculty.map(f => {
+        container.innerHTML = validFaculty.map(f => {
             const photoHtml = f.photo ? `<img src="${f.photo}" alt="${f.name}" class="pd-faculty-avatar" loading="lazy" onerror="this.style.display='none'">` : '';
             let liUrl = f.linkedin;
             if (liUrl && !/^https?:\/\//i.test(liUrl)) {

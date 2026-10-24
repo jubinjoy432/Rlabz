@@ -35,12 +35,51 @@ require_once '../includes/layout_header.php';
     </div>
 </div>
 
+<?php
+$categories = array_filter(array_unique(array_map(function($p) { return trim($p['category'] ?? ''); }, $projects)));
+sort($categories);
+$departments = array_filter(array_unique(array_map(function($p) { return trim($p['department'] ?? ''); }, $projects)));
+sort($departments);
+$statuses = ['Deployed', 'Completed', 'In Development'];
+?>
+
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-        <h2 style="margin: 0; padding: 0; border: none;"><i class="fa-solid fa-folder-open"></i> Existing Projects (<?php echo count($projects); ?>)</h2>
-        <div class="search-bar" style="margin: 0; width: 300px;">
+        <h2 style="margin: 0; padding: 0; border: none;"><i class="fa-solid fa-folder-open"></i> Existing Projects (<span id="projectCountLabel"><?php echo count($projects); ?></span>)</h2>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="projects-filter-bar" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; background: #f8fafc; padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
+        <div class="search-bar" style="margin: 0; min-width: 240px; flex: 1;">
             <i class="fa-solid fa-search"></i>
-            <input type="text" id="projectSearch" placeholder="Search projects...">
+            <input type="text" id="projectSearch" placeholder="Search title, tech, description...">
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <select id="filterCategory" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-primary); font-size: 0.85rem; font-weight: 500; cursor: pointer;">
+                <option value="">All Categories</option>
+                <?php foreach($categories as $cat): ?>
+                    <option value="<?php echo htmlspecialchars($cat); ?>"><?php echo htmlspecialchars($cat); ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <select id="filterDepartment" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-primary); font-size: 0.85rem; font-weight: 500; cursor: pointer;">
+                <option value="">All Departments</option>
+                <?php foreach($departments as $dept): ?>
+                    <option value="<?php echo htmlspecialchars($dept); ?>"><?php echo htmlspecialchars($dept); ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <select id="filterStatus" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-primary); font-size: 0.85rem; font-weight: 500; cursor: pointer;">
+                <option value="">All Statuses</option>
+                <?php foreach($statuses as $st): ?>
+                    <option value="<?php echo htmlspecialchars($st); ?>"><?php echo htmlspecialchars($st); ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <button type="button" id="btnResetFilters" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-secondary); font-size: 0.82rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+            </button>
         </div>
     </div>
     
@@ -59,7 +98,11 @@ require_once '../includes/layout_header.php';
     <?php else: ?>
         <ul class="project-list" id="projectList">
             <?php foreach($projects as $p): ?>
-            <li class="project-item">
+            <li class="project-item" 
+                data-status="<?php echo htmlspecialchars($p['status'] ?? ''); ?>"
+                data-category="<?php echo htmlspecialchars($p['category'] ?? ''); ?>"
+                data-department="<?php echo htmlspecialchars($p['department'] ?? ''); ?>"
+                data-year="<?php echo htmlspecialchars($p['year'] ?? ''); ?>">
                 <img src="../../<?php echo htmlspecialchars($p['image_path']); ?>" alt="Project image" class="project-img" onerror="this.src='../../assets/images/logo1.png'">
                 <div class="project-info">
                     <h3 class="project-title"><?php echo htmlspecialchars($p['title']); ?></h3>
@@ -76,7 +119,10 @@ require_once '../includes/layout_header.php';
                         <span class="badge <?php echo $statusClass; ?>"><?php echo htmlspecialchars($p['status']); ?></span>
                         <?php endif; ?>
                         <?php if(!empty($p['category'])): ?>
-                        <span class="badge badge-default" style="background: rgba(139,92,246,0.12); color: #a78bfa;"><?php echo htmlspecialchars($p['category']); ?></span>
+                        <span class="badge badge-default" style="background: rgba(139,92,246,0.12); color: #7c3aed;"><?php echo htmlspecialchars($p['category']); ?></span>
+                        <?php endif; ?>
+                        <?php if(!empty($p['department'])): ?>
+                        <span class="badge badge-default" style="background: rgba(14,165,233,0.12); color: #0284c7;"><?php echo htmlspecialchars($p['department']); ?></span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -112,7 +158,13 @@ require_once '../includes/layout_header.php';
     let allItems = [];
     let filteredItems = [];
 
-    const searchInput  = document.getElementById('projectSearch');
+    const searchInput      = document.getElementById('projectSearch');
+    const filterCategory   = document.getElementById('filterCategory');
+    const filterDepartment = document.getElementById('filterDepartment');
+    const filterStatus     = document.getElementById('filterStatus');
+    const btnResetFilters  = document.getElementById('btnResetFilters');
+    const countLabel       = document.getElementById('projectCountLabel');
+
     const projectList  = document.getElementById('projectList');
     const pagination   = document.getElementById('adminPagination');
     const admPrev      = document.getElementById('admPrev');
@@ -125,18 +177,44 @@ require_once '../includes/layout_header.php';
     allItems     = Array.from(projectList.querySelectorAll('.project-item'));
     filteredItems = allItems.slice();
 
+    function applyFilters() {
+        const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+        const selectedCat = filterCategory ? filterCategory.value.trim() : '';
+        const selectedDept = filterDepartment ? filterDepartment.value.trim() : '';
+        const selectedStatus = filterStatus ? filterStatus.value.trim() : '';
+
+        filteredItems = allItems.filter(item => {
+            const itemText = item.textContent.toLowerCase();
+            const itemCat  = item.getAttribute('data-category') || '';
+            const itemDept = item.getAttribute('data-department') || '';
+            const itemStat = item.getAttribute('data-status') || '';
+
+            const matchQuery = !query || itemText.includes(query);
+            const matchCat   = !selectedCat || (itemCat === selectedCat);
+            const matchDept  = !selectedDept || (itemDept === selectedDept);
+            const matchStat  = !selectedStatus || (itemStat === selectedStatus);
+
+            return matchQuery && matchCat && matchDept && matchStat;
+        });
+
+        if (countLabel) {
+            countLabel.textContent = filteredItems.length;
+        }
+
+        currentPage = 1;
+        renderPage();
+    }
+
     function totalPages() {
         return Math.max(1, Math.ceil(filteredItems.length / ITEMS_PER_PAGE));
     }
 
     function renderPage() {
-        // Hide all then show only the current page slice
         allItems.forEach(item => { item.style.display = 'none'; });
         const start = (currentPage - 1) * ITEMS_PER_PAGE;
         const end   = Math.min(start + ITEMS_PER_PAGE, filteredItems.length);
         filteredItems.slice(start, end).forEach(item => { item.style.display = 'flex'; });
 
-        // Show / hide pagination
         if (filteredItems.length <= ITEMS_PER_PAGE) {
             pagination.style.display = 'none';
         } else {
@@ -188,20 +266,23 @@ require_once '../includes/layout_header.php';
     admPrev.addEventListener('click', () => goToPage(currentPage - 1));
     admNext.addEventListener('click', () => goToPage(currentPage + 1));
 
-    // Search — refilter and reset to page 1
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            const term = this.value.trim().toLowerCase();
-            filteredItems = term
-                ? allItems.filter(item => item.textContent.toLowerCase().includes(term))
-                : allItems.slice();
-            currentPage = 1;
-            renderPage();
+    if (searchInput) searchInput.addEventListener('input', applyFilters);
+    if (filterCategory) filterCategory.addEventListener('change', applyFilters);
+    if (filterDepartment) filterDepartment.addEventListener('change', applyFilters);
+    if (filterStatus) filterStatus.addEventListener('change', applyFilters);
+
+    if (btnResetFilters) {
+        btnResetFilters.addEventListener('click', () => {
+            if (searchInput) searchInput.value = '';
+            if (filterCategory) filterCategory.value = '';
+            if (filterDepartment) filterDepartment.value = '';
+            if (filterStatus) filterStatus.value = '';
+            applyFilters();
         });
     }
 
     // Initial render
-    renderPage();
+    applyFilters();
 })();
 </script>
 

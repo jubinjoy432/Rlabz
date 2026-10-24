@@ -173,11 +173,13 @@
                 const searchable = [
                     project.title,
                     project.shortDescription,
+                    project.fullDescription,
                     project.year,
-                    ...project.tech,
+                    ...(project.tech || []),
                     ...(project.team || []).map(t => t.name),
                     project.category || '',
-                    project.department || ''
+                    project.department || '',
+                    project.status || ''
                 ].join(' ').toLowerCase();
 
                 if (!searchable.includes(searchQuery)) return false;
@@ -303,29 +305,30 @@
 
     function createCardElement(project, index) {
         const card = document.createElement('a');
-        const hasDemoLink = project.demoLink && project.demoLink.trim() !== '' && project.demoLink !== '#';
-        if (hasDemoLink) {
-            card.href = project.demoLink;
-            card.target = '_blank';
-            card.rel = 'noopener noreferrer';
-        } else {
-            card.href = `project-details.html?id=${project.id}`;
-        }
+        card.href = `project-details.html?id=${project.id}`;
         card.className = 'project-gallery-card';
         card.style.animationDelay = `${index * 0.06}s`;
 
         const statusClass = project.status === 'Deployed' ? 'status-deployed' :
             project.status === 'In Development' ? 'status-in-development' : 'status-completed';
 
-        const hostedIndicator = hasDemoLink 
-            ? `<span class="pg-card-tag" style="background: var(--digital-blue); color: white; border-color: var(--digital-blue);"><i class="fa-solid fa-globe"></i> Hosted Site</span>` 
-            : '';
+        let tagsHtml = '';
+        if (project.tech && project.tech.length > 0) {
+            const techTags = project.tech.slice(0, 4).map(t =>
+                `<span class="pg-card-tag">${t}</span>`
+            ).join('');
+            const extraTechCount = project.tech.length - 4;
+            const techExtra = extraTechCount > 0 ? `<span class="pg-card-tag">+${extraTechCount}</span>` : '';
+            tagsHtml = `${techTags}${techExtra}`;
+        } else {
+            // When language is not given, display project type / category (e.g. Web Application, Mobile Application)
+            const typeLabel = project.category || project.projectType || 'Web Application';
+            const typeIcon = typeLabel.toLowerCase().includes('mobile') ? 'fa-mobile-screen' :
+                             typeLabel.toLowerCase().includes('analytic') ? 'fa-chart-pie' : 'fa-layer-group';
+            tagsHtml = `<span class="pg-card-tag pg-card-tag-type"><i class="fa-solid ${typeIcon}" style="font-size: 0.65rem; margin-right: 5px;"></i>${typeLabel}</span>`;
+        }
 
-        const techTags = project.tech.slice(0, 4).map(t =>
-            `<span class="pg-card-tag">${t}</span>`
-        ).join('');
-        const extraTechCount = project.tech.length - 4;
-        const techExtra = extraTechCount > 0 ? `<span class="pg-card-tag">+${extraTechCount}</span>` : '';
+        const cardDesc = project.shortDescription || project.fullDescription || '';
 
         card.innerHTML = `
             <div class="pg-card-image">
@@ -335,8 +338,8 @@
             </div>
             <div class="pg-card-content">
                 <h3 class="pg-card-title">${project.title}</h3>
-                <p class="pg-card-desc">${project.shortDescription}</p>
-                <div class="pg-card-tags">${hostedIndicator}${techTags}${techExtra}</div>
+                <p class="pg-card-desc">${cardDesc}</p>
+                <div class="pg-card-tags">${tagsHtml}</div>
             </div>
         `;
 

@@ -18,6 +18,8 @@ if (typeof Lenis !== 'undefined') {
 
     gsap.ticker.lagSmoothing(0);
 
+    window.lenis = lenis;
+    window.isMobileLenisKilled = false;
     let isMobileLenisKilled = false;
 
     // Forces scroll onto the main thread on mobile to eliminate compositor divergence 
@@ -28,6 +30,7 @@ if (typeof Lenis !== 'undefined') {
         // feedback vibrations when fighting GSAP's normalizeScroll
         lenis.destroy();
         isMobileLenisKilled = true;
+        window.isMobileLenisKilled = true;
     }
 
     // Smooth scroll for nav anchor links using Lenis instead of CSS scroll-behavior
@@ -1563,11 +1566,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        backToTopBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const startY = window.pageYOffset || document.documentElement.scrollTop;
+            if (startY <= 0) return;
+
+            if (window.lenis && !window.isMobileLenisKilled && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(0, {
+                    duration: 1.6,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                });
+                return;
+            }
+
+            // Smooth fallback for mobile or when Lenis is not active
+            const duration = 1400; // ms for a calm, controlled upward glide
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function scrollStep(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeOutCubic(progress);
+                const targetY = startY * (1 - eased);
+
+                window.scrollTo(0, targetY);
+
+                if (progress < 1) {
+                    requestAnimationFrame(scrollStep);
+                }
+            }
+
+            requestAnimationFrame(scrollStep);
         });
     }
     // --- Scroll Animations for Bottom Cards (Our Works) ---
@@ -2723,7 +2756,6 @@ function refreshTimeline() {
         buildDynamicTimeline();
         dynamicTimelineBuilt = true;
     }
-    // Init the GSAP timeline everywhere
     initCurvedTimeline();
 }
 
@@ -2748,26 +2780,21 @@ function buildDynamicTimeline() {
     const scrollContent = document.querySelector('.timeline-scroll-content');
     if (!scrollContent || !window.RLABZ_PROJECTS || window.RLABZ_PROJECTS.length === 0) return;
 
-    // Remove ALL existing nodes and cards (both static HTML ones and dynamic ones)
+    // Remove existing nodes and cards
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Remove any existing mobile carousel
-    const existingCarousel = document.getElementById('mobile-project-carousel');
-    if (existingCarousel) existingCarousel.remove();
-
-    // Sort projects: oldest first for desktop timeline; newest first for mobile preview
-    const sorted = [...window.RLABZ_PROJECTS].sort((a, b) => {
+    // Sort projects ascending: oldest year / oldest project first at the start of the timeline
+    const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
         const yearA = parseInt(a.year) || 0;
         const yearB = parseInt(b.year) || 0;
-        if (yearA !== yearB) return yearA - yearB;
-        return String(a.id).localeCompare(String(b.id));
+        if (yearA !== yearB) {
+            return yearA - yearB; // Oldest year first
+        }
+        return String(a.id).localeCompare(String(b.id)); // Alphabetical fallback for same year
     });
 
-    const isMobile = false; // Force desktop timeline on mobile
-
-    // ─── DESKTOP: build the curvy timeline nodes ────────────────────────────
-    const projects = sorted;
+    // Base X offset
     let currentX = 240;
     let isBottom = true;
     const colors = ['#27A3FF', '#43AE47', '#002C49', '#1689D6', '#2E7C31'];
@@ -2776,26 +2803,45 @@ function buildDynamicTimeline() {
         const top = isBottom ? 340 : 160;
         const color = colors[idx % colors.length];
 
+        // Node
         const node = document.createElement('div');
         node.className = `timeline-node node-${isBottom ? 'bottom' : 'top'} clean-node`;
         node.style.left = `${currentX}px`;
         node.style.top = `${top}px`;
         node.style.setProperty('--node-color', color);
         node.innerHTML = `<div class="node-inner" style="color: ${color}">${proj.year || 'N/A'}</div>`;
+
+        // Connecting Line
+        const line = document.createElement('div');
+        line.style.position = 'absolute';
+        line.style.width = '2px';
+        line.style.left = '50%';
+        line.style.transform = 'translateX(-50%)';
+        line.style.backgroundColor = color;
+        line.style.opacity = '0.5';
+        line.style.zIndex = '-1';
+        if (isBottom) {
+            line.style.top = '100%';
+            line.style.height = '60px';
+        } else {
+            line.style.bottom = '100%';
+            line.style.height = '60px';
+        }
+        // Removed dynamic inline line injection since it conflicts with CSS overrides
+        // node.appendChild(line);
+
         scrollContent.appendChild(node);
 
-        const cardLeft = currentX - 100;
+        // Card
+        const cardLeft = currentX - 100; // Center the 220px card
         const card = document.createElement('div');
         card.className = `timeline-card clean-card card-${isBottom ? 'bottom' : 'top'}`;
         card.style.left = `${cardLeft}px`;
         card.setAttribute('data-node', idx);
 
         const basePath = window.location.pathname.includes('/public/') ? '' : 'public/';
-        const hasDemoLink = proj.demoLink && proj.demoLink.trim() !== '' && proj.demoLink !== '#';
-        const cardHref = hasDemoLink ? proj.demoLink : `${basePath}project-details.html?id=${proj.id}`;
-        const targetAttr = hasDemoLink ? ' target="_blank" rel="noopener noreferrer"' : '';
         card.innerHTML = `
-            <a href="${cardHref}"${targetAttr} class="clean-card-link">
+            <a href="${basePath}project-details.html?id=${proj.id}" class="clean-card-link">
                 <h3 class="card-title">${proj.title}</h3>
                 <p class="card-desc">${proj.category}. ${proj.shortDescription}</p>
             </a>
@@ -2816,10 +2862,10 @@ function buildDynamicTimeline() {
         svgs.forEach(svg => {
             svg.setAttribute('viewBox', `0 0 ${newWidth} 520`);
             svg.style.width = `${newWidth}px`;
-            if (svg.parentElement) {
-                svg.parentElement.style.width = `${newWidth}px`;
-            }
         });
+
+        const ghostWrapper = scrollContent.querySelector('div[style*="pointer-events: none"]');
+        if (ghostWrapper) ghostWrapper.style.width = `${newWidth}px`;
 
         const clipRect = document.querySelector('#svg-clip rect');
         if (clipRect) clipRect.setAttribute('width', newWidth);
@@ -2887,169 +2933,190 @@ function initCurvedTimeline() {
         );
     }
 
-    // Removed pinContainer GSAP entrance animation to prevent opacity 0 bugs on mobile
+    // --- Dark Card Entrance: glide up from slightly below ---
+    gsap.set(pinContainer, { opacity: 0, y: 60 });
+    gsap.to(pinContainer, {
+        opacity: 1,
+        y: 0,
+        duration: 1.0,
+        ease: 'expo.out',
+        delay: 0.15,
+        onComplete: () => gsap.set(pinContainer, { clearProps: 'all' }),
+        scrollTrigger: {
+            trigger: '#our-works',
+            start: 'top 85%',
+            once: true
+        }
+    });
 
     if (timelineCtx) {
         timelineCtx.revert();
     }
 
-    // Apply horizontal pinning scroll on all devices
+    // Unified horizontal scrolling timeline for all viewports (desktop, tablet, mobile)
     timelineCtx = gsap.context(() => {
-        // We no longer restrict by min-width; horizontal scroll runs everywhere
-            const containerWidth = pinContainer.offsetWidth;
-            const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
+        const containerWidth = pinContainer.offsetWidth;
+        const totalScrollDistance = scrollContent.scrollWidth - containerWidth;
 
-            const cards = gsap.utils.toArray('.timeline-card');
-            const nodes = gsap.utils.toArray('.timeline-node');
+        const cards = gsap.utils.toArray('.timeline-card');
+        const nodes = gsap.utils.toArray('.timeline-node');
 
-            if (totalScrollDistance > 0) {
-                // Enable horizontal scroll via mouse wheel when hovered. Start from extreme right.
-                pinContainer.scrollLeft = totalScrollDistance;
-                let targetScroll = totalScrollDistance;
+        if (totalScrollDistance > 0) {
+            // Enable horizontal scroll via mouse wheel, touch, or navigation buttons. Start from extreme right.
+            pinContainer.scrollLeft = totalScrollDistance;
+            let targetScroll = totalScrollDistance;
 
-                // Navigation Buttons Logic
-                const prevBtn = document.querySelector('.timeline-prev');
-                const nextBtn = document.querySelector('.timeline-next');
+            // Navigation Buttons Logic
+            const prevBtn = document.querySelector('.timeline-prev');
+            const nextBtn = document.querySelector('.timeline-next');
 
-                const updateButtons = () => {
-                    if (!prevBtn || !nextBtn) return;
-                    if (targetScroll <= 5) prevBtn.classList.add('disabled');
-                    else prevBtn.classList.remove('disabled');
+            const updateButtons = () => {
+                if (!prevBtn || !nextBtn) return;
+                const currentLeft = pinContainer.scrollLeft;
+                if (currentLeft <= 5) prevBtn.classList.add('disabled');
+                else prevBtn.classList.remove('disabled');
 
-                    if (targetScroll >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
-                    else nextBtn.classList.remove('disabled');
+                if (currentLeft >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
+                else nextBtn.classList.remove('disabled');
 
-                    // --- Road Mask Width (clipping div grows to show more of the SVG) ---
-                    // This handles the drawing animation since CSS transitions the width
-                    const maskPath = document.querySelector('#road-mask-path');
-                    if (maskPath) {
-                        maskPath.style.width = (targetScroll + containerWidth) + 'px';
-                    }
-
-                    // Trigger cascade for newly revealed nodes
-                    nodes.forEach((node, index) => {
-                        const nodeLeft = parseInt(node.style.left || 0);
-                        if (nodeLeft < targetScroll + containerWidth) {
-                            if (!node.classList.contains('revealed')) {
-                                node.classList.add('revealed');
-                                gsap.fromTo(node, 
-                                    { scale: 0.85, opacity: 0 },
-                                    { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: (index % 3) * 0.05 }
-                                );
-                            }
-                        }
-                    });
-
-                    // Trigger cascade for newly revealed cards
-                    cards.forEach((card, index) => {
-                        const cardLeft = parseInt(card.style.left || 0);
-                        if (cardLeft < targetScroll + containerWidth) {
-                            if (!card.classList.contains('revealed')) {
-                                card.classList.add('revealed');
-                                const isTop = card.classList.contains('card-top');
-                                gsap.fromTo(card, 
-                                    { y: isTop ? -20 : 20, opacity: 0 },
-                                    { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.4)', delay: (index % 3) * 0.1 }
-                                );
-                            }
-                        }
-                    });
-                };
-
-                if (prevBtn && nextBtn) {
-                    prevBtn.addEventListener('click', () => {
-                        targetScroll = Math.max(0, targetScroll - containerWidth * 0.6);
-                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                    });
-                    nextBtn.addEventListener('click', () => {
-                        targetScroll = Math.min(totalScrollDistance, targetScroll + containerWidth * 0.6);
-                        gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                    });
-                    updateButtons();
+                // --- Road Mask Width (clipping div grows to show more of the SVG) ---
+                const maskPath = document.querySelector('#road-mask-path');
+                if (maskPath) {
+                    maskPath.style.width = (currentLeft + containerWidth) + 'px';
                 }
 
-                pinContainer.addEventListener('scroll', () => {
-                    if (!gsap.isTweening(pinContainer)) {
-                        targetScroll = pinContainer.scrollLeft;
-                        updateButtons();
-                    }
-                }, { passive: true });
-
-                pinContainer.addEventListener('wheel', (evt) => {
-                    // Only intercept if scrolling vertically and we have horizontal space
-                    if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
-                        const delta = evt.deltaY;
-
-                        // Base atStart and atEnd on ACTUAL visual scroll position, not just the target
-                        // REVERSED LOGIC: Scrolling down (delta > 0) moves left. Scrolling up (delta < 0) moves right.
-                        const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
-                        const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
-
-                        if (!atStart && !atEnd) {
-                            evt.preventDefault();
-                            targetScroll -= delta * 0.45; // Slower scroll speed multiplier
-                            targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
-
-                            gsap.to(pinContainer, {
-                                scrollLeft: targetScroll,
-                                duration: 1.4, // Smoother and slower transition
-                                ease: "power2.out",
-                                overwrite: "auto",
-                                onUpdate: updateButtons
-                            });
-                        }
-                    }
-                }, { passive: false });
-
-                // --- Initial trigger for the road mask and visible nodes ---
-                updateButtons();
-
-                // Node and Cards are left fully visible by default to prevent backwards scrub disappearing bugs
-            } else {
-                // Screen is wide enough to show all 1500px, no horizontal scroll needed
+                // Trigger cascade for newly revealed nodes
                 nodes.forEach((node, index) => {
-                    gsap.fromTo(node,
-                        { opacity: 0, scale: 0.5 },
-                        {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.8,
-                            delay: index * 0.1,
-                            ease: 'back.out(1.7)',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 60%',
-                                toggleActions: 'play none none reverse'
-                            }
+                    const nodeLeft = parseInt(node.style.left || 0);
+                    if (nodeLeft < currentLeft + containerWidth + 120) {
+                        if (!node.classList.contains('revealed')) {
+                            node.classList.add('revealed');
+                            gsap.fromTo(node, 
+                                { scale: 0.85, opacity: 0 },
+                                { scale: 1, opacity: 1, duration: 0.6, ease: 'back.out(1.7)', delay: (index % 3) * 0.05 }
+                            );
                         }
-                    );
+                    }
                 });
 
+                // Trigger cascade for newly revealed cards
                 cards.forEach((card, index) => {
-                    const isTop = card.classList.contains('card-top');
-                    const startY = isTop ? -40 : 40;
-                    gsap.fromTo(card,
-                        { opacity: 0, y: startY },
-                        {
-                            opacity: 1,
-                            y: 0,
-                            duration: 1,
-                            delay: index * 0.1 + 0.3,
-                            ease: 'power2.out',
-                            scrollTrigger: {
-                                trigger: '#our-works',
-                                start: 'top 60%',
-                                toggleActions: 'play none none reverse'
-                            }
+                    const cardLeft = parseInt(card.style.left || 0);
+                    if (cardLeft < currentLeft + containerWidth + 120) {
+                        if (!card.classList.contains('revealed')) {
+                            card.classList.add('revealed');
+                            const isTop = card.classList.contains('card-top');
+                            gsap.fromTo(card, 
+                                { y: isTop ? -20 : 20, opacity: 0 },
+                                { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.4)', delay: (index % 3) * 0.1 }
+                            );
                         }
-                    );
+                    }
+                });
+            };
+
+            if (prevBtn && nextBtn) {
+                const newPrev = prevBtn.cloneNode(true);
+                const newNext = nextBtn.cloneNode(true);
+                prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+                nextBtn.parentNode.replaceChild(newNext, nextBtn);
+
+                newPrev.addEventListener('click', () => {
+                    const scrollStep = Math.max(260, containerWidth * 0.6);
+                    targetScroll = Math.max(0, pinContainer.scrollLeft - scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                });
+                newNext.addEventListener('click', () => {
+                    const scrollStep = Math.max(260, containerWidth * 0.6);
+                    targetScroll = Math.min(totalScrollDistance, pinContainer.scrollLeft + scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
                 });
             }
+
+            pinContainer.addEventListener('scroll', () => {
+                if (!gsap.isTweening(pinContainer)) {
+                    targetScroll = pinContainer.scrollLeft;
+                    updateButtons();
+                }
+            }, { passive: true });
+
+            pinContainer.addEventListener('wheel', (evt) => {
+                // Only intercept if scrolling vertically and we have horizontal space
+                if (Math.abs(evt.deltaY) > Math.abs(evt.deltaX)) {
+                    const delta = evt.deltaY;
+                    const atStart = pinContainer.scrollLeft <= 5 && delta > 0;
+                    const atEnd = pinContainer.scrollLeft >= (totalScrollDistance - 5) && delta < 0;
+
+                    if (!atStart && !atEnd) {
+                        evt.preventDefault();
+                        targetScroll -= delta * 0.45;
+                        targetScroll = Math.max(0, Math.min(targetScroll, totalScrollDistance));
+
+                        gsap.to(pinContainer, {
+                            scrollLeft: targetScroll,
+                            duration: 1.4,
+                            ease: "power2.out",
+                            overwrite: "auto",
+                            onUpdate: updateButtons
+                        });
+                    }
+                }
+            }, { passive: false });
+
+            // Initial trigger
+            updateButtons();
+        } else {
+            nodes.forEach((node, index) => {
+                gsap.fromTo(node,
+                    { opacity: 0, scale: 0.5 },
+                    {
+                        opacity: 1,
+                        scale: 1,
+                        duration: 0.8,
+                        delay: index * 0.1,
+                        ease: 'back.out(1.7)',
+                        scrollTrigger: {
+                            trigger: '#our-works',
+                            start: 'top 60%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+
+            cards.forEach((card, index) => {
+                const isTop = card.classList.contains('card-top');
+                const startY = isTop ? -40 : 40;
+                gsap.fromTo(card,
+                    { opacity: 0, y: startY },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        delay: index * 0.1 + 0.3,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: '#our-works',
+                            start: 'top 60%',
+                            toggleActions: 'play none none reverse'
+                        }
+                    }
+                );
+            });
+        }
     });
 
     // Cleanup on window unload
     window.addEventListener('unload', () => {
         timelineCtx.revert();
+    });
+
+    let timelineResizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(timelineResizeTimer);
+        timelineResizeTimer = setTimeout(() => {
+            initCurvedTimeline();
+        }, 250);
     });
 }
 
@@ -3166,23 +3233,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
-    
-    // Mobile Navbar Toggle
-    const menuToggleBtn = document.querySelector('.menu-toggle-btn');
-    const navLinksContainer = document.querySelector('.nav-links-container');
-    const navLinks = document.querySelectorAll('.nav-link');
-    
-    if (menuToggleBtn && navLinksContainer) {
-        menuToggleBtn.addEventListener('click', () => {
-            menuToggleBtn.classList.toggle('open');
-            navLinksContainer.classList.toggle('open');
-        });
-        
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggleBtn.classList.remove('open');
-                navLinksContainer.classList.remove('open');
-            });
-        });
-    }
 });
