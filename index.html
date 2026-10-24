@@ -17,7 +17,7 @@
         media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
         onload="this.media='all'">
-    <link rel="stylesheet" href="assets/css/styles.css?v=2.4">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3">
 
 </head>
 
@@ -623,7 +623,7 @@
                     <!-- Stat 1: Completed Projects -->
                     <div class="rlabz-stat-card">
                         <div class="rlabz-stat-number-wrapper">
-                            <span class="rlabz-counter" id="rlabzStatCompleted" data-target="11">11</span>
+                            <span class="rlabz-counter" id="rlabzStatCompleted" data-target="0">0</span>
                         </div>
                         <div class="rlabz-stat-badge">
                             <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Projects Completed
@@ -634,7 +634,7 @@
                     <!-- Stat 2: In Development -->
                     <div class="rlabz-stat-card">
                         <div class="rlabz-stat-number-wrapper">
-                            <span class="rlabz-counter" id="rlabzStatInDev" data-target="6">6</span>
+                            <span class="rlabz-counter" id="rlabzStatInDev" data-target="0">0</span>
                         </div>
                         <div class="rlabz-stat-badge">
                             <i class="fa-solid fa-code" style="color: #fbbf24;"></i> In Development
@@ -645,7 +645,7 @@
                     <!-- Stat 3: Total Projects -->
                     <div class="rlabz-stat-card">
                         <div class="rlabz-stat-number-wrapper">
-                            <span class="rlabz-counter" id="rlabzStatTotal" data-target="17">17</span>
+                            <span class="rlabz-counter" id="rlabzStatTotal" data-target="0">0</span>
                         </div>
                         <div class="rlabz-stat-badge">
                             <i class="fa-solid fa-layer-group" style="color: #38bdf8;"></i> Total Projects
@@ -656,7 +656,7 @@
                     <!-- Stat 4: Student Developers -->
                     <div class="rlabz-stat-card">
                         <div class="rlabz-stat-number-wrapper">
-                            <span class="rlabz-counter" id="rlabzStatMembers" data-target="28">28</span>
+                            <span class="rlabz-counter" id="rlabzStatMembers" data-target="0">0</span>
                         </div>
                         <div class="rlabz-stat-badge">
                             <i class="fa-solid fa-users" style="color: #a78bfa;"></i> Student Developers
@@ -676,8 +676,16 @@
                         </div>
                         <div class="rlabz-annual-subtitle">Year-by-year completed projects and development distribution calculated dynamically from database records.</div>
                     </div>
+                    <span class="rlabz-annual-page-indicator" id="rlabzAnnualPageIndicator"></span>
                 </div>
-                <div class="rlabz-year-grid" id="rlabzYearStatsGrid">
+
+                <!-- Carousel Wrapper with Left & Right Side Navigation Buttons -->
+                <div class="rlabz-annual-carousel-wrapper">
+                    <button class="rlabz-annual-nav-btn rlabz-annual-side-btn rlabz-annual-prev-side" id="rlabzAnnualPrevBtn" aria-label="Previous Projects" title="Previous Projects">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <div class="rlabz-year-grid" id="rlabzYearStatsGrid">
                     <!-- Dynamic cards will be hydrated from DB -->
                     <div class="rlabz-year-pill-item">
                         <div class="rlabz-year-top-row">
@@ -718,6 +726,11 @@
                             <span>1 Total Project</span>
                         </div>
                     </div>
+                    </div>
+
+                    <button class="rlabz-annual-nav-btn rlabz-annual-side-btn rlabz-annual-next-side" id="rlabzAnnualNextBtn" aria-label="Next Projects" title="Next Projects">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
 

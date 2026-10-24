@@ -6,15 +6,24 @@
  */
 
 window.RLABZ_PROJECTS = [];
+window.RLABZ_PROJECTS_LOADED = false;
+window.RLABZ_PROJECTS_ERROR = null;
 let projectsLoadedPromise = null;
 
 function fetchProjects() {
     if (projectsLoadedPromise) return projectsLoadedPromise;
 
-    projectsLoadedPromise = fetch('/admin/api/public_projects.php')
-        .then(response => response.json())
+    const apiPath = window.location.pathname.includes('/public/') 
+        ? '../admin/api/public_projects.php' 
+        : 'admin/api/public_projects.php';
+
+    projectsLoadedPromise = fetch(apiPath)
+        .then(response => {
+            if (!response.ok) throw new Error('HTTP error ' + response.status);
+            return response.json();
+        })
         .then(data => {
-            if(data && !data.error) {
+            if(data && !data.error && Array.isArray(data)) {
                 // Fix image paths to be relative to public/ directory
                 data.forEach(p => {
                     if (p.thumbnail && !p.thumbnail.startsWith('http') && !p.thumbnail.startsWith('../')) p.thumbnail = '../' + p.thumbnail;
@@ -34,14 +43,22 @@ function fetchProjects() {
                     }
                 });
                 window.RLABZ_PROJECTS = data;
+                window.RLABZ_PROJECTS_LOADED = true;
+                window.RLABZ_PROJECTS_ERROR = null;
             } else {
-                console.error('API Error:', data.error);
+                console.error('API Error:', data ? data.error : 'Empty response');
+                window.RLABZ_PROJECTS = [];
+                window.RLABZ_PROJECTS_LOADED = true;
+                window.RLABZ_PROJECTS_ERROR = (data && data.error) ? data.error : 'No projects found';
             }
             window.dispatchEvent(new Event('projectsLoaded'));
             return window.RLABZ_PROJECTS;
         })
         .catch(err => {
             console.error('Error loading projects from DB:', err);
+            window.RLABZ_PROJECTS = [];
+            window.RLABZ_PROJECTS_LOADED = true;
+            window.RLABZ_PROJECTS_ERROR = 'Database not connected';
             window.dispatchEvent(new Event('projectsLoaded'));
             return [];
         });

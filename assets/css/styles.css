@@ -174,7 +174,7 @@ body {
 }
 
 .premium-nav.scrolled .logo-image {
-    width: 225px;
+    width: 195px;
     height: auto;
 }
 
@@ -9644,10 +9644,91 @@ html.lenis body {
     font-weight: 400;
 }
 
+/* Annual Section Navigation Carousel with Side Buttons */
+.rlabz-annual-carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.rlabz-annual-nav-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.rlabz-annual-nav-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.rlabz-annual-nav-btn:hover:not(:disabled) {
+    background: #0284c7;
+    border-color: #38bdf8;
+    color: #ffffff;
+    transform: scale(1.08);
+    box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
+}
+
+.rlabz-annual-nav-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.rlabz-annual-page-indicator {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #94a3b8;
+    min-width: 65px;
+    text-align: right;
+}
+
 .rlabz-year-grid {
+    flex: 1;
+    min-width: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+    .rlabz-annual-carousel-wrapper {
+        gap: 0.5rem;
+    }
+    .rlabz-annual-nav-btn {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 1200px) {
+    .rlabz-year-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .rlabz-year-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .rlabz-year-pill-item {
@@ -9691,6 +9772,13 @@ html.lenis body {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
+}
+
+.status-in-progress-badge {
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+    background: rgba(251, 191, 36, 0.16);
+    border: 1px solid rgba(251, 191, 36, 0.35);
 }
 
 .rlabz-year-progress-track {
@@ -9749,4 +9837,53 @@ html.lenis body {
 }
 .client_form_logo_item i {
     color: #38bdf8 !important;
+}
+
+/* =====================================================
+   Timeline Empty State (When DB is disconnected/empty)
+   ===================================================== */
+.timeline-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 3.5rem 2rem;
+    min-height: 280px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1.5px dashed rgba(14, 165, 233, 0.35);
+    border-radius: 24px;
+    margin: 2rem auto;
+    max-width: 620px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.timeline-empty-state .empty-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(14, 165, 233, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: #0284c7;
+    margin-bottom: 1.25rem;
+}
+
+.timeline-empty-state h3 {
+    font-family: var(--font-heading, 'Space Grotesk', sans-serif);
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+}
+
+.timeline-empty-state p {
+    color: #64748b;
+    font-size: 0.95rem;
+    max-width: 440px;
+    margin: 0;
+    line-height: 1.6;
 }

@@ -11,7 +11,7 @@ try {
     $stmtStatus = $pdo->query("
         SELECT 
             COUNT(*) AS total_projects,
-            SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed_projects,
+            SUM(CASE WHEN status IN ('Completed', 'Deployed') THEN 1 ELSE 0 END) AS completed_projects,
             SUM(CASE WHEN status = 'In Development' THEN 1 ELSE 0 END) AS in_dev_projects
         FROM projects
     ");
@@ -21,11 +21,20 @@ try {
     $stmtMembers = $pdo->query("SELECT COUNT(*) FROM project_members");
     $totalMembers = (int) $stmtMembers->fetchColumn();
 
+    // 2.5 Recent Projects (latest 16 projects ordered by year desc, id desc)
+    $stmtRecent = $pdo->query("
+        SELECT id, slug, title, year, category, status, thumbnail_path, short_description
+        FROM projects
+        ORDER BY year DESC, id DESC
+        LIMIT 20
+    ");
+    $recentProjects = $stmtRecent->fetchAll(PDO::FETCH_ASSOC);
+
     // 3. Year-based completed and overall breakdown
     $stmtYears = $pdo->query("
         SELECT 
             year,
-            SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed,
+            SUM(CASE WHEN status IN ('Completed', 'Deployed') THEN 1 ELSE 0 END) AS completed,
             SUM(CASE WHEN status = 'In Development' THEN 1 ELSE 0 END) AS in_dev,
             COUNT(*) AS total
         FROM projects
@@ -42,6 +51,17 @@ try {
         'completed_projects' => (int) ($overall['completed_projects'] ?? 0),
         'in_dev_projects' => (int) ($overall['in_dev_projects'] ?? 0),
         'total_members' => $totalMembers,
+        'recent_projects' => array_map(function($p) {
+            return [
+                'id' => $p['slug'] ?: $p['id'],
+                'title' => $p['title'],
+                'year' => (string) $p['year'],
+                'category' => $p['category'] ?: 'Web Application',
+                'status' => $p['status'] ?: 'Completed',
+                'thumbnail' => $p['thumbnail_path'] ?: '',
+                'short_description' => $p['short_description'] ?: ''
+            ];
+        }, $recentProjects),
         'year_stats' => array_map(function($row) {
             return [
                 'year' => (string) $row['year'],

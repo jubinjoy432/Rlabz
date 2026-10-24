@@ -2816,11 +2816,40 @@ let timelineCtx = null;
 let dynamicTimelineBuilt = false;
 
 function refreshTimeline() {
+    const timelineWrapper = document.querySelector('.timeline-section-wrapper');
+    const prevBtn = document.querySelector('.timeline-prev');
+    const nextBtn = document.querySelector('.timeline-next');
+    const viewAllBtn = document.querySelector('.view-all-projects-btn');
+
     if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
+        if (prevBtn) prevBtn.style.display = '';
+        if (nextBtn) nextBtn.style.display = '';
+        if (viewAllBtn) viewAllBtn.style.display = '';
         buildDynamicTimeline();
         dynamicTimelineBuilt = true;
+        initCurvedTimeline();
+    } else if (window.RLABZ_PROJECTS_LOADED) {
+        // Database not connected or returned 0 projects
+        dynamicTimelineBuilt = true;
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        if (viewAllBtn) viewAllBtn.style.display = 'none';
+
+        if (timelineCtx) {
+            timelineCtx.revert();
+            timelineCtx = null;
+        }
+
+        if (timelineWrapper) {
+            timelineWrapper.innerHTML = `
+                <div class="timeline-empty-state">
+                    <div class="empty-icon"><i class="fa-solid fa-folder-open"></i></div>
+                    <h3>No Projects Available</h3>
+                    <p>${window.RLABZ_PROJECTS_ERROR === 'Database not connected' ? 'Database connection could not be established. Please ensure the database server is running.' : 'No projects have been published yet.'}</p>
+                </div>
+            `;
+        }
     }
-    initCurvedTimeline();
 }
 
 window.addEventListener('projectsLoaded', () => {
@@ -2831,13 +2860,13 @@ if (window.RLABZ_PROJECTS && window.RLABZ_PROJECTS.length > 0) {
     refreshTimeline();
 }
 
-// Fallback for static timeline if projectsLoaded takes time or is not yet fired
+// Fallback for timeline if projectsLoaded takes time
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        if (!dynamicTimelineBuilt && document.querySelector('.timeline-scroll-content')) {
-            initCurvedTimeline();
+        if (!dynamicTimelineBuilt) {
+            refreshTimeline();
         }
-    }, 150);
+    }, 600);
 });
 
 function buildDynamicTimeline() {
