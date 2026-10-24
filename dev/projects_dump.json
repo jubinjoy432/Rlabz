@@ -1,0 +1,1181 @@
+[
+    {
+        "id": 25,
+        "slug": "colabsphere",
+        "title": "ColabSphere",
+        "year": "2026",
+        "short_description": "In Development. Collaborative workspace and project management platform developed under RLabZ.",
+        "description": "ColabSphere is a collaborative workspace and project management platform designed to facilitate team collaboration within RLabZ. It provides tools for project planning, task management, code sharing, and real-time communication.",
+        "objectives": "To create an all-in-one collaboration platform that streamlines project management and team communication within RLabZ.",
+        "problem_statement": "RLabZ teams used multiple disconnected tools for project management, communication, and file sharing, leading to fragmented workflows.",
+        "key_features": "Project Boards, Task Management, Real-time Chat, File Sharing, Timeline View, Team Analytics",
+        "expected_outcome": "A unified collaboration platform improving team productivity and project management.",
+        "tech_stack": "",
+        "image_path": "images/logo1.png",
+        "thumbnail_path": "images/logo1.png",
+        "department": "MCA",
+        "batch": "2024-2026",
+        "category": "Web Application",
+        "project_type": "Internal",
+        "duration": "Ongoing",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-09-16 01:04:20",
+        "members": [
+            {
+                "name": "Jeffin Joby",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Jasin Joji",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr.Bindiya M varghese",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Mr. Diljith K Benny",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 27,
+        "slug": "rajagiri-flora",
+        "title": "Rajagiri Flora",
+        "year": "2026",
+        "short_description": "A growing snapshot of the botanical diversity across our campuses.",
+        "description": "Rajagiri Flora is a joint initiative of Rajagiri College of Social Sciences and Rajagiri Business School to digitally document and preserve the botanical diversity across both campuses. By scanning permanent QR codes, students, researchers and visitors can instantly access accurate botanical information.",
+        "objectives": "",
+        "problem_statement": "",
+        "key_features": null,
+        "expected_outcome": "",
+        "tech_stack": "PHP,Laravel Framework,PostGresql",
+        "image_path": "uploads/proj_6aa9a61f052ff.png",
+        "thumbnail_path": "uploads/thumbnail_6aabb1f2107f4.png",
+        "department": "MCA",
+        "batch": "2025-2027",
+        "category": "Web Application",
+        "project_type": "Internal",
+        "duration": "3 months",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "https://flora.rajagiri.edu/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-09-16 01:40:07",
+        "members": [
+            {
+                "name": "Athira Binu",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D5603AQFRjtQLlC89xw/profile-displayphoto-scale_400_400/B56ZfG4OJcHoAs-/0/1751388317112?e=1794441600&v=beta&t=1Qy4Qg_iua88_vWytvHF2NPANetrd-WDv9DrIJbYcY0",
+                "linkedin_link": "https://www.linkedin.com/in/athirakbinu/"
+            },
+            {
+                "name": "Maria Jose",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4E03AQGfEyBsKSebHA/profile-displayphoto-scale_400_400/B4EZq2MsPPHMAk-/0/1763993372380?e=1794441600&v=beta&t=nxU0097tjY3DZAMZaUYEOF28ig45lyvnxFTqSIN2DH0",
+                "linkedin_link": "https://www.linkedin.com/in/mariajose-dev/"
+            },
+            {
+                "name": "Treesa Jose",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D5603AQEsO4KPQ7rx_w/profile-displayphoto-scale_400_400/B56Zq2YGk5JUAg-/0/1763996364951?e=1794441600&v=beta&t=0IvnOl-pDdie6Lh8qJ0JCxsK9zfxVxwI14xLwaBihv8",
+                "linkedin_link": "https://www.linkedin.com/in/treesajose-dev/"
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Ajay Antony Joseph",
+                "designation": "Assistant Professor",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4D03AQHDfSXCwgJ-Kg/profile-displayphoto-scale_400_400/B4DZ9Fj9wDI0Ag-/0/1783578487421?e=1794441600&v=beta&t=Z0x265V9naH1ARvcQJJHlVoaT6JEwj2_ETN5cvy30UQ",
+                "linkedin_link": "https://www.linkedin.com/in/ajay-antony-joseph-a37404100/"
+            }
+        ],
+        "screenshots": [
+            {
+                "image_path": "uploads/screenshot_6aa9a61f06165.png",
+                "caption": ""
+            },
+            {
+                "image_path": "uploads/screenshot_6aa9a61f0669a.png",
+                "caption": ""
+            },
+            {
+                "image_path": "uploads/screenshot_6aa9a61f06d61.png",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "slug": "sahrdaya-counselling",
+        "title": "Sahrdaya Counselling",
+        "year": "2026",
+        "short_description": "Secure counselling management platform with confidential records, role-based access, and analytics.",
+        "description": "Secure counselling management platform with confidential records, role-based access, and analytics.",
+        "objectives": "",
+        "problem_statement": "",
+        "key_features": null,
+        "expected_outcome": "",
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Gracen K. Shaji",
+                "role": "MCA 23",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Sahil Sharma",
+                "role": "MCA 20",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr. Shiju Thomas M Y",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Dr. Bindiya M Varghese",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 29,
+        "slug": "rlabz-website-revamp",
+        "title": "RLabZ Website Revamp",
+        "year": "2026",
+        "short_description": "Official RLabZ website redesign with modern UI and improved project showcase features.",
+        "description": "Official RLabZ website redesign with modern UI and improved project showcase features.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "https://rlabz.in/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "RLabZ Development Team with students",
+                "role": "",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Albert C S",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4E03AQFhsohcqZmfqQ/profile-displayphoto-scale_400_400/B4EZfBbYwkGwAk-/0/1751296873540?e=1794441600&v=beta&t=_w1cecV67jwncraoysA2zXDDewgOqsmPxlt2qQVa3KQ",
+                "linkedin_link": "https://www.linkedin.com/in/albert-cs/"
+            },
+            {
+                "name": "Ann Jo Mathew",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D5603AQFLltKOFnxEtw/profile-displayphoto-scale_400_400/B56ZhXI_gDHMAg-/0/1753808632491?e=1794441600&v=beta&t=MNTs3eD3IOu-P7Vmam1qNhgx5engsjrrxu930VxKjAo",
+                "linkedin_link": "www.linkedin.com/in/ann-jo-mathew"
+            },
+            {
+                "name": "Farsan Suneer",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4D03AQEDnjdIUUjCDg/profile-displayphoto-scale_400_400/B4DZq2seExIEAg-/0/1764001703745?e=1794441600&v=beta&t=Zu6WKTnEje9F36-0jTdjfBrxSDTyPOx3jfFlzFHg58s",
+                "linkedin_link": "https://www.linkedin.com/in/farsan-suneer/"
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Gracen K. Shaji",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 30,
+        "slug": "international-conference-website",
+        "title": "International Conference Website",
+        "year": "2025",
+        "short_description": "Conference management portal supporting registrations, abstract submissions, and schedules.",
+        "description": "Conference management portal supporting registrations, abstract submissions, and schedules.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "https://icswhmh.com/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Ananthu Krishna",
+                "role": "MCA 25",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Shyam James",
+                "role": "MCA 25",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Febin Sunny",
+                "role": "MCA 25",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "MSC CS 25",
+                "role": "Team",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Ajay Antony Joseph",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Jobin K Jaison",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 31,
+        "slug": "splendore-website",
+        "title": "Splendore Website",
+        "year": "2025",
+        "short_description": "Event and media showcase website developed for Splendore.",
+        "description": "Event and media showcase website developed for Splendore.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "images/splendore-2019.webp",
+        "thumbnail_path": "images/splendore-2019.webp",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Students Team",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "RLabZ",
+                "designation": "Team In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 32,
+        "slug": "mentoring-app",
+        "title": "Mentoring App",
+        "year": "2026",
+        "short_description": "Mentorship platform connecting students with faculty mentors and progress tracking.",
+        "description": "Mentorship platform connecting students with faculty mentors and progress tracking.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "https://mentrix.rajagiri.edu/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Student Innovation Team",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Diljith K Benny",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 33,
+        "slug": "facility-booking-app",
+        "title": "Facility Booking App",
+        "year": "2026",
+        "short_description": "Online platform for booking campus facilities and managing schedules.",
+        "description": "Online platform for booking campus facilities and managing schedules.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Campus Automation Team",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Diljith K Benny",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 34,
+        "slug": "blood-donation-app",
+        "title": "Blood Donation App",
+        "year": "2026",
+        "short_description": "Blood donor management system with donor registration and request tracking.",
+        "description": "Blood donor management system with donor registration and request tracking.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Mobile Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Dhanush",
+                "role": "BSC CS 24",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Vivek",
+                "role": "BSC CS 24",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Ms.Sunu Fathima",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 35,
+        "slug": "placement-analytics",
+        "title": "Placement Analytics",
+        "year": "2026",
+        "short_description": "Placement analytics dashboard with statistics, reports, and recruitment insights.",
+        "description": "Placement analytics dashboard with statistics, reports, and recruitment insights.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Analytics Platform",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Abhilash BK",
+                "role": "MSC 23",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr. Bindiya M Varghese",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 36,
+        "slug": "euphoria-website",
+        "title": "Euphoria Website",
+        "year": "2024",
+        "short_description": "Official website developed for Euphoria event management and announcements.",
+        "description": "Official website developed for Euphoria event management and announcements.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "images/euphoria-2019.webp",
+        "thumbnail_path": "images/euphoria-2019.webp",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Daivath Lal",
+                "role": "MCA 23",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Hrishikesh U",
+                "role": "MCA 23",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Mr. Diljith K Benny",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 37,
+        "slug": "arkon-medical-systems",
+        "title": "Arkon Medical Systems",
+        "year": "2025",
+        "short_description": "Medical equipment platform with product catalog and order management.",
+        "description": "Medical equipment platform with product catalog and order management.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "images/arkon-img.webp",
+        "thumbnail_path": "images/arkon-img.webp",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "https://arkonmedicalsystems.in/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Arkon Development Team",
+                "role": "Developer",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "RLabZ",
+                "designation": "Team In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 38,
+        "slug": "dyuti-website-content-management",
+        "title": "DYUTI Website Content Management",
+        "year": "2025",
+        "short_description": "Rlabz handles DYUTI Website Content Management.",
+        "description": "Rlabz handles DYUTI Website Content Management.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "https://dyuti.in/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "George B George",
+                "role": "MCA 24",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr. Anil John",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 39,
+        "slug": "sparc-mobile-app",
+        "title": "Sparc Mobile App",
+        "year": "2025",
+        "short_description": "Mobile application developed for student and campus utility services.",
+        "description": "Mobile application developed for student and campus utility services.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Mobile Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Albin Joseph",
+                "role": "MCA 24",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr. Bindiya M Varghese",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            },
+            {
+                "name": "Dr. Shiju Thomas M Y",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 40,
+        "slug": "stuba-platform",
+        "title": "STUBA Platform",
+        "year": "2025",
+        "short_description": "Student association management platform with communication and event modules.",
+        "description": "Student association management platform with communication and event modules.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Daivadath Lal",
+                "role": "MCA 24",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Mr.Diljith K Benny",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 41,
+        "slug": "campus-connect",
+        "title": "Campus Connect",
+        "year": "2025",
+        "short_description": "Campus communication and collaboration platform for students and faculty.",
+        "description": "Campus communication and collaboration platform for students and faculty.",
+        "objectives": null,
+        "problem_statement": null,
+        "key_features": null,
+        "expected_outcome": null,
+        "tech_stack": "",
+        "image_path": "images/campuscon-image.webp",
+        "thumbnail_path": "images/campuscon-image.webp",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "https://connect.rajagiri.edu/login_page/?next=/",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [],
+        "faculty": [
+            {
+                "name": "Dr.Sreejith R",
+                "designation": "Faculty In-Charge",
+                "photo_path": "",
+                "linkedin_link": ""
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 42,
+        "slug": "project-of-exam-cell",
+        "title": "Project of Exam Cell",
+        "year": "2026",
+        "short_description": "Exam Cell automation platform for managing schedules, reports, and examination workflows.",
+        "description": "Exam Cell automation platform for managing schedules, reports, and examination workflows.",
+        "objectives": "",
+        "problem_statement": "",
+        "key_features": "",
+        "expected_outcome": "",
+        "tech_stack": "",
+        "image_path": "assets/images/projects/default.jpg",
+        "thumbnail_path": "",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "In Development",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-09 23:28:00",
+        "members": [
+            {
+                "name": "Shyam James",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4D03AQGILk4v60j1iQ/profile-displayphoto-scale_400_400/B4DZ8xUKF.J8Ak-/0/1783238797395?e=1794441600&v=beta&t=D2ZOieEASz7w6ogfZYlWC6ynnjGRZUsgM3ovcygXV80",
+                "linkedin_link": "https://www.linkedin.com/in/shyamjames74/"
+            },
+            {
+                "name": "Jubin Joy",
+                "role": "Developer",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D4D03AQEE5MoXfdIPrw/profile-displayphoto-scale_400_400/B4DaE5zxfFI0Ag-/0/1791971239244?e=1794441600&v=beta&t=q64eAp18WXTsB-pwq18lw4_wwalo_k1HFZ6SN8EjgMc",
+                "linkedin_link": "https://www.linkedin.com/in/jubinjoy/"
+            }
+        ],
+        "faculty": [
+            {
+                "name": "Dr.Shiju Thomas M Y",
+                "designation": "Faculty In-Charge",
+                "photo_path": "https://media.licdn.com/dms/image/v2/D5603AQE_whZcfQtw4A/profile-displayphoto-shrink_400_400/B56ZYFQfFOHoAg-/0/1743844930291?e=1794441600&v=beta&t=7A8698b6yZTWfdLWS30rt5mpkLPCck7SmOkAVHZgSaA",
+                "linkedin_link": "https://www.linkedin.com/in/shijuthomasmy/"
+            }
+        ],
+        "screenshots": []
+    },
+    {
+        "id": 43,
+        "slug": "rex",
+        "title": "ReX",
+        "year": "N/A",
+        "short_description": "Comprehensive web platform developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3, and JavaScript.",
+        "description": "ReX is a comprehensive web platform developed for Rajagiri College of Social Sciences. The platform serves as a centralized hub for college activities, resources, and communication, streamlining various administrative and academic processes.",
+        "objectives": "To create a centralized web platform that unifies college operations, improves communication between departments, and provides easy access to academic resources for students and faculty.",
+        "problem_statement": "Rajagiri College lacked a unified digital platform, resulting in fragmented communication and difficulty accessing important college resources and information.",
+        "key_features": "User Authentication, Resource Management, Department Portal, Notice Board, Event Calendar, Document Repository",
+        "expected_outcome": "A fully functional web platform that serves as the digital backbone of college operations.",
+        "tech_stack": "PHP, HTML5, CSS3, JavaScript",
+        "image_path": "images/rex-image.webp",
+        "thumbnail_path": "images/rex-image.webp",
+        "department": "MCA",
+        "batch": "",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/rex-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "slug": "cocobies",
+        "title": "Cocobies",
+        "year": "2013",
+        "short_description": "Innovative Android application developed for the RCSS MCA Department, showcasing mobile development capabilities.",
+        "description": "Cocobies is an innovative Android application developed as part of the MCA Department's mobile development initiative. The app demonstrates the department's early commitment to mobile technology and native Android development.",
+        "objectives": "To develop a functional Android application that showcases the mobile development skills of MCA students and serves as a practical learning project.",
+        "problem_statement": "The department needed a hands-on mobile development project to demonstrate practical skills in Android application development.",
+        "key_features": "Native Android UI, Data Management, User Interface Design, Mobile Optimization",
+        "expected_outcome": "A fully functional Android application demonstrating mobile development proficiency.",
+        "tech_stack": "Android, Java",
+        "image_path": "images/cocobi-image.webp",
+        "thumbnail_path": "images/cocobi-image.webp",
+        "department": "MCA",
+        "batch": "2011-2013",
+        "category": "Mobile Application",
+        "project_type": "Academic",
+        "duration": "6 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/cocobi-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 45,
+        "slug": "campus-connect-2017",
+        "title": "Campus Connect",
+        "year": "2017",
+        "short_description": "Comprehensive web platform built with Python, Django, HTML5, CSS3, and JavaScript connecting students, faculty, and administration.",
+        "description": "Campus Connect is a comprehensive web platform designed to bridge the communication gap between students, faculty, and administration at Rajagiri College. Built with modern Python Django framework, it provides a seamless digital experience for all campus stakeholders.",
+        "objectives": "To build a unified campus communication platform that facilitates seamless interaction between students, faculty, and administrators.",
+        "problem_statement": "Campus communication was fragmented across multiple channels, making it difficult for students and faculty to stay updated on academic and administrative matters.",
+        "key_features": "Student Portal, Faculty Dashboard, Admin Panel, Notification System, Academic Calendar, Resource Sharing",
+        "expected_outcome": "A unified platform improving campus communication efficiency by connecting all stakeholders.",
+        "tech_stack": "Python, Django, HTML5, CSS3, JavaScript",
+        "image_path": "images/campuscon-image.webp",
+        "thumbnail_path": "images/campuscon-image.webp",
+        "department": "MCA",
+        "batch": "2015-2017",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "8 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "http://xxsreexx.pythonanywhere.com",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/campuscon-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 46,
+        "slug": "ctrm",
+        "title": "CTRM System",
+        "year": "2017",
+        "short_description": "Comprehensive Teaching Resource Management system developed for Rajagiri College of Social Sciences using PHP, HTML5, CSS3.",
+        "description": "The CTRM (Comprehensive Teaching Resource Management) system is a specialized platform designed to streamline the management of teaching resources across departments. It enables faculty to organize, share, and access teaching materials efficiently.",
+        "objectives": "To develop a centralized teaching resource management system that improves accessibility and organization of academic materials.",
+        "problem_statement": "Faculty members lacked a centralized system for managing and sharing teaching resources, leading to duplication of effort and inconsistent access to materials.",
+        "key_features": "Resource Upload & Management, Department-wise Organization, Search & Filter, Access Control, Resource Sharing, Usage Analytics",
+        "expected_outcome": "An organized, accessible teaching resource repository improving academic resource management.",
+        "tech_stack": "PHP, HTML5, CSS3, JavaScript, MySQL",
+        "image_path": "images/ctrm-image.webp",
+        "thumbnail_path": "images/ctrm-image.webp",
+        "department": "MCA",
+        "batch": "2015-2017",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "6 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/ctrm-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 47,
+        "slug": "theluke",
+        "title": "The Luke",
+        "year": "2017",
+        "short_description": "Professional event management website built with HTML5, CSS3, and JavaScript for The Luke Event Management company.",
+        "description": "The Luke is a professional event management website designed and developed for The Luke Event Management company. The website showcases the company's services, portfolio of events, and provides an elegant platform for client inquiries and bookings.",
+        "objectives": "To create a visually stunning and functional website that effectively showcases event management services and attracts potential clients.",
+        "problem_statement": "The Luke Event Management needed a professional online presence to showcase their portfolio and attract new clients in the competitive event management industry.",
+        "key_features": null,
+        "expected_outcome": "A professional website that effectively represents the brand and generates client inquiries.",
+        "tech_stack": "HTML5, CSS3, JavaScript",
+        "image_path": "images/luke-image.webp",
+        "thumbnail_path": "images/luke-image.webp",
+        "department": "MCA",
+        "batch": "2015-2017",
+        "category": "Web Application",
+        "project_type": "Client",
+        "duration": "3 months",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "http://www.theluke.in",
+        "ssl_tracking_enabled": 0,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/luke-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 48,
+        "slug": "arkon-2017",
+        "title": "Arkon Medical Systems",
+        "year": "2017",
+        "short_description": "Healthcare equipment platform built with HTML5, CSS3, JavaScript, and PHP offering comprehensive medical equipment systems.",
+        "description": "Arkon Medical Systems is a healthcare equipment platform that provides comprehensive information about medical equipment and systems. The website serves as a digital catalog and information hub for healthcare professionals seeking reliable medical equipment solutions.",
+        "objectives": "To develop an informative and professional web platform for a medical equipment company that showcases products and services effectively.",
+        "problem_statement": "Arkon Medical Systems needed a digital presence to showcase their wide range of medical equipment and reach healthcare professionals across regions.",
+        "key_features": "Product Catalog, Equipment Details, Service Information, Contact System, Responsive Layout, Product Search",
+        "expected_outcome": "A professional healthcare platform improving product visibility and client engagement.",
+        "tech_stack": "HTML5, CSS3, JavaScript, PHP",
+        "image_path": "images/arkon-img.webp",
+        "thumbnail_path": "images/arkon-img.webp",
+        "department": "MCA",
+        "batch": "2015-2017",
+        "category": "Web Application",
+        "project_type": "Client",
+        "duration": "4 months",
+        "status": "Deployed",
+        "github_link": "",
+        "demo_link": "http://www.arkonmedicalsystems.in",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/arkon-img.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 49,
+        "slug": "euphoria-2k17",
+        "title": "Euphoria 2k17",
+        "year": "2017",
+        "short_description": "Cultural festival website built with HTML5, CSS3, JavaScript, and PHP for the RCSS MCA Department.",
+        "description": "Euphoria 2k17 is the official website developed for the annual cultural festival organized by the MCA Department of Rajagiri College of Social Sciences. The website serves as the digital hub for event registrations, schedules, and information.",
+        "objectives": "To create an engaging and functional festival website that handles event registrations and provides comprehensive festival information.",
+        "problem_statement": "The MCA department's cultural festival needed an attractive and functional website for event promotion, registration management, and information dissemination.",
+        "key_features": null,
+        "expected_outcome": "A vibrant festival website driving registrations and providing seamless event information.",
+        "tech_stack": "HTML5, CSS3, JavaScript, PHP",
+        "image_path": "images/euphoria-2019.webp",
+        "thumbnail_path": "images/euphoria-2019.webp",
+        "department": "MCA",
+        "batch": "2015-2017",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "2 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "http://euphoria.rlabz.in",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/euphoria-2019.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 50,
+        "slug": "outreach",
+        "title": "RAJAGIRI OutREACH",
+        "year": "2019",
+        "short_description": "Web platform built with PHP, HTML5, CSS3, and JavaScript for community outreach and social engagement.",
+        "description": "RAJAGIRI OutREACH is a community outreach and social engagement platform developed for Rajagiri College. The platform facilitates community service activities, volunteer management, and social impact tracking.",
+        "objectives": "To build a digital platform that streamlines community outreach activities and tracks social impact effectively.",
+        "problem_statement": "Managing community outreach programs and tracking volunteer activities across the institution was challenging without a centralized digital platform.",
+        "key_features": "Volunteer Management, Activity Tracking, Impact Reports, Event Coordination, Community Portal, Photo Gallery",
+        "expected_outcome": "A comprehensive outreach management platform improving community engagement efficiency.",
+        "tech_stack": "PHP, HTML5, CSS3, JavaScript",
+        "image_path": "images/outreach-image.webp",
+        "thumbnail_path": "images/outreach-image.webp",
+        "department": "MCA",
+        "batch": "2017-2019",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "6 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/outreach-image.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 51,
+        "slug": "splendore-2019",
+        "title": "Splendore",
+        "year": "2019",
+        "short_description": "Website built with HTML5, CSS3, and JavaScript for the Rajagiri College of Social Sciences cultural festival.",
+        "description": "Splendore is the official website for the Rajagiri College of Social Sciences cultural festival. The website provides a visually rich platform for event information, registration, and showcasing the vibrant cultural activities of the college.",
+        "objectives": "To design and develop an attractive cultural festival website that captures the spirit of the event and facilitates participant engagement.",
+        "problem_statement": "The college cultural festival needed an engaging digital platform to promote events, manage registrations, and create excitement among students.",
+        "key_features": null,
+        "expected_outcome": "An engaging festival website increasing event participation and digital reach.",
+        "tech_stack": "HTML5, CSS3, JavaScript",
+        "image_path": "images/splendore-2019.webp",
+        "thumbnail_path": "images/splendore-2019.webp",
+        "department": "MCA",
+        "batch": "2017-2019",
+        "category": "Web Application",
+        "project_type": "Academic",
+        "duration": "2 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "http://www.splendorercss.in",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/splendore-2019.webp",
+                "caption": ""
+            }
+        ]
+    },
+    {
+        "id": 52,
+        "slug": "fest-buddy",
+        "title": "Fest Buddy",
+        "year": "2020",
+        "short_description": "Android application for managing college festivals and events developed for client Impress Project.",
+        "description": "Fest Buddy is an Android application designed for managing college festivals and events. The app provides a comprehensive solution for event organizers and attendees, enabling seamless event management, scheduling, and participation tracking.",
+        "objectives": "To create a mobile-first event management solution that simplifies college festival organization and improves attendee experience.",
+        "problem_statement": "College festival management relied heavily on manual processes, making it difficult to coordinate events, track registrations, and communicate with participants in real-time.",
+        "key_features": "Event Schedule, Push Notifications, Registration System, Venue Maps, Live Updates, Participant Profiles",
+        "expected_outcome": "A mobile application streamlining festival management and improving attendee engagement.",
+        "tech_stack": "Android, Java, Firebase",
+        "image_path": "images/fesbud-image.webp",
+        "thumbnail_path": "images/fesbud-image.webp",
+        "department": "MCA",
+        "batch": "2018-2020",
+        "category": "Mobile Application",
+        "project_type": "Client",
+        "duration": "6 months",
+        "status": "Completed",
+        "github_link": "",
+        "demo_link": "",
+        "ssl_tracking_enabled": 1,
+        "poster_path": "",
+        "created_at": "2026-10-23 23:03:29",
+        "members": [],
+        "faculty": [],
+        "screenshots": [
+            {
+                "image_path": "images/fesbud-image.webp",
+                "caption": ""
+            }
+        ]
+    }
+]
