@@ -2848,14 +2848,20 @@ function buildDynamicTimeline() {
     const existing = scrollContent.querySelectorAll('.timeline-node, .timeline-card');
     existing.forEach(el => el.remove());
 
-    // Sort projects ascending: oldest year / oldest project first at the start of the timeline
+    // Sort projects ascending: oldest year / oldest project first at the start of the timeline.
+    // Within the same year, order chronologically by db_id ascending so newly added projects come as the latest (last) in that specific year.
     const projects = [...window.RLABZ_PROJECTS].sort((a, b) => {
         const yearA = parseInt(a.year) || 0;
         const yearB = parseInt(b.year) || 0;
         if (yearA !== yearB) {
             return yearA - yearB; // Oldest year first
         }
-        return String(a.id).localeCompare(String(b.id)); // Alphabetical fallback for same year
+        const idA = a.db_id !== undefined ? Number(a.db_id) : (parseInt(a.id) || 0);
+        const idB = b.db_id !== undefined ? Number(b.db_id) : (parseInt(b.id) || 0);
+        if (idA !== idB) {
+            return idA - idB;
+        }
+        return 0;
     });
 
     // Base X offset

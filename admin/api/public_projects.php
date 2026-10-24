@@ -88,6 +88,8 @@ try {
         // Map database fields to the exact keys expected by the frontend JS
         $mapped_project = [
             'id' => $p['slug'], // The frontend uses slug as the 'id'
+            'db_id' => (int)$p['id'],
+            'created_at' => $p['created_at'],
             'title' => $p['title'],
             'year' => $p['year'],
             'shortDescription' => $p['short_description'],
