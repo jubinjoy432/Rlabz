@@ -2635,7 +2635,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (nav) {
         let navTicking = false;
-        const darkSections = Array.from(document.querySelectorAll('#client_form_section, footer'));
+        const darkSections = Array.from(document.querySelectorAll('#client_form_section, footer, #rlabzStatsSection'));
         const allSections = Array.from(sections);
 
         const onNavScroll = () => {
@@ -2647,7 +2647,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let isOverDark = false;
             for (let i = 0; i < darkSections.length; i++) {
                 const rect = darkSections[i].getBoundingClientRect();
-                if (rect.top <= navCenterY && rect.bottom >= navCenterY) {
+                if (rect.top <= 75 && rect.bottom >= 15) {
                     isOverDark = true;
                     break;
                 }

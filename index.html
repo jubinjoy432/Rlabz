@@ -17,7 +17,7 @@
         media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" media="print"
         onload="this.media='all'">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css?v=2.3">
 
 </head>
 
@@ -53,6 +53,7 @@
                 <a href="#hero-blue" class="nav-link active">Home</a>
                 <a href="#what-we-do" class="nav-link">Solutions</a>
                 <a href="#our-works" class="nav-link">Projects</a>
+                <a href="#rlabzStatsSection" class="nav-link">Overview</a>
                 <a href="#client_form_section" class="nav-link">Clients</a>
             </div>
 
@@ -597,9 +598,131 @@
         </div>
     </section><!-- /#our-works -->
 
+    <!-- =====================================================
+         RLABZ STATISTICS SECTION — Real-time Project Metrics
+         ===================================================== -->
+    <section class="rlabz-statistics-section" id="rlabzStatsSection">
+        <div class="rlabz-stats-bg-glow"></div>
+        <div class="rlabz-stats-container">
+            <div class="rlabz-stats-grid-main">
+                
+                <!-- Left: Headline & Call To Action -->
+                <div class="rlabz-stats-left">
+                    <span class="rlabz-stats-kicker"><i class="fa-solid fa-chart-line"></i> Real-time Impact</span>
+                    <h2 class="rlabz-stats-title">Overview</h2>
+                    <p class="rlabz-stats-desc">
+                        From student-engineered solutions to enterprise campus platforms, RLabZ drives real-world software engineering with verifiable outcomes, production standards, and measurable milestones.
+                    </p>
+                    <a href="public/projects.html" class="rlabz-stats-btn">
+                        Explore All Projects <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
 
+                <!-- Right: High-Impact Metrics Grid (from DB) -->
+                <div class="rlabz-stats-cards-grid">
+                    <!-- Stat 1: Completed Projects -->
+                    <div class="rlabz-stat-card">
+                        <div class="rlabz-stat-number-wrapper">
+                            <span class="rlabz-counter" id="rlabzStatCompleted" data-target="11">11</span>
+                        </div>
+                        <div class="rlabz-stat-badge">
+                            <i class="fa-solid fa-circle-check" style="color: #34d399;"></i> Projects Completed
+                        </div>
+                        <p class="rlabz-stat-desc">Software successfully delivered.</p>
+                    </div>
 
-    <!-- Premium Who We Are Section -->
+                    <!-- Stat 2: In Development -->
+                    <div class="rlabz-stat-card">
+                        <div class="rlabz-stat-number-wrapper">
+                            <span class="rlabz-counter" id="rlabzStatInDev" data-target="6">6</span>
+                        </div>
+                        <div class="rlabz-stat-badge">
+                            <i class="fa-solid fa-code" style="color: #fbbf24;"></i> In Development
+                        </div>
+                        <p class="rlabz-stat-desc">Projects currently being developed.</p>
+                    </div>
+
+                    <!-- Stat 3: Total Projects -->
+                    <div class="rlabz-stat-card">
+                        <div class="rlabz-stat-number-wrapper">
+                            <span class="rlabz-counter" id="rlabzStatTotal" data-target="17">17</span>
+                        </div>
+                        <div class="rlabz-stat-badge">
+                            <i class="fa-solid fa-layer-group" style="color: #38bdf8;"></i> Total Projects
+                        </div>
+                        <p class="rlabz-stat-desc">Completed and ongoing projects.</p>
+                    </div>
+
+                    <!-- Stat 4: Student Developers -->
+                    <div class="rlabz-stat-card">
+                        <div class="rlabz-stat-number-wrapper">
+                            <span class="rlabz-counter" id="rlabzStatMembers" data-target="28">28</span>
+                        </div>
+                        <div class="rlabz-stat-badge">
+                            <i class="fa-solid fa-users" style="color: #a78bfa;"></i> Student Developers
+                        </div>
+                        <p class="rlabz-stat-desc">Students contributing to development.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Annual Completed Projects Breakdown Bar -->
+            <div class="rlabz-annual-breakdown-card">
+                <div class="rlabz-annual-header">
+                    <div>
+                        <div class="rlabz-annual-title">
+                            <i class="fa-solid fa-chart-line"></i> Annual Completed Projects
+                        </div>
+                        <div class="rlabz-annual-subtitle">Year-by-year completed projects and development distribution calculated dynamically from database records.</div>
+                    </div>
+                </div>
+                <div class="rlabz-year-grid" id="rlabzYearStatsGrid">
+                    <!-- Dynamic cards will be hydrated from DB -->
+                    <div class="rlabz-year-pill-item">
+                        <div class="rlabz-year-top-row">
+                            <span class="rlabz-year-label">2026</span>
+                            <span class="rlabz-year-completed-badge"><i class="fa-solid fa-check"></i> 3 Completed</span>
+                        </div>
+                        <div class="rlabz-year-progress-track">
+                            <div class="rlabz-year-progress-fill" style="width: 33%;"></div>
+                        </div>
+                        <div class="rlabz-year-bottom-meta">
+                            <span>6 In Progress</span>
+                            <span>9 Total Projects</span>
+                        </div>
+                    </div>
+                    <div class="rlabz-year-pill-item">
+                        <div class="rlabz-year-top-row">
+                            <span class="rlabz-year-label">2025</span>
+                            <span class="rlabz-year-completed-badge"><i class="fa-solid fa-check"></i> 7 Completed</span>
+                        </div>
+                        <div class="rlabz-year-progress-track">
+                            <div class="rlabz-year-progress-fill" style="width: 100%;"></div>
+                        </div>
+                        <div class="rlabz-year-bottom-meta">
+                            <span>0 In Progress</span>
+                            <span>7 Total Projects</span>
+                        </div>
+                    </div>
+                    <div class="rlabz-year-pill-item">
+                        <div class="rlabz-year-top-row">
+                            <span class="rlabz-year-label">2024</span>
+                            <span class="rlabz-year-completed-badge"><i class="fa-solid fa-check"></i> 1 Completed</span>
+                        </div>
+                        <div class="rlabz-year-progress-track">
+                            <div class="rlabz-year-progress-fill" style="width: 100%;"></div>
+                        </div>
+                        <div class="rlabz-year-bottom-meta">
+                            <span>0 In Progress</span>
+                            <span>1 Total Project</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
     <section class="premium-about-section" id="aboutUsSection">
         <div class="about-bg-elements">
             <!-- Modern sweeping gradient background elements instead of orbs -->
@@ -1319,29 +1442,35 @@
 
         .client_form_logo_item {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #6B7A87;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff !important;
             padding: 18px 40px;
-            background: #001C30;
-            border: 1px solid rgba(39, 163, 255, 0.2);
+            background: #021a32;
+            border: 1px solid rgba(39, 163, 255, 0.35);
             border-radius: 14px;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            gap: 10px;
             transition: all 0.35s ease;
             cursor: default;
             white-space: nowrap;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .client_form_logo_item i {
+            color: #38bdf8;
+            font-size: 1.15em;
         }
 
         .client_form_logo_item:hover {
-            background: rgba(11, 83, 148, 0.25);
-            color: #ffffff;
-            border-color: rgba(37, 99, 235, 0.4);
+            background: rgba(8, 51, 92, 0.8);
+            color: #ffffff !important;
+            border-color: #38bdf8;
             transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 8px 25px rgba(39, 163, 255, 0.35);
         }
 
         /* ══════════════════════════════════
@@ -2269,7 +2398,8 @@
 
     <!-- Main Script -->
     <script src="assets/js/projects-data.js"></script>
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/stats-loader.js?v=2.2"></script>
+    <script src="assets/js/script.js?v=2.2"></script>
 
 
 

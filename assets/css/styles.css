@@ -9399,7 +9399,9 @@ html.lenis body {
 #robot-popup, .robot-popup, .fixed-sidebar-btn, .robot-sidebar-dock { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
 /* Force light logo when scrolled over dark sections */
+.premium-nav.nav-over-dark .logo-dark,
 .premium-nav.scrolled.nav-over-dark .logo-dark { display: none !important; }
+.premium-nav.nav-over-dark .logo-light,
 .premium-nav.scrolled.nav-over-dark .logo-light { display: block !important; }
 
 /* Compositing & GPU Acceleration Layers */
@@ -9422,3 +9424,329 @@ html.lenis body {
     }
 }
 
+/* =====================================================
+   STATISTICAL SECTION — Impact & Milestone Metrics
+   ===================================================== */
+.rlabz-statistics-section {
+    position: relative;
+    background: #021a32;
+    background: radial-gradient(circle at 15% 25%, #08335c 0%, #021a32 80%);
+    color: #ffffff;
+    padding: 7rem 5% 6.5rem;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.rlabz-stats-bg-glow {
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 650px;
+    height: 650px;
+    background: radial-gradient(circle, rgba(39, 163, 255, 0.14) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.rlabz-stats-container {
+    max-width: 1350px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.rlabz-stats-grid-main {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 4.5rem;
+    align-items: center;
+    margin-bottom: 3.5rem;
+}
+
+/* Left Column */
+.rlabz-stats-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.rlabz-stats-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #38bdf8;
+    margin-bottom: 1.25rem;
+    padding: 0.4rem 1rem;
+    border-radius: 9999px;
+    background: rgba(56, 189, 248, 0.14);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.rlabz-statistics-section .rlabz-stats-title {
+    font-size: clamp(2.4rem, 4.2vw, 3.6rem) !important;
+    font-weight: 800 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.02em !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    margin-bottom: 1.5rem !important;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif !important;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.rlabz-statistics-section .rlabz-stats-title .rlabz-highlight-text {
+    color: #38bdf8 !important;
+    -webkit-text-fill-color: #38bdf8 !important;
+    background: none !important;
+    text-shadow: 0 0 25px rgba(56, 189, 248, 0.45);
+}
+
+.rlabz-statistics-section .rlabz-stats-desc {
+    font-size: 1.1rem !important;
+    line-height: 1.75 !important;
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+    margin-bottom: 2.25rem !important;
+    max-width: 530px !important;
+    font-weight: 400 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+
+.rlabz-stats-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: #ffffff;
+    color: #021a32 !important;
+    -webkit-text-fill-color: #021a32 !important;
+    padding: 0.95rem 2.2rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.rlabz-stats-btn:hover {
+    background: #38bdf8;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(56, 189, 248, 0.45);
+}
+
+/* Right Column (2x2 Stats Grid matching reference) */
+.rlabz-stats-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.75rem 2.5rem;
+}
+
+.rlabz-stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.rlabz-stat-number-wrapper {
+    font-size: clamp(3.2rem, 5vw, 4.4rem);
+    font-weight: 800;
+    line-height: 1;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: baseline;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+.rlabz-stat-plus {
+    color: #38bdf8 !important;
+    -webkit-text-fill-color: #38bdf8 !important;
+    font-size: 0.75em;
+    margin-left: 2px;
+}
+
+.rlabz-stat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.14) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    padding: 0.38rem 0.9rem;
+    border-radius: 9999px;
+    margin-bottom: 0.65rem;
+}
+
+.rlabz-stat-desc {
+    font-size: 0.95rem !important;
+    color: #e2e8f0 !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
+    line-height: 1.55 !important;
+    max-width: 270px !important;
+}
+
+/* Annual Completed Projects Breakdown Bar */
+.rlabz-annual-breakdown-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    padding: 2.2rem 2.5rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.rlabz-annual-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rlabz-annual-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+}
+
+.rlabz-annual-title i {
+    color: #38bdf8;
+}
+
+.rlabz-annual-subtitle {
+    font-size: 0.92rem;
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    margin-top: 0.35rem;
+    font-weight: 400;
+}
+
+.rlabz-year-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+}
+
+.rlabz-year-pill-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 1.35rem 1.45rem;
+    transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+
+.rlabz-year-pill-item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(56, 189, 248, 0.5);
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.rlabz-year-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+}
+
+.rlabz-year-label {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.rlabz-year-completed-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #34d399 !important;
+    -webkit-text-fill-color: #34d399 !important;
+    background: rgba(52, 211, 153, 0.16);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 0.28rem 0.72rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.rlabz-year-progress-track {
+    width: 100%;
+    height: 7px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.rlabz-year-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #38bdf8);
+    border-radius: 9999px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rlabz-year-bottom-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #e2e8f0 !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .rlabz-stats-grid-main {
+        grid-template-columns: 1fr;
+        gap: 3.5rem;
+    }
+    .rlabz-stats-cards-grid {
+        gap: 2.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .rlabz-statistics-section {
+        padding: 5rem 5% 4.5rem;
+    }
+    .rlabz-stats-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .rlabz-annual-breakdown-card {
+        padding: 1.5rem 1.25rem;
+    }
+}
+/* Client Logos Company Name Visibility */
+.client_form_logo_item {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+.client_form_logo_item i {
+    color: #38bdf8 !important;
+}
