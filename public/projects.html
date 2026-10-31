@@ -15,8 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <link rel="stylesheet" href="../assets/css/projects-page.css">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=2.5">
+    <link rel="stylesheet" href="../assets/css/projects-page.css?v=2.5">
 </head>
 
 <body>
@@ -51,6 +51,13 @@
 
     <!-- Projects Page Content -->
     <div class="projects-page-wrapper">
+
+        <!-- Top Back Navigation -->
+        <div class="projects-back-bar">
+            <button type="button" class="projects-back-btn" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); } else { window.location.href='../index.html'; }" aria-label="Go back">
+                <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
+            </button>
+        </div>
 
         <!-- Page Hero -->
         <section class="projects-hero">
@@ -137,8 +144,8 @@
 
         <!-- Back to Home -->
         <div class="projects-back-home">
-            <a href="../index.html" class="projects-back-link">
-                <i class="fa-solid fa-arrow-left"></i> Back to Home
+            <a href="../index.html" class="projects-back-link" onclick="if(window.history.length > 1 && document.referrer){ event.preventDefault(); window.history.back(); }">
+                <i class="fa-solid fa-arrow-left"></i> Back
             </a>
         </div>
 

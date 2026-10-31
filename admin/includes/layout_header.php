@@ -4,7 +4,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 // Determine path offset based on current location
 $isRootAdmin = (basename(dirname($_SERVER['PHP_SELF'])) === 'admin');
 $faviconPath = $isRootAdmin ? "../assets/images/rlabz-icon.png?v=2" : "../../assets/images/rlabz-icon.png?v=2";
-$cssPath = $isRootAdmin ? 'assets/css/admin_style.css' : '../assets/css/admin_style.css';
+$cssPath = $isRootAdmin ? 'assets/css/admin_style.css?v=2.1' : '../assets/css/admin_style.css?v=2.1';
 $homePath = $isRootAdmin ? 'pages/overview.php' : 'overview.php';
 $managePath = $isRootAdmin ? 'pages/manage_projects.php' : 'manage_projects.php';
 $addPath = $isRootAdmin ? 'pages/add_project.php' : 'add_project.php';
@@ -43,9 +43,9 @@ if (isset($pdo) && $pdo) {
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 1.5rem 1rem;">
+        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 0.6rem 0.75rem;">
             <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
-            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="width: 225px; max-width: 100%; height: auto; object-fit: contain;">
+            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="width: 225px; max-width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12)); margin-left: -20px;">
         </a>
 
         <nav class="sidebar-nav">
@@ -103,6 +103,11 @@ if (isset($pdo) && $pdo) {
                 <button class="sidebar-toggle" id="sidebarToggle">
                     <i class="fa-solid fa-bars"></i>
                 </button>
+                <?php if ($currentPage !== 'overview.php' && $currentPage !== 'dashboard.php'): ?>
+                <button type="button" class="btn-back" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); } else { window.location.href='<?php echo $homePath; ?>'; }" title="Go back" aria-label="Go back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <?php endif; ?>
                 <div>
                     <div class="header-page-title"><?php echo isset($pageTitle) ? $pageTitle : 'Dashboard'; ?></div>
                     <div class="header-breadcrumb">

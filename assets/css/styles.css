@@ -135,15 +135,15 @@ body {
     left: 0;
     width: 100%;
     max-width: none;
-    padding: 0.8rem 2rem;
+    padding: 0.2rem 2rem;
     z-index: 9999;
     background: transparent;
-    transition: all 0.3s ease;
+    transition: background 0.3s ease;
 }
 
 .premium-nav.scrolled {
     background: transparent;
-    padding: 0.5rem 2rem;
+    padding: 0.2rem 2rem;
 }
 
 .nav-content {
@@ -159,36 +159,60 @@ body {
 .nav-logo {
     font-family: var(--font-heading);
     text-decoration: none;
-    display: flex;
+    display: inline-grid;
+    grid-template-areas: "logo";
     align-items: center;
-    transition: all 0.35s ease-in-out;
     min-width: 180px;
 }
 
 .premium-nav .logo-image {
+    grid-area: logo;
     width: 225px;
     height: auto;
     filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));
-    transition: all 0.35s ease-in-out;
+    transition: opacity 0.35s ease;
     object-fit: contain;
+    margin-top: -16px;
+    margin-bottom: -16px;
+    margin-left: -12px;
 }
 
 .premium-nav.scrolled .logo-image {
-    width: 195px;
+    width: 225px;
     height: auto;
+    margin-top: -16px;
+    margin-bottom: -16px;
+    margin-left: -12px;
 }
 
 /* Dual-logo swap for pages with dark hero (index.html) */
 .logo-dark {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.logo-light {
+    opacity: 1;
+    visibility: visible;
 }
 
 .premium-nav.scrolled .logo-light {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .premium-nav.scrolled .logo-dark {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.premium-nav .logo-image:not(.logo-light):not(.logo-dark) {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
 }
 
 .nav-links-container {
@@ -203,7 +227,8 @@ body {
     /* Absolutely center in the navbar â€” immune to logo/actions width changes */
     position: absolute;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
 }
 
@@ -370,13 +395,11 @@ body {
 
 @media (max-width: 768px) {
     .premium-nav {
-        padding: 1rem 1.2rem;
+        padding: 0.35rem 1.2rem;
     }
 
-
-
     .premium-nav.scrolled {
-        padding: 0.5rem 1.2rem;
+        padding: 0.35rem 1.2rem;
     }
 
     .nav-contact-btn {
@@ -4684,11 +4707,11 @@ footer {
     }
 
     .premium-nav {
-        padding: 0.8rem 1rem;
+        padding: 0.35rem 1rem;
     }
 
     .premium-nav.scrolled {
-        padding: 0.5rem 1rem;
+        padding: 0.35rem 1rem;
     }
 }
 
@@ -9400,9 +9423,17 @@ html.lenis body {
 
 /* Force light logo when scrolled over dark sections */
 .premium-nav.nav-over-dark .logo-dark,
-.premium-nav.scrolled.nav-over-dark .logo-dark { display: none !important; }
+.premium-nav.scrolled.nav-over-dark .logo-dark {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
 .premium-nav.nav-over-dark .logo-light,
-.premium-nav.scrolled.nav-over-dark .logo-light { display: block !important; }
+.premium-nav.scrolled.nav-over-dark .logo-light {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
 
 /* Compositing & GPU Acceleration Layers */
 .hero-cards-wrapper,

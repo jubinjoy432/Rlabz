@@ -52,7 +52,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         /* --- Left Side: Form --- */
         .login-left {
             flex: 1;
-            padding: 4rem;
+            padding: 3rem 4rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -60,7 +60,30 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         }
 
         .login-header {
-            margin-bottom: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-login-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.95rem;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-login-back:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+            background: #f8fafc;
+            transform: translateX(-2px);
         }
 
         .login-header h2 {
@@ -200,9 +223,12 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         }
 
         .brand-display img {
-            max-width: 280px;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
+            width: 225px;
+            max-width: 225px;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 1.25rem;
+            filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));
             animation: float 6s ease-in-out infinite;
         }
         
@@ -241,6 +267,11 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         
         <!-- Left Side: Login Form -->
         <div class="login-left">
+            <div class="login-back-wrapper" style="margin-bottom: 1.25rem;">
+                <button type="button" class="btn-login-back" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); } else { window.location.href='../index.html'; }" aria-label="Go back">
+                    <i class="fa-solid fa-arrow-left"></i> <span>Back to Website</span>
+                </button>
+            </div>
             <div class="login-header">
                 <h2>Welcome Back</h2>
                 <p>Please sign in to access the RLabz admin panel.</p>
@@ -279,7 +310,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         <!-- Right Side: RLabz Logo -->
         <div class="login-right">
             <div class="brand-display">
-                <img src="../assets/images/rlabz-logo-white.png" alt="RLabz Logo" style="width: 225px; max-width: 225px; height: auto; object-fit: contain;">
+                <img src="../assets/images/rlabz-logo-white.png" alt="RLabz Logo" style="width: 225px; max-width: 225px; height: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));">
                 <div class="brand-text">RLabz ADMIN</div>
             </div>
         </div>

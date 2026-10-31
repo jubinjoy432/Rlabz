@@ -15,8 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <link rel="stylesheet" href="../assets/css/project-details.css">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=2.5">
+    <link rel="stylesheet" href="../assets/css/project-details.css?v=2.5">
 </head>
 
 <body>
@@ -65,16 +65,11 @@
         <!-- Navigation Bar -->
         <nav class="pd-nav-bar">
             <div class="pd-nav-left">
+                <button type="button" class="pd-nav-btn pd-back-btn" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); } else { window.location.href='projects.html'; }" aria-label="Go back">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
                 <a href="projects.html" class="pd-nav-btn">
                     <i class="fa-solid fa-grid-2"></i> All Projects
-                </a>
-            </div>
-            <div class="pd-nav-right">
-                <a href="#" class="pd-nav-btn disabled" id="pdPrevBtn">
-                    <i class="fa-solid fa-arrow-left"></i> Previous
-                </a>
-                <a href="#" class="pd-nav-btn disabled" id="pdNextBtn">
-                    Next <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         </nav>

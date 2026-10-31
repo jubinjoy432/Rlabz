@@ -7,13 +7,47 @@
 .projects-page-wrapper {
     min-height: 100vh;
     background: var(--paper-white);
-    padding-top: 120px;
+    padding-top: 85px;
+}
+
+/* ---- Top Back Navigation ---- */
+.projects-back-bar {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0.5rem 1.5rem 0.25rem;
+    display: flex;
+    align-items: center;
+}
+
+.projects-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.1rem;
+    background: #ffffff;
+    border: 1px solid rgba(0, 44, 73, 0.12);
+    border-radius: 50px;
+    color: var(--slate-text, #475569);
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: 'Outfit', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+}
+
+.projects-back-btn:hover {
+    background: #f8fafc;
+    color: var(--primary-blue, #2563eb);
+    border-color: rgba(37, 99, 235, 0.3);
+    transform: translateX(-3px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
 }
 
 /* ---- Page Hero ---- */
 .projects-hero {
     text-align: center;
-    padding: 2rem 1.5rem 3rem;
+    padding: 0.75rem 1.5rem 2.5rem;
     position: relative;
 }
 

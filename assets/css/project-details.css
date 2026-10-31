@@ -7,7 +7,7 @@
 .pd-page-wrapper {
     min-height: 100vh;
     background: var(--paper-white);
-    padding-top: 100px;
+    padding-top: 85px;
     padding-bottom: 4rem;
 }
 
@@ -15,7 +15,7 @@
 .pd-hero {
     position: relative;
     max-width: 1200px;
-    margin: 0 auto 3rem;
+    margin: 0 auto 2rem;
     padding: 0 1.5rem;
 }
 
@@ -175,6 +175,7 @@
     font-weight: 600;
     font-family: 'Outfit', sans-serif;
     text-decoration: none;
+    cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
 }
