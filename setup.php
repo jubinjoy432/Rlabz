@@ -6,6 +6,7 @@
  */
 
 // 1. Establish Environment and Database Connection
+define('ALLOW_DB_FAIL', true);
 require_once __DIR__ . '/admin/api/db.php';
 
 $isCli = (php_sapi_name() === 'cli');
@@ -13,7 +14,37 @@ $isCli = (php_sapi_name() === 'cli');
 $results = [];
 $error = null;
 
+// If initial connection failed (e.g. database does not exist yet), attempt to auto-create database
+if (!$pdo) {
+    try {
+        $connPdo = new PDO("mysql:host=$host;charset=utf8mb4", $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]);
+        $connPdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+        
+        // Reconnect with dbname
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]);
+        $results[] = [
+            'type' => 'success',
+            'action' => 'Database Creation',
+            'message' => "Created database `$dbname` automatically"
+        ];
+    } catch (Exception $connEx) {
+        $error = "Cannot connect to MySQL server at '{$host}': " . $connEx->getMessage();
+    }
+}
+
 try {
+    if ($error) {
+        throw new Exception($error);
+    }
+    if (!$pdo) {
+        throw new Exception("Database connection could not be established.");
+    }
+
     // Disable foreign key checks during migration
     $pdo->exec("SET FOREIGN_KEY_CHECKS = 0;");
 

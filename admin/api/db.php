@@ -15,6 +15,9 @@ if (file_exists($envPath)) {
     $password = '';
 }
 
+$pdo = null;
+$db_error = null;
+
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
     // Set the PDO error mode to exception
@@ -51,6 +54,10 @@ try {
         }
     }
 } catch(PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
+    $db_error = $e->getMessage();
+    if (!defined('ALLOW_DB_FAIL')) {
+        die("Connection failed: " . $e->getMessage());
+    }
 }
+
 ?>
