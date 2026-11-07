@@ -137,3 +137,12 @@ CREATE TABLE IF NOT EXISTS `admin_announcements` (
     PRIMARY KEY (`id`),
     INDEX `idx_announcement_read` (`is_read`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =====================================================
+-- 8. Default Administrator Account
+-- Credentials: Username = admin | Password = admin123
+-- Uses INSERT IGNORE so it will not overwrite existing credentials if already created.
+-- =====================================================
+INSERT IGNORE INTO `admin_users` (`id`, `username`, `password_hash`, `role`) 
+VALUES (1, 'admin', '$2y$10$ZAXXwXTJinle7YPZ/m1BxOvUNUQbpVwD7eBhBspzn9/2pADj4wrei', 'admin');
+

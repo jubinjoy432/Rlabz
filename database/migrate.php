@@ -153,6 +153,10 @@ try {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
 
+    // 1.5 Ensure Default Admin User Exists (Username: admin | Password: admin123)
+    $pdo->exec("INSERT IGNORE INTO `admin_users` (`id`, `username`, `password_hash`, `role`) VALUES (1, 'admin', '$2y$10$ZAXXwXTJinle7YPZ/m1BxOvUNUQbpVwD7eBhBspzn9/2pADj4wrei', 'admin');");
+
+
     // 2. Safe Column Upgrades for Existing Databases
     // Check and add projects columns
     $projCols = $pdo->query("SHOW COLUMNS FROM `projects`")->fetchAll(PDO::FETCH_COLUMN);
