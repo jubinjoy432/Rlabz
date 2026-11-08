@@ -4,7 +4,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 // Determine path offset based on current location
 $isRootAdmin = (basename(dirname($_SERVER['PHP_SELF'])) === 'admin');
 $faviconPath = $isRootAdmin ? "../assets/images/rlabz-icon.png?v=2" : "../../assets/images/rlabz-icon.png?v=2";
-$cssPath = $isRootAdmin ? 'assets/css/admin_style.css?v=2.1' : '../assets/css/admin_style.css?v=2.1';
+$cssPath = $isRootAdmin ? 'assets/css/admin_style.css?v=2.3' : '../assets/css/admin_style.css?v=2.3';
 $homePath = $isRootAdmin ? 'pages/overview.php' : 'overview.php';
 $managePath = $isRootAdmin ? 'pages/manage_projects.php' : 'manage_projects.php';
 $addPath = $isRootAdmin ? 'pages/add_project.php' : 'add_project.php';
@@ -43,10 +43,15 @@ if (isset($pdo) && $pdo) {
 
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 0.6rem 0.75rem;">
-            <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
-            <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="width: 225px; max-width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12)); margin-left: -20px;">
-        </a>
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0.6rem 0.75rem;">
+            <a href="<?php echo $homePath; ?>" class="sidebar-logo" style="justify-content: flex-start; padding: 0; border-bottom: none;">
+                <?php $logoWhitePath = $isRootAdmin ? "../assets/images/rlabz-logo-white.png" : "../../assets/images/rlabz-logo-white.png"; ?>
+                <img src="<?php echo $logoWhitePath; ?>" alt="RLabz Logo" style="width: 200px; max-width: 100%; height: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12)); margin-left: -15px;">
+            </a>
+            <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
 
         <nav class="sidebar-nav">
             <div class="sidebar-section-label">Core</div>
@@ -100,7 +105,7 @@ if (isset($pdo) && $pdo) {
         <!-- Top Header -->
         <header class="admin-header">
             <div class="header-left">
-                <button class="sidebar-toggle" id="sidebarToggle">
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
                     <i class="fa-solid fa-bars"></i>
                 </button>
                 <?php if ($currentPage !== 'overview.php' && $currentPage !== 'dashboard.php'): ?>
@@ -108,7 +113,7 @@ if (isset($pdo) && $pdo) {
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <?php endif; ?>
-                <div>
+                <div class="header-title-box">
                     <div class="header-page-title"><?php echo isset($pageTitle) ? $pageTitle : 'Dashboard'; ?></div>
                     <div class="header-breadcrumb">
                         <i class="fa-solid fa-home"></i> / Admin / <?php echo isset($pageTitle) ? $pageTitle : 'Dashboard'; ?>
@@ -116,8 +121,8 @@ if (isset($pdo) && $pdo) {
                 </div>
             </div>
             <div class="header-right">
-                <a href="<?php echo $logoutPath; ?>" class="btn-header">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                <a href="<?php echo $logoutPath; ?>" class="btn-header btn-logout" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i> <span class="logout-text">Logout</span>
                 </a>
             </div>
         </header>

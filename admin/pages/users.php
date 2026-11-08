@@ -10,7 +10,7 @@ require_once '../includes/layout_header.php';
 ?>
 
 <div class="admin-panel-container">
-    <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div>
             <h1 style="margin: 0; font-size: 1.8rem; color: #1e293b;">Manage Users</h1>
             <p style="margin: 0; color: #64748b; margin-top: 0.5rem;">Add new admin users and manage their permissions.</p>
@@ -41,7 +41,7 @@ require_once '../includes/layout_header.php';
 
 <!-- User Modal -->
 <div id="userModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
-    <div style="background: white; width: 400px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+    <div style="background: white; width: 400px; max-width: calc(100vw - 2rem); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin: 1rem;">
         <div style="padding: 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
             <h3 id="modalTitle" style="margin: 0; font-size: 1.25rem;">Add New User</h3>
             <button id="closeModal" style="background: none; border: none; font-size: 1.25rem; cursor: pointer; color: #64748b;"><i class="fa-solid fa-times"></i></button>

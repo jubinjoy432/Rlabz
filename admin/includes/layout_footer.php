@@ -7,25 +7,40 @@
         const sidebar = document.getElementById('adminSidebar');
         const overlay = document.getElementById('sidebarOverlay');
         const toggleBtn = document.getElementById('sidebarToggle');
+        const closeBtn = document.getElementById('sidebarCloseBtn');
 
-        if(toggleBtn && sidebar && overlay) {
-            toggleBtn.addEventListener('click', () => {
+        function openSidebar() {
+            if (sidebar && overlay) {
                 sidebar.classList.add('open');
                 overlay.classList.add('show');
-            });
-            
-            overlay.addEventListener('click', () => {
+                document.body.classList.add('sidebar-open');
+            }
+        }
+
+        function closeSidebar() {
+            if (sidebar && overlay) {
                 sidebar.classList.remove('open');
                 overlay.classList.remove('show');
-            });
+                document.body.classList.remove('sidebar-open');
+            }
         }
+
+        if (toggleBtn) toggleBtn.addEventListener('click', openSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+        if (closeBtn) closeBtn.addEventListener('click', closeSidebar);
+
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) closeSidebar();
+            });
+        });
 
         function showAdminToast(type, title, message) {
             let container = document.getElementById('adminToastContainer');
             if (!container) {
                 container = document.createElement('div');
                 container.id = 'adminToastContainer';
-                container.style.cssText = 'position:fixed;top:1.5rem;right:1.5rem;z-index:999999;display:flex;flex-direction:column;gap:0.75rem;pointer-events:none;max-width:380px;width:calc(100% - 3rem);';
+                container.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:999999;display:flex;flex-direction:column;gap:0.75rem;pointer-events:none;max-width:380px;width:calc(100% - 2rem);';
                 document.body.appendChild(container);
             }
 

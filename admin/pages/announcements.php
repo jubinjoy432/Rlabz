@@ -63,7 +63,7 @@ require_once '../includes/layout_header.php';
 </div>
 
 <!-- Stats Counter Grid -->
-<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem;">
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
     <div class="stat-card" style="border-left: 4px solid #3b82f6;">
         <div class="stat-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
             <i class="fa-solid fa-bell"></i>

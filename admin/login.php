@@ -260,6 +260,33 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
                 padding: 3rem 2rem;
             }
         }
+
+        @media (max-width: 600px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 1.5rem 0;
+                align-items: flex-start;
+            }
+            .login-container {
+                margin: 0.75rem auto;
+                width: calc(100% - 1.5rem);
+                border-radius: 18px;
+                box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            }
+            .login-left {
+                padding: 2rem 1.25rem;
+            }
+            .login-header h2 {
+                font-size: 1.85rem;
+            }
+            .login-header p {
+                font-size: 0.95rem;
+            }
+            .input-wrapper input {
+                font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+            }
+        }
     </style>
 </head>
 <body>

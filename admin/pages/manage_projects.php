@@ -30,7 +30,7 @@ require_once '../includes/layout_header.php';
         <h1>Manage Projects</h1>
         <p>View, edit, and delete existing projects.</p>
     </div>
-    <div>
+    <div class="page-header-actions">
         <a href="add_project.php" class="btn-header primary"><i class="fa-solid fa-plus"></i> New Project</a>
     </div>
 </div>
@@ -50,7 +50,7 @@ $statuses = ['Completed', 'In Development'];
 
     <!-- Filter Bar -->
     <div class="projects-filter-bar" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-bottom: 1.25rem; background: #f8fafc; padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border);">
-        <div class="search-bar" style="margin: 0; min-width: 240px; flex: 1;">
+        <div class="search-bar" style="margin: 0; flex: 1 1 200px; width: 100%;">
             <i class="fa-solid fa-search"></i>
             <input type="text" id="projectSearch" placeholder="Search title, tech, description...">
         </div>

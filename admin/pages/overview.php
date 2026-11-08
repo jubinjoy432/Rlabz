@@ -91,7 +91,7 @@ require_once '../includes/layout_header.php';
         <h1>Dashboard Overview</h1>
         <p>Welcome back! Here's what's happening with your projects.</p>
     </div>
-    <div>
+    <div class="page-header-actions">
         <a href="add_project.php" class="btn-header primary"><i class="fa-solid fa-plus"></i> New Project</a>
     </div>
 </div>

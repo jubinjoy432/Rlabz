@@ -101,7 +101,7 @@ try {
 </div>
 
 <!-- SSL Status Stats Counters -->
-<div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); margin-bottom: 1.5rem;">
+<div class="stats-grid" style="margin-bottom: 1.5rem;">
     <div class="stat-card" style="border-left: 4px solid #3b82f6;">
         <div class="stat-icon" style="background: rgba(59, 130, 246, 0.12); color: #2563eb;">
             <i class="fa-solid fa-globe"></i>
@@ -160,7 +160,7 @@ try {
         
         <!-- Search Row with Search Button and Reset Button -->
         <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-            <div class="search-bar" style="margin: 0; min-width: 250px; flex: 1;">
+            <div class="search-bar" style="margin: 0; flex: 1 1 200px; width: 100%;">
                 <i class="fa-solid fa-search"></i>
                 <input type="text" id="sslSearchInput" placeholder="Search project title, domain URL, provider...">
             </div>
