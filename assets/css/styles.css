@@ -177,12 +177,18 @@ body {
     margin-left: -12px;
 }
 
-.premium-nav.scrolled .logo-image {
-    width: 225px;
-    height: auto;
-    margin-top: -16px;
-    margin-bottom: -16px;
-    margin-left: -12px;
+/* Icon-only logo (shown after first page / when scrolled) */
+.logo-icon {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    margin: 0;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 /* Dual-logo swap for pages with dark hero (index.html) */
@@ -197,19 +203,38 @@ body {
     visibility: visible;
 }
 
-.premium-nav.scrolled .logo-light {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
+/* When scrolled (after the first page): ONLY rlabz-icon.png is shown */
+.premium-nav.scrolled .nav-logo {
+    min-width: unset;
+    width: auto;
 }
 
+.premium-nav.scrolled .logo-light,
 .premium-nav.scrolled .logo-dark {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    display: none !important;
 }
 
-.premium-nav .logo-image:not(.logo-light):not(.logo-dark) {
+.premium-nav.scrolled .logo-icon {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    width: 44px;
+    height: 44px;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .premium-nav.scrolled .logo-icon {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+.premium-nav .logo-image:not(.logo-light):not(.logo-dark):not(.logo-icon) {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
@@ -8617,9 +8642,16 @@ html.lenis body {
     overflow-y: hidden;
     background: #ffffff;
     border-radius: 28px;
+    cursor: grab;
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
     /* Hide scrollbar */
     -ms-overflow-style: none;
     scrollbar-width: none;
+}
+
+.timeline-pin-container:active {
+    cursor: grabbing;
 }
 
 .timeline-pin-container::-webkit-scrollbar {
@@ -8858,19 +8890,59 @@ html.lenis body {
     }
 }
 
-/* ---- Section Header Row (title centered, View More right) ---- */
+/* ---- Section Header Row (title centered, View More / View All right) ---- */
 .es-section-header-row {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom: 2rem;
+    max-width: 1400px;
+    margin: 0 auto 1.5rem;
+    padding: 0 5%;
     width: 100%;
 }
 
 .es-section-header-row .section-title {
     margin: 0 auto;
     text-align: center;
+}
+
+.es-section-header-row .view-all-projects-btn {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.es-section-header-row .view-all-projects-btn:hover {
+    transform: translateY(calc(-50% - 2px));
+}
+
+@media (max-width: 768px) {
+    .es-section-header-row {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.85rem !important;
+        margin-bottom: 1.5rem !important;
+        padding: 0 1rem !important;
+    }
+
+    .es-section-header-row .view-all-projects-btn {
+        position: static !important;
+        right: auto !important;
+        top: auto !important;
+        transform: none !important;
+        margin: 0 auto !important;
+        padding: 0.55rem 1.35rem !important;
+        font-size: 0.88rem !important;
+    }
+
+    .es-section-header-row .view-all-projects-btn:hover {
+        transform: translateY(-2px) !important;
+    }
 }
 
 .es-view-more-btn {
@@ -9421,15 +9493,13 @@ html.lenis body {
 .timeline-nav-btn:hover { background: #f8fafc !important; color: #64748b !important; }
 #robot-popup, .robot-popup, .fixed-sidebar-btn, .robot-sidebar-dock { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
-/* Force light logo when scrolled over dark sections */
-.premium-nav.nav-over-dark .logo-dark,
-.premium-nav.scrolled.nav-over-dark .logo-dark {
+/* Force light logo over dark sections ONLY when NOT scrolled (first page hero) */
+.premium-nav:not(.scrolled).nav-over-dark .logo-dark {
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
 }
-.premium-nav.nav-over-dark .logo-light,
-.premium-nav.scrolled.nav-over-dark .logo-light {
+.premium-nav:not(.scrolled).nav-over-dark .logo-light {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;

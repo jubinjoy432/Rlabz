@@ -3068,15 +3068,37 @@ function initCurvedTimeline() {
             // Navigation Buttons Logic
             const prevBtn = document.querySelector('.timeline-prev');
             const nextBtn = document.querySelector('.timeline-next');
+            let activePrevBtn = prevBtn;
+            let activeNextBtn = nextBtn;
+
+            if (prevBtn && nextBtn) {
+                activePrevBtn = prevBtn.cloneNode(true);
+                activeNextBtn = nextBtn.cloneNode(true);
+                prevBtn.parentNode.replaceChild(activePrevBtn, prevBtn);
+                nextBtn.parentNode.replaceChild(activeNextBtn, nextBtn);
+
+                activePrevBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const scrollStep = Math.max(260, containerWidth * 0.65);
+                    targetScroll = Math.max(0, pinContainer.scrollLeft - scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.6, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                });
+                activeNextBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const scrollStep = Math.max(260, containerWidth * 0.65);
+                    targetScroll = Math.min(totalScrollDistance, pinContainer.scrollLeft + scrollStep);
+                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.6, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
+                });
+            }
 
             const updateButtons = () => {
-                if (!prevBtn || !nextBtn) return;
+                if (!activePrevBtn || !activeNextBtn) return;
                 const currentLeft = pinContainer.scrollLeft;
-                if (currentLeft <= 5) prevBtn.classList.add('disabled');
-                else prevBtn.classList.remove('disabled');
+                if (currentLeft <= 5) activePrevBtn.classList.add('disabled');
+                else activePrevBtn.classList.remove('disabled');
 
-                if (currentLeft >= totalScrollDistance - 5) nextBtn.classList.add('disabled');
-                else nextBtn.classList.remove('disabled');
+                if (currentLeft >= totalScrollDistance - 5) activeNextBtn.classList.add('disabled');
+                else activeNextBtn.classList.remove('disabled');
 
                 // --- Road Mask Width (clipping div grows to show more of the SVG) ---
                 const maskPath = document.querySelector('#road-mask-path');
@@ -3114,23 +3136,151 @@ function initCurvedTimeline() {
                 });
             };
 
-            if (prevBtn && nextBtn) {
-                const newPrev = prevBtn.cloneNode(true);
-                const newNext = nextBtn.cloneNode(true);
-                prevBtn.parentNode.replaceChild(newPrev, prevBtn);
-                nextBtn.parentNode.replaceChild(newNext, nextBtn);
+            // --- Touch Swipe Handler for Mobile / Tablets ---
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchStartScrollLeft = 0;
+            let touchLastX = 0;
+            let touchLastTime = 0;
+            let touchVelocity = 0;
+            let isHorizontalSwipe = null;
+            let isSwipingTimeline = false;
 
-                newPrev.addEventListener('click', () => {
-                    const scrollStep = Math.max(260, containerWidth * 0.6);
-                    targetScroll = Math.max(0, pinContainer.scrollLeft - scrollStep);
-                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                });
-                newNext.addEventListener('click', () => {
-                    const scrollStep = Math.max(260, containerWidth * 0.6);
-                    targetScroll = Math.min(totalScrollDistance, pinContainer.scrollLeft + scrollStep);
-                    gsap.to(pinContainer, { scrollLeft: targetScroll, duration: 0.8, ease: "power2.out", overwrite: "auto", onUpdate: updateButtons });
-                });
-            }
+            pinContainer.addEventListener('touchstart', (e) => {
+                if (e.touches.length !== 1) return;
+                gsap.killTweensOf(pinContainer);
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                touchLastX = touchStartX;
+                touchLastTime = Date.now();
+                touchStartScrollLeft = pinContainer.scrollLeft;
+                touchVelocity = 0;
+                isHorizontalSwipe = null;
+                isSwipingTimeline = false;
+            }, { passive: true });
+
+            pinContainer.addEventListener('touchmove', (e) => {
+                if (e.touches.length !== 1) return;
+                const currentX = e.touches[0].clientX;
+                const currentY = e.touches[0].clientY;
+                const dx = currentX - touchStartX;
+                const dy = currentY - touchStartY;
+
+                if (isHorizontalSwipe === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+                    isHorizontalSwipe = Math.abs(dx) >= Math.abs(dy);
+                }
+
+                if (isHorizontalSwipe) {
+                    if (e.cancelable) e.preventDefault();
+                    e.stopPropagation();
+                    isSwipingTimeline = true;
+
+                    const now = Date.now();
+                    const dt = now - touchLastTime;
+                    if (dt > 0) {
+                        touchVelocity = (currentX - touchLastX) / dt;
+                        touchLastX = currentX;
+                        touchLastTime = now;
+                    }
+
+                    pinContainer.scrollLeft = touchStartScrollLeft - dx;
+                    targetScroll = pinContainer.scrollLeft;
+                    updateButtons();
+                }
+            }, { passive: false });
+
+            pinContainer.addEventListener('touchend', () => {
+                if (isSwipingTimeline) {
+                    if (Math.abs(touchVelocity) > 0.2) {
+                        const momentum = touchVelocity * 280;
+                        const finalScroll = Math.max(0, Math.min(totalScrollDistance, pinContainer.scrollLeft - momentum));
+                        gsap.to(pinContainer, {
+                            scrollLeft: finalScroll,
+                            duration: 0.7,
+                            ease: "power2.out",
+                            overwrite: "auto",
+                            onUpdate: updateButtons
+                        });
+                    }
+                    setTimeout(() => {
+                        isSwipingTimeline = false;
+                    }, 120);
+                }
+            }, { passive: true });
+
+            // --- Desktop Mouse Drag Handler ---
+            let isMouseDown = false;
+            let mouseStartX = 0;
+            let mouseStartScrollLeft = 0;
+            let mouseLastX = 0;
+            let mouseLastTime = 0;
+            let mouseVelocity = 0;
+            let isMouseDragging = false;
+
+            pinContainer.addEventListener('mousedown', (e) => {
+                if (e.button !== 0 || e.target.closest('.timeline-nav-btn')) return;
+                isMouseDown = true;
+                isMouseDragging = false;
+                mouseStartX = e.clientX;
+                mouseLastX = mouseStartX;
+                mouseLastTime = Date.now();
+                mouseStartScrollLeft = pinContainer.scrollLeft;
+                mouseVelocity = 0;
+                gsap.killTweensOf(pinContainer);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isMouseDown) return;
+                const dx = e.clientX - mouseStartX;
+                if (!isMouseDragging && Math.abs(dx) > 5) {
+                    isMouseDragging = true;
+                    pinContainer.style.cursor = 'grabbing';
+                    pinContainer.style.userSelect = 'none';
+                }
+                if (isMouseDragging) {
+                    e.preventDefault();
+                    const now = Date.now();
+                    const dt = now - mouseLastTime;
+                    if (dt > 0) {
+                        mouseVelocity = (e.clientX - mouseLastX) / dt;
+                        mouseLastX = e.clientX;
+                        mouseLastTime = now;
+                    }
+                    pinContainer.scrollLeft = mouseStartScrollLeft - dx;
+                    targetScroll = pinContainer.scrollLeft;
+                    updateButtons();
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isMouseDown) {
+                    isMouseDown = false;
+                    pinContainer.style.cursor = '';
+                    pinContainer.style.userSelect = '';
+                    if (isMouseDragging) {
+                        if (Math.abs(mouseVelocity) > 0.2) {
+                            const momentum = mouseVelocity * 250;
+                            const finalScroll = Math.max(0, Math.min(totalScrollDistance, pinContainer.scrollLeft - momentum));
+                            gsap.to(pinContainer, {
+                                scrollLeft: finalScroll,
+                                duration: 0.6,
+                                ease: "power2.out",
+                                overwrite: "auto",
+                                onUpdate: updateButtons
+                            });
+                        }
+                        setTimeout(() => { isMouseDragging = false; }, 100);
+                    }
+                }
+            });
+
+            // Prevent link clicks during swipe or drag
+            pinContainer.addEventListener('click', (e) => {
+                if (isSwipingTimeline || isMouseDragging) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
 
             pinContainer.addEventListener('scroll', () => {
                 if (!gsap.isTweening(pinContainer)) {
