@@ -10,7 +10,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - RLabz</title>
+    <title>Admin Login - RLabZ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;500;600;700&display=swap" rel="stylesheet">
@@ -338,7 +338,7 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
         <div class="login-right">
             <div class="brand-display">
                 <img src="../assets/images/rlabz-logo-white.png" alt="RLabz Logo" style="width: 225px; max-width: 225px; height: auto; object-fit: contain; filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.12));">
-                <div class="brand-text">RLabz ADMIN</div>
+                <div class="brand-text">RLabZ ADMIN</div>
             </div>
         </div>
 
