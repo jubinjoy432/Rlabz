@@ -805,10 +805,82 @@
     transform: translateY(-2px);
 }
 
+/* ---- Whole-page Circular Loader ---- */
+.pd-page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--paper-white, #f8faff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.pd-page-loader.loaded {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.pd-spinner-circle {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(11, 83, 148, 0.12);
+    border-top-color: var(--primary-blue, #0b5394);
+    border-radius: 50%;
+    animation: pdSpin 0.75s linear infinite;
+}
+
+@keyframes pdSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
 /* ---- Responsive ---- */
 @media (max-width: 992px) {
     .pd-content {
-        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .pd-main,
+    .pd-sidebar {
+        display: contents;
+    }
+
+    /* Strict sequential ordering for smaller / mobile view */
+    #pdOverviewCard {
+        order: 1;
+    }
+
+    #pdTechCard {
+        order: 2;
+    }
+
+    #pdInfoCard {
+        order: 3;
+    }
+
+    #pdFacultyCard {
+        order: 4;
+    }
+
+    #pdTeamCard {
+        order: 5;
+    }
+
+    #pdFeaturesCard {
+        order: 6;
+    }
+
+    #pdScreenshotsCard {
+        order: 7;
     }
 
     .pd-hero-title {

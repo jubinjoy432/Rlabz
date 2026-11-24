@@ -55,7 +55,7 @@ try {
             `department` VARCHAR(100) DEFAULT 'MCA',
             `batch` VARCHAR(20) DEFAULT '',
             `category` VARCHAR(50) DEFAULT 'Web Application',
-            `project_type` VARCHAR(50) DEFAULT 'Academic',
+            `client` VARCHAR(255) DEFAULT NULL,
             `duration` VARCHAR(50) DEFAULT '',
             `status` VARCHAR(30) DEFAULT 'In Development',
             `github_link` VARCHAR(255) DEFAULT '',
@@ -167,6 +167,15 @@ try {
     if (!in_array('short_description', $projCols)) {
         $pdo->exec("ALTER TABLE `projects` ADD COLUMN `short_description` VARCHAR(500) DEFAULT '' AFTER `year`");
         echo "Added `short_description` to projects.\n";
+    }
+    if (!in_array('client', $projCols)) {
+        if (in_array('project_type', $projCols)) {
+            $pdo->exec("ALTER TABLE `projects` CHANGE COLUMN `project_type` `client` VARCHAR(255) DEFAULT NULL;");
+            echo "Renamed column `project_type` to `client`.\n";
+        } else {
+            $pdo->exec("ALTER TABLE `projects` ADD COLUMN `client` VARCHAR(255) DEFAULT NULL AFTER `category`;");
+            echo "Added `client` column to projects.\n";
+        }
     }
 
     // Widen path columns to 500 chars to safely store external URLs and Google Drive links

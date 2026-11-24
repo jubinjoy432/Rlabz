@@ -30,13 +30,13 @@ require_once '../includes/layout_header.php';
         </div>
 
         <div class="form-group">
-            <label for="title">Project Title</label>
+            <label for="title">Project Title <span style="color: #ef4444;">*</span></label>
             <input type="text" id="title" name="title" required placeholder="e.g. Euphoria 2024">
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="year">Project Year</label>
+                <label for="year">Project Year <span style="color: #ef4444;">*</span></label>
                 <input type="text" id="year" name="year" required placeholder="e.g. 2025">
             </div>
         </div>
@@ -48,7 +48,7 @@ require_once '../includes/layout_header.php';
         </div>
 
         <div class="form-group">
-            <label for="description">Full Description</label>
+            <label for="description">Full Description <span style="color: #ef4444;">*</span></label>
             <textarea id="description" name="description" required placeholder="Detailed project description..."></textarea>
         </div>
 
@@ -86,12 +86,8 @@ require_once '../includes/layout_header.php';
                 </div>
             </div>
             <div class="form-group">
-                <label for="project_type">Project Type</label>
-                <select id="project_type" name="project_type">
-                    <option value="Academic" selected>Academic</option>
-                    <option value="Client">Client</option>
-                    <option value="Internal">Internal</option>
-                </select>
+                <label for="client">Client</label>
+                <input type="text" id="client" name="client" placeholder="e.g. Rajagiri, Client / Sponsor, Internal, etc." value="">
             </div>
         </div>
 

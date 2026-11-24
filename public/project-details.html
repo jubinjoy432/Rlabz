@@ -20,6 +20,12 @@
 </head>
 
 <body>
+
+    <!-- Whole-page Circular Loader -->
+    <div class="pd-page-loader" id="pdPageLoader">
+        <div class="pd-spinner-circle"></div>
+    </div>
+
     <!-- Premium Floating Navbar -->
     <nav class="premium-nav">
         <div class="nav-content">
@@ -56,7 +62,7 @@
         <section class="pd-hero">
             <div class="pd-hero-banner" id="pdHeroBanner">
                 <div class="pd-hero-meta" id="pdHeroMeta"></div>
-                <h1 class="pd-hero-title" id="pdHeroTitle">Loading...</h1>
+                <h1 class="pd-hero-title" id="pdHeroTitle"></h1>
                 <p class="pd-hero-tagline" id="pdHeroTagline"></p>
                 <div class="pd-hero-actions" id="pdHeroActions"></div>
             </div>
@@ -81,30 +87,12 @@
             <div class="pd-main">
 
                 <!-- Overview Card -->
-                <div class="pd-card">
+                <div class="pd-card" id="pdOverviewCard">
                     <div class="pd-card-header blue">
                         <i class="fa-solid fa-file-lines"></i>
                         <h3>Project Overview</h3>
                     </div>
                     <div class="pd-overview-content" id="pdOverview"></div>
-                </div>
-
-                <!-- Timeline Card -->
-                <div class="pd-card" id="pdTimelineCard">
-                    <div class="pd-card-header teal">
-                        <i class="fa-solid fa-timeline"></i>
-                        <h3>Project Timeline</h3>
-                    </div>
-                    <div class="pd-timeline" id="pdTimelineContent"></div>
-                </div>
-
-                <!-- Screenshots Card -->
-                <div class="pd-card" id="pdScreenshotsCard">
-                    <div class="pd-card-header purple">
-                        <i class="fa-solid fa-images"></i>
-                        <h3>Screenshots</h3>
-                    </div>
-                    <div class="pd-screenshots-grid" id="pdScreenshotsGrid"></div>
                 </div>
 
                 <!-- Features Card -->
@@ -125,6 +113,15 @@
                     <div class="pd-team-grid" id="pdTeamGrid"></div>
                 </div>
 
+                <!-- Screenshots Card (Displayed last in full-screen / desktop view) -->
+                <div class="pd-card" id="pdScreenshotsCard">
+                    <div class="pd-card-header purple">
+                        <i class="fa-solid fa-images"></i>
+                        <h3>Screenshots</h3>
+                    </div>
+                    <div class="pd-screenshots-grid" id="pdScreenshotsGrid"></div>
+                </div>
+
             </div>
 
             <!-- Sidebar -->
@@ -140,7 +137,7 @@
                 </div>
 
                 <!-- Project Information Card -->
-                <div class="pd-card">
+                <div class="pd-card" id="pdInfoCard">
                     <div class="pd-card-header blue">
                         <i class="fa-solid fa-circle-info"></i>
                         <h3>Project Information</h3>

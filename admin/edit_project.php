@@ -59,16 +59,16 @@ require_once 'includes/layout_header.php';
         
         <div class="form-section-title"><i class="fa-solid fa-info-circle"></i> Basic Information</div>
         <div class="form-group">
-            <label>URL Slug</label>
+            <label>URL Slug <span style="color: #ef4444;">*</span></label>
             <input type="text" name="slug" required value="<?= htmlspecialchars($project['slug']) ?>">
         </div>
         <div class="form-group">
-            <label>Project Title</label>
+            <label>Project Title <span style="color: #ef4444;">*</span></label>
             <input type="text" name="title" required value="<?= htmlspecialchars($project['title']) ?>">
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label>Project Year</label>
+                <label>Project Year <span style="color: #ef4444;">*</span></label>
                 <input type="text" name="year" required value="<?= htmlspecialchars($project['year']) ?>">
             </div>
         </div>
@@ -77,7 +77,7 @@ require_once 'includes/layout_header.php';
             <input type="text" name="short_description" value="<?= htmlspecialchars($project['short_description']) ?>" maxlength="300">
         </div>
         <div class="form-group">
-            <label>Full Description</label>
+            <label>Full Description <span style="color: #ef4444;">*</span></label>
             <textarea name="description" required><?= htmlspecialchars($project['description']) ?></textarea>
         </div>
         <div class="form-group">
@@ -116,12 +116,8 @@ require_once 'includes/layout_header.php';
                 </div>
             </div>
             <div class="form-group">
-                <label>Project Type</label>
-                <select name="project_type">
-                    <option value="Academic" <?= $project['project_type']=='Academic'?'selected':'' ?>>Academic</option>
-                    <option value="Client" <?= $project['project_type']=='Client'?'selected':'' ?>>Client</option>
-                    <option value="Internal" <?= $project['project_type']=='Internal'?'selected':'' ?>>Internal</option>
-                </select>
+                <label for="client">Client</label>
+                <input type="text" id="client" name="client" value="<?= htmlspecialchars($project['client'] ?? $project['project_type'] ?? '') ?>" placeholder="e.g. Rajagiri, Client / Sponsor, Internal, etc.">
             </div>
         </div>
         <div class="form-row">

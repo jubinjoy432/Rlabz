@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
     `department` VARCHAR(100) DEFAULT 'MCA',
     `batch` VARCHAR(20) DEFAULT '',
     `category` VARCHAR(50) DEFAULT 'Web Application',
-    `project_type` VARCHAR(50) DEFAULT 'Academic',
+    `client` VARCHAR(255) DEFAULT NULL,
     `duration` VARCHAR(50) DEFAULT '',
     `status` VARCHAR(30) DEFAULT 'In Development',
     `github_link` VARCHAR(255) DEFAULT '',

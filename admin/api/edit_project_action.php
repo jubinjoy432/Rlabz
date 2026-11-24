@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($category === 'Other' && !empty(trim($_POST['category_custom'] ?? ''))) {
         $category = trim($_POST['category_custom']);
     }
-    $project_type = trim($_POST['project_type'] ?? 'Academic');
+    $client = trim($_POST['client'] ?? $_POST['project_type'] ?? '');
     
     // Status preservation and validation
     $valid_statuses = ['In Development', 'Completed'];
@@ -121,24 +121,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $pdo->beginTransaction();
 
-        $stmt = $pdo->prepare("UPDATE projects SET 
-            slug = ?, title = ?, year = ?, short_description = ?, description = ?, 
-            objectives = ?, problem_statement = ?, expected_outcome = ?, tech_stack = ?, 
-            key_features = ?, department = ?, batch = ?, category = ?, project_type = ?, 
-            status = ?, duration = ?, 
-            github_link = ?, demo_link = ?, image_path = ?, thumbnail_path = ?, poster_path = ?,
-            ssl_tracking_enabled = ?
-            WHERE id = ?");
-        
-        $stmt->execute([
+        $checkCols = $pdo->query("SHOW COLUMNS FROM projects")->fetchAll(PDO::FETCH_COLUMN);
+        $hasClient = in_array('client', $checkCols);
+        $hasProjectType = in_array('project_type', $checkCols);
+
+        $setParts = [
+            'slug = ?', 'title = ?', 'year = ?', 'short_description = ?', 'description = ?',
+            'objectives = ?', 'problem_statement = ?', 'expected_outcome = ?', 'tech_stack = ?',
+            'key_features = ?', 'department = ?', 'batch = ?', 'category = ?'
+        ];
+        $vals = [
             $slug, $title, $year, $short_description, $description,
             $objectives, $problem_statement, $expected_outcome, $tech_stack,
-            $key_features, $department, $batch, $category, $project_type,
-            $status, $duration,
-            $github_link, $demo_link, $image_path, $thumbnail_path, $poster_path,
+            $key_features, $department, $batch, $category
+        ];
+
+        if ($hasClient) {
+            $setParts[] = 'client = ?';
+            $vals[] = $client;
+        }
+        if ($hasProjectType) {
+            $setParts[] = 'project_type = ?';
+            $vals[] = $client;
+        }
+
+        $setParts = array_merge($setParts, [
+            'status = ?', 'duration = ?', 'github_link = ?', 'demo_link = ?',
+            'image_path = ?', 'thumbnail_path = ?', 'poster_path = ?',
+            'ssl_tracking_enabled = ?'
+        ]);
+        $vals = array_merge($vals, [
+            $status, $duration, $github_link, $demo_link,
+            $image_path, $thumbnail_path, $poster_path,
             $ssl_tracking_enabled,
             $id
         ]);
+
+        $sql = "UPDATE projects SET " . implode(', ', $setParts) . " WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($vals);
 
         // Process team members (Dynamic rows with upload or URL)
         if (isset($_POST['member_names']) && is_array($_POST['member_names'])) {

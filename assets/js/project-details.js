@@ -38,7 +38,15 @@
         setupLightbox(project);
     }
 
+    function hideLoader() {
+        const loader = document.getElementById('pdPageLoader');
+        if (loader) {
+            loader.classList.add('loaded');
+        }
+    }
+
     function showNotFound() {
+        hideLoader();
         const wrapper = document.getElementById('pdContentArea');
         if (wrapper) {
             wrapper.innerHTML = `
@@ -64,7 +72,6 @@
 
         // Main content
         renderOverview(project);
-        renderTimeline(project);
         renderScreenshots(project);
         renderFeatures(project);
 
@@ -76,6 +83,9 @@
 
         // Footer nav
         renderFooterNav(project);
+
+        // Hide whole-page circular loader once fully rendered
+        hideLoader();
     }
 
     function renderHero(project) {
@@ -109,7 +119,7 @@
             }
             meta.innerHTML = badges;
         }
-        
+
         const actionsContainer = document.getElementById('pdHeroActions');
         if (actionsContainer) {
             if (project.sslDomain) {
@@ -165,29 +175,6 @@
         }
 
         container.innerHTML = html || '<p style="color: rgba(255,255,255,0.3);">No description available yet.</p>';
-    }
-
-    function renderTimeline(project) {
-        const card = document.getElementById('pdTimelineCard');
-        const container = document.getElementById('pdTimelineContent');
-        if (!card || !container) return;
-
-        if (!project.milestones || project.milestones.length === 0) {
-            card.style.display = 'none';
-            return;
-        }
-
-        container.innerHTML = project.milestones.map(m => {
-            // Format date to a readable string (e.g. Aug 15, 2026)
-            const dateObj = new Date(m.date);
-            const dateStr = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            return `
-                <div class="pd-timeline-item status-${m.status}">
-                    <div class="pd-timeline-date">${dateStr}</div>
-                    <div class="pd-timeline-title">${m.title}</div>
-                </div>
-            `;
-        }).join('');
     }
 
     function renderScreenshots(project) {
@@ -263,6 +250,8 @@
         if (project.year) rows.push({ label: 'Project Year', value: project.year });
         if (project.batch) rows.push({ label: 'Batch', value: project.batch });
         if (project.department) rows.push({ label: 'Department', value: project.department });
+        const clientVal = project.client || project.projectType || '';
+        if (clientVal) rows.push({ label: 'Client', value: clientVal });
         if (project.faculty && project.faculty.length > 0) {
             const facultyNames = project.faculty
                 .filter(f => f && f.name && f.name.trim() !== '')
@@ -271,14 +260,12 @@
                 rows.push({ label: 'Guide', value: facultyNames });
             }
         }
-        if (project.projectType) rows.push({ label: 'Project Type', value: project.projectType });
         if (project.category) rows.push({ label: 'Category', value: project.category });
         if (project.duration) rows.push({ label: 'Duration', value: project.duration });
         if (project.status) rows.push({ label: 'Status', value: project.status });
-        if (project.client) rows.push({ label: 'Client', value: project.client });
         if (project.githubLink) rows.push({ label: 'Repository', value: `<a href="${project.githubLink}" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>` });
         if (project.demoLink && project.demoLink !== '#') rows.push({ label: 'Demo Link', value: `<a href="${project.demoLink}" target="_blank" rel="noopener"><i class="fa-solid fa-external-link-alt"></i> Visit</a>` });
-        
+
         if (project.ssl && project.ssl.domain_url) {
             let sslText = `<a href="${project.ssl.domain_url}" target="_blank" rel="noopener" style="color:#10b981;"><i class="fa-solid fa-lock"></i> Secured</a>`;
             if (project.ssl.provider) sslText += ` by ${project.ssl.provider}`;
@@ -336,10 +323,14 @@
         if (validFaculty.length === 0) {
             card.style.display = 'none';
             container.innerHTML = '';
+            const teamCard = document.getElementById('pdTeamCard');
+            if (teamCard) teamCard.classList.add('pd-full-width');
             return;
         }
 
         card.style.display = '';
+        const teamCard = document.getElementById('pdTeamCard');
+        if (teamCard) teamCard.classList.remove('pd-full-width');
         container.style.display = 'grid';
         container.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
         container.style.gap = '1.5rem';

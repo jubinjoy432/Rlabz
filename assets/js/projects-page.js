@@ -71,10 +71,7 @@
             option.className = 'filter-option';
             option.setAttribute('data-value', item);
             option.setAttribute('data-filter-type', filterType);
-            option.innerHTML = `
-                <span class="check-icon"><i class="fa-solid fa-check"></i></span>
-                <span>${item}</span>
-            `;
+            option.innerHTML = `<span>${item}</span>`;
             option.addEventListener('click', () => toggleFilter(filterType, item, option));
             menu.appendChild(option);
         });
