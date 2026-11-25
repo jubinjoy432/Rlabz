@@ -128,6 +128,9 @@
                 btn.onclick = function(e) {
                     e.preventDefault();
                     const href = this.getAttribute('href');
+                    if (!href || href === '#' || href === 'null') {
+                        return;
+                    }
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
                             title: 'Are you sure?',
@@ -137,14 +140,14 @@
                             confirmButtonColor: '#ef4444',
                             cancelButtonColor: '#3b82f6',
                             confirmButtonText: 'Yes, delete it!',
-                            background: '#ffffff',
-                            color: '#1e293b'
+                            background: document.body.classList.contains('dark-mode') ? '#1e293b' : '#ffffff',
+                            color: document.body.classList.contains('dark-mode') ? '#f8fafc' : '#1e293b'
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.location.href = href;
                             }
                         });
-                    } else if (confirm('Are you sure you want to delete this project?')) {
+                    } else if (confirm('Are you sure you want to delete this?')) {
                         window.location.href = href;
                     }
                 };

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Opportunities — RLabz</title>
+    <link rel="icon" type="image/png" href="../assets/images/rlabz-icon.png?v=2">
+    <meta name="description" content="Explore verified internship opportunities published under RLabz — collaborate with industry partners, advance your skills, and apply directly.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Space+Grotesk:wght@300;500;700&family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="../assets/css/styles.css?v=2.5">
+    <link rel="stylesheet" href="../assets/css/internships.css?v=1.2">
+    <link rel="stylesheet" href="../assets/css/dark-theme.css?v=1.3">
+    <script src="../assets/js/theme.js"></script>
+</head>
+
+<body>
+    <!-- From Uiverse.io by dovatgabriel - https://uiverse.io/dovatgabriel/jolly-kangaroo-36 -->
+    <!-- MIT License, Copyright (c) dovatgabriel (Gabriel) -->
+    <div class="internships-loader" id="internshipsLoader">
+        <div class="newtons-cradle">
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+            <div class="newtons-cradle__dot"></div>
+        </div>
+    </div>
+
+    <!-- Premium Floating Navbar -->
+    <nav class="premium-nav">
+        <div class="nav-content">
+            <a href="../index.html" class="nav-logo">
+                <img src="../assets/images/rlabz-logo-dark.png" alt="RLabz Logo" class="logo-image" decoding="async">
+            </a>
+            <div class="nav-links-container">
+                <span class="sliding-pill"></span>
+                <a href="../index.html#hero-blue" class="nav-link">Home</a>
+                <a href="../index.html#what-we-do" class="nav-link">Solutions</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="internships.html" class="nav-link active">Internships</a>
+                <a href="../index.html#rlabzStatsSection" class="nav-link">Overview</a>
+                <a href="../index.html#client_form_section" class="nav-link">Clients</a>
+            </div>
+
+            <div class="nav-actions">
+                <!-- From Uiverse.io by zenonaiden_3341 - https://uiverse.io/zenonaiden_3341/slippery-ape-47 -->
+                <!-- MIT License, Copyright (c) Creatlydev - https://uiverse.io/Creatlydev/massive-quail-70, zenonaiden_3341 (ZenonAiden) -->
+                <div class="theme-switch-wrapper">
+                    <input id="themeSwitchInternships" type="checkbox" class="theme-switch-checkbox" aria-label="Toggle dark/light theme" />
+                    <label class="toggleSwitch theme-switch-toggle" for="themeSwitchInternships" aria-label="Toggle dark/light theme" title="Toggle theme">
+                        <div class="icon icon--moon">
+                            <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="icon icon--sun">
+                            <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"></path>
+                            </svg>
+                        </div>
+                    </label>
+                </div>
+                <a href="../index.html#contactSection" class="nav-contact-btn">
+                    Contact Us <span class="nav-dot"></span>
+                </a>
+                <button class="menu-toggle-btn" aria-label="Toggle navigation menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 9H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M4 15H20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Internships Page Wrapper -->
+    <div class="internships-page-wrapper">
+
+        <!-- Top Back Navigation -->
+        <div class="internships-back-bar">
+            <button type="button" class="internships-back-btn" onclick="if(window.history.length > 1 && document.referrer){ window.history.back(); } else { window.location.href='../index.html'; }" aria-label="Go back">
+                <i class="fa-solid fa-arrow-left"></i> <span>Back</span>
+            </button>
+        </div>
+
+        <!-- Page Hero -->
+        <section class="internships-hero">
+            <div class="internships-hero-badge">
+                <i class="fa-solid fa-briefcase"></i>
+                Internship Opportunities
+            </div>
+            <h1>Explore Verified <span>Opportunities</span></h1>
+            <p class="internships-hero-subtitle">
+                Discover internship openings with leading technology partners. Review requirements, specs, and connect directly with hiring teams.
+            </p>
+        </section>
+
+        <!-- Search & Filters -->
+        <div class="internships-filter-bar">
+            <div class="internships-search-row">
+                <div class="internships-search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="internshipSearchInput" class="internships-search-input"
+                        placeholder="Search by title, company, skills, or location...">
+                    <button id="internshipSearchClear" class="internships-search-clear" aria-label="Clear search">&times;</button>
+                </div>
+            </div>
+
+            <div class="internships-filter-row">
+                <span class="filter-pill-label">Filter:</span>
+
+                <!-- Category Filter -->
+                <select id="filterCategory" class="filter-select" aria-label="Filter by category">
+                    <option value="">All Categories</option>
+                </select>
+
+                <!-- Work Mode Filter -->
+                <select id="filterWorkMode" class="filter-select" aria-label="Filter by work mode">
+                    <option value="">All Work Modes</option>
+                    <option value="Remote">Remote</option>
+                    <option value="On-site">On-site</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+
+                <!-- Stipend Filter -->
+                <select id="filterStipend" class="filter-select" aria-label="Filter by stipend type">
+                    <option value="">All Stipend Types</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Unpaid">Unpaid</option>
+                    <option value="Performance-based">Performance-based</option>
+                </select>
+
+                <!-- Deadline / Urgency Filter -->
+                <select id="filterDeadline" class="filter-select" aria-label="Filter by deadline urgency">
+                    <option value="">All Deadlines</option>
+                    <option value="today">Expiring Today</option>
+                    <option value="urgent">Ending Soon (≤ 3 Days)</option>
+                    <option value="closing_soon">Closing Soon (≤ 7 Days)</option>
+                    <option value="month">Closing This Month (≤ 30 Days)</option>
+                    <option value="open">Actively Open (> 7 Days)</option>
+                </select>
+
+                <!-- Reset Filters Button -->
+                <button type="button" id="filterResetBtn" class="filter-reset-btn" title="Reset all filters">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Info -->
+        <div class="internships-results-info">
+            <div class="internships-count" id="internshipsCountText">Loading opportunities...</div>
+        </div>
+
+        <!-- Internships Grid -->
+        <div class="internships-grid" id="internshipsGrid">
+            <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Empty State Container -->
+        <div class="internships-empty-state" id="internshipsEmptyState" style="display: none;">
+            <div class="empty-icon-wrap">
+                <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <h3>No Current Openings Found</h3>
+            <p id="emptyStateMsg">There are currently no active internship opportunities matching your criteria. Check back soon as new positions are published regularly.</p>
+            <button type="button" class="internships-back-btn" id="emptyResetBtn">
+                <i class="fa-solid fa-rotate-left"></i> Clear Filters
+            </button>
+        </div>
+
+    </div>
+
+    <!-- From Uiverse.io by vinodjangid07 - https://uiverse.io/vinodjangid07/afraid-falcon-17 -->
+    <!-- MIT License, Copyright (c) vinodjangid07 (Vinod Jangid) -->
+    <button id="backToTop" class="rlabz-back-to-top" aria-label="Back to Top" title="Back to Top">
+        <svg class="svgIcon" viewBox="0 0 384 512">
+            <path d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path>
+        </svg>
+    </button>
+
+    <!-- Floating Announcement Script (keeps button synced if open) -->
+    <script src="../assets/js/internship-announcement.js"></script>
+    <!-- Listing Page Logic -->
+    <script src="../assets/js/internships-page.js"></script>
+</body>
+
+</html>

@@ -36,6 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        if (strlen($username) < 3) {
+            echo json_encode(['success' => false, 'message' => 'Username must be at least 3 characters long.']);
+            exit;
+        }
+
+        if (strlen($password) < 8) {
+            echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters long.']);
+            exit;
+        }
+
         try {
             // Check if username exists
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM admin_users WHERE username = :username");
@@ -73,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if (!empty($password)) {
+                if (strlen($password) < 8) {
+                    echo json_encode(['success' => false, 'message' => 'New password must be at least 8 characters long.']);
+                    exit;
+                }
                 // Update role and password
                 $hash = password_hash($password, PASSWORD_DEFAULT);
                 $stmt = $pdo->prepare("UPDATE admin_users SET role = :role, password_hash = :password WHERE id = :id");

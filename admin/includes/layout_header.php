@@ -8,11 +8,14 @@ $cssPath = $isRootAdmin ? 'assets/css/admin_style.css?v=2.3' : '../assets/css/ad
 $homePath = $isRootAdmin ? 'pages/overview.php' : 'overview.php';
 $managePath = $isRootAdmin ? 'pages/manage_projects.php' : 'manage_projects.php';
 $addPath = $isRootAdmin ? 'pages/add_project.php' : 'add_project.php';
+$manageInternshipsPath = $isRootAdmin ? 'pages/manage_internships.php' : 'manage_internships.php';
+$addInternshipPath = $isRootAdmin ? 'pages/add_internship.php' : 'add_internship.php';
 $sitePath = $isRootAdmin ? '../index.html' : '../../index.html';
 $logoutPath = $isRootAdmin ? 'api/logout.php' : '../api/logout.php';
 $usersPath = $isRootAdmin ? 'pages/users.php' : 'users.php';
 $sslPath = $isRootAdmin ? 'pages/ssl_certificates.php' : 'ssl_certificates.php';
 $announcementsPath = $isRootAdmin ? 'pages/announcements.php' : 'announcements.php';
+$themeJsPath = $isRootAdmin ? '../assets/js/theme.js' : '../../assets/js/theme.js';
 
 $sidebarUnreadCount = 0;
 if (isset($pdo) && $pdo) {
@@ -34,7 +37,8 @@ if (isset($pdo) && $pdo) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="<?php echo $cssPath; ?>">
+    <script src="<?php echo $themeJsPath; ?>"></script>
+    <link rel="stylesheet" href="<?php echo $cssPath; ?>?v=2.1">
 </head>
 <body>
 
@@ -74,6 +78,14 @@ if (isset($pdo) && $pdo) {
             </a>
             <a href="<?php echo $sslPath; ?>" class="sidebar-link <?php echo $currentPage == 'ssl_certificates.php' ? 'active' : ''; ?>">
                 <i class="fa-solid fa-shield-halved"></i> SSL Certificates
+            </a>
+
+            <div class="sidebar-section-label">Internships</div>
+            <a href="<?php echo $manageInternshipsPath; ?>" class="sidebar-link <?php echo ($currentPage == 'manage_internships.php' || $currentPage == 'edit_internship.php') ? 'active' : ''; ?>">
+                <i class="fa-solid fa-briefcase"></i> Manage Internships
+            </a>
+            <a href="<?php echo $addInternshipPath; ?>" class="sidebar-link <?php echo $currentPage == 'add_internship.php' ? 'active' : ''; ?>">
+                <i class="fa-solid fa-plus-circle"></i> Add Internship
             </a>
             
             <div class="sidebar-section-label">Admin</div>
@@ -120,7 +132,24 @@ if (isset($pdo) && $pdo) {
                     </div>
                 </div>
             </div>
-            <div class="header-right">
+            <div class="header-right" style="display: flex; align-items: center; gap: 0.65rem;">
+                <!-- From Uiverse.io by zenonaiden_3341 - https://uiverse.io/zenonaiden_3341/slippery-ape-47 -->
+                <!-- MIT License, Copyright (c) Creatlydev - https://uiverse.io/Creatlydev/massive-quail-70, zenonaiden_3341 (ZenonAiden) -->
+                <div class="theme-switch-wrapper" style="margin-right: 0.25rem;">
+                    <input id="themeSwitchAdmin" type="checkbox" class="theme-switch-checkbox" aria-label="Toggle dark/light theme" />
+                    <label class="toggleSwitch theme-switch-toggle" for="themeSwitchAdmin" aria-label="Toggle dark/light theme" title="Toggle theme">
+                        <div class="icon icon--moon">
+                            <svg class="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="icon icon--sun">
+                            <svg class="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"></path>
+                            </svg>
+                        </div>
+                    </label>
+                </div>
                 <a href="<?php echo $logoutPath; ?>" class="btn-header btn-logout" title="Logout">
                     <i class="fas fa-sign-out-alt"></i> <span class="logout-text">Logout</span>
                 </a>

@@ -177,7 +177,7 @@ require_once '../includes/layout_header.php';
                  data-id="<?php echo $a['id']; ?>"
                  data-category="<?php echo $category; ?>"
                  data-read="<?php echo $isRead ? '1' : '0'; ?>"
-                 style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 9px 13px; display: flex; align-items: center; gap: 10px; border-left: 4px solid <?php echo $isRead ? '#cbd5e1' : $accentColor; ?>; opacity: <?php echo $isRead ? '0.75' : '1'; ?>; box-shadow: 0 1px 2px rgba(0,0,0,0.02); transition: all 0.2s ease;">
+                 style="border-radius: 8px; padding: 9px 13px; display: flex; align-items: center; gap: 10px; border-left: 4px solid <?php echo $isRead ? '#cbd5e1' : $accentColor; ?>; opacity: <?php echo $isRead ? '0.75' : '1'; ?>; transition: all 0.2s ease;">
                 
                 <div style="width: 30px; height: 30px; border-radius: 6px; background: <?php echo $badgeBg; ?>; color: <?php echo $accentColor; ?>; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0;">
                     <i class="fa-solid <?php echo $icon; ?>"></i>
@@ -186,7 +186,7 @@ require_once '../includes/layout_header.php';
                 <div style="flex: 1; min-width: 0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: nowrap;">
                         <span style="display: inline-flex; align-items: center; gap: 0.45rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            <strong style="color: #0f172a; font-size: 0.88rem;"><?php echo htmlspecialchars($a['title']); ?></strong>
+                            <strong style="font-size: 0.88rem;"><?php echo htmlspecialchars($a['title']); ?></strong>
                             <span class="badge" style="background: <?php echo $badgeBg; ?>; color: <?php echo $badgeText; ?>; font-weight: 700; font-size: 0.68rem; padding: 0.1rem 0.45rem; border-radius: 9999px; flex-shrink: 0;">
                                 <?php echo $label; ?>
                             </span>
@@ -199,7 +199,7 @@ require_once '../includes/layout_header.php';
                         </span>
                     </div>
 
-                    <div style="font-size: 0.81rem; color: #475569; line-height: 1.35; white-space: pre-line; word-break: break-word; margin-top: 2px;">
+                    <div style="font-size: 0.81rem; line-height: 1.35; white-space: pre-line; word-break: break-word; margin-top: 2px;">
                         <?php echo htmlspecialchars($a['message']); ?>
                     </div>
                 </div>

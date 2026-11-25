@@ -151,6 +151,45 @@ try {
             PRIMARY KEY (`id`),
             INDEX `idx_announcement_read` (`is_read`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS `internship_opportunities` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `company_name` VARCHAR(255) NOT NULL,
+            `company_logo` VARCHAR(500) DEFAULT '',
+            `company_website` VARCHAR(255) DEFAULT '',
+            `company_location` VARCHAR(255) DEFAULT '',
+            `internship_title` VARCHAR(255) NOT NULL,
+            `category` VARCHAR(100) NOT NULL DEFAULT 'General',
+            `short_description` VARCHAR(500) NOT NULL,
+            `description` TEXT NOT NULL,
+            `responsibilities` TEXT DEFAULT NULL,
+            `requirements` TEXT DEFAULT NULL,
+            `eligibility` TEXT DEFAULT NULL,
+            `duration` VARCHAR(100) NOT NULL,
+            `work_mode` ENUM('Remote', 'On-site', 'Hybrid') NOT NULL DEFAULT 'Remote',
+            `location` VARCHAR(255) DEFAULT '',
+            `stipend_type` ENUM('Paid', 'Unpaid', 'Performance-based', 'Not disclosed') NOT NULL DEFAULT 'Paid',
+            `stipend_amount` VARCHAR(100) DEFAULT '',
+            `openings` INT(11) DEFAULT NULL,
+            `start_date` DATE DEFAULT NULL,
+            `application_deadline` DATE NOT NULL,
+            `application_email` VARCHAR(255) DEFAULT '',
+            `application_url` VARCHAR(500) DEFAULT '',
+            `application_instructions` TEXT DEFAULT NULL,
+            `contact_person` VARCHAR(150) DEFAULT '',
+            `contact_phone` VARCHAR(50) DEFAULT '',
+            `poster_path` VARCHAR(500) DEFAULT '',
+            `status` ENUM('Draft', 'Published', 'Closed', 'Archived') NOT NULL DEFAULT 'Draft',
+            `published_at` TIMESTAMP NULL DEFAULT NULL,
+            `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            INDEX `idx_internship_status` (`status`),
+            INDEX `idx_internship_deadline` (`application_deadline`),
+            INDEX `idx_internship_deleted` (`deleted_at`),
+            INDEX `idx_internship_category` (`category`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     ");
 
     // 1.5 Ensure Default Admin User Exists (Username: admin | Password: admin123)

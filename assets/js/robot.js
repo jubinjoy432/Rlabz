@@ -1269,106 +1269,118 @@ document.addEventListener('DOMContentLoaded', () => {
             window.hideRLabzPreloader();
         }
 
-        // Delay popup until screen loaded
-        setTimeout(() => {
-            if (popupState === 'hidden' && popup) {
-                popupState = 'tracking';
-                popup.innerHTML = `
-                    <div class="popup-bubble">
-                        <div class="popup-arrow"></div>
-                        <span class="desktop-text">
-                            <span class="typing-target"></span>
-                            <button class="popup-close-btn desktop-close-btn" style="display: none; background: rgba(255,255,255,0.2); border: none; color: white; opacity: 0.9; font-size: 0.8rem; cursor: pointer; padding: 0; width: 22px; height: 22px; margin-left: 12px; border-radius: 50%; justify-content: center; align-items: center;"><i class="fas fa-times"></i></button>
-                        </span>
-                        <span class="mobile-text">
-                            <span class="typing-target-mobile"></span>
-                            <span class="banner-actions" style="display: flex; opacity: 0; width: 0; overflow: hidden; align-items: center; gap: 10px; transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
-                                <a href="" target="_blank" class="banner-btn" style="white-space: nowrap; background: white; color: #F9440D; padding: 6px 12px; border-radius: 12px; font-size: 0.8rem; text-decoration: none; font-weight: bold;">Know More &rarr;</a>
-                                <button class="popup-close-btn" style="background: none; border: none; color: white; opacity: 0.9; font-size: 1.2rem; cursor: pointer; padding: 0;"><i class="fas fa-times"></i></button>
-                            </span>
-                        </span>
-                    </div>
-                `;
-                popup.classList.add('visible');
+        // Check live available published internships from database
+        const countUrl = (window.location.pathname.includes('/public/') ? '../admin/api/public_internships.php?action=count' : 'admin/api/public_internships.php?action=count');
 
-                const popupCloseBtns = popup.querySelectorAll('.popup-close-btn');
-                popupCloseBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        popup.style.setProperty('display', 'none', 'important');
-                    });
-                });
-
-                // Typing effect
-                let charInd = 0;
-                const targetText = "Internships Open";
-                const targetTextMobile = "Internships Open";
-
-                function typeBubble() {
-                    if (popupState !== 'tracking') return;
-                    const desktopEl = popup.querySelector('.typing-target');
-                    const mobileEl = popup.querySelector('.typing-target-mobile');
-
-                    if (desktopEl && charInd < targetText.length) {
-                        desktopEl.innerHTML += targetText.charAt(charInd);
-                    }
-                    if (mobileEl && charInd < targetTextMobile.length) {
-                        mobileEl.innerHTML += targetTextMobile.charAt(charInd);
-                    }
-
-                    charInd++;
-                    if (charInd < Math.max(targetText.length, targetTextMobile.length)) {
-                        setTimeout(typeBubble, 60);
-                    }
+        fetch(countUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || !data.success || data.count <= 0) {
+                    if (popup) popup.style.display = 'none';
+                    return;
                 }
 
-                // Start typing shortly after appearing
-                setTimeout(typeBubble, 300);
+                const targetText = data.label || (data.count === 1 ? "Internship Opportunities" : `Internship Opportunities (${data.count})`);
+                const targetTextMobile = targetText;
+                const destinationUrl = (window.location.pathname.includes('/public/') ? 'internships.html' : 'public/internships.html');
 
-                // Wait 5 seconds, then glide to sidebar strictly as a comment box
+                // Delay popup until screen loaded
                 setTimeout(() => {
-                    if (popupState === 'tracking' && popup) {
-                        popupState = 'transitioning';
-                        popup.style.opacity = '1'; // Ensure visible
+                    if (popupState === 'hidden' && popup) {
+                        popupState = 'tracking';
+                        popup.innerHTML = `
+                            <div class="popup-bubble" title="Click to view Internship Opportunities" style="cursor: pointer;">
+                                <div class="popup-arrow"></div>
+                                <span class="desktop-text">
+                                    <span class="typing-target"></span>
+                                    <button type="button" class="popup-close-btn desktop-close-btn" aria-label="Dismiss announcement" style="display: none; background: rgba(255,255,255,0.2); border: none; color: white; opacity: 0.9; font-size: 0.8rem; cursor: pointer; padding: 0; width: 22px; height: 22px; margin-left: 12px; border-radius: 50%; justify-content: center; align-items: center;"><i class="fas fa-times"></i></button>
+                                </span>
+                                <span class="mobile-text">
+                                    <span class="typing-target-mobile"></span>
+                                    <button type="button" class="popup-close-btn" aria-label="Dismiss announcement" style="background: rgba(255,255,255,0.2); border: none; color: white; opacity: 0.9; font-size: 0.8rem; cursor: pointer; padding: 0; width: 22px; height: 22px; margin-left: 8px; border-radius: 50%; display: inline-flex; justify-content: center; align-items: center;"><i class="fas fa-times"></i></button>
+                                </span>
+                            </div>
+                        `;
+                        popup.classList.add('visible');
 
-                        // Small delay ensures bounds read
-                        setTimeout(() => {
-                            const exactWidth = popup.getBoundingClientRect().width;
-                            const isMobile = window.innerWidth < 768;
+                        // Click on popup navigates to internships page
+                        popup.addEventListener('click', (e) => {
+                            if (e.target.closest('.popup-close-btn')) return;
+                            window.location.href = destinationUrl;
+                        });
 
-                            const targetLeft = isMobile ? (window.innerWidth - exactWidth) / 2 : window.innerWidth - exactWidth - 20;
-                            const targetTop = isMobile ? window.innerHeight - popup.getBoundingClientRect().height - 10 : window.innerHeight / 2;
-
-                            gsap.to(popup, {
-                                left: targetLeft,
-                                top: targetTop,
-                                duration: 0.6, // Fast glide
-                                ease: "power2.inOut",
-                                onComplete: () => {
-                                    // Convert to button ONLY on reaching the side
-                                    popupState = 'fixed';
-                                    popup.classList.add('fixed-sidebar-btn');
-                                    popup.style.left = '';
-                                    popup.style.top = '';
-                                    popup.style.transform = '';
-
-                                    if (isMobile) {
-                                        const actions = popup.querySelector('.banner-actions');
-                                        if (actions) {
-                                            actions.style.opacity = '1';
-                                            actions.style.width = '145px';
-                                        }
-                                    } else {
-                                        const pcClose = popup.querySelector('.desktop-close-btn');
-                                        if (pcClose) pcClose.style.display = 'flex';
-                                    }
-                                }
+                        const popupCloseBtns = popup.querySelectorAll('.popup-close-btn');
+                        popupCloseBtns.forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                popup.style.setProperty('display', 'none', 'important');
                             });
-                        }, 50);
+                        });
+
+                        // Typing effect
+                        let charInd = 0;
+
+                        function typeBubble() {
+                            if (popupState !== 'tracking') return;
+                            const desktopEl = popup.querySelector('.typing-target');
+                            const mobileEl = popup.querySelector('.typing-target-mobile');
+
+                            if (desktopEl && charInd < targetText.length) {
+                                desktopEl.innerHTML += targetText.charAt(charInd);
+                            }
+                            if (mobileEl && charInd < targetTextMobile.length) {
+                                mobileEl.innerHTML += targetTextMobile.charAt(charInd);
+                            }
+
+                            charInd++;
+                            if (charInd < Math.max(targetText.length, targetTextMobile.length)) {
+                                setTimeout(typeBubble, 60);
+                            }
+                        }
+
+                        // Start typing shortly after appearing
+                        setTimeout(typeBubble, 300);
+
+                        // Wait 4 seconds, then glide to sidebar strictly as a comment box
+                        setTimeout(() => {
+                            if (popupState === 'tracking' && popup) {
+                                popupState = 'transitioning';
+                                popup.style.opacity = '1';
+
+                                setTimeout(() => {
+                                    const exactWidth = popup.getBoundingClientRect().width;
+                                    const isMobile = window.innerWidth < 768;
+
+                                    const targetLeft = isMobile ? window.innerWidth - exactWidth - 10 : window.innerWidth - exactWidth - 20;
+                                    const targetTop = isMobile ? window.innerHeight * 0.6 : window.innerHeight / 2;
+
+                                    gsap.to(popup, {
+                                        left: targetLeft,
+                                        top: targetTop,
+                                        duration: 0.6,
+                                        ease: "power2.inOut",
+                                        onComplete: () => {
+                                            popupState = 'fixed';
+                                            popup.classList.add('fixed-sidebar-btn');
+                                            popup.style.left = '';
+                                            popup.style.top = '';
+                                            popup.style.transform = '';
+
+                                            const pcClose = popup.querySelector('.desktop-close-btn');
+                                            if (pcClose) pcClose.style.display = 'inline-flex';
+                                        }
+                                    });
+                                }, 50);
+                            }
+                        }, 4000);
                     }
-                }, 4000);
-            }
-        }, 1500);
+                }, 1500);
+            })
+            .catch(err => {
+                console.warn("Could not fetch internship count:", err);
+                if (popup) popup.style.display = 'none';
+            });
     } catch (e) {
         console.error("ROBOT: Animation failed to start:", e);
 

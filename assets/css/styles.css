@@ -284,14 +284,27 @@ body {
     /* Only animate text color */
 }
 
-.nav-link.active,
+.nav-link.active {
+    color: #ffffff !important;
+    background: var(--primary-blue, #0b72ce);
+    border-radius: 50px;
+}
+
 .nav-link:hover {
     color: #ffffff;
+}
+
+/* Once sliding-pill is positioned by JS, container gets .pill-ready and pill provides the sliding background */
+.nav-links-container.pill-ready .nav-link.active {
+    background: transparent;
 }
 
 /* Clever trick: when another tab is hovered, make the old active tab dark again */
 .nav-links-container:hover .nav-link.active:not(:hover) {
     color: #1a362d;
+}
+.nav-links-container.pill-ready:hover .nav-link.active:not(:hover) {
+    background: transparent;
 }
 
 .nav-actions {
@@ -3334,38 +3347,301 @@ h2 {
 /* =========================================
    Back to Top Button
    ========================================= */
-#backToTop {
+/* ===================================================
+   From Uiverse.io by vinodjangid07 - https://uiverse.io/vinodjangid07/afraid-falcon-17
+   MIT License, Copyright (c) vinodjangid07 (Vinod Jangid)
+   Adapted for RLabz with website theme colors
+   =================================================== */
+#backToTop,
+.rlabz-back-to-top {
     position: fixed;
     bottom: 30px;
     right: 30px;
     width: 50px;
     height: 50px;
-    background-color: var(--accent-cyan);
-    color: #000;
-    /* Dark icon for contrast on bright cyan */
+    border-radius: 50%;
+    background-color: #0b1120;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 0px 4px rgba(11, 114, 206, 0.28), 0 4px 16px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
 }
 
-#backToTop.visible {
+#backToTop.visible,
+.rlabz-back-to-top.visible {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
 }
 
-#backToTop:hover {
-    background-color: var(--primary-blue);
-    transform: translateY(-3px);
-    color: #fff;
+#backToTop .svgIcon,
+.rlabz-back-to-top .svgIcon {
+    width: 14px;
+    height: 14px;
+    transition-duration: 0.3s;
+    display: block;
+}
+
+#backToTop .svgIcon path,
+.rlabz-back-to-top .svgIcon path {
+    fill: #ffffff;
+}
+
+#backToTop:hover,
+.rlabz-back-to-top:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background: linear-gradient(135deg, #0b72ce 0%, #0284c7 100%);
+    align-items: center;
+    box-shadow: 0px 0px 0px 4px rgba(11, 114, 206, 0.4), 0 8px 24px rgba(11, 114, 206, 0.45);
+}
+
+#backToTop:hover .svgIcon,
+.rlabz-back-to-top:hover .svgIcon {
+    transition-duration: 0.3s;
+    transform: translateY(-200%);
+}
+
+#backToTop::before,
+.rlabz-back-to-top::before {
+    position: absolute;
+    bottom: -20px;
+    content: "Back to Top";
+    color: #ffffff;
+    font-size: 0px;
+    font-family: 'Space Grotesk', 'Outfit', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+#backToTop:hover::before,
+.rlabz-back-to-top:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    bottom: unset;
+    transition-duration: 0.3s;
+}
+
+/* ===================================================
+   From Uiverse.io by zenonaiden_3341 - https://uiverse.io/zenonaiden_3341/slippery-ape-47
+   MIT License, Copyright (c) Creatlydev - https://uiverse.io/Creatlydev/massive-quail-70, zenonaiden_3341 (ZenonAiden)
+   Adapted for RLabz Dark/Light Theme Switch
+   =================================================== */
+.theme-switch-wrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    vertical-align: middle;
+}
+
+.theme-switch-checkbox {
+    display: none !important;
+}
+
+.theme-switch-toggle {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    border-radius: 50%;
+    position: relative;
+    place-items: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    line-height: 1;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.theme-switch-toggle .icon {
+    grid-column: 1 / 1;
+    grid-row: 1 / 1;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    z-index: 2;
+    transform-origin: center center;
+    transition: transform 500ms ease, opacity 300ms ease;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.theme-switch-toggle .icon--moon {
+    color: #38bdf8;
+    background-color: #0f172a;
+    border-radius: 50%;
+}
+
+.theme-switch-toggle .icon--sun {
+    color: #f59e0b;
+    background-color: #ffffff;
+    border-radius: 50%;
+}
+
+.theme-switch-toggle .icon--moon,
+.theme-switch-toggle .icon--sun {
+    transform: rotate(0deg) scale(0);
+    opacity: 0;
+}
+
+.theme-switch-checkbox:not(:checked) + .theme-switch-toggle .icon--sun {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+}
+
+.theme-switch-checkbox:not(:checked) + .theme-switch-toggle .icon--moon {
+    transform: rotate(0deg) scale(0);
+    opacity: 0;
+}
+
+.theme-switch-checkbox:checked + .theme-switch-toggle .icon--moon {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+}
+
+.theme-switch-checkbox:checked + .theme-switch-toggle .icon--sun {
+    transform: rotate(0deg) scale(0);
+    opacity: 0;
+}
+
+.theme-switch-checkbox:active + .theme-switch-toggle {
+    transform: scale(0.92);
+}
+
+.theme-switch-toggle .icon svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor !important;
+}
+
+/* Dark theme surfaces */
+body.dark-mode .theme-switch-toggle,
+[data-theme="dark"] .theme-switch-toggle {
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ===================================================
+   From Uiverse.io by dovatgabriel - https://uiverse.io/dovatgabriel/jolly-kangaroo-36
+   MIT License, Copyright (c) dovatgabriel (Gabriel)
+   Adapted for RLabz with website theme colors
+   =================================================== */
+.newtons-cradle {
+    --uib-size: 60px;
+    --uib-speed: 1.2s;
+    --uib-color: var(--primary-blue, #0b72ce);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--uib-size);
+    height: var(--uib-size);
+}
+
+body.dark-mode .newtons-cradle,
+[data-theme="dark"] .newtons-cradle {
+    --uib-color: #38bdf8;
+}
+
+.newtons-cradle__dot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 25%;
+    transform-origin: center top;
+}
+
+.newtons-cradle__dot::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 25%;
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    box-shadow: 0 2px 8px rgba(11, 114, 206, 0.35);
+}
+
+body.dark-mode .newtons-cradle__dot::after,
+[data-theme="dark"] .newtons-cradle__dot::after {
+    box-shadow: 0 2px 10px rgba(56, 189, 248, 0.55);
+}
+
+.newtons-cradle__dot:first-child {
+    animation: newtonSwing var(--uib-speed) linear infinite;
+}
+
+.newtons-cradle__dot:last-child {
+    animation: newtonSwing2 var(--uib-speed) linear infinite;
+}
+
+@keyframes newtonSwing {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: ease-out;
+    }
+    25% {
+        transform: rotate(70deg);
+        animation-timing-function: ease-in;
+    }
+    50% {
+        transform: rotate(0deg);
+        animation-timing-function: linear;
+    }
+}
+
+@keyframes newtonSwing2 {
+    0% {
+        transform: rotate(0deg);
+        animation-timing-function: linear;
+    }
+    50% {
+        transform: rotate(0deg);
+        animation-timing-function: ease-out;
+    }
+    75% {
+        transform: rotate(-70deg);
+        animation-timing-function: ease-in;
+    }
+}
+
+/* Page Loader Overlays for Newton's Cradle */
+.internships-loader,
+.pd-page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+body.dark-mode .internships-loader,
+[data-theme="dark"] .internships-loader,
+body.dark-mode .pd-page-loader,
+[data-theme="dark"] .pd-page-loader {
+    background: #0b1120 !important;
 }
 
 @media (max-width: 768px) {
@@ -8556,28 +8832,29 @@ html.lenis body {
 
 @media (max-width: 768px) {
     #robot-popup.fixed-sidebar-btn {
-        top: auto !important;
+        top: 60% !important;
         bottom: auto !important;
-        bottom: 0 !important;
-        left: 0 !important;
         right: 0 !important;
-        width: 100% !important;
-        transform: none !important;
-        -webkit-transform: none !important;
+        left: auto !important;
+        width: auto !important;
+        transform: translateY(-50%) !important;
+        -webkit-transform: translateY(-50%) !important;
         display: flex !important;
-        justify-content: center !important;
+        justify-content: flex-end !important;
+        border-radius: 18px 0 0 18px !important;
+        z-index: 9999 !important;
     }
 
     #robot-popup.fixed-sidebar-btn:hover {
-        transform: none !important;
-        -webkit-transform: none !important;
+        transform: translateY(-50%) scale(1.02) !important;
+        -webkit-transform: translateY(-50%) scale(1.02) !important;
     }
 
     #robot-popup.fixed-sidebar-btn .popup-bubble {
-        width: 100%;
-        max-width: 100%;
-        border-radius: 18px 18px 0 0;
-        padding: 12px 18px;
+        width: auto;
+        max-width: 90vw;
+        border-radius: 18px 0 0 18px;
+        padding: 10px 16px;
         min-height: unset;
         flex-direction: row;
         justify-content: center;
@@ -8586,20 +8863,22 @@ html.lenis body {
         animation-name: none !important;
         -webkit-animation-name: none !important;
         animation-play-state: paused !important;
-        /* Force stop floating */
         -webkit-animation-play-state: paused !important;
     }
 
     #robot-popup.fixed-sidebar-btn .mobile-text {
+        display: inline-flex !important;
         flex-direction: row;
-        width: 100%;
-        justify-content: space-between;
+        width: auto;
+        justify-content: center;
         align-items: center;
+        gap: 8px;
     }
 
     #robot-popup.fixed-sidebar-btn .typing-target-mobile {
         white-space: nowrap;
         text-align: left;
+        font-size: 13px;
     }
 }
 
@@ -9491,7 +9770,6 @@ html.lenis body {
 .timeline-card .card-desc { color: #64748b !important; font-size: 0.82rem !important; line-height: 1.45 !important; text-align: center !important; display: -webkit-box !important; -webkit-line-clamp: 3 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; text-overflow: ellipsis !important; }
 .timeline-nav-btn { background: #ffffff !important; color: #94a3b8 !important; border: 1px solid rgba(0,0,0,0.08) !important; box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important; width: 44px !important; height: 44px !important; border-radius: 50% !important; }
 .timeline-nav-btn:hover { background: #f8fafc !important; color: #64748b !important; }
-#robot-popup, .robot-popup, .fixed-sidebar-btn, .robot-sidebar-dock { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 
 /* Force light logo over dark sections ONLY when NOT scrolled (first page hero) */
 .premium-nav:not(.scrolled).nav-over-dark .logo-dark {
@@ -9503,6 +9781,71 @@ html.lenis body {
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
+}
+
+/* Standalone Floating Internship Announcement Button */
+.rlabz-floating-internship-btn {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #F9440D;
+    color: #ffffff;
+    padding: 12px 22px 12px 24px;
+    border-radius: 20px 0 0 20px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 18px rgba(249, 68, 13, 0.35);
+    z-index: 9999;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    user-select: none;
+}
+
+.rlabz-floating-internship-btn:hover {
+    transform: translateY(-50%) scale(1.03);
+    box-shadow: 0 6px 22px rgba(249, 68, 13, 0.45);
+}
+
+.rlabz-floating-internship-btn.dismissed {
+    opacity: 0;
+    transform: translateY(-50%) translateX(100%);
+    pointer-events: none;
+}
+
+.internship-btn-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #ffffff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease;
+}
+
+.internship-btn-close:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-width: 768px) {
+    .rlabz-floating-internship-btn {
+        top: 60%;
+        padding: 10px 16px 10px 18px;
+        font-size: 13px;
+        border-radius: 18px 0 0 18px;
+    }
 }
 
 /* Compositing & GPU Acceleration Layers */
@@ -9533,7 +9876,7 @@ html.lenis body {
     background: #021a32;
     background: radial-gradient(circle at 15% 25%, #08335c 0%, #021a32 80%);
     color: #ffffff;
-    padding: 7rem 5% 6.5rem;
+    padding: 4.5rem 5% 4rem;
     overflow: hidden;
     z-index: 10;
 }
@@ -9559,9 +9902,9 @@ html.lenis body {
 .rlabz-stats-grid-main {
     display: grid;
     grid-template-columns: 1fr 1.15fr;
-    gap: 4.5rem;
+    gap: 3rem;
     align-items: center;
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.25rem;
 }
 
 /* Left Column */
@@ -9574,28 +9917,28 @@ html.lenis body {
 .rlabz-stats-kicker {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
+    gap: 0.45rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: #38bdf8;
-    margin-bottom: 1.25rem;
-    padding: 0.4rem 1rem;
+    margin-bottom: 0.85rem;
+    padding: 0.32rem 0.85rem;
     border-radius: 9999px;
     background: rgba(56, 189, 248, 0.14);
     border: 1px solid rgba(56, 189, 248, 0.35);
 }
 
 .rlabz-statistics-section .rlabz-stats-title {
-    font-size: clamp(2.4rem, 4.2vw, 3.6rem) !important;
+    font-size: clamp(1.85rem, 2.8vw, 2.4rem) !important;
     font-weight: 800 !important;
     line-height: 1.18 !important;
     letter-spacing: -0.02em !important;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     background: none !important;
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 0.85rem !important;
     font-family: 'Space Grotesk', 'Outfit', sans-serif !important;
     text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
@@ -9608,12 +9951,12 @@ html.lenis body {
 }
 
 .rlabz-statistics-section .rlabz-stats-desc {
-    font-size: 1.1rem !important;
-    line-height: 1.75 !important;
+    font-size: 0.95rem !important;
+    line-height: 1.6 !important;
     color: #f1f5f9 !important;
     -webkit-text-fill-color: #f1f5f9 !important;
-    margin-bottom: 2.25rem !important;
-    max-width: 530px !important;
+    margin-bottom: 1.5rem !important;
+    max-width: 480px !important;
     font-weight: 400 !important;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
 }
@@ -9621,17 +9964,17 @@ html.lenis body {
 .rlabz-stats-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.55rem;
     background: #ffffff;
     color: #021a32 !important;
     -webkit-text-fill-color: #021a32 !important;
-    padding: 0.95rem 2.2rem;
+    padding: 0.65rem 1.6rem;
     border-radius: 9999px;
     font-weight: 700;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     text-decoration: none;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
 .rlabz-stats-btn:hover {
@@ -9639,14 +9982,14 @@ html.lenis body {
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(56, 189, 248, 0.45);
+    box-shadow: 0 12px 25px rgba(56, 189, 248, 0.4);
 }
 
-/* Right Column (2x2 Stats Grid matching reference) */
+/* Right Column (2x2 Stats Grid) */
 .rlabz-stats-cards-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2.75rem 2.5rem;
+    gap: 1.5rem 2rem;
 }
 
 .rlabz-stat-card {
@@ -9656,17 +9999,17 @@ html.lenis body {
 }
 
 .rlabz-stat-number-wrapper {
-    font-size: clamp(3.2rem, 5vw, 4.4rem);
+    font-size: clamp(2rem, 3.2vw, 2.75rem);
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.1;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     font-family: 'Space Grotesk', 'Outfit', sans-serif;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.85rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
     display: flex;
     align-items: baseline;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+    text-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
 }
 
 .rlabz-stat-plus {
@@ -9679,36 +10022,36 @@ html.lenis body {
 .rlabz-stat-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.45rem;
-    font-size: 0.75rem;
+    gap: 0.4rem;
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
-    background: rgba(255, 255, 255, 0.14) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    padding: 0.38rem 0.9rem;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 0.25rem 0.7rem;
     border-radius: 9999px;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.4rem;
 }
 
 .rlabz-stat-desc {
-    font-size: 0.95rem !important;
-    color: #e2e8f0 !important;
-    -webkit-text-fill-color: #e2e8f0 !important;
-    line-height: 1.55 !important;
-    max-width: 270px !important;
+    font-size: 0.82rem !important;
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+    line-height: 1.45 !important;
+    max-width: 250px !important;
 }
 
 /* Annual Completed Projects Breakdown Bar */
 .rlabz-annual-breakdown-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    padding: 2.2rem 2.5rem;
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
     backdrop-filter: blur(12px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
 }
 
 .rlabz-annual-header {
@@ -9716,20 +10059,20 @@ html.lenis body {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-    padding-bottom: 1.25rem;
+    gap: 0.75rem;
+    margin-bottom: 1.15rem;
+    padding-bottom: 0.85rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .rlabz-annual-title {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.55rem;
     font-family: 'Space Grotesk', 'Outfit', sans-serif;
 }
 
@@ -9738,10 +10081,10 @@ html.lenis body {
 }
 
 .rlabz-annual-subtitle {
-    font-size: 0.92rem;
+    font-size: 0.82rem;
     color: #cbd5e1 !important;
     -webkit-text-fill-color: #cbd5e1 !important;
-    margin-top: 0.35rem;
+    margin-top: 0.25rem;
     font-weight: 400;
 }
 
@@ -9761,9 +10104,9 @@ html.lenis body {
 }
 
 .rlabz-annual-nav-btn {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.18);
@@ -9772,7 +10115,7 @@ html.lenis body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     transition: all 0.25s ease;
     flex-shrink: 0;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
@@ -9920,14 +10263,14 @@ html.lenis body {
 
 @media (max-width: 576px) {
     .rlabz-statistics-section {
-        padding: 5rem 5% 4.5rem;
+        padding: 3.5rem 5% 3rem;
     }
     .rlabz-stats-cards-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
     .rlabz-annual-breakdown-card {
-        padding: 1.5rem 1.25rem;
+        padding: 1.25rem 1rem;
     }
 }
 /* Client Logos Company Name Visibility */

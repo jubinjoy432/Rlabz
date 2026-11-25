@@ -1,0 +1,797 @@
+/* =====================================================
+   RLabZ Dark Theme Stylesheet
+   Applies to Project & Internship Public Pages
+   ===================================================== */
+
+/* Theme Toggle Button in Navigation */
+.theme-toggle-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(0, 44, 73, 0.05);
+    border: 1px solid rgba(0, 44, 73, 0.12);
+    color: #475569;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin-right: 0.35rem;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(11, 114, 206, 0.12);
+    color: #0b72ce;
+    transform: rotate(15deg);
+}
+
+/* =====================================================
+   DARK MODE RULES
+   ===================================================== */
+body.dark-mode,
+[data-theme="dark"] body {
+    background: #0b1120 !important;
+    color: #f1f5f9 !important;
+}
+
+/* 1. Navigation */
+body.dark-mode .premium-nav,
+[data-theme="dark"] .premium-nav {
+    background: rgba(15, 23, 42, 0.88) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Nav Links Pill Capsule (Centered Desktop Menu) */
+body.dark-mode .nav-links-container,
+[data-theme="dark"] .nav-links-container {
+    background: rgba(15, 23, 42, 0.78) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+}
+
+body.dark-mode .nav-links-container .nav-link,
+[data-theme="dark"] .nav-links-container .nav-link {
+    color: #94a3b8 !important;
+    font-weight: 500 !important;
+}
+
+body.dark-mode .nav-links-container .nav-link:hover,
+[data-theme="dark"] .nav-links-container .nav-link:hover,
+body.dark-mode .nav-links-container .nav-link.active,
+[data-theme="dark"] .nav-links-container .nav-link.active {
+    color: #ffffff !important;
+}
+
+body.dark-mode .nav-links-container:not(.pill-ready) .nav-link.active,
+[data-theme="dark"] .nav-links-container:not(.pill-ready) .nav-link.active {
+    background: #0b72ce !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .nav-links-container.pill-ready .nav-link.active,
+[data-theme="dark"] .nav-links-container.pill-ready .nav-link.active {
+    background: transparent !important;
+}
+
+body.dark-mode .nav-links-container:hover .nav-link.active:not(:hover),
+[data-theme="dark"] .nav-links-container:hover .nav-link.active:not(:hover) {
+    color: #94a3b8 !important;
+}
+
+/* Sliding Active Pill Background */
+body.dark-mode .sliding-pill,
+[data-theme="dark"] .sliding-pill {
+    background: linear-gradient(135deg, #0b72ce 0%, #0284c7 100%) !important;
+    box-shadow: 0 2px 14px rgba(11, 114, 206, 0.45) !important;
+}
+
+/* Mobile Dropdown Menu */
+body.dark-mode .nav-links-container.open,
+[data-theme="dark"] .nav-links-container.open {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dark-mode .nav-links-container.open .nav-link,
+[data-theme="dark"] .nav-links-container.open .nav-link {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .nav-links-container.open .nav-link.active,
+[data-theme="dark"] .nav-links-container.open .nav-link.active {
+    background: #0b72ce !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .nav-links-container.open .nav-link:hover:not(.active),
+[data-theme="dark"] .nav-links-container.open .nav-link:hover:not(.active) {
+    background: #1e293b !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .nav-contact-btn,
+[data-theme="dark"] .nav-contact-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .nav-contact-btn:hover,
+[data-theme="dark"] .nav-contact-btn:hover {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+body.dark-mode .theme-toggle-btn,
+[data-theme="dark"] .theme-toggle-btn {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #f59e0b !important;
+}
+
+body.dark-mode .theme-toggle-btn:hover,
+[data-theme="dark"] .theme-toggle-btn:hover {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #fbbf24 !important;
+}
+
+body.dark-mode .menu-toggle-btn,
+[data-theme="dark"] .menu-toggle-btn {
+    color: #f1f5f9 !important;
+}
+
+/* 2. Page Wrappers & Backgrounds */
+body.dark-mode .projects-page-wrapper,
+body.dark-mode .internships-page-wrapper,
+body.dark-mode .pd-page-wrapper {
+    background: #0b1120 !important;
+}
+
+/* 3. Back Buttons */
+body.dark-mode .projects-back-btn,
+body.dark-mode .internships-back-btn,
+body.dark-mode .pd-nav-btn,
+body.dark-mode .pd-back-btn,
+body.dark-mode .projects-back-link {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .projects-back-btn:hover,
+body.dark-mode .internships-back-btn:hover,
+body.dark-mode .pd-nav-btn:hover,
+body.dark-mode .projects-back-link:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* 4. Heroes */
+body.dark-mode .projects-hero h1,
+body.dark-mode .internships-hero h1 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .projects-hero-subtitle,
+body.dark-mode .internships-hero-subtitle {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .projects-hero-badge {
+    background: rgba(56, 189, 248, 0.1) !important;
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .internships-hero-badge {
+    background: rgba(249, 68, 13, 0.15) !important;
+    border-color: rgba(249, 68, 13, 0.3) !important;
+    color: #fb923c !important;
+}
+
+/* 5. Search & Filters */
+body.dark-mode .projects-search-input,
+body.dark-mode .internships-search-input {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.dark-mode .projects-search-input:focus,
+body.dark-mode .internships-search-input:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15) !important;
+}
+
+body.dark-mode .projects-search-wrapper i,
+body.dark-mode .internships-search-wrapper i {
+    color: #64748b !important;
+}
+
+body.dark-mode .projects-search-clear,
+body.dark-mode .internships-search-clear {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .filter-dropdown-btn,
+body.dark-mode .filter-select {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .filter-dropdown-btn:hover,
+body.dark-mode .filter-select:hover {
+    border-color: #38bdf8 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .filter-dropdown-menu {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .filter-dropdown-menu label,
+body.dark-mode .filter-option {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .filter-dropdown-menu label:hover,
+body.dark-mode .filter-option:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .filter-option.selected {
+    background: rgba(56, 189, 248, 0.2) !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .active-filter-chip {
+    background: rgba(56, 189, 248, 0.15) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .active-filter-chip button {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .clear-all-filters {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .clear-all-filters:hover {
+    color: #f87171 !important;
+}
+
+body.dark-mode .filter-reset-btn {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .filter-reset-btn:hover {
+    color: #f87171 !important;
+    background: rgba(239, 68, 68, 0.12) !important;
+}
+
+body.dark-mode .projects-count,
+body.dark-mode .internships-count {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .projects-count span,
+body.dark-mode .internships-count span {
+    color: #38bdf8 !important;
+}
+
+/* 6. Project Cards (Gallery & Standard) */
+body.dark-mode .project-gallery-card,
+[data-theme="dark"] .project-gallery-card,
+body.dark-mode .project-card,
+[data-theme="dark"] .project-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .project-gallery-card:hover,
+[data-theme="dark"] .project-gallery-card:hover,
+body.dark-mode .project-card:hover,
+[data-theme="dark"] .project-card:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .pg-card-image,
+[data-theme="dark"] .pg-card-image {
+    background: #0f172a !important;
+}
+
+body.dark-mode .pg-card-content,
+[data-theme="dark"] .pg-card-content {
+    background: #1e293b !important;
+}
+
+body.dark-mode .pg-card-title,
+[data-theme="dark"] .pg-card-title,
+body.dark-mode .project-card-title,
+body.dark-mode .card-title {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .pg-card-desc,
+[data-theme="dark"] .pg-card-desc,
+body.dark-mode .project-card-desc,
+body.dark-mode .card-desc {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .pg-card-year-badge {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border: 1px solid #334155 !important;
+    color: #f8fafc !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .pg-card-status-badge {
+    background: rgba(15, 23, 42, 0.9) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .pg-card-tags {
+    border-top-color: #334155 !important;
+}
+
+body.dark-mode .pg-card-tag,
+body.dark-mode .project-client-badge,
+body.dark-mode .project-tag {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pg-card-tag.pg-card-tag-type {
+    background: rgba(56, 189, 248, 0.1) !important;
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .project-card-meta {
+    border-top-color: #334155 !important;
+}
+
+/* 7. Internship Cards */
+body.dark-mode .internship-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .internship-card:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .ic-company-logo {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .ic-company-logo i {
+    color: #64748b !important;
+}
+
+body.dark-mode .ic-company-name {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .ic-company-location {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .ic-title {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .ic-category-pill {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .ic-desc {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .ic-specs-row {
+    border-top-color: #334155 !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .ic-spec-item {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .ic-spec-item i {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .ic-deadline {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .ic-deadline.urgent {
+    color: #f87171 !important;
+}
+
+body.dark-mode .ic-view-btn {
+    background: rgba(56, 189, 248, 0.12) !important;
+    color: #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+body.dark-mode .internship-card:hover .ic-view-btn {
+    background: #0b72ce !important;
+    color: #ffffff !important;
+}
+
+/* 8. Internship Details Page */
+body.dark-mode .id-header-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .id-company-logo-lg {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .id-company-logo-lg i {
+    color: #64748b !important;
+}
+
+body.dark-mode .id-company-name-lg {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .id-title-lg {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .id-pill {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .id-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .id-card-title {
+    color: #f8fafc !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .id-prose {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .id-contact-card {
+    background: linear-gradient(135deg, #1e293b 0%, #162033 100%) !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+body.dark-mode .id-contact-alert {
+    background: rgba(249, 68, 13, 0.15) !important;
+    border-color: rgba(249, 68, 13, 0.3) !important;
+    color: #fdba74 !important;
+}
+
+body.dark-mode .id-contact-item-label,
+body.dark-mode .id-spec-label {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .id-spec-value {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .id-spec-row {
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .id-copy-email-btn {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .id-copy-email-btn:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .id-external-apply-btn {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .id-external-apply-btn:hover {
+    border-color: #38bdf8 !important;
+    color: #38bdf8 !important;
+}
+
+/* 9. Project Details Page */
+body.dark-mode .pd-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .pd-card-header h3 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .pd-card-header i {
+    background: #0f172a !important;
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .pd-overview-content {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pd-overview-block h4 {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .pd-overview-block p {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pd-feature-item,
+body.dark-mode .feature-item,
+body.dark-mode .pd-team-card,
+body.dark-mode .team-card,
+body.dark-mode .pd-faculty-card,
+body.dark-mode .faculty-card {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .pd-feature-text {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pd-team-avatar,
+body.dark-mode .pd-faculty-avatar {
+    border-color: #1e293b !important;
+}
+
+body.dark-mode .pd-team-name,
+body.dark-mode .team-name,
+body.dark-mode .pd-faculty-info h4,
+body.dark-mode .faculty-name {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .pd-team-role,
+body.dark-mode .team-role,
+body.dark-mode .pd-faculty-designation,
+body.dark-mode .faculty-title {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .pd-team-reg {
+    color: #64748b !important;
+}
+
+body.dark-mode .pd-faculty-label {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pd-tech-badge {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pd-tech-badge:hover {
+    background: #0b72ce !important;
+    color: #ffffff !important;
+    border-color: #0b72ce !important;
+}
+
+body.dark-mode .pd-screenshot-item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .pd-footer-nav {
+    border-top-color: #334155 !important;
+}
+
+body.dark-mode .pd-info-sidebar {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .pd-info-row {
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .pd-info-label {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .pd-info-value {
+    color: #f8fafc !important;
+}
+
+/* 10. Empty States & Pagination */
+body.dark-mode .projects-empty-state,
+body.dark-mode .internships-empty-state {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .internships-empty-state h3,
+body.dark-mode .projects-empty-state h3,
+body.dark-mode .projects-no-results h3 {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .internships-empty-state p,
+body.dark-mode .projects-empty-state p,
+body.dark-mode .projects-no-results p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .projects-no-results i {
+    color: #475569 !important;
+}
+
+body.dark-mode .pg-page-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pg-page-btn:hover:not(:disabled) {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+    border-color: #38bdf8 !important;
+}
+
+body.dark-mode .pg-page-btn.active {
+    background: #0b72ce !important;
+    border-color: #0b72ce !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .pg-ellipsis {
+    color: #64748b !important;
+}
+
+body.dark-mode .projects-load-more-btn {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .projects-load-more-btn:hover {
+    background: #334155 !important;
+    color: #38bdf8 !important;
+    border-color: #38bdf8 !important;
+}
+
+/* =====================================================
+   DARK MODE DEADLINE URGENCY BADGES
+   ===================================================== */
+body.dark-mode .deadline-badge.badge-urgent,
+[data-theme="dark"] .deadline-badge.badge-urgent {
+    background: rgba(220, 38, 38, 0.2) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(248, 113, 113, 0.4) !important;
+    box-shadow: 0 1px 8px rgba(220, 38, 38, 0.3) !important;
+}
+
+body.dark-mode .deadline-badge.badge-warning,
+[data-theme="dark"] .deadline-badge.badge-warning {
+    background: rgba(217, 119, 6, 0.2) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(251, 191, 36, 0.4) !important;
+}
+
+body.dark-mode .deadline-badge.badge-notice,
+[data-theme="dark"] .deadline-badge.badge-notice {
+    background: rgba(2, 132, 199, 0.2) !important;
+    color: #38bdf8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.4) !important;
+}
+
+body.dark-mode .deadline-badge.badge-open,
+[data-theme="dark"] .deadline-badge.badge-open {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+}
+
+body.dark-mode .deadline-badge.badge-expired,
+[data-theme="dark"] .deadline-badge.badge-expired {
+    background: rgba(100, 116, 139, 0.2) !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}
+
+body.dark-mode .id-pill.id-pill-deadline.badge-urgent,
+[data-theme="dark"] .id-pill.id-pill-deadline.badge-urgent {
+    background: rgba(220, 38, 38, 0.22) !important;
+    color: #f87171 !important;
+    border-color: rgba(248, 113, 113, 0.4) !important;
+}
+
+body.dark-mode .id-pill.id-pill-deadline.badge-warning,
+[data-theme="dark"] .id-pill.id-pill-deadline.badge-warning {
+    background: rgba(217, 119, 6, 0.22) !important;
+    color: #fbbf24 !important;
+    border-color: rgba(251, 191, 36, 0.4) !important;
+}
+
+body.dark-mode .id-pill.id-pill-deadline.badge-notice,
+[data-theme="dark"] .id-pill.id-pill-deadline.badge-notice {
+    background: rgba(2, 132, 199, 0.22) !important;
+    color: #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+body.dark-mode .id-pill.id-pill-deadline.badge-open,
+[data-theme="dark"] .id-pill.id-pill-deadline.badge-open {
+    background: rgba(16, 185, 129, 0.22) !important;
+    color: #34d399 !important;
+    border-color: rgba(52, 211, 153, 0.4) !important;
+}
+
+/* Admin Deadline Badges in Dark Mode */
+body.dark-mode .admin-deadline-badge.badge-urgent,
+[data-theme="dark"] .admin-deadline-badge.badge-urgent {
+    background: rgba(220, 38, 38, 0.22) !important;
+    color: #f87171 !important;
+    border: 1px solid rgba(248, 113, 113, 0.4) !important;
+}
+body.dark-mode .admin-deadline-badge.badge-warning,
+[data-theme="dark"] .admin-deadline-badge.badge-warning {
+    background: rgba(217, 119, 6, 0.22) !important;
+    color: #fbbf24 !important;
+    border: 1px solid rgba(251, 191, 36, 0.4) !important;
+}
+body.dark-mode .admin-deadline-badge.badge-open,
+[data-theme="dark"] .admin-deadline-badge.badge-open {
+    background: rgba(16, 185, 129, 0.22) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+}
+body.dark-mode .admin-deadline-badge.badge-expired,
+[data-theme="dark"] .admin-deadline-badge.badge-expired {
+    background: rgba(100, 116, 139, 0.22) !important;
+    color: #94a3b8 !important;
+    border: 1px solid rgba(148, 163, 184, 0.3) !important;
+}

@@ -66,6 +66,13 @@ if ($pdo) {
             if (!$a['is_read']) $unreadCount++;
         }
 
+        // Active Published Internships
+        $activeInternships = 0;
+        try {
+            $stmtIntern = $pdo->query("SELECT COUNT(*) FROM internship_opportunities WHERE status = 'Published' AND deleted_at IS NULL AND application_deadline >= CURDATE()");
+            $activeInternships = (int)$stmtIntern->fetchColumn();
+        } catch (Exception $e) {}
+
     } catch (PDOException $e) {
         $error = "Failed to load stats: " . $e->getMessage();
     }
@@ -118,6 +125,11 @@ require_once '../includes/layout_header.php';
         <div class="stat-card-value"><?php echo $totalMembers; ?></div>
         <div class="stat-card-label">Team Members</div>
     </div>
+    <a href="manage_internships.php" class="stat-card" style="border-left: 4px solid #f9440d; text-decoration: none;">
+        <div class="stat-card-icon" style="color: #f9440d;"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="stat-card-value"><?php echo $activeInternships; ?></div>
+        <div class="stat-card-label">Active Internships</div>
+    </a>
 
 
 </div>

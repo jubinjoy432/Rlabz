@@ -156,7 +156,7 @@ try {
 
 <div class="card">
     <!-- Filter and Search Toolbar -->
-    <div style="background: #f8fafc; padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
+    <div class="ssl-filter-toolbar" style="padding: 0.85rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem;">
         
         <!-- Search Row with Search Button and Reset Button -->
         <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
@@ -170,7 +170,7 @@ try {
             </button>
 
             <?php if(!empty($providers)): ?>
-            <select id="filterSslProvider" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-primary); font-size: 0.85rem; font-weight: 500; cursor: pointer;">
+            <select id="filterSslProvider" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 500; cursor: pointer;">
                 <option value="">All Providers</option>
                 <?php foreach($providers as $p): ?>
                     <option value="<?php echo htmlspecialchars($p); ?>"><?php echo htmlspecialchars($p); ?></option>
@@ -178,7 +178,7 @@ try {
             </select>
             <?php endif; ?>
 
-            <button type="button" id="btnSslReset" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #ffffff; color: var(--text-secondary); font-size: 0.82rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;">
+            <button type="button" id="btnSslReset" style="padding: 0.45rem 0.85rem; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.2s ease;">
                 <i class="fa-solid fa-rotate-left"></i> Reset
             </button>
         </div>

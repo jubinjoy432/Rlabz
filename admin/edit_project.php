@@ -375,7 +375,10 @@ require_once 'includes/layout_header.php';
         </div>
         <input type="hidden" id="ssl_fingerprint" name="ssl_fingerprint" value="<?= htmlspecialchars($ssl['certificate_fingerprint'] ?? '') ?>">
 
-        <button type="submit" class="btn-submit full-width"><i class="fa-solid fa-save"></i> Save Changes</button>
+        <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1.75rem; flex-wrap: wrap;">
+            <button type="submit" class="btn-submit" style="flex: 1; min-width: 200px;"><i class="fa-solid fa-save"></i> Save Changes</button>
+            <a href="pages/manage_projects.php" class="btn-cancel"><i class="fa-solid fa-xmark"></i> Cancel</a>
+        </div>
     </form>
 
 </div>
