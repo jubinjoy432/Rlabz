@@ -939,6 +939,28 @@
     background: #f8fafc;
 }
 
+.id-contact-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--crucible-core);
+    line-height: 1.4;
+}
+
+.id-contact-phone-link {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--digital-flow);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.id-contact-phone-link:hover {
+    text-decoration: underline;
+    color: var(--primary-blue);
+}
+
 .id-instructions-box {
     background: #f8fafc;
     border-radius: 10px;

@@ -249,12 +249,13 @@ body {
     padding: 0.35rem;
     border-radius: 50px;
     gap: 0.5rem;
-    /* Absolutely center in the navbar â€” immune to logo/actions width changes */
+    /* Absolutely center in the navbar — immune to logo/actions width changes */
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 1;
+    isolation: isolate;
 }
 
 .sliding-pill {
@@ -268,7 +269,7 @@ body {
     border-radius: 50px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: -1;
+    z-index: 0;
     /* Keep behind text */
     pointer-events: none;
 }
@@ -282,6 +283,8 @@ body {
     border-radius: 50px;
     transition: color 0.3s ease;
     /* Only animate text color */
+    position: relative;
+    z-index: 1;
 }
 
 .nav-link.active {
@@ -3388,8 +3391,9 @@ h2 {
 .rlabz-back-to-top .svgIcon {
     width: 14px;
     height: 14px;
-    transition-duration: 0.3s;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
     display: block;
+    opacity: 1;
 }
 
 #backToTop .svgIcon path,
@@ -3409,8 +3413,8 @@ h2 {
 
 #backToTop:hover .svgIcon,
 .rlabz-back-to-top:hover .svgIcon {
-    transition-duration: 0.3s;
-    transform: translateY(-200%);
+    transform: translateY(-40px) scale(0.5);
+    opacity: 0;
 }
 
 #backToTop::before,
@@ -3424,14 +3428,16 @@ h2 {
     font-weight: 600;
     letter-spacing: 0.3px;
     white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #backToTop:hover::before,
 .rlabz-back-to-top:hover::before {
     font-size: 13px;
     opacity: 1;
-    bottom: unset;
-    transition-duration: 0.3s;
+    bottom: 50%;
+    transform: translateY(50%);
 }
 
 /* ===================================================

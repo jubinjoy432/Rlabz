@@ -346,7 +346,7 @@
                 <div class="pd-faculty-card">
                     ${photoHtml}
                     <div class="pd-faculty-info">
-                        <h4 style="display:flex; align-items:center; margin:0;">${f.name} ${linkedinHtml}</h4>
+                        <h4 style="display:flex; align-items:center; margin:0 0 0.35rem 0;">${f.name} ${linkedinHtml}</h4>
                         ${f.designation ? `<div class="pd-faculty-designation">${f.designation}</div>` : ''}
                         <span class="pd-faculty-label"><i class="fa-solid fa-user-tie"></i> Faculty In-Charge</span>
                     </div>

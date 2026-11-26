@@ -157,23 +157,23 @@ require_once '../includes/layout_header.php';
             <h2 style="margin: 0; padding: 0; border: none; font-size: 1.15rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-primary);">
                 <i class="fa-solid fa-bell" style="color: #f59e0b;"></i> SSL Expiry & Announcements
             </h2>
-            <span id="unread-count" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: <?php echo $unreadCount > 0 ? '#fef3c7' : '#f1f5f9'; ?>; color: <?php echo $unreadCount > 0 ? '#b45309' : '#64748b'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? '#fde68a' : '#e2e8f0'; ?>;">
+            <span id="unread-count" class="overview-unread-badge" style="display: inline-flex; align-items: center; padding: 0.25rem 0.7rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: <?php echo $unreadCount > 0 ? '#fef3c7' : '#f1f5f9'; ?>; color: <?php echo $unreadCount > 0 ? '#b45309' : '#64748b'; ?>; border: 1px solid <?php echo $unreadCount > 0 ? '#fde68a' : '#e2e8f0'; ?>;">
                 <?php echo $unreadCount; ?> new
             </span>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <?php if($unreadCount > 0): ?>
-            <button type="button" onclick="markAllReadOverview()" id="btn-mark-all-read" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+            <button type="button" onclick="markAllReadOverview()" id="btn-mark-all-read" class="btn-overview-action btn-overview-mark-read">
                 <i class="fa-solid fa-check-double"></i> <span>Mark All Read</span>
             </button>
             <?php endif; ?>
-            <a href="announcements.php" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+            <a href="announcements.php" class="btn-overview-action btn-overview-view-all">
                 <i class="fa-solid fa-arrow-up-right-from-square"></i> <span>View All</span>
             </a>
-            <a href="ssl_certificates.php" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #f8fafc; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s ease;">
+            <a href="ssl_certificates.php" class="btn-overview-action btn-overview-ssl">
                 <i class="fa-solid fa-shield-halved" style="color: var(--accent-blue);"></i> <span>SSL Tracker</span>
             </a>
-            <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" style="display: inline-flex; align-items: center; gap: 0.4rem; background: #0b5394; color: #ffffff; border: 1px solid rgba(255,255,255,0.15); border-radius: 7px; padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <button type="button" onclick="refreshSslNow()" id="btn-refresh-cron" class="btn-overview-action btn-overview-check-ssl">
                 <i class="fa-solid fa-rotate"></i> <span>Check SSL</span>
             </button>
         </div>
@@ -240,19 +240,19 @@ require_once '../includes/layout_header.php';
                 $opacity = $a['is_read'] ? '0.65' : '1';
                 $borderLeft = $a['is_read'] ? '4px solid #cbd5e1' : "4px solid $border";
             ?>
-            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 7px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+            <div class="announcement-item" id="announcement-<?= $a['id'] ?>" style="border-radius: 7px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; border-left: <?= $borderLeft ?>; opacity: <?= $opacity ?>; transition: all 0.2s ease;">
                 <div style="color: <?= $color ?>; background: <?= $bg ?>; width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.85rem;">
                     <i class="fa-solid <?= $icon ?>"></i>
                 </div>
                 <div style="flex: 1; min-width: 0;">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap: nowrap; gap: 0.5rem;">
-                        <span style="font-weight: 600; color: #0f172a; font-size: 0.86rem; display: inline-flex; align-items: center; gap: 0.45rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <span class="announcement-item-title" style="font-weight: 600; font-size: 0.86rem; display: inline-flex; align-items: center; gap: 0.45rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                             <?= htmlspecialchars($a['title']) ?>
                             <span style="font-size: 0.68rem; font-weight: 700; padding: 0.08rem 0.45rem; border-radius: 9999px; background: <?= $pillBg ?>; color: <?= $pillColor ?>; flex-shrink: 0;"><?= $pillText ?></span>
                         </span>
                         <span style="font-size:0.72rem; color:#94a3b8; font-weight:500; flex-shrink: 0;"><i class="fa-regular fa-clock" style="font-size: 0.68rem;"></i> <?= date('M j, g:i A', strtotime($a['created_at'])) ?></span>
                     </div>
-                    <div style="font-size: 0.8rem; color: #475569; line-height: 1.35; white-space: pre-line; word-break: break-word; margin-top: 1px;"><?= htmlspecialchars($a['message']) ?></div>
+                    <div class="announcement-item-msg" style="font-size: 0.8rem; line-height: 1.35; white-space: pre-line; word-break: break-word; margin-top: 1px;"><?= htmlspecialchars($a['message']) ?></div>
                 </div>
                 <?php if(!$a['is_read']): ?>
                     <button class="btn-action" style="align-self: center; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 5px; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 0.75rem;" title="Mark as Read" onclick="markRead(<?= $a['id'] ?>)">

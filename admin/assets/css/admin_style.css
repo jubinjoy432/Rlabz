@@ -499,6 +499,118 @@ a { text-decoration: none; color: inherit; }
 .btn-action.btn-delete:hover { background: rgba(251,113,133,0.22); }
 .project-actions { display: flex; gap: 0.4rem; }
 
+/* ---------- Table Action Buttons (Users Table) ---------- */
+.btn-table-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+.btn-table-edit {
+    background: rgba(11, 114, 206, 0.1);
+    color: #0b72ce;
+    border-color: rgba(11, 114, 206, 0.2);
+}
+.btn-table-edit:hover {
+    background: #0b72ce;
+    color: #ffffff;
+}
+.btn-table-delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+.btn-table-delete:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+/* ---------- Overview Announcements ---------- */
+.announcement-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 7px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+.announcement-item-title {
+    color: #0f172a;
+}
+.announcement-item-msg {
+    color: #475569;
+}
+
+/* ---------- Overview Action Buttons ---------- */
+.btn-overview-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 7px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+.btn-overview-mark-read {
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+}
+.btn-overview-mark-read:hover {
+    background: #d1fae5;
+}
+.btn-overview-view-all {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+.btn-overview-view-all:hover {
+    background: #dbeafe;
+}
+.btn-overview-ssl {
+    background: #f8fafc;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+.btn-overview-ssl:hover {
+    background: #f1f5f9;
+}
+.btn-overview-check-ssl {
+    background: #0b5394;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.btn-overview-check-ssl:hover {
+    background: #083c6c;
+}
+
+/* ---------- Internship Table Extras ---------- */
+.internship-table-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+}
+.meta-work-mode {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+}
+
 /* ---------- Alerts ---------- */
 .alert {
     padding: 0.9rem 1rem; border-radius: var(--radius-md);
@@ -1823,6 +1935,177 @@ body.dark-mode .admin-pagination .adm-pg-info,
     background: #f1f5f9;
     color: #64748b;
     border: 1px solid #cbd5e1;
+}
+
+/* Dark mode rules for admin deadline badges */
+body.dark-mode .admin-deadline-badge.badge-urgent,
+[data-theme="dark"] .admin-deadline-badge.badge-urgent {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+body.dark-mode .admin-deadline-badge.badge-warning,
+[data-theme="dark"] .admin-deadline-badge.badge-warning {
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #fbbf24 !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+body.dark-mode .admin-deadline-badge.badge-open,
+[data-theme="dark"] .admin-deadline-badge.badge-open {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+}
+
+body.dark-mode .admin-deadline-badge.badge-expired,
+[data-theme="dark"] .admin-deadline-badge.badge-expired {
+    background: rgba(148, 163, 184, 0.15) !important;
+    color: #94a3b8 !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+/* Overview announcements and actions dark theme */
+body.dark-mode .announcement-item,
+[data-theme="dark"] .announcement-item {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+body.dark-mode .announcement-item-title,
+[data-theme="dark"] .announcement-item-title,
+body.dark-mode .announcement-item strong,
+[data-theme="dark"] .announcement-item strong {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .announcement-item-msg,
+[data-theme="dark"] .announcement-item-msg,
+body.dark-mode .announcement-item div[style*="color: #475569"],
+[data-theme="dark"] .announcement-item div[style*="color: #475569"] {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .btn-overview-mark-read,
+[data-theme="dark"] .btn-overview-mark-read {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #34d399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+body.dark-mode .btn-overview-mark-read:hover,
+[data-theme="dark"] .btn-overview-mark-read:hover {
+    background: rgba(16, 185, 129, 0.25) !important;
+}
+
+body.dark-mode .btn-overview-view-all,
+[data-theme="dark"] .btn-overview-view-all {
+    background: rgba(56, 189, 248, 0.15) !important;
+    color: #38bdf8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+body.dark-mode .btn-overview-view-all:hover,
+[data-theme="dark"] .btn-overview-view-all:hover {
+    background: rgba(56, 189, 248, 0.25) !important;
+}
+
+body.dark-mode .btn-overview-ssl,
+[data-theme="dark"] .btn-overview-ssl {
+    background: #1e293b !important;
+    color: #cbd5e1 !important;
+    border: 1px solid #334155 !important;
+}
+body.dark-mode .btn-overview-ssl:hover,
+[data-theme="dark"] .btn-overview-ssl:hover {
+    background: #334155 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .overview-unread-badge,
+[data-theme="dark"] .overview-unread-badge {
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #fbbf24 !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+/* User management table actions dark theme */
+body.dark-mode .btn-table-edit,
+[data-theme="dark"] .btn-table-edit {
+    background: rgba(56, 189, 248, 0.15) !important;
+    color: #38bdf8 !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+body.dark-mode .btn-table-edit:hover,
+[data-theme="dark"] .btn-table-edit:hover {
+    background: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .btn-table-delete,
+[data-theme="dark"] .btn-table-delete {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+}
+body.dark-mode .btn-table-delete:hover,
+[data-theme="dark"] .btn-table-delete:hover {
+    background: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+/* Manage Internships dark theme */
+body.dark-mode .internship-table-logo,
+[data-theme="dark"] .internship-table-logo {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .meta-work-mode,
+[data-theme="dark"] .meta-work-mode {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode select#filterDeadline,
+[data-theme="dark"] select#filterDeadline {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Alert boxes in forms (Section 4 notices, etc.) */
+body.dark-mode .alert[style*="background: rgba(249,68,13"],
+body.dark-mode .alert[style*="background:rgba(249,68,13"],
+[data-theme="dark"] .alert[style*="background: rgba(249,68,13"],
+[data-theme="dark"] .alert[style*="background:rgba(249,68,13"] {
+    background: rgba(249, 68, 13, 0.15) !important;
+    border-color: rgba(249, 68, 13, 0.35) !important;
+    color: #fdba74 !important;
+}
+
+/* SSL table badges dark theme */
+body.dark-mode .badge[style*="background:#fee2e2"],
+body.dark-mode .badge[style*="background: #fee2e2"],
+[data-theme="dark"] .badge[style*="background:#fee2e2"] {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+body.dark-mode .badge[style*="background:#fef3c7"],
+body.dark-mode .badge[style*="background: #fef3c7"],
+[data-theme="dark"] .badge[style*="background:#fef3c7"] {
+    background: rgba(245, 158, 11, 0.2) !important;
+    color: #fbbf24 !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+body.dark-mode .badge[style*="background:#dcfce7"],
+body.dark-mode .badge[style*="background: #dcfce7"],
+[data-theme="dark"] .badge[style*="background:#dcfce7"] {
+    background: rgba(16, 185, 129, 0.2) !important;
+    color: #34d399 !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
 }
 
 /* ===================================================

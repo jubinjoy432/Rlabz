@@ -207,7 +207,7 @@ require_once '../includes/layout_header.php';
                         data-location="<?php echo htmlspecialchars(strtolower($item['location'] . ' ' . $item['company_location'])); ?>">
                         
                         <td>
-                            <div style="width: 40px; height: 40px; border-radius: 8px; background: #f1f5f9; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #e2e8f0;">
+                            <div class="internship-table-logo">
                                 <?php if (!empty($logoSrc)): ?>
                                     <img src="<?php echo htmlspecialchars($logoSrc); ?>" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.parentElement.innerHTML='<i class=\'fa-solid fa-building\' style=\'color: #94a3b8;\'></i>';">
                                 <?php else: ?>
@@ -237,7 +237,7 @@ require_once '../includes/layout_header.php';
                         </td>
 
                         <td>
-                            <span style="font-size: 0.8rem; font-weight: 600; color: #475569;">
+                            <span class="meta-work-mode">
                                 <?php echo htmlspecialchars($item['work_mode']); ?>
                             </span>
                         </td>

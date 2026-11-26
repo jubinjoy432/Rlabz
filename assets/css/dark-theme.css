@@ -502,7 +502,42 @@ body.dark-mode .id-contact-alert {
 }
 
 body.dark-mode .id-contact-item-label,
-body.dark-mode .id-spec-label {
+body.dark-mode .id-spec-label,
+[data-theme="dark"] .id-contact-item-label,
+[data-theme="dark"] .id-spec-label {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .id-contact-value,
+[data-theme="dark"] .id-contact-value,
+body.dark-mode #textContactPerson,
+[data-theme="dark"] #textContactPerson {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .id-contact-phone-link,
+[data-theme="dark"] .id-contact-phone-link,
+body.dark-mode #linkContactPhone,
+[data-theme="dark"] #linkContactPhone {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .id-instructions-box,
+[data-theme="dark"] .id-instructions-box,
+body.dark-mode #textInstructions,
+[data-theme="dark"] #textInstructions {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .id-company-link,
+[data-theme="dark"] .id-company-link {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .filter-pill-label,
+[data-theme="dark"] .filter-pill-label {
     color: #94a3b8 !important;
 }
 
@@ -567,11 +602,26 @@ body.dark-mode .pd-overview-block p {
 body.dark-mode .pd-feature-item,
 body.dark-mode .feature-item,
 body.dark-mode .pd-team-card,
-body.dark-mode .team-card,
-body.dark-mode .pd-faculty-card,
-body.dark-mode .faculty-card {
+body.dark-mode .team-card {
     background: #0f172a !important;
     border-color: #334155 !important;
+}
+
+body.dark-mode .pd-faculty-card,
+[data-theme="dark"] .pd-faculty-card,
+body.dark-mode .faculty-card,
+[data-theme="dark"] .faculty-card {
+    background: #0f172a !important;
+    border: 1px solid #334155 !important;
+    border-radius: 12px !important;
+    padding: 1.25rem 1.4rem !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .pd-faculty-card:hover,
+[data-theme="dark"] .pd-faculty-card:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
 }
 
 body.dark-mode .pd-feature-text {
@@ -777,18 +827,21 @@ body.dark-mode .admin-deadline-badge.badge-urgent,
     color: #f87171 !important;
     border: 1px solid rgba(248, 113, 113, 0.4) !important;
 }
+
 body.dark-mode .admin-deadline-badge.badge-warning,
 [data-theme="dark"] .admin-deadline-badge.badge-warning {
     background: rgba(217, 119, 6, 0.22) !important;
     color: #fbbf24 !important;
     border: 1px solid rgba(251, 191, 36, 0.4) !important;
 }
+
 body.dark-mode .admin-deadline-badge.badge-open,
 [data-theme="dark"] .admin-deadline-badge.badge-open {
     background: rgba(16, 185, 129, 0.22) !important;
     color: #34d399 !important;
     border: 1px solid rgba(52, 211, 153, 0.4) !important;
 }
+
 body.dark-mode .admin-deadline-badge.badge-expired,
 [data-theme="dark"] .admin-deadline-badge.badge-expired {
     background: rgba(100, 116, 139, 0.22) !important;

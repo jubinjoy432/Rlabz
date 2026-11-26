@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (idx < score) {
                     bar.style.background = colors[score - 1];
                 } else {
-                    bar.style.background = '#e2e8f0';
+                    bar.style.background = document.body.classList.contains('dark-mode') ? '#334155' : '#e2e8f0';
                 }
             });
 
@@ -187,8 +187,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             </td>
                             <td style="padding: 1rem; color: #94a3b8;">${new Date(u.created_at).toLocaleDateString()}</td>
                             <td style="padding: 1rem; text-align: right;">
-                                <button onclick="editUser(${u.id}, '${u.username}', '${u.role}')" class="btn-action" style="background: none; border: none; color: #38bdf8; cursor: pointer; margin-right: 0.5rem; font-weight: 600;"><i class="fa-solid fa-edit"></i> Edit</button>
-                                ${u.id != currentAdminId ? `<button onclick="deleteUser(${u.id}, '${u.username}')" class="btn-action btn-delete" style="background: none; border: none; color: #f87171; cursor: pointer; font-weight: 600;"><i class="fa-solid fa-trash"></i> Delete</button>` : ''}
+                                <button onclick="editUser(${u.id}, '${u.username}', '${u.role}')" class="btn-table-action btn-table-edit" style="margin-right: 0.5rem;"><i class="fa-solid fa-edit"></i> Edit</button>
+                                ${u.id != currentAdminId ? `<button onclick="deleteUser(${u.id}, '${u.username}')" class="btn-table-action btn-table-delete"><i class="fa-solid fa-trash"></i> Delete</button>` : ''}
                             </td>
                         </tr>
                     `).join('');
